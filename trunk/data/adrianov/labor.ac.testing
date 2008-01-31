@@ -1,0 +1,5 @@
+11 CLASS=1 w=attr1=ignore w=attr2=-2\.65 w=attr3=-3\.25 w=attr4=-3\.25 w=attr5=? w=attr6=ignore w=attr7=empl_contr w=attr8=? w=attr9=? w=attr10=? w=attr11=ignore w=attr12=average w=attr13=? w=attr14=? w=attr15=yes w=attr16=none
+28 CLASS=0 w=attr1=ignore w=attr2=2\.65+ w=attr3=3\.25+ w=attr4=? w=attr5=? w=attr6=ignore w=attr7=? w=attr8=? w=attr9=ignore w=attr10=? w=attr11=ignore w=attr12=generous w=attr13=? w=attr14=half w=attr15=? w=attr16=full
+3 CLASS=0 w=attr1=ignore w=attr2=2\.65+ w=attr3=? w=attr4=? w=attr5=none w=attr6=ignore w=attr7=empl_contr w=attr8=? w=attr9=ignore w=attr10=? w=attr11=ignore w=attr12=generous w=attr13=yes w=attr14=full w=attr15=? w=attr16=?
+21 CLASS=0 w=attr1=ignore w=attr2=2\.65+ w=attr3=3\.25+ w=attr4=? w=attr5=none w=attr6=ignore w=attr7=? w=attr8=? w=attr9=ignore w=attr10=? w=attr11=ignore w=attr12=average w=attr13=? w=attr14=full w=attr15=yes w=attr16=full
+33 CLASS=0 w=attr1=ignore w=attr2=2\.65+ w=attr3=? w=attr4=? w=attr5=? w=attr6=ignore w=attr7=? w=attr8=? w=attr9=ignore w=attr10=? w=attr11=ignore w=attr12=average w=attr13=? w=attr14=? w=attr15=yes w=attr16=?
