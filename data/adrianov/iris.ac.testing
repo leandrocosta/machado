@@ -1,0 +1,15 @@
+30 CLASS=1 w=attr1=-5\.55 w=attr2=3\.35+ w=attr3=-2\.45 w=attr4=-0\.8
+26 CLASS=1 w=attr1=-5\.55 w=attr2=2\.95-3\.35 w=attr3=-2\.45 w=attr4=-0\.8
+6 CLASS=2 w=attr1=-5\.55 w=attr2=-2\.95 w=attr3=2\.45-4\.75 w=attr4=0\.8-1\.75
+13 CLASS=1 w=attr1=-5\.55 w=attr2=3\.35+ w=attr3=-2\.45 w=attr4=-0\.8
+137 CLASS=0 w=attr1=6\.15+ w=attr2=2\.95-3\.35 w=attr3=4\.75+ w=attr4=1\.75+
+48 CLASS=0 w=attr1=6\.15+ w=attr2=-2\.95 w=attr3=4\.75+ w=attr4=1\.75+
+18 CLASS=0 w=attr1=6\.15+ w=attr2=-2\.95 w=attr3=4\.75+ w=attr4=0\.8-1\.75
+97 CLASS=2 w=attr1=5\.55-6\.15 w=attr2=2\.95-3\.35 w=attr3=2\.45-4\.75 w=attr4=0\.8-1\.75
+9 CLASS=2 w=attr1=5\.55-6\.15 w=attr2=-2\.95 w=attr3=2\.45-4\.75 w=attr4=0\.8-1\.75
+113 CLASS=2 w=attr1=5\.55-6\.15 w=attr2=-2\.95 w=attr3=2\.45-4\.75 w=attr4=0\.8-1\.75
+134 CLASS=1 w=attr1=-5\.55 w=attr2=2\.95-3\.35 w=attr3=-2\.45 w=attr4=-0\.8
+121 CLASS=0 w=attr1=6\.15+ w=attr2=2\.95-3\.35 w=attr3=4\.75+ w=attr4=1\.75+
+62 CLASS=0 w=attr1=6\.15+ w=attr2=-2\.95 w=attr3=4\.75+ w=attr4=1\.75+
+102 CLASS=1 w=attr1=-5\.55 w=attr2=3\.35+ w=attr3=-2\.45 w=attr4=-0\.8
+125 CLASS=0 w=attr1=5\.55-6\.15 w=attr2=2\.95-3\.35 w=attr3=4\.75+ w=attr4=1\.75+
