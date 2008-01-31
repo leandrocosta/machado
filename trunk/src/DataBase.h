@@ -2,11 +2,11 @@
 #define _DATA_BASE_H_
 
 
-#include "IOManager.h"
-#include "Tokenizer.h"
 #include "ClassList.h"
 #include "ItemList.h"
 #include "TransactionList.h"
+#include "base/IOManager.h"
+#include "base/Tokenizer.h"
 
 #define	MODE_ORTHOGONAL	'o'
 #define	MODE_CLASSICAL	'c'

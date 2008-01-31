@@ -7,7 +7,7 @@
 using std::string;
 using std::list;
 
-#include "base/types.h"
+#include "types.h"
 
 
 class IOManager
