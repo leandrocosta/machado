@@ -21,6 +21,7 @@ autoconf
 ### configure @ ATI (hydrus) ###
 ROOT=/data/users/leandro.costa
 echo ./configure --prefix=$ROOT/local/machado
+./configure --prefix=$ROOT/local/machado
 
 #echo make clean
 #make clean

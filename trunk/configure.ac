@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([classifier], [0.01], [costa@dcc.ufmg.br])
+AC_INIT([machado], [0.01], [costa@dcc.ufmg.br])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
