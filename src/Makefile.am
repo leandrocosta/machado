@@ -1,10 +1,9 @@
 LDADD_BASE	= $(top_builddir)/src/base/libbase.la
 
-SRCS		= Class.cpp ClassList.cpp DataBase.cpp IOManager.cpp		\
+SRCS		= Class.cpp ClassList.cpp DataBase.cpp Transaction.cpp		\
 	Item.cpp ItemHash.cpp ItemList.cpp ItemSet.cpp Pattern.cpp		\
-	PatternList.cpp Rule.cpp RuleList.cpp RuleUIntHash.cpp			\
-	Tokenizer.cpp Transaction.cpp TransactionList.cpp AppOptions.cpp	\
-	main.cpp
+	PatternList.cpp Rule.cpp RuleList.cpp RuleUIntHash.cpp AppOptions.cpp	\
+	TransactionList.cpp main.cpp
 
 SUBDIRS = base
 

@@ -1,5 +1,5 @@
 #include "Tokenizer.h"
-#include "base/Logger.h"
+#include "Logger.h"
 
 
 Tokenizer::Tokenizer (const string &delimiter)

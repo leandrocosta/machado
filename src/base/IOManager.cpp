@@ -1,6 +1,5 @@
 #include "IOManager.h"
-#include "base/Logger.h"
-#include "base/types.h"
+#include "Logger.h"
 
 #include <fstream>
 using std::ifstream;
