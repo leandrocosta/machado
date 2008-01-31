@@ -1,0 +1,3 @@
+96 CLASS=17 m_sn_gt_1k air(mild) ar_c(normal) ar_u(normal) history(dizziness) history(fluctuating) history(recruitment) o_ar_c(normal) o_ar_u(normal) speech(normal) tymp(a)
+139 CLASS=6 history(noise) age_gt_60 speech(very_poor) o_ar_c(elevated) o_ar_u(elevated) ar_u(normal) ar_c(normal) static(normal) tymp(a) air(moderate) boneAbnormal
+30 CLASS=0 boneAbnormal air(mild) ar_c(elevated) ar_u(normal) bone(mild) o_ar_c(absent) o_ar_u(absent) speech(normal) static(normal) tymp(a)

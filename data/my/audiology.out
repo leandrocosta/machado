@@ -1,0 +1,28 @@
+
+[CLASS=17] [m_sn_gt_1k air(mild) ar_c(normal) ar_u(normal) history(dizziness) history(fluctuating) history(recruitment) o_ar_c(normal) o_ar_u(normal) speech(normal) tymp(a)]
+classificação (padrões frequentes):
+regras:
+classe [CLASS=17], confiança [1], padrão [history(recruitment)]
+classe [CLASS=17], confiança [1], padrão [history(fluctuating)]
+MELHOR REGRA:
+classe [CLASS=17], suporte [0.0322581], confiança [1]
+---
+PIOR REGRA:
+classe [CLASS=17], suporte [0.00537634], confiança [1]
+---
+classificação:
+classe [CLASS=17], regras [2], suporte absoluto/média [0.0376344/0.0188172], confiança absoluto/média [2/1]
+classificação: CLASS=17
+classificação (padrões frequentes ortogonais):
+regras:
+25/01/2008-16:52:00-27009: DataBase::ClassifyTestData () - exception [Out of range access in 8RuleList]
+
+[CLASS=6] [history(noise) age_gt_60 speech(very_poor) o_ar_c(elevated) o_ar_u(elevated) ar_u(normal) ar_c(normal) static(normal) tymp(a) air(moderate) boneAbnormal]
+classificação (padrões frequentes):
+regras:
+25/01/2008-16:52:02-27009: DataBase::ClassifyTestData () - exception [Out of range access in 8RuleList]
+
+[CLASS=0] [boneAbnormal air(mild) ar_c(elevated) ar_u(normal) bone(mild) o_ar_c(absent) o_ar_u(absent) speech(normal) static(normal) tymp(a)]
+classificação (padrões frequentes):
+regras:
+25/01/2008-16:52:03-27009: DataBase::ClassifyTestData () - exception [Out of range access in 8RuleList]
