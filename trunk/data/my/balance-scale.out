@@ -1,0 +1,30 @@
+
+[CLASS=2] [left_weight_3 left_distance_2 right_weight_1 right_distance_4]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=1], regras [4], suporte absoluto/média [1.34973/0.168716], confiança absoluto/média [1.76265/0.220332]
+classe [CLASS=2], regras [4], suporte absoluto/média [1.34973/0.168716], confiança absoluto/média [1.91352/0.23919]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=1], regras [2], suporte absoluto/média [0.674863/0.168716], confiança absoluto/média [0.759179/0.189795]
+classe [CLASS=2], regras [2], suporte absoluto/média [0.674863/0.168716], confiança absoluto/média [1.07887/0.269719]
+
+[CLASS=2] [left_weight_3 left_distance_5 right_weight_2 right_distance_3]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=1], regras [4], suporte absoluto/média [1.34877/0.168597], confiança absoluto/média [1.51154/0.188942]
+classe [CLASS=2], regras [4], suporte absoluto/média [1.34877/0.168597], confiança absoluto/média [2.18142/0.272677]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=1], regras [2], suporte absoluto/média [0.675749/0.168937], confiança absoluto/média [0.854839/0.21371]
+classe [CLASS=2], regras [2], suporte absoluto/média [0.675749/0.168937], confiança absoluto/média [0.983871/0.245968]
+
+[CLASS=2] [left_weight_4 left_distance_3 right_weight_1 right_distance_1]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=1], regras [4], suporte absoluto/média [1.34877/0.168597], confiança absoluto/média [1.00918/0.126147]
+classe [CLASS=2], regras [4], suporte absoluto/média [1.34877/0.168597], confiança absoluto/média [2.67565/0.334456]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=1], regras [2], suporte absoluto/média [0.675749/0.168937], confiança absoluto/média [0.443548/0.110887]
+classe [CLASS=2], regras [2], suporte absoluto/média [0.675749/0.168937], confiança absoluto/média [1.39516/0.34879]

@@ -1,0 +1,35 @@
+
+[CLASS=0] [buying_vhigh doors_4 persons_4 lug_boot_med safety_high]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=0], regras [8], suporte absoluto/média [2.19555/0.115555], confiança absoluto/média [4.384/0.230737]
+classe [CLASS=1], regras [8], suporte absoluto/média [2.19555/0.115555], confiança absoluto/média [2.61747/0.137762]
+classe [CLASS=2], regras [3], suporte absoluto/média [0.665275/0.0350145], confiança absoluto/média [0.401199/0.0211157]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=0], regras [2], suporte absoluto/média [0.43215/0.0864301], confiança absoluto/média [1.12992/0.225983]
+classe [CLASS=1], regras [2], suporte absoluto/média [0.43215/0.0864301], confiança absoluto/média [0.603701/0.12074]
+classe [CLASS=2], regras [1], suporte absoluto/média [0.132916/0.0265832], confiança absoluto/média [0.13089/0.026178]
+
+[CLASS=0] [buying_vhigh doors_2 persons_more lug_boot_small safety_high]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=0], regras [8], suporte absoluto/média [2.19694/0.115628], confiança absoluto/média [4.8966/0.257716]
+classe [CLASS=1], regras [8], suporte absoluto/média [2.19694/0.115628], confiança absoluto/média [2.32197/0.122209]
+classe [CLASS=2], regras [2], suporte absoluto/média [0.532359/0.0280189], confiança absoluto/média [0.296486/0.0156046]
+classe [CLASS=3], regras [1], suporte absoluto/média [0.132916/0.00699557], confiança absoluto/média [0.109948/0.00578672]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=0], regras [2], suporte absoluto/média [0.432846/0.0865692], confiança absoluto/média [1.27762/0.255524]
+classe [CLASS=1], regras [2], suporte absoluto/média [0.432846/0.0865692], confiança absoluto/média [0.554427/0.110885]
+classe [CLASS=3], regras [1], suporte absoluto/média [0.132916/0.0265832], confiança absoluto/média [0.109948/0.0219895]
+
+[CLASS=0] [buying_vhigh doors_4 persons_2 lug_boot_med safety_low]
+classificação (padrões frequentes):
+classificação:
+classe [CLASS=0], regras [8], suporte absoluto/média [2.19624/0.199658], confiança absoluto/média [7.18603/0.653275]
+classe [CLASS=1], regras [3], suporte absoluto/média [0.997216/0.090656], confiança absoluto/média [0.640233/0.058203]
+classificação (padrões frequentes ortogonais):
+classificação:
+classe [CLASS=0], regras [2], suporte absoluto/média [0.43215/0.14405], confiança absoluto/média [1.67442/0.55814]
+classe [CLASS=1], regras [1], suporte absoluto/média [0.299235/0.0997448], confiança absoluto/média [0.237209/0.0790698]
