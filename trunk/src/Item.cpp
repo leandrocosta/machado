@@ -60,6 +60,11 @@ const string& Item::GetValue () const
 	return mValue;
 }
 
+void Item::SetCount (const uint32 &count)
+{
+	mCount = count;
+}
+
 void Item::IncCount ()
 {
 	LOGMSG (HIGH_LEVEL, "Item::IncCount () - p [%p]\n", this);

@@ -1,6 +1,8 @@
 #include "PatternList.h"
 #include "TransactionList.h"
 #include "ItemHash.h"
+#include "RuleList.h"
+#include "ClassList.h"
 #include "AppOptions.h"
 #include "base/Logger.h"
 
@@ -175,6 +177,35 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
+RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence) const
+{
+	RuleList *pRuleList = new RuleList ();
+
+	for (uint32 i = 0; i < pClassList->GetSize (); i++)
+	{
+		Class *pClass = static_cast<Class *>(pClassList->GetAt (i));
+
+		LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - check class [%s]\n", pClass->GetValue ().c_str ());
+
+		for (uint32 j = 0; j < GetSize (); j++)
+		{
+			Pattern *pPattern = static_cast<Pattern *>(GetAt (j));
+
+			Rule *pRule = new Rule (pClass, pPattern);
+
+			if (pRule->GetConfidence () >= confidence)
+			{
+				LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - add rule [%s]\n", pPattern->GetPrintableString ().c_str ());
+				pRuleList->PushBack (pRule);
+			}
+			else
+				delete pRule;
+		}
+	}
+
+	return pRuleList;
+}
+
 const uint32 PatternList::GetSumPatternLen () const
 {
 	uint32 sumPatternLen = 0;
@@ -201,7 +232,7 @@ Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern) const
 
 	Pattern *pPatternRet = static_cast<Pattern *>(*it);
 
-	float32 similarity = pPatternRet->GetSimilarity (pPattern);
+	float32 similarity = pPatternRet->GetSimilarityL (pPattern);
 
 	STLPatternList_cit itEnd = GetEnd ();
 
@@ -209,21 +240,20 @@ Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern) const
 	{
 		Pattern *pPattern2 = static_cast<Pattern *>(*it);
 
-		if (pPattern2->GetSimilarity (pPattern) > similarity)
+		if (pPattern2->GetSimilarityL (pPattern) > similarity)
 			pPatternRet = pPattern2;
 	}
 
 	return pPatternRet;
 }
 
-const float32 PatternList::GetSimilarityRate () const
+const float32 PatternList::GetSimilarityRate ()
 {
 	float32 rate = 0.0;
 
 	STLPatternList_cit		itPattern		;
 	ItemList::STLItemList_cit	itItem			;
-	ItemHash			Hash			;
-	const Item*			pItem		= NULL	;
+	ItemHash			totalItemHash		;
 	uint32				num_items	= 0	;
 
 	STLPatternList_cit itEnd = GetEnd ();
@@ -236,26 +266,36 @@ const float32 PatternList::GetSimilarityRate () const
 
 		for (itItem = pPattern->GetBegin (); itItem != itPatternEnd; itItem++)
 		{
-			pItem = static_cast<const Item *>(*itItem);
+			Item *pItem = static_cast<Item *>(*itItem);
 
-			if (! Hash.Find (pItem->GetValue ()))
-				Hash.Add (pItem->GetValue (), new Item (pItem->GetValue ()));
+			/*
+			if (! totalItemHash.Find (pItem->GetValue ()))
+				totalItemHash.Add (pItem->GetValue (), new Item (pItem->GetValue ()));
 			else
-				Hash.Get (pItem->GetValue ())->IncCount ();
+				totalItemHash.Get (pItem->GetValue ())->IncCount ();
+			*/
+
+			if (totalItemHash.Find (pItem->GetValue ()))
+				pItem->IncCount ();
+			else
+			{
+				pItem->SetCount (1);
+				totalItemHash.Add (pItem->GetValue (), pItem);
+			}
 
 			num_items++;
 		}
 	}
 
-	uint32	distinct_items	= Hash.GetSize ()	;
+	uint32	distinct_items	= totalItemHash.GetSize ()	;
 	float32 exclusive_items = 0			;
 
 	ItemHash::STLItemHash_cit itHash			;
-	ItemHash::STLItemHash_cit itHashEnd = Hash.GetEnd ()	;
+	ItemHash::STLItemHash_cit itHashEnd = totalItemHash.GetEnd ()	;
 
-	for (itHash = Hash.GetBegin (); itHash != itHashEnd; itHash++)
+	for (itHash = totalItemHash.GetBegin (); itHash != itHashEnd; itHash++)
 	{
-		pItem = static_cast<const Item *>(itHash->second);
+		const Item *pItem = static_cast<const Item *>(itHash->second);
 
 		exclusive_items += (GetSize () - pItem->GetCount ()) / (GetSize () - 1);
 	}
@@ -265,6 +305,8 @@ const float32 PatternList::GetSimilarityRate () const
 	rate = (float32) (exclusive_items / distinct_items);
 //      rate = (float32) (exclusive_items / distinct_items) * ((float32) num_items / (mMaxPatternLen * GetSize ()));
 //	rate = (float32) (exclusive_items / distinct_items) * log ((float32) num_items / (mMaxPatternLen * GetSize ()));
+
+	totalItemHash.RemoveAll ();
 
 	return rate;
 }
@@ -287,32 +329,8 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 		STLPatternList_cit itPatternEnd = GetEnd ();
 
 		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
-		{
-			/*
-			const Pattern *pPattern = static_cast<const Pattern *>(*itPattern);
-
-			bool bCovered = true;
-
-			ItemList::STLItemList_cit itItemEnd = pPattern->GetEnd ();
-
-			for (ItemList::STLItemList_cit itItem = pPattern->GetBegin (); itItem != itItemEnd; itItem++)
-			{
-				const Item *pItem = static_cast<const Item *>(*itItem);
-
-				if (! pTransaction->FindByPtr (pItem))
-				{
-					bCovered = false;
-					break;
-				}
-			}
-
-			if (bCovered)
-				patterns_found_in_transaction++;
-			*/
-
 			if (pTransaction->IsCoveredBy (static_cast<const Pattern *>(*itPattern)))
 				patterns_found_in_transaction++;
-		}
 
 		if (patterns_found_in_transaction)
 		{
@@ -330,7 +348,7 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 	return rate;
 }
 
-const float32 PatternList::GetRate (const TransactionList *pTransactionList) const
+const float32 PatternList::GetRate (const TransactionList *pTransactionList)
 {
 	return GetSimilarityRate () * GetCoverageRate (pTransactionList);
 }

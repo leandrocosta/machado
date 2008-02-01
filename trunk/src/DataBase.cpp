@@ -173,7 +173,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 //		cout << "padrões frequentes [" << pFrequentPatternList->GetSize () << "]" << endl;
 //		pFrequentPatternList->Print ();
 
-		RuleList *pRuleList = GetRuleList (pFrequentPatternList);
+		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence);
 
 //		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - pRuleList (frequent patterns)\n");
 //		cout << "classificação (padrões frequentes):" << endl;
@@ -214,7 +214,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 //		cout << "padrões frequentes ortogonais:" << endl;
 		pOrthogonalFrequentPatternList->Print ();
 
-		RuleList *pRuleList = GetRuleList (pOrthogonalFrequentPatternList);
+		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence);
 
 //		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - pRuleList (orthogonal frequent patterns)\n");
 //		cout << "classificação (padrões frequentes ortogonais):" << endl;
@@ -358,143 +358,7 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 	return pFrequentPatternList;
 }
 
-PatternList* DataBase::GetOrthogonalPatternList (PatternList *pPatternList) const
-{
-	LOGMSG (LOW_LEVEL, "DataBase::GetOrthogonalPatternList () - pPatternList [%p], patterns [%llu]\n", pPatternList, pPatternList ? pPatternList->GetSize ():0);
-
-	return GetOrthogonalPatternListHeuristical (pPatternList);
-}
-
-PatternList* DataBase::GetOrthogonalPatternListHeuristical (PatternList *pPatternList) const
-{
-	LOGMSG (LOW_LEVEL, "DataBase::GetOrthogonalPatternListHeuristical () - begin\n");
-
-	PatternList *pOrthogonalPatternList = new PatternList ();
-
-	if (pPatternList->GetSize () <= 2)
-	{
-		if (pPatternList->GetSize () > 0)
-			pOrthogonalPatternList->PushBack (pPatternList->GetAt (0));
-
-		if (pPatternList->GetSize () > 1)
-			pOrthogonalPatternList->PushBack (pPatternList->GetAt (1));
-	}
-	else
-	{
-		pPatternList->ReverseSort ();
-
-		pOrthogonalPatternList->PushBack (pPatternList->GetAt (0));
-		pOrthogonalPatternList->PushBack (pPatternList->GetAt (1));
-
-		pPatternList->GetAt (0)->SetGot (true);
-		pPatternList->GetAt (1)->SetGot (true);
-
-		uint64 index = 0;
-
-		// two items
-		for (index = 0; index < pPatternList->GetSize (); index++)
-		{
-			Pattern *pPattern1 = static_cast<Pattern *>(pPatternList->GetAt (index));
-
-			if (! pPattern1->GetGot ())
-			{
-				Pattern *pPattern2 = pOrthogonalPatternList->GetMoreSimilar (pPattern1);
-				float32 rate_prv = pOrthogonalPatternList->GetRate (&mTrainTransactionList);
-
-				pOrthogonalPatternList->Remove (pPattern2);
-				pOrthogonalPatternList->PushBack (pPattern1);
-
-				float32 rate_new = pOrthogonalPatternList->GetRate (&mTrainTransactionList);
-
-				if (rate_new > rate_prv)
-				{
-					pPattern1->SetGot (true);
-					pPattern2->SetGot (false);
-				}
-				else
-				{
-					pOrthogonalPatternList->Remove (pPattern1);
-					pOrthogonalPatternList->PushBack (pPattern2);
-				}
-			}
-
-		}
-	}
-
-	return pOrthogonalPatternList;
-}
-
-PatternList* DataBase::GetOrthogonalPatternListPolynomial (PatternList *pPatternList) const
-{
-	LOGMSG (LOW_LEVEL, "DataBase::GetOrthogonalPatternListPolynomial () - begin\n");
-
-	PatternList *pOrthogonalPatternList = new PatternList ();
-
-	Pattern *pPattern1 = NULL;
-	Pattern *pPattern2 = NULL;
-
-	if (pPatternList->GetSize () <= 2)
-	{
-		if (pPatternList->GetSize () > 0)
-			pPattern1 = pPatternList->GetAt (0);
-
-		if (pPatternList->GetSize () > 1)
-			pPattern2 = pPatternList->GetAt (1);
-	}
-	else
-	{
-		float32 rate = -1;
-
-		for (uint32 i = 0; i < pPatternList->GetSize () - 1; i++)
-		{
-			LOGMSG (MEDIUM_LEVEL, "DataBase::GetOrthogonalPatternListPolynomial () - try pattern 1 [%s]\n", pPatternList->GetAt (i)->GetPrintableString ().c_str ());
-
-			for (uint32 j = i+1; j < pPatternList->GetSize (); j++)
-			{
-				LOGMSG (MEDIUM_LEVEL, "DataBase::GetOrthogonalPatternListPolynomial () - try pattern 2 [%s]\n", pPatternList->GetAt (j)->GetPrintableString ().c_str ());
-
-				pOrthogonalPatternList->PushBack (pPatternList->GetAt (i));
-				pOrthogonalPatternList->PushBack (pPatternList->GetAt (j));
-
-				float32 rate_new = -1;
-
-				switch (AppOptions::GetInstance ()->GetOrtMode ())
-				{
-					case ORTH_SIMILARITY:
-						rate_new = pOrthogonalPatternList->GetSimilarityRate ();
-						break;
-					case ORTH_COVERAGE:
-						rate_new = pOrthogonalPatternList->GetCoverageRate (&mTrainTransactionList);
-						break;
-					case ORTH_BOTH:
-						rate_new = pOrthogonalPatternList->GetRate (&mTrainTransactionList);
-						break;
-					case ORTH_UNKNOWN:
-					default:
-						LOGMSG (NO_DEBUG, "DataBase::GetOrthogonalPatternListPolynomial () - unknown orthogonality mode\n");
-						break;
-				}
-
-				if (rate_new > rate)
-				{
-					pPattern1 = pPatternList->GetAt (i);
-					pPattern2 = pPatternList->GetAt (j);
-				}
-
-				pOrthogonalPatternList->RemoveAll ();
-			}
-		}
-	}
-
-	if (pPattern1)
-		pOrthogonalPatternList->PushBack (pPattern1);
-
-	if (pPattern2)
-		pOrthogonalPatternList->PushBack (pPattern2);
-
-	return pOrthogonalPatternList;
-}
-
+/*
 RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
 {
 	RuleList *pRuleList = new RuleList ();
@@ -523,6 +387,7 @@ RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
 
 	return pRuleList;
 }
+*/
 
 void DataBase::MakeProjectionTransactionList (const Transaction *pTransaction)
 {

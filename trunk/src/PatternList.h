@@ -6,7 +6,9 @@
 #include "Pattern.h"
 
 
-class TransactionList;
+class TransactionList	;
+class RuleList		;
+class ClassList		;
 
 
 class PatternList : public ObjectList
@@ -33,14 +35,17 @@ class PatternList : public ObjectList
 		PatternList*	GetOrthogonalPatternListPolynomial	(const TransactionList *pTransactionList)	;
 
 	public:
+		RuleList*	GetRuleList	(const ClassList *pClassList, const float32 &confidence)	const	;
+
+	public:
 		const	uint32&		GetMaxPatternLen	()				const	;
 		const	uint32		GetSumPatternLen	()				const	;
 			Pattern*	GetMoreSimilar		(const Pattern *pPattern)	const	;
-		const	float32		GetSimilarityRate	()				const	;
+		const	float32		GetSimilarityRate	()					;
 		const	float32		GetCoverageRate		(
 						const TransactionList *pTransactionList)	const	;
 		const	float32		GetRate			(
-						const TransactionList *pTransactionList)	const	;
+						const TransactionList *pTransactionList)		;
 
 	private:
 		uint32	mMaxPatternLen	;

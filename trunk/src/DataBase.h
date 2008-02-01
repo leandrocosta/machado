@@ -49,16 +49,11 @@ class DataBase : private IOManager, private Tokenizer
 		void	ClassifyTestData	()	;
 
 	private:
-		void		ClassifyTransaction			(Transaction *pTransaction)		;
-		PatternList*	GetFrequentPatternList			(
-								const Transaction *pTransaction,
-								const uint64 &projection_size)		const	;
-
-		PatternList*	GetOrthogonalPatternList		(PatternList *pPatternList)	const	;
-		PatternList*	GetOrthogonalPatternListHeuristical	(PatternList *pPatternList)	const	;
-		PatternList*	GetOrthogonalPatternListPolynomial	(PatternList *pPatternList)	const	;
-
-		RuleList*	GetRuleList				(PatternList *pPatternList)	const	;
+		void		ClassifyTransaction	(Transaction *pTransaction)		;
+		PatternList*	GetFrequentPatternList	(
+							const Transaction *pTransaction,
+							const uint64 &projection_size)		const	;
+//		RuleList*	GetRuleList		(const ClassList *pClassList)		const	;
 
 	private:
 		void	MakeProjectionTransactionList	(const Transaction *pTransaction)	;
