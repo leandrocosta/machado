@@ -25,6 +25,9 @@ class ObjectList : public Object
 			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
 		} GreaterComparer;
 
+	public:
+		static	const	bool	HasIntersectionByPtr	(const ObjectList *p1, const ObjectList *p2)	;
+
 	protected:
 		typedef deque<Object *>			STLObjectList		;
 		typedef STLObjectList::iterator		STLObjectList_it	;

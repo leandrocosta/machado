@@ -1,6 +1,5 @@
 #include "Object.h"
 #include "ObjectException.h"
-#include "ObjectFactory.h"
 #include <typeinfo>
 
 
@@ -60,13 +59,6 @@ void Object::Unserialize (istream &stream)
 Object* Object::Clone () const
 {
 	throw (ObjectException ("Method Clone () not defined for class " + string (typeid (*this).name ())));
-}
-
-const ObjectFactory* Object::GetFactory () const
-{
-	throw (ObjectException ("Method GetFactory () not defined for class " + string (typeid (*this).name ())));
-
-	return NULL;
 }
 
 void Object::Print () const

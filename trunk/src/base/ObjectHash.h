@@ -21,7 +21,7 @@ class ObjectHash : public Object
 		typedef	STLObjectHash::iterator		STLObjectHash_it	;
 		typedef	STLObjectHash::const_iterator	STLObjectHash_cit	;
 
-	protected:
+	public:
 			STLObjectHash_it	GetBegin	()		;
 		const	STLObjectHash_cit	GetBegin	()	const	;
 			STLObjectHash_it	GetEnd		()		;

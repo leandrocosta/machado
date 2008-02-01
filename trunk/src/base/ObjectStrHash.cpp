@@ -4,14 +4,18 @@
 
 ObjectStrHash::ObjectStrHash (const uint64 &max_size)
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectStrHash::ObjectStrHash () - [%p]\n", this);
+#endif
 
 	mMaxSize = max_size;
 }
 
 ObjectStrHash::~ObjectStrHash ()
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectStrHash::~ObjectStrHash () - [%p]\n", this);
+#endif
 
 	STLObjectStrHash_cit it;
 
@@ -59,7 +63,9 @@ void ObjectStrHash::RemoveAll ()
 
 void ObjectStrHash::DeleteAll ()
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectStrHash::DeleteAll () - begin [%p]\n", this);
+#endif
 
 	STLObjectStrHash_it it;
 
@@ -68,7 +74,9 @@ void ObjectStrHash::DeleteAll ()
 
 	mHash.clear ();
 
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectStrHash::DeleteAll () - end [%p]\n", this);
+#endif
 }
 
 const bool ObjectStrHash::Find (const string &key) const

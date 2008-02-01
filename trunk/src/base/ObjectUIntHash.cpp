@@ -4,14 +4,18 @@
 
 ObjectUIntHash::ObjectUIntHash (const uint32 &max_size)
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectUIntHash::ObjectUIntHash () - [%p]\n", this);
+#endif
 
 	mMaxSize = max_size;
 }
 
 ObjectUIntHash::~ObjectUIntHash ()
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectUIntHash::~ObjectUIntHash () - [%p]\n", this);
+#endif
 
 	STLObjectUIntHash_cit it;
 
@@ -59,7 +63,9 @@ void ObjectUIntHash::RemoveAll ()
 
 void ObjectUIntHash::DeleteAll ()
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectUIntHash::DeleteAll () - begin [%p]\n", this);
+#endif
 
 	STLObjectUIntHash_it it;
 
@@ -68,7 +74,9 @@ void ObjectUIntHash::DeleteAll ()
 
 	mHash.clear ();
 
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectUIntHash::DeleteAll () - end [%p]\n", this);
+#endif
 }
 
 const bool ObjectUIntHash::Find (const uint32 &key) const

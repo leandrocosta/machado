@@ -60,7 +60,9 @@ const uint64 ObjectHash::GetSize () const
 
 const bool ObjectHash::Find (const string &key) const
 {
+#ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectHash::Find () - p [%p]\n", this);
+#endif
 
 	return (mHash.find (key) != mHash.end ());
 }
