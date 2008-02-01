@@ -152,9 +152,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 //
 	pTransaction->Print ();
 
-	TransactionList *pProjectionTransactionList = GetProjectionTransactionList (pTransaction);
+	MakeProjectionTransactionList (pTransaction);
 
-	PatternList *pFrequentPatternList = GetFrequentPatternList (pTransaction, pProjectionTransactionList->GetSize ());
+	PatternList *pFrequentPatternList = GetFrequentPatternList (pTransaction, mProjectionTransactionList.GetSize ());
+
 //	cout << "frequent patterns:" << endl;
 //	pFrequentPatternList->Print ();
 //	PatternList *pOrthogonalFrequentPatternList = GetOrthogonalPatternList (pFrequentPatternList);
@@ -207,7 +208,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = GetOrthogonalPatternList (pFrequentPatternList);
+//		PatternList *pOrthogonalFrequentPatternList = GetOrthogonalPatternList (pFrequentPatternList);
+		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (&mProjectionTransactionList);
 
 //		cout << "padrões frequentes ortogonais:" << endl;
 		pOrthogonalFrequentPatternList->Print ();
@@ -252,10 +254,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - unknown run mode\n");
 	}
 
-	delete pFrequentPatternList;
+	mProjectionTransactionList.RemoveAll ();
 
-	pProjectionTransactionList->RemoveAll ();
-	delete pProjectionTransactionList;
+	delete pFrequentPatternList;
 
 	if (class_guess == pTransaction->GetClass ()->GetValue ())
 		mCorrectGuesses++;
@@ -263,23 +264,6 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		mWrongGuesses++;
 
 	cout << class_guess << endl;
-}
-
-uint64 DataBase::GetProjectionSize (const Transaction *pTransaction) const
-{
-	uint64 size = 0;
-
-	for (uint64 i = 0; i < mTrainTransactionList.GetSize (); i++)
-	{
-		Transaction *pTrainTransaction = static_cast<Transaction *>(mTrainTransactionList.GetAt (i));
-
-		if (Transaction::HasIntersectionByPtr (pTransaction, pTrainTransaction))
-			size++;
-	}
-
-	LOGMSG (LOW_LEVEL, "DataBase::GetProjectionSize () - size [%llu]\n", size);
-
-	return size;
 }
 
 PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, const uint64 &projection_size) const
@@ -540,17 +524,13 @@ RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
 	return pRuleList;
 }
 
-TransactionList* DataBase::GetProjectionTransactionList (const Transaction *pTransaction) const
+void DataBase::MakeProjectionTransactionList (const Transaction *pTransaction)
 {
-	TransactionList *pTransactionList = new TransactionList ();
-
 	TransactionList::STLTransactionList_cit itEnd = mTrainTransactionList.GetEnd ();
 
 	for (TransactionList::STLTransactionList_cit it = mTrainTransactionList.GetBegin (); it != itEnd; it++)
 		if (Transaction::HasIntersectionByPtr (pTransaction, static_cast<const Transaction *>(*it)))
-			pTransactionList->PushBack (static_cast<Transaction *>(*it));
-
-	return pTransactionList;
+			mProjectionTransactionList.PushBack (static_cast<Transaction *>(*it));
 }
 
 void DataBase::Print () const

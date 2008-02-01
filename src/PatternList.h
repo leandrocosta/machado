@@ -28,7 +28,9 @@ class PatternList : public ObjectList
 		Pattern*	GetAt	(const uint64 &index)	const	;
 
 	public:
-		PatternList*	GetOrthogonalPatternList	()	const	;
+		PatternList*	GetOrthogonalPatternList		(const TransactionList *pTransactionList)	;
+		PatternList*	GetOrthogonalPatternListHeuristical	(const TransactionList *pTransactionList)	;
+		PatternList*	GetOrthogonalPatternListPolynomial	(const TransactionList *pTransactionList)	;
 
 	public:
 		const	uint32&		GetMaxPatternLen	()				const	;
