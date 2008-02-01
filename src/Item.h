@@ -28,8 +28,9 @@ class Item : public Object
 		const	uint32&	GetItemID	()	const	;
 		const	string&	GetValue	()	const	;
 
-			void	IncCount	()		;
-		const	uint32& GetCount	()	const	;
+			void	IncCount	()			;
+			void	SetCount	(const uint32 &count)	;
+		const	uint32& GetCount	()	const		;
 
 	public:
 			void			AddTransaction		(Transaction *pTransaction)		;

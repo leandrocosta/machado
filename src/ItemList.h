@@ -27,7 +27,7 @@ class ItemList : public ObjectList
 
 	public:
 			Item*	GetItemByValue	(const string &value)	const	;
-		const	float32	GetSimilarity	(const ItemList *pItemList)	const	;
+//		const	float32	GetSimilarity	(const ItemList *pItemList)	const	;
 
 	public:
 		virtual	const	string	GetPrintableString	()	const	;

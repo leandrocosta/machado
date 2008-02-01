@@ -132,6 +132,7 @@ Item* ItemList::GetItemByValue (const string &value) const
 	return pItem;
 }
 
+/*
 const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 {
 	LOGMSG (MEDIUM_LEVEL, "ItemList::GetSimilarity () - begin [%p]\n", this);
@@ -190,6 +191,7 @@ const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 
 	return similarity;
 }
+*/
 
 const string ItemList::GetPrintableString () const
 {
