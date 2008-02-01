@@ -132,67 +132,6 @@ Item* ItemList::GetItemByValue (const string &value) const
 	return pItem;
 }
 
-/*
-const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
-{
-	LOGMSG (MEDIUM_LEVEL, "ItemList::GetSimilarity () - begin [%p]\n", this);
-
-	float32		similarity	= 0.0	;
-	const Item*	pItem		= NULL	;
-	STLItemList_cit	itList			;
-	ItemHash	Hash			;
-	STLItemList_cit itEnd = GetEnd ()	;
-
-	for (itList = GetBegin (); itList != itEnd; ++itList)
-	{
-		pItem = static_cast<const Item *>(*itList);
-
-		LOGMSG (HIGH_LEVEL, "ItemList::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		if (! Hash.Find (pItem->GetValue ()))
-			Hash.Add (pItem->GetValue (), new Item (pItem->GetValue ()));
-		else
-			Hash.Get (pItem->GetValue ())->IncCount ();
-	}
-
-	itEnd = pItemList->GetEnd ();
-
-	for (itList = pItemList->GetBegin (); itList != itEnd; ++itList)
-	{
-		pItem = static_cast<const Item *>(*itList);
-
-		LOGMSG (HIGH_LEVEL, "ItemList::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		if (! Hash.Find (pItem->GetValue ()))
-			Hash.Add (pItem->GetValue (), new Item (pItem->GetValue ()));
-		else
-			Hash.Get (pItem->GetValue ())->IncCount ();
-	}
-
-	uint32 num	= 0	;
-	uint32 den	= 0	;
-
-	ItemHash::STLItemHash_cit itHash			;
-	ItemHash::STLItemHash_cit itHashEnd = Hash.GetEnd ()	;
-
-	for (itHash = Hash.GetBegin (); itHash != itHashEnd; itHash++)
-	{
-		pItem = static_cast<const Item *>(itHash->second);
-
-		den += pItem->GetCount ();
-
-		if (pItem->GetCount () > 1)
-			num += pItem->GetCount ();
-
-		LOGMSG (HIGH_LEVEL, "ItemList::GetSimilarity () - key [%s], count [%u]\n", itHash->first.c_str (), pItem->GetCount ());
-	}
-
-	similarity = (float32) num / den;
-
-	return similarity;
-}
-*/
-
 const string ItemList::GetPrintableString () const
 {
 	stringstream	sstream			;

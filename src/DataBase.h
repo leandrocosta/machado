@@ -53,7 +53,6 @@ class DataBase : private IOManager, private Tokenizer
 		PatternList*	GetFrequentPatternList	(
 							const Transaction *pTransaction,
 							const uint64 &projection_size)		const	;
-//		RuleList*	GetRuleList		(const ClassList *pClassList)		const	;
 
 	private:
 		void	MakeProjectionTransactionList	(const Transaction *pTransaction)	;

@@ -358,37 +358,6 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 	return pFrequentPatternList;
 }
 
-/*
-RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
-{
-	RuleList *pRuleList = new RuleList ();
-
-	for (uint32 i = 0; i < mClassList.GetSize (); i++)
-	{
-		Class *pClass = static_cast<Class *>(mClassList.GetAt (i));
-
-		LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - check class [%s]\n", pClass->GetValue ().c_str ());
-
-		for (uint32 j = 0; j < pPatternList->GetSize (); j++)
-		{
-			Pattern *pPattern = static_cast<Pattern *>(pPatternList->GetAt (j));
-
-			Rule *pRule = new Rule (pClass, pPattern);
-
-			if (pRule->GetConfidence () >= mConfidence)
-			{
-				LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - add rule [%s]\n", pPattern->GetPrintableString ().c_str ());
-				pRuleList->PushBack (pRule);
-			}
-			else
-				delete pRule;
-		}
-	}
-
-	return pRuleList;
-}
-*/
-
 void DataBase::MakeProjectionTransactionList (const Transaction *pTransaction)
 {
 	TransactionList::STLTransactionList_cit itEnd = mTrainTransactionList.GetEnd ();

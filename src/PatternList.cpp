@@ -268,13 +268,6 @@ const float32 PatternList::GetSimilarityRate ()
 		{
 			Item *pItem = static_cast<Item *>(*itItem);
 
-			/*
-			if (! totalItemHash.Find (pItem->GetValue ()))
-				totalItemHash.Add (pItem->GetValue (), new Item (pItem->GetValue ()));
-			else
-				totalItemHash.Get (pItem->GetValue ())->IncCount ();
-			*/
-
 			if (totalItemHash.Find (pItem->GetValue ()))
 				pItem->IncCount ();
 			else
