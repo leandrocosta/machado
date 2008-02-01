@@ -7,8 +7,8 @@
 #include <string>
 using std::string;
 
-class Transaction	;
-class TransactionList	;
+class	Transaction	;
+class	TransactionList	;
 
 
 class Item : public Object

@@ -3,40 +3,41 @@
 
 
 #include "ItemSet.h"
-
-class TransactionList;
+#include "TransactionList.h"
 
 
 class Pattern : public ItemSet
 {
 	public:
-			Pattern		()	;
-		virtual	~Pattern	()	;
+			Pattern		(const Pattern *pPattern)	;
+			Pattern		(Item *pItem)			;
+			Pattern		()				;
+		virtual	~Pattern	()				;
 
-//	public:
-//		virtual	const	bool	operator<	(const Object& rObject)	const	;
+	private:
+		void	InitFields	()	;
 
 	public:
-			void		MakeTransactionList	()				const	;
+			void		MakeTransactionList	()					;
+			void		MakeTransactionList	(Item *pItem)				;
 		const	uint64		GetFrequence		()				const	;
 
 			void		SetSupport		(const float32 &support)		;
 		const	float32&	GetSupport		()				const	;
 
 	public:
-		const	TransactionList*	GetTransactionList	()	const	;
-
-	public:
-			void	SetGot	(const bool &got)		;
-		const	bool&	GetGot	()			const	;
+			void			AddItem			(Item *pItem)			;
+			void			SetGot			(const bool &got)		;
+		const	bool&			GetGot			()			const	;
+		const	TransactionList&	GetTransactionList	()			const	;
 
 	public:
 		void	Print	()	const	;
 
 	private:
-		float32			mSupport		;
-		TransactionList*	mpTransactionList	;
-		bool			mGot			;
+		float32		mSupport		;
+		TransactionList	mTransactionList	;
+		bool		mGot			;
 };
 
 

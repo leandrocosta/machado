@@ -21,12 +21,6 @@ class ItemList : public ObjectList
 		typedef STLItemList::const_iterator	STLItemList_cit	;
 
 	public:
-			STLItemList_it	GetBegin	()		;
-		const	STLItemList_cit	GetBegin	()	const	;
-			STLItemList_it	GetEnd		()		;
-		const	STLItemList_cit	GetEnd		()	const	;
-
-	public:
 		virtual	const	bool	operator==	(const Object& rObject)	const	;
 		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
@@ -35,8 +29,11 @@ class ItemList : public ObjectList
 			Item*	GetItemByValue	(const string &value)	const	;
 		const	float32	GetSimilarity	(const ItemList *pItemList)	const	;
 
-//	public:
-//		void	Print	()	const	;
+	public:
+		virtual	const	string	GetPrintableString	()	const	;
+
+	public:
+		void	Print	()	const	;
 };
 
 

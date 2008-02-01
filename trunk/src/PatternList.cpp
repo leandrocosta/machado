@@ -49,9 +49,10 @@ const uint32 PatternList::GetSumPatternLen () const
 {
 	uint32 sumPatternLen = 0;
 
-	STLPatternList_cit it;
+	STLPatternList_cit	it			;
+	STLPatternList_cit	itEnd = GetEnd ()	;
 
-	for (it = GetBegin (); it != GetEnd (); it++)
+	for (it = GetBegin (); it != itEnd; it++)
 	{
 		sumPatternLen += static_cast<const Pattern *>(*it)->GetSize ();
 	}
@@ -66,15 +67,15 @@ const uint32& PatternList::GetMaxPatternLen () const
 
 Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern) const
 {
-	STLPatternList_cit it;
-
-	it = GetBegin ();
+	STLPatternList_cit it = GetBegin ();
 
 	Pattern *pPatternRet = static_cast<Pattern *>(*it);
 
 	float32 similarity = pPatternRet->GetSimilarity (pPattern);
 
-	for (++it; it != GetEnd (); it++)
+	STLPatternList_cit itEnd = GetEnd ();
+
+	for (++it; it != itEnd; it++)
 	{
 		Pattern *pPattern2 = static_cast<Pattern *>(*it);
 
@@ -95,11 +96,15 @@ const float32 PatternList::GetSimilarityRate () const
 	const Item*			pItem		= NULL	;
 	uint32				num_items	= 0	;
 
-	for (itPattern = GetBegin (); itPattern != GetEnd (); ++itPattern)
+	STLPatternList_cit itEnd = GetEnd ();
+
+	for (itPattern = GetBegin (); itPattern != itEnd; ++itPattern)
 	{
 		const Pattern *pPattern = static_cast<const Pattern *>(*itPattern);
 
-		for (itItem = pPattern->GetBegin (); itItem != pPattern->GetEnd (); itItem++)
+		STLPatternList_cit itPatternEnd = pPattern->GetEnd ();
+
+		for (itItem = pPattern->GetBegin (); itItem != itPatternEnd; itItem++)
 		{
 			pItem = static_cast<const Item *>(*itItem);
 
@@ -115,9 +120,10 @@ const float32 PatternList::GetSimilarityRate () const
 	uint32	distinct_items	= Hash.GetSize ()	;
 	float32 exclusive_items = 0			;
 
-	ItemHash::STLItemHash_cit itHash	;
+	ItemHash::STLItemHash_cit itHash			;
+	ItemHash::STLItemHash_cit itHashEnd = Hash.GetEnd ()	;
 
-	for (itHash = Hash.GetBegin (); itHash != Hash.GetEnd (); itHash++)
+	for (itHash = Hash.GetBegin (); itHash != itHashEnd; itHash++)
 	{
 		pItem = static_cast<const Item *>(itHash->second);
 
@@ -135,52 +141,61 @@ const float32 PatternList::GetSimilarityRate () const
 
 const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionList) const
 {
-	float32 rate = 0.0;
+	uint32	distinct_transactions	= 0		;
+	float32 exclusive_factor	= 0.0		;
+//	float32 num_coverages		= 0.0		;
+	uint32	num_patterns		= GetSize ()	;
 
-	STLPatternList_cit			itPattern	;
-	TransactionList::STLTransactionList_cit itTransaction	;
-	ItemList::STLItemList_cit		itItem		;
+	TransactionList::STLTransactionList_cit itTransactionEnd = pTransactionList->GetEnd ();
 
-	uint32	distinct_transactions	= 0	;
-	float32 exclusive_transactions	= 0.0	;
-	float32 num_transactions	= 0.0	;
-
-	for (itTransaction = pTransactionList->GetBegin (); itTransaction != pTransactionList->GetEnd (); itTransaction++)
+	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
 	{
 		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
 
-		uint32 coveraged = 0;
+		uint32 patterns_found_in_transaction = 0;
 
-		for (itPattern = GetBegin (); itPattern != GetEnd (); itPattern++)
+		STLPatternList_cit itPatternEnd = GetEnd ();
+
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
 		{
+			/*
 			const Pattern *pPattern = static_cast<const Pattern *>(*itPattern);
 
 			bool bCovered = true;
 
-			for (itItem = pPattern->GetBegin (); itItem != pPattern->GetEnd (); itItem++)
+			ItemList::STLItemList_cit itItemEnd = pPattern->GetEnd ();
+
+			for (ItemList::STLItemList_cit itItem = pPattern->GetBegin (); itItem != itItemEnd; itItem++)
 			{
 				const Item *pItem = static_cast<const Item *>(*itItem);
 
-				if (! pTransaction->GetItemByValue (pItem->GetValue ()))
-					bCovered = 0;
+				if (! pTransaction->FindByPtr (pItem))
+				{
+					bCovered = false;
+					break;
+				}
 			}
 
 			if (bCovered)
-				coveraged++;
+				patterns_found_in_transaction++;
+			*/
+
+			if (pTransaction->IsCoveredBy (static_cast<const Pattern *>(*itPattern)))
+				patterns_found_in_transaction++;
 		}
 
-		if (coveraged)
+		if (patterns_found_in_transaction)
 		{
 			distinct_transactions++;
-			exclusive_transactions += float32 (GetSize () - coveraged) / (GetSize () - 1);
+			exclusive_factor += float32 (num_patterns - patterns_found_in_transaction) / (num_patterns - 1);
 		}
 
-		num_transactions += coveraged;
+//		num_coverages += patterns_found_in_transaction;
 	}
 
-	 rate = (float32) (exclusive_transactions / distinct_transactions);
- //	rate = (float32) (exclusive_transactions / distinct_transactions) * ((float32) num_transactions / (GetSize () * pTransactionList->GetSize ()));
-//	rate = (float32) (exclusive_transactions / distinct_transactions) * log ((float32) num_transactions / (GetSize () * pTransactionList->GetSize ()));
+	float rate = exclusive_factor / distinct_transactions;
+ //	rate = (float32) (exclusive_factor / distinct_transactions) * ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
+//	rate = (float32) (exclusive_factor / distinct_transactions) * log ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
 
 	return rate;
 }

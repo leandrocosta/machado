@@ -3,12 +3,10 @@
 
 
 #include "base/Object.h"
+#include "TransactionList.h"
 
 #include <string>
 using std::string;
-
-class Transaction	;
-class TransactionList	;
 
 
 class Class : public Object
@@ -35,10 +33,10 @@ class Class : public Object
 
 	private:
 		const	uint32	mClassID	;
-		const	string	mValue	;
+		const	string	mValue		;
 
 	private:
-		TransactionList*	mpTransactionList	;
+		TransactionList	mTransactionList	;
 };
 
 

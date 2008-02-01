@@ -30,7 +30,9 @@ void RuleList::PrintClassification () const
 
 	uint32 total_rules = GetSize ();
 
-	for (STLObjectList_cit it = GetBegin (); it != GetEnd (); it++)
+	STLRuleList_cit itEnd = GetEnd ();
+
+	for (STLObjectList_cit it = GetBegin (); it != itEnd; it++)
 	{
 		const Rule *pRule = static_cast<const Rule *>(*it);
 
@@ -77,7 +79,9 @@ const string RuleList::GetClassificationValue () const
 
 	uint32 total_rules = GetSize ();
 
-	for (STLObjectList_cit it = GetBegin (); it != GetEnd (); it++)
+	STLRuleList_cit itEnd = GetEnd ();
+
+	for (STLObjectList_cit it = GetBegin (); it != itEnd; it++)
 	{
 		const Rule *pRule = static_cast<const Rule *>(*it);
 
@@ -111,25 +115,3 @@ const string RuleList::GetClassificationValue () const
 
 	return class_guess;
 }
-
-/*
-RuleList::STLRuleList_it RuleList::GetBegin ()
-{
-	return ObjectList::GetBegin ();
-}
-
-const RuleList::STLRuleList_cit RuleList::GetBegin () const
-{
-	return ObjectList::GetBegin ();
-}
-
-RuleList::STLRuleList_it RuleList::GetEnd ()
-{
-	return ObjectList::GetEnd ();
-}
-
-const RuleList::STLRuleList_cit RuleList::GetEnd () const
-{
-	return ObjectList::GetEnd ();
-}
-*/

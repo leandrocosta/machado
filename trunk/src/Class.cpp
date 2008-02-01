@@ -1,5 +1,4 @@
 #include "Class.h"
-#include "TransactionList.h"
 #include "base/Logger.h"
 
 
@@ -9,15 +8,11 @@ uint32 Class::msSeqClassID	= 0	;
 Class::Class (const string &value) : Object (), mClassID (GetSeqClassID ()), mValue (value)
 {
 	LOGMSG (MAX_LEVEL, "Class::Class () - value [%s]\n", value.c_str ());
-
-	mpTransactionList = new TransactionList ();
 }
 
 Class::~Class ()
 {
-	mpTransactionList->RemoveAll ();
-
-	delete mpTransactionList;
+	mTransactionList.RemoveAll ();
 }
 
 const uint32 Class::GetSeqClassID ()
@@ -40,7 +35,7 @@ const string& Class::GetValue () const
 
 void Class::AddTransaction (Transaction *pTransaction)
 {
-	mpTransactionList->PushBack (pTransaction);
+	mTransactionList.PushBack (pTransaction);
 }
 
 void Class::Print () const

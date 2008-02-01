@@ -3,8 +3,11 @@
 #include "base/Logger.h"
 
 #include <iostream>
+#include <sstream>
+
 using std::cout;
 using std::endl;
+using std::stringstream;
 
 
 ItemList::ItemList (const uint64 &max_size) : ObjectList (max_size)
@@ -15,26 +18,6 @@ ItemList::ItemList (const uint64 &max_size) : ObjectList (max_size)
 ItemList::~ItemList ()
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::~ItemList () - p [%p]\n", this);
-}
-
-ItemList::STLItemList_it ItemList::GetBegin ()
-{
-	return ObjectList::GetBegin ();
-}
-
-const ItemList::STLItemList_cit ItemList::GetBegin () const
-{
-	return ObjectList::GetBegin ();
-}
-
-ItemList::STLItemList_it ItemList::GetEnd ()
-{
-	return ObjectList::GetEnd ();
-}
-
-const ItemList::STLItemList_cit ItemList::GetEnd () const
-{
-	return ObjectList::GetEnd ();
 }
 
 const bool ItemList::operator== (const Object &rObject) const
@@ -133,10 +116,11 @@ Item* ItemList::GetItemByValue (const string &value) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::GetItemByValue () - value [%s]\n", value.c_str ());
 
-	Item*		pItem = NULL	;
-	STLItemList_cit	it		;
+	Item*		pItem = NULL		;
+	STLItemList_cit	it			;
+	STLItemList_cit itEnd = GetEnd ()	;
 
-	for (it = GetBegin (); it != GetEnd (); ++it)
+	for (it = GetBegin (); it != itEnd; ++it)
 	{
 		if ((static_cast<Item *>(*it))->GetValue () == value)
 		{
@@ -156,8 +140,9 @@ const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 	const Item*	pItem		= NULL	;
 	STLItemList_cit	itList			;
 	ItemHash	Hash			;
+	STLItemList_cit itEnd = GetEnd ()	;
 
-	for (itList = GetBegin (); itList != GetEnd (); ++itList)
+	for (itList = GetBegin (); itList != itEnd; ++itList)
 	{
 		pItem = static_cast<const Item *>(*itList);
 
@@ -169,7 +154,9 @@ const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 			Hash.Get (pItem->GetValue ())->IncCount ();
 	}
 
-	for (itList = pItemList->GetBegin (); itList != pItemList->GetEnd (); ++itList)
+	itEnd = pItemList->GetEnd ();
+
+	for (itList = pItemList->GetBegin (); itList != itEnd; ++itList)
 	{
 		pItem = static_cast<const Item *>(*itList);
 
@@ -184,9 +171,10 @@ const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 	uint32 num	= 0	;
 	uint32 den	= 0	;
 
-	ItemHash::STLItemHash_cit itHash	;
+	ItemHash::STLItemHash_cit itHash			;
+	ItemHash::STLItemHash_cit itHashEnd = Hash.GetEnd ()	;
 
-	for (itHash = Hash.GetBegin (); itHash != Hash.GetEnd (); itHash++)
+	for (itHash = Hash.GetBegin (); itHash != itHashEnd; itHash++)
 	{
 		pItem = static_cast<const Item *>(itHash->second);
 
@@ -201,4 +189,33 @@ const float32 ItemList::GetSimilarity (const ItemList *pItemList) const
 	similarity = (float32) num / den;
 
 	return similarity;
+}
+
+const string ItemList::GetPrintableString () const
+{
+	stringstream	sstream			;
+	Item*		pItem	= NULL		;
+	STLItemList_cit	it	= GetBegin ()	;
+	STLItemList_cit itEnd	= GetEnd ()	;
+
+	if (it != itEnd)
+	{
+		pItem = static_cast<Item *>(*it);
+		sstream << pItem->GetValue ();
+		it++;
+	}
+
+	while (it != itEnd)
+	{
+		pItem = static_cast<Item *>(*it);
+		sstream << " " << pItem->GetValue ();
+		it++;
+	}
+
+	return sstream.str ();
+}
+
+void ItemList::Print () const
+{
+	LOGMSG (NO_DEBUG, "ItemList::Print () - [%s]\n", GetPrintableString ().c_str ());
 }

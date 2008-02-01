@@ -8,6 +8,7 @@
 using std::string;
 
 class Class	;
+class Pattern	;
 
 
 class Transaction : public ItemSet
@@ -22,6 +23,9 @@ class Transaction : public ItemSet
 	public:
 		const	uint32&	GetTransactionID	()	const	;
 		const	Class*	GetClass		()	const	;
+
+	public:
+		const	bool	IsCoveredBy		(const Pattern *pPattern)	const	;
 
 	public:
 		void	Print	()	const	;

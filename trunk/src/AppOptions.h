@@ -55,18 +55,18 @@ class AppOptions
 		bool	mHelp;
 
 	public:
-		static	const	string	DEFAULT_APP_NAME			;
-		static	const	string	DEFAULT_TRAINING_FILE			;
-		static	const	string	DEFAULT_TESTING_FILE			;
-		static	const	float32	DEFAULT_SUPPORT		= 0.1		;
-		static	const	float32	DEFAULT_CONFIDENCE	= 0.9		;
-		static	const	uint32	DEFAULT_MIN_RULE_LEN	= 1		;
-		static	const	uint32	DEFAULT_MAX_RULE_LEN	= 100		;
-		static	const	e_rmode	DEFAULT_RUN_MODE	= ORTHOGONAL	;
-		static	const	e_omode	DEFAULT_ORT_MODE	= BOTH		;
-		static	const	e_debug	DEFAULT_DEBUG_LEVEL	= NO_DEBUG	;
-		static	const	bool	DEFAULT_VERBOSE		= false		;
-		static	const	bool	DEFAULT_HELP		= false		;
+		static	const	string	DEFAULT_APP_NAME				;
+		static	const	string	DEFAULT_TRAINING_FILE				;
+		static	const	string	DEFAULT_TESTING_FILE				;
+		static	const	float32	DEFAULT_SUPPORT		= 0.1			;
+		static	const	float32	DEFAULT_CONFIDENCE	= 0.9			;
+		static	const	uint32	DEFAULT_MIN_RULE_LEN	= 1			;
+		static	const	uint32	DEFAULT_MAX_RULE_LEN	= 100			;
+		static	const	e_rmode	DEFAULT_RUN_MODE	= MODE_ORTHOGONAL	;
+		static	const	e_omode	DEFAULT_ORT_MODE	= ORTH_BOTH		;
+		static	const	e_debug	DEFAULT_DEBUG_LEVEL	= NO_DEBUG		;
+		static	const	bool	DEFAULT_VERBOSE		= false			;
+		static	const	bool	DEFAULT_HELP		= false			;
 };
 
 
