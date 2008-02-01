@@ -1,8 +1,8 @@
 #include "PatternList.h"
 #include "TransactionList.h"
 #include "ItemHash.h"
+#include "AppOptions.h"
 #include "base/Logger.h"
-//#include "alortho/AlOrtho.h"
 
 
 PatternList::PatternList (const uint64 &max_size) : ObjectList (max_size)
@@ -38,11 +38,141 @@ Pattern* PatternList::GetAt (const uint64 &index) const
 	return static_cast<Pattern *>(ObjectList::GetAt (index));
 }
 
-PatternList* PatternList::GetOrthogonalPatternList () const
+PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList)
 {
-//	AlOrtho alortho;
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternList () - pTransactionList [%p], transactions [%llu]\n", pTransactionList, pTransactionList ? pTransactionList->GetSize ():0);
 
-	return NULL;
+	return GetOrthogonalPatternListHeuristical (pTransactionList);
+}
+
+PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList)
+{
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - begin\n");
+
+	PatternList *pOrthogonalPatternList = new PatternList ();
+
+	if (GetSize () <= 2)
+	{
+		if (GetSize () > 0)
+			pOrthogonalPatternList->PushBack (GetAt (0));
+
+		if (GetSize () > 1)
+			pOrthogonalPatternList->PushBack (GetAt (1));
+	}
+	else
+	{
+		ReverseSort ();
+
+		pOrthogonalPatternList->PushBack (GetAt (0));
+		pOrthogonalPatternList->PushBack (GetAt (1));
+
+		GetAt (0)->SetGot (true);
+		GetAt (1)->SetGot (true);
+
+		uint64 index = 0;
+
+		// two items
+		for (index = 0; index < GetSize (); index++)
+		{
+			Pattern *pPattern1 = static_cast<Pattern *>(GetAt (index));
+
+			if (! pPattern1->GetGot ())
+			{
+				Pattern *pPattern2 = pOrthogonalPatternList->GetMoreSimilar (pPattern1);
+				float32 rate_prv = pOrthogonalPatternList->GetRate (pTransactionList);
+
+				pOrthogonalPatternList->Remove (pPattern2);
+				pOrthogonalPatternList->PushBack (pPattern1);
+
+				float32 rate_new = pOrthogonalPatternList->GetRate (pTransactionList);
+
+				if (rate_new > rate_prv)
+				{
+					pPattern1->SetGot (true);
+					pPattern2->SetGot (false);
+				}
+				else
+				{
+					pOrthogonalPatternList->Remove (pPattern1);
+					pOrthogonalPatternList->PushBack (pPattern2);
+				}
+			}
+
+		}
+	}
+
+	return pOrthogonalPatternList;
+}
+
+PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList)
+{
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - begin\n");
+
+	PatternList *pOrthogonalPatternList = new PatternList ();
+
+	Pattern *pPattern1 = NULL;
+	Pattern *pPattern2 = NULL;
+
+	if (GetSize () <= 2)
+	{
+		if (GetSize () > 0)
+			pPattern1 = GetAt (0);
+
+		if (GetSize () > 1)
+			pPattern2 = GetAt (1);
+	}
+	else
+	{
+		float32 rate = -1;
+
+		for (uint32 i = 0; i < GetSize () - 1; i++)
+		{
+			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - try pattern 1 [%s]\n", GetAt (i)->GetPrintableString ().c_str ());
+
+			for (uint32 j = i+1; j < GetSize (); j++)
+			{
+				LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - try pattern 2 [%s]\n", GetAt (j)->GetPrintableString ().c_str ());
+
+				pOrthogonalPatternList->PushBack (GetAt (i));
+				pOrthogonalPatternList->PushBack (GetAt (j));
+
+				float32 rate_new = -1;
+
+				switch (AppOptions::GetInstance ()->GetOrtMode ())
+				{
+					case ORTH_SIMILARITY:
+						rate_new = pOrthogonalPatternList->GetSimilarityRate ();
+						break;
+					case ORTH_COVERAGE:
+						rate_new = pOrthogonalPatternList->GetCoverageRate (pTransactionList);
+						break;
+					case ORTH_BOTH:
+						rate_new = pOrthogonalPatternList->GetRate (pTransactionList);
+						break;
+					case ORTH_UNKNOWN:
+					default:
+						LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListPolynomial () - unknown orthogonality mode\n");
+						break;
+				}
+
+				if (rate_new > rate)
+				{
+					pPattern1 = GetAt (i);
+					pPattern2 = GetAt (j);
+				}
+
+				pOrthogonalPatternList->RemoveAll ();
+			}
+		}
+	}
+
+	if (pPattern1)
+		pOrthogonalPatternList->PushBack (pPattern1);
+
+	if (pPattern2)
+		pOrthogonalPatternList->PushBack (pPattern2);
+
+	return pOrthogonalPatternList;
 }
 
 const uint32 PatternList::GetSumPatternLen () const
