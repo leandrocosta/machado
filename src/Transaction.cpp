@@ -1,6 +1,7 @@
 #include "Transaction.h"
 #include "Class.h"
 #include "ItemList.h"
+#include "Pattern.h"
 #include "base/Logger.h"
 
 #include <iostream>
@@ -31,14 +32,34 @@ const uint32 Transaction::GetSeqTransactionID ()
 	return transactionID;
 }
 
+const uint32& Transaction::GetTransactionID () const
+{
+	return mTransactionID;
+}
+
 const Class* Transaction::GetClass () const
 {
 	return mpClass;
 }
 
-const uint32& Transaction::GetTransactionID () const
+const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 {
-	return mTransactionID;
+	bool bRet = true;
+
+	ItemList::STLItemList_cit itEnd = pPattern->GetEnd ();
+
+	for (ItemList::STLItemList_cit it = pPattern->GetBegin (); it != itEnd; it++)
+	{
+		const Item *pItem = static_cast<const Item *>(*it);
+
+		if (! FindByPtr (pItem))
+		{
+			bRet = false;
+			break;
+		}
+	}
+
+	return bRet;
 }
 
 void Transaction::Print () const

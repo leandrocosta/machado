@@ -19,12 +19,6 @@ class TransactionList : public ObjectList
 		typedef STLObjectList				STLTransactionList	;
 		typedef STLTransactionList::iterator		STLTransactionList_it	;
 		typedef STLTransactionList::const_iterator	STLTransactionList_cit	;
-
-	public:
-			STLTransactionList_it	GetBegin	()		;
-		const	STLTransactionList_cit	GetBegin	()	const	;
-			STLTransactionList_it	GetEnd		()		;
-		const	STLTransactionList_cit	GetEnd		()	const	;
 };
 
 

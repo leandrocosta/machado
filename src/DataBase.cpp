@@ -19,9 +19,6 @@ DataBase::DataBase (
 	mMinRuleLen	= min_rule_len	;
 	mMaxRuleLen	= max_rule_len	;
 
-	m_rmode		= RUNKNOWN;
-	m_omode		= OUNKNOWN;
-
 	mCorrectGuesses	= 0;
 	mWrongGuesses	= 0;
 }
@@ -31,23 +28,10 @@ DataBase::~DataBase ()
 	LOGMSG (MEDIUM_LEVEL, "DataBase::~DataBase () - p [%p]\n", this);
 }
 
-void DataBase::SetRunMode (const e_rmode &mode)
-{
-	m_rmode = mode;
-}
-
-void DataBase::SetOrtMode (const e_omode &mode)
-{
-	m_omode = mode;
-}
-
-void DataBase::SetDataFile (const string &file)
+void DataBase::LoadTrainData (const string &file)
 {
 	SetFile (file);
-}
 
-void DataBase::LoadTrainData ()
-{
 	list<string> lines;
 	LoadFile (&lines);
 
@@ -76,7 +60,7 @@ void DataBase::LoadTrainData ()
 
 			while (! items.empty ())
 			{
-				if (!mItemList.GetItemByValue (items.front ()))
+				if (! mItemList.GetItemByValue (items.front ()))
 					mItemList.PushBack (new Item (items.front ()));
 
 				Item *pItem = mItemList.GetItemByValue (items.front ());
@@ -94,8 +78,10 @@ void DataBase::LoadTrainData ()
 	}
 }
 
-void DataBase::LoadTestData ()
+void DataBase::LoadTestData (const string &file)
 {
+	SetFile (file);
+
 	list<string> lines;
 	LoadFile (&lines);
 
@@ -123,7 +109,7 @@ void DataBase::LoadTestData ()
 
 			while (! items.empty ())
 			{
-				if (!mItemList.GetItemByValue (items.front ()))
+				if (! mItemList.GetItemByValue (items.front ()))
 					mItemList.PushBack (new Item (items.front ()));
 
 				pTransaction->PushBack (mItemList.GetItemByValue (items.front ()));
@@ -156,9 +142,7 @@ void DataBase::ClassifyTestData ()
 		}
 	}
 
-	LOGMSG (NO_DEBUG, "correct  : %u\n", mCorrectGuesses);
-	LOGMSG (NO_DEBUG, "wrong    : %u\n", mWrongGuesses);
-	LOGMSG (NO_DEBUG, "accuracy : %f\n", ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)));
+	LOGMSG (NO_DEBUG, "accuracy [%0.2f] (correct [%u], wrong [%u])\n", ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)), mCorrectGuesses, mWrongGuesses);
 }
 
 void DataBase::ClassifyTransaction (Transaction *pTransaction)
@@ -181,7 +165,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	string class_guess = "";
 
-	if (m_rmode == MODE_CLASSICAL)
+	if (AppOptions::GetInstance ()->GetRunMode () == MODE_CLASSICAL)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
@@ -219,7 +203,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 		delete pRuleList;
 	}
-	else if (m_rmode == MODE_ORTHOGONAL)
+	else if (AppOptions::GetInstance ()->GetRunMode () == MODE_ORTHOGONAL)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
@@ -265,7 +249,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	}
 	else
 	{
-		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - unknown m_rmode\n");
+		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - unknown run mode\n");
 	}
 
 	delete pFrequentPatternList;
@@ -286,7 +270,7 @@ uint64 DataBase::GetProjectionSize (Transaction *pTransaction) const
 	{
 		Transaction *pTrainTransaction = static_cast<Transaction *>(mTrainTransactionList.GetAt (i));
 
-		if (*pTransaction ^ *pTrainTransaction)
+		if (Transaction::HasIntersectionByPtr (pTransaction, pTrainTransaction))
 			size++;
 	}
 
@@ -309,10 +293,8 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 
 		if ((float32) pItem->GetFrequence () / projection_size >= mSupport)
 		{
-			Pattern *pPattern = new Pattern ();
-			pPattern->PushBack (pItem);
-			pPattern->MakeTransactionList ();
-			pPattern->SetSupport ((float32) pPattern->GetTransactionList ()->GetSize () / projection_size);
+			Pattern *pPattern = new Pattern (pItem);
+			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
 			LOGMSG (MEDIUM_LEVEL, "DataBase::GetFrequentPatternList () - add pattern [%s], frequence [%llu]\n", pPattern->GetPrintableString ().c_str (), pPattern->GetFrequence ());
 
 			pFrequentPatternList->PushBack (pPattern);
@@ -342,6 +324,7 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 
 				if (pItemBack->GetItemID () < pItem->GetItemID ())
 				{
+					/*
 					Pattern *pNewPattern = new Pattern ();
 
 					for (uint32 j = 0; j < pPattern->GetSize (); j++)
@@ -350,7 +333,14 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 					pNewPattern->PushBack (pItem);
 
 					pNewPattern->MakeTransactionList ();
-					pNewPattern->SetSupport ((float32) pNewPattern->GetTransactionList ()->GetSize () / projection_size);
+					*/
+
+					/**/
+					Pattern *pNewPattern = new Pattern (pPattern);
+					pNewPattern->AddItem (pItem);
+					/**/
+
+					pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
 
 					if ((float32) pNewPattern->GetFrequence () / projection_size >= mSupport)
 					{
@@ -373,15 +363,17 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 
 	LOGMSG (MEDIUM_LEVEL, "DataBase::GetFrequentPatternList () - remove short patterns\n");
 
-	PatternList::STLPatternList_it it = pFrequentPatternList->GetBegin ();
+	PatternList::STLPatternList_it it	= pFrequentPatternList->GetBegin ();
+	PatternList::STLPatternList_it itEnd	= pFrequentPatternList->GetEnd ();
 
-	while (it != pFrequentPatternList->GetEnd ())
+	while (it != itEnd)
 	{
 		if (static_cast<const Pattern*>(*it)->GetSize () < mMinRuleLen)
 		{
 			LOGMSG (MEDIUM_LEVEL, "DataBase::GetFrequentPatternList () - delete pattern [%s], frequence [%llu]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
 			delete *it;
 			it = pFrequentPatternList->Erase (it);
+			itEnd = pFrequentPatternList->GetEnd ();
 		}
 		else
 			it++;
@@ -492,18 +484,18 @@ PatternList* DataBase::GetOrthogonalPatternListPolynomial (PatternList *pPattern
 
 				float32 rate_new = -1;
 
-				switch (m_omode)
+				switch (AppOptions::GetInstance ()->GetOrtMode ())
 				{
-					case SIMILARITY:
+					case ORTH_SIMILARITY:
 						rate_new = pOrthogonalPatternList->GetSimilarityRate ();
 						break;
-					case COVERAGE:
+					case ORTH_COVERAGE:
 						rate_new = pOrthogonalPatternList->GetCoverageRate (&mTrainTransactionList);
 						break;
-					case BOTH:
+					case ORTH_BOTH:
 						rate_new = pOrthogonalPatternList->GetRate (&mTrainTransactionList);
 						break;
-					case OUNKNOWN:
+					case ORTH_UNKNOWN:
 					default:
 						LOGMSG (NO_DEBUG, "DataBase::GetOrthogonalPatternListPolynomial () - unknown orthogonality mode\n");
 						break;
@@ -545,20 +537,13 @@ RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
 
 			Rule *pRule = new Rule (pClass, pPattern);
 
-//			if (! pRuleList->Find (pRule))
-//			{
-				pRule->MakeTransactionList ();
-
-				if (pRule->GetConfidence () >= mConfidence)
-				{
-					LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - add rule [%s]\n", pPattern->GetPrintableString ().c_str ());
-					pRuleList->PushBack (pRule);
-				}
-				else
-					delete pRule;
-//			}
-//			else
-//				delete pRule;
+			if (pRule->GetConfidence () >= mConfidence)
+			{
+				LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - add rule [%s]\n", pPattern->GetPrintableString ().c_str ());
+				pRuleList->PushBack (pRule);
+			}
+			else
+				delete pRule;
 		}
 	}
 

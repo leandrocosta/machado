@@ -1,7 +1,6 @@
 #include "Rule.h"
 #include "Class.h"
 #include "Pattern.h"
-#include "TransactionList.h"
 #include "base/Logger.h"
 
 #include <iostream>
@@ -11,16 +10,26 @@ using std::endl;
 
 Rule::Rule (const Class *pClass, const Pattern *pPattern) : Object (), mpClass (pClass), mpPattern (pPattern)
 {
-	mSupport		= -1			;
-	mConfidence		= -1			;
-	mpTransactionList	= new TransactionList ();
+//	mSupport	= -1	;
+//	mConfidence	= -1	;
+
+	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
+
+	for (uint32 i = 0; i < rTransactionList.GetSize (); i++)
+	{
+		Transaction *pTransaction = static_cast<Transaction *>(rTransactionList.GetAt (i));
+
+		if (pTransaction->GetClass () == mpClass)
+			mTransactionList.PushBack (pTransaction);
+	}
+
+	mSupport	= mpPattern->GetSupport ();
+	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
 }
 
 Rule::~Rule ()
 {
-	mpTransactionList->RemoveAll ();
-
-	delete mpTransactionList;
+	mTransactionList.RemoveAll ();
 }
 
 const bool Rule::operator> (const Object &rObject) const
@@ -35,23 +44,25 @@ const bool Rule::operator> (const Object &rObject) const
 	return bRet;
 }
 
+/*
 void Rule::MakeTransactionList ()
 {
 	LOGMSG (MEDIUM_LEVEL, "Rule::MakeTransactionList () - begin\n");
 
-	const TransactionList *pTransactionList = mpPattern->GetTransactionList ();
+	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
 
-	for (uint32 i = 0; i < pTransactionList->GetSize (); i++)
+	for (uint32 i = 0; i < rTransactionList.GetSize (); i++)
 	{
-		Transaction *pTransaction = static_cast<Transaction *>(pTransactionList->GetAt (i));
+		Transaction *pTransaction = static_cast<Transaction *>(rTransactionList.GetAt (i));
 
 		if (pTransaction->GetClass () == mpClass)
-			mpTransactionList->PushBack (pTransaction);
+			mTransactionList.PushBack (pTransaction);
 	}
 
 	mSupport	= mpPattern->GetSupport ();
-	mConfidence	= (float32) mpTransactionList->GetSize () / mpPattern->GetTransactionList ()->GetSize ();
+	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
 }
+*/
 
 const float32& Rule::GetSupport () const
 {

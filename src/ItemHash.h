@@ -18,12 +18,6 @@ class ItemHash : public ObjectHash
 		typedef STLItemHash::const_iterator	STLItemHash_cit	;
 
 	public:
-			STLItemHash_it	GetBegin	()		;
-		const	STLItemHash_cit	GetBegin	()	const	;
-			STLItemHash_it	GetEnd		()		;
-		const	STLItemHash_cit	GetEnd		()	const	;
-
-	public:
 		Item*	Get	(const string &key)	;
 };
 

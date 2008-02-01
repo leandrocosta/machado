@@ -8,25 +8,21 @@
 #include "base/IOManager.h"
 #include "base/Tokenizer.h"
 
-#define	MODE_ORTHOGONAL	'o'
-#define	MODE_CLASSICAL	'c'
-
 
 typedef enum e_run_mode
 {
-	CLASSICAL	= 'c',
-	ORTHOGONAL	= 'o',
-	RUNKNOWN		= 0
+	MODE_CLASSICAL	= 'c',
+	MODE_ORTHOGONAL	= 'o',
+	MODE_UNKNOWN	= 0
 } e_rmode;
 
 typedef enum e_orthogonality_mode
 {
-	SIMILARITY	= 's',
-	COVERAGE	= 'c',
-	BOTH		= 'b',
-	OUNKNOWN	= 0
+	ORTH_SIMILARITY	= 's',
+	ORTH_COVERAGE	= 'c',
+	ORTH_BOTH	= 'b',
+	ORTH_UNKNOWN	= 0
 } e_omode;
-
 
 
 class PatternList	;
@@ -42,23 +38,22 @@ class DataBase : private IOManager, private Tokenizer
 		virtual	~DataBase	()								;
 
 	public:
-		void	SetRunMode	(const e_rmode &mode)	;
-		void	SetOrtMode	(const e_omode &mode)	;
-		void	SetDataFile	(const string &file)	;
-		void	LoadTrainData	()			;
-		void	LoadTestData	()			;
+		void	SetSupport	(const float32 &support)	;
+		void	SetConfidence	(const float32 &confidence)	;
+		void	SetMinRuleLen	(const uint32 &min_rul_len)	;
+		void	SetMaxRuleLen	(const uint32 &max_rul_len)	;
+		void	LoadTrainData	(const string &file)		;
+		void	LoadTestData	(const string &file)		;
 
 	public:
 		void	ClassifyTestData	()	;
 
 	private:
-		void	ClassifyTransaction	(Transaction *pTransaction)	;
-
-	private:
-		uint64		GetProjectionSize		(Transaction *pTransaction)	const	;
-		PatternList*	GetFrequentPatternList		(
-						const Transaction *pTransaction,
-						const uint64 &projection_size)			const	;
+		void		ClassifyTransaction			(Transaction *pTransaction)		;
+		uint64		GetProjectionSize			(Transaction *pTransaction)	const	;
+		PatternList*	GetFrequentPatternList			(
+								const Transaction *pTransaction,
+								const uint64 &projection_size)		const	;
 		PatternList*	GetOrthogonalPatternList		(PatternList *pPatternList)	const	;
 		PatternList*	GetOrthogonalPatternListHeuristical	(PatternList *pPatternList)	const	;
 		PatternList*	GetOrthogonalPatternListPolynomial	(PatternList *pPatternList)	const	;
@@ -77,9 +72,6 @@ class DataBase : private IOManager, private Tokenizer
 		ItemList	mItemList		;
 		TransactionList	mTrainTransactionList	;
 		TransactionList	mTestTransactionList	;
-
-		e_rmode	m_rmode;
-		e_omode m_omode;
 
 		uint32	mCorrectGuesses;
 		uint32	mWrongGuesses;

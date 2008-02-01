@@ -18,25 +18,18 @@ int main(int argc, char* argv[])
 	{
 		LOGGER->SetDebugLevel (pAppOptions->GetDebugLevel ());
 
-		DataBase *pDataBase = new DataBase (
+		DataBase base (
 				pAppOptions->GetSupport (), pAppOptions->GetConfidence (),
 				pAppOptions->GetMinRuleLen (), pAppOptions->GetMaxRuleLen ());
 
-		pDataBase->SetDataFile (pAppOptions->GetTrainingFile ());
-		pDataBase->LoadTrainData ();
+		base.LoadTrainData (pAppOptions->GetTrainingFile ());
+		base.LoadTestData (pAppOptions->GetTestingFile ());
 
-		pDataBase->SetDataFile (pAppOptions->GetTestingFile ());
-		pDataBase->LoadTestData ();
-
-		pDataBase->SetRunMode (pAppOptions->GetRunMode ());
-		pDataBase->SetOrtMode (pAppOptions->GetOrtMode ());
-
-		pDataBase->ClassifyTestData ();
-
-		delete pDataBase;
-	
-		Logger::Finalize ();
+		base.ClassifyTestData ();
 	}
+
+	AppOptions::Finalize ();
+	Logger::Finalize ();
 
 	return 0;
 }

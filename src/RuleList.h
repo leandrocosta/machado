@@ -26,12 +26,6 @@ class RuleList : public ObjectList
 	public:
 			void	PrintClassification	()	const	;
 		const	string	GetClassificationValue	()	const	;
-
-	public:
-//			STLRuleList_it	GetBegin	()		;
-//		const	STLRuleList_cit	GetBegin	()	const	;
-//			STLRuleList_it	GetEnd		()		;
-//		const	STLRuleList_cit	GetEnd		()	const	;
 };
 
 

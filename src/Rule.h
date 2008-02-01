@@ -3,13 +3,13 @@
 
 
 #include "base/Object.h"
+#include "TransactionList.h"
 
 #include <string>
 using std::string;
 
 class	Class		;
 class	Pattern		;
-class 	TransactionList	;
 
 
 class Rule : public Object
@@ -23,8 +23,8 @@ class Rule : public Object
 //		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
 
-	public:
-		void	MakeTransactionList	()	;
+//	public:
+//		void	MakeTransactionList	()	;
 
 	public:
 		const	float32&	GetSupport		()	const	;
@@ -41,9 +41,10 @@ class Rule : public Object
 		const	string&	GetClassValue	()	const	;
 
 	private:
-		float32			mSupport		;
-		float32			mConfidence		;
-		TransactionList*	mpTransactionList	;
+		float32		mSupport		;
+		float32		mConfidence		;
+
+		TransactionList	mTransactionList	;
 };
 
 

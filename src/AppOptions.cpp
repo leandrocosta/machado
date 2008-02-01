@@ -52,7 +52,7 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"testing-file"		, 1, 0, 't'},
 		{"support"		, 1, 0, 's'},
 		{"confidence"		, 1, 0, 'c'},
-		{"min-rule-len"		, 1, 0, 'n'},
+		{"min-rule-len"		, 1, 0, 'm'},
 		{"max-rule-len"		, 1, 0, 'a'},
 		{"run-mode"		, 1, 0, 'r'},
 		{"orthogonality-mode"	, 1, 0, 'o'},
@@ -66,7 +66,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:s:c:n:a:r:o:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:s:c:m:a:r:o:d:vh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -89,7 +89,7 @@ void AppOptions::Run (int argc, char* const* argv)
 				mConfidence = atof (optarg);
 				break;
 
-			case 'n':
+			case 'm':
 				mMinRuleLen = atoi (optarg);
 				break;
 
@@ -132,7 +132,7 @@ void AppOptions::Usage () const
 	cout << "  -t, --testing-file       Set the testing file" << endl;
 	cout << "  -s, --support            Set the support" << endl;
 	cout << "  -c, --confidence         Set the confidence" << endl;
-	cout << "  -n, --min-rule-len       Set the minimum length of the rules" << endl;
+	cout << "  -m, --min-rule-len       Set the minimum length of the rules" << endl;
 	cout << "  -a, --max-rule-len       Set the maximum lenfth of the rules" << endl;
 	cout << "  -r, --run-mode           Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
 	cout << "  -r, --orthogonality-mode           Set the orthogonality mode [s,c,b] [SIMILARITY, COVERAGE, BOTH]" << endl;

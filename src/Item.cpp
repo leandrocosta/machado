@@ -84,8 +84,6 @@ const TransactionList* Item::GetTransactionList () const
 
 const uint64 Item::GetFrequence () const
 {
-	LOGMSG (MEDIUM_LEVEL, "Item::GetFrequence () - value [%s], frequence [%llu]\n", mValue.c_str (), mpTransactionList->GetSize ());
-
 	return mpTransactionList->GetSize ();
 }
 

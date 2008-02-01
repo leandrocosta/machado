@@ -16,26 +16,6 @@ ClassList::~ClassList ()
 	LOGMSG (MEDIUM_LEVEL, "ClassList::~ClassList () - p [%p]\n", this);
 }
 
-ClassList::STLClassList_it ClassList::GetBegin ()
-{
-	return ObjectList::GetBegin ();
-}
-
-const ClassList::STLClassList_cit ClassList::GetBegin () const
-{
-	return ObjectList::GetBegin ();
-}
-
-ClassList::STLClassList_it ClassList::GetEnd ()
-{
-	return ObjectList::GetEnd ();
-}
-
-const ClassList::STLClassList_cit ClassList::GetEnd () const
-{
-	return ObjectList::GetEnd ();
-}
-
 const bool ClassList::operator> (const Object &rObject) const
 {
 	LOGMSG (MEDIUM_LEVEL, "ClassList::operator> () - p [%p]\n", this);
@@ -65,10 +45,11 @@ Class* ClassList::GetClassByValue (const string &value) const
 {
 	LOGMSG (HIGH_LEVEL, "ClassList::GetClassByValue () - value [%s]\n", value.c_str ());
 
-	Class*		pClass = NULL	;
-	STLClassList_cit	it		;
+	Class*			pClass = NULL		;
+	STLClassList_cit	it			;
+	STLClassList_cit	itEnd = GetEnd ()	;
 
-	for (it = GetBegin (); it != GetEnd (); ++it)
+	for (it = GetBegin (); it != itEnd; ++it)
 	{
 		if ((static_cast<Class *>(*it))->GetValue () == value)
 		{
@@ -83,10 +64,11 @@ Class* ClassList::GetClassByValue (const string &value) const
 /*
 void ClassList::Print () const
 {
-	Class*		pClass = NULL;
-	STLClassList_cit	it;
+	Class*			pClass = NULL		;
+	STLClassList_cit	it			;
+	STLClassList_cit	itEnd = GetEnd ()	;
 
-	for (it = GetBegin (); it != GetEnd (); ++it)
+	for (it = GetBegin (); it != itEnd; ++it)
 	{
 		pClass = static_cast<Class *>(*it);
 

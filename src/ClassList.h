@@ -21,19 +21,10 @@ class ClassList : public ObjectList
 		typedef STLClassList::const_iterator	STLClassList_cit	;
 
 	public:
-			STLClassList_it	GetBegin	()		;
-		const	STLClassList_cit	GetBegin	()	const	;
-			STLClassList_it	GetEnd		()		;
-		const	STLClassList_cit	GetEnd		()	const	;
-
-	public:
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
 
 	public:
 		Class*	GetClassByValue	(const string &value)	const	;
-
-//	public:
-//		void	Print	()	const	;
 };
 
 

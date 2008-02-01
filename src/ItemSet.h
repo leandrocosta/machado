@@ -10,15 +10,6 @@ class ItemSet : public ItemList
 	public:
 			ItemSet		()	;
 		virtual	~ItemSet	()	;
-
-	public:
-		virtual	const	bool	operator^	(const ItemSet& rItemSet)	const	;
-
-	public:
-		virtual	const	string	GetPrintableString	()	const	;
-
-	public:
-		virtual	void	Print	()	const	;
 };
 
 
