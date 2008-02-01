@@ -152,10 +152,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 //
 	pTransaction->Print ();
 
-	uint64 projection_size = GetProjectionSize (pTransaction);
 	TransactionList *pProjectionTransactionList = GetProjectionTransactionList (pTransaction);
 
-	PatternList *pFrequentPatternList = GetFrequentPatternList (pTransaction, projection_size);
+	PatternList *pFrequentPatternList = GetFrequentPatternList (pTransaction, pProjectionTransactionList->GetSize ());
 //	cout << "frequent patterns:" << endl;
 //	pFrequentPatternList->Print ();
 //	PatternList *pOrthogonalFrequentPatternList = GetOrthogonalPatternList (pFrequentPatternList);
@@ -316,11 +315,11 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 
 	while (iTryPattern < pFrequentPatternList->GetSize ())
 	{
-		Pattern*	pPattern	= pFrequentPatternList->GetAt (iTryPattern);
+		Pattern *pPattern = pFrequentPatternList->GetAt (iTryPattern);
 
 		if (pPattern->GetSize () < mMaxRuleLen)
 		{
-			Item*		pItemBack	= static_cast<Item *>(pPattern->GetBack ());
+			Item *pItemBack = static_cast<Item *>(pPattern->GetBack ());
 
 			for (uint32 i = 0; i < numFrequentOneItemPatterns; i++)
 			{
