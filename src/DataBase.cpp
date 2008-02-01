@@ -153,6 +153,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	pTransaction->Print ();
 
 	uint64 projection_size = GetProjectionSize (pTransaction);
+	TransactionList *pProjectionTransactionList = GetProjectionTransactionList (pTransaction);
 
 	PatternList *pFrequentPatternList = GetFrequentPatternList (pTransaction, projection_size);
 //	cout << "frequent patterns:" << endl;
@@ -254,6 +255,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	delete pFrequentPatternList;
 
+	pProjectionTransactionList->RemoveAll ();
+	delete pProjectionTransactionList;
+
 	if (class_guess == pTransaction->GetClass ()->GetValue ())
 		mCorrectGuesses++;
 	else
@@ -262,7 +266,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	cout << class_guess << endl;
 }
 
-uint64 DataBase::GetProjectionSize (Transaction *pTransaction) const
+uint64 DataBase::GetProjectionSize (const Transaction *pTransaction) const
 {
 	uint64 size = 0;
 
@@ -535,6 +539,19 @@ RuleList* DataBase::GetRuleList (PatternList *pPatternList) const
 	}
 
 	return pRuleList;
+}
+
+TransactionList* DataBase::GetProjectionTransactionList (const Transaction *pTransaction) const
+{
+	TransactionList *pTransactionList = new TransactionList ();
+
+	TransactionList::STLTransactionList_cit itEnd = mTrainTransactionList.GetEnd ();
+
+	for (TransactionList::STLTransactionList_cit it = mTrainTransactionList.GetBegin (); it != itEnd; it++)
+		if (Transaction::HasIntersectionByPtr (pTransaction, static_cast<const Transaction *>(*it)))
+			pTransactionList->PushBack (static_cast<Transaction *>(*it));
+
+	return pTransactionList;
 }
 
 void DataBase::Print () const

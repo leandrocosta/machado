@@ -50,7 +50,6 @@ class DataBase : private IOManager, private Tokenizer
 
 	private:
 		void		ClassifyTransaction			(Transaction *pTransaction)		;
-		uint64		GetProjectionSize			(Transaction *pTransaction)	const	;
 		PatternList*	GetFrequentPatternList			(
 								const Transaction *pTransaction,
 								const uint64 &projection_size)		const	;
@@ -58,6 +57,10 @@ class DataBase : private IOManager, private Tokenizer
 		PatternList*	GetOrthogonalPatternListHeuristical	(PatternList *pPatternList)	const	;
 		PatternList*	GetOrthogonalPatternListPolynomial	(PatternList *pPatternList)	const	;
 		RuleList*	GetRuleList				(PatternList *pPatternList)	const	;
+
+	private:
+		uint64			GetProjectionSize		(const Transaction *pTransaction)	const	;
+		TransactionList*	GetProjectionTransactionList	(const Transaction *pTransaction)	const	;
 
 	public:
 		void	Print	()	const	;
