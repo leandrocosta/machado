@@ -13,33 +13,23 @@ using std::list;
 class IOManager
 {
 	public:
-			IOManager	(const string &directory = "", const string &file = "")	;
-		virtual	~IOManager	()							;
+			IOManager	(const string &file = "")	;
+		virtual	~IOManager	()				;
 
 	private:
 		static	void	EscapeString	(string &str)	;
 
 	protected:
-		static	void	MoveFile	(const string &file_src, const string &file_dst)	;
-			void	SetDirectory	(const string &directory)				;
-			void	SetFile		(const string &file)					;
-			bool	WriteFile	(const string &value)				const	;
-			void	LoadFile	(list<string> *pLines = NULL)				;
-		const	string&	GetFileBuffer	()						const	;
-
-	public:
-		static	void	MakeDirectory	(const string &directory)	;
+			void	SetFile		(const string &file)			;
+			bool	WriteFile	(const string &value)		const	;
+			void	LoadFile	(list<string> *pLines = NULL)		;
+		const	string&	GetFileBuffer	()				const	;
 
 	private:
-		string	mDirectory	;
-		string	mTmpFile	;
-		string	mBuffer		;
+		string	mBuffer	;
 
 	protected:
 		string	mFile	;
-
-	public:
-		static	const	uint32	MAX_SUB_DIRS	= 1000	;
 };
 
 

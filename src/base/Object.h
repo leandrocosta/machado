@@ -36,9 +36,6 @@ class Object
 		virtual	Object*	Clone	()	const	;
 
 	public:
-		virtual	const	ObjectFactory*	GetFactory	()	const	;
-
-	public:
 		virtual	void	Print	()	const	;
 
 	public:

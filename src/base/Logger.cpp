@@ -28,7 +28,9 @@ Logger* Logger::GetInstance ()
 
 void Logger::Finalize ()
 {
+#ifdef USE_LOGGER
 	LOGMSG (LOW_LEVEL, "Logger::Finalize () - [%p]\n", mspInstance);
+#endif
 
 	if (mspInstance)
 		delete mspInstance;
@@ -145,7 +147,9 @@ void Logger::Print (e_debug debug, char *msg, ...)
 
 const uint64 Logger::GetMemSize () const
 {
+#ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "Logger::GetMemSize () - [%p]\n", this);
+#endif
 
 	uint64 size = 0;
 

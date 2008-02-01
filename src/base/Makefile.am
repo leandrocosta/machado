@@ -1,7 +1,6 @@
-SRCS 		= Object.cpp Lockable.cpp Lock.cpp Logger.cpp ObjectList.cpp		\
-	LockableObjectList.cpp ObjectHash.cpp LockableHash.cpp ObjectStrHash.cpp	\
-	ObjectListException.cpp ObjectException.cpp LockableException.cpp IOManager.cpp	\
-	ObjectUIntHash.cpp Converter.cpp Exception.cpp ObjectFactory.cpp Tokenizer.cpp
+SRCS 		= Object.cpp Logger.cpp ObjectList.cpp Converter.cpp		\
+	ObjectHash.cpp ObjectStrHash.cpp ObjectUIntHash.cpp Exception.cpp	\
+	ObjectListException.cpp ObjectException.cpp IOManager.cpp Tokenizer.cpp
 
 noinst_LTLIBRARIES	= libbase.la
 libbase_la_SOURCES	= $(SRCS)
