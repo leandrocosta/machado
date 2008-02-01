@@ -324,21 +324,8 @@ PatternList* DataBase::GetFrequentPatternList (const Transaction *pTransaction, 
 
 				if (pItemBack->GetItemID () < pItem->GetItemID ())
 				{
-					/*
-					Pattern *pNewPattern = new Pattern ();
-
-					for (uint32 j = 0; j < pPattern->GetSize (); j++)
-						pNewPattern->PushBack (pPattern->GetAt (j));
-
-					pNewPattern->PushBack (pItem);
-
-					pNewPattern->MakeTransactionList ();
-					*/
-
-					/**/
 					Pattern *pNewPattern = new Pattern (pPattern);
 					pNewPattern->AddItem (pItem);
-					/**/
 
 					pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
 
