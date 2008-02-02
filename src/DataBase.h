@@ -37,25 +37,18 @@ class DataBase : private IOManager, private Tokenizer
 				const uint32 &min_rule_len = 1, const uint32 &max_rule_len = 100)	;
 		virtual	~DataBase	()								;
 
-	public:
-		void	SetSupport	(const float32 &support)	;
-		void	SetConfidence	(const float32 &confidence)	;
-		void	SetMinRuleLen	(const uint32 &min_rul_len)	;
-		void	SetMaxRuleLen	(const uint32 &max_rul_len)	;
-		void	LoadTrainData	(const string &file)		;
-		void	LoadTestData	(const string &file)		;
+	private:
+		void	ClassifyTransaction	(Transaction *pTransaction)	;
 
 	public:
-		void	ClassifyTestData	()	;
-
-	private:
-		void		ClassifyTransaction	(Transaction *pTransaction)		;
-		PatternList*	GetFrequentPatternList	(
-							const Transaction *pTransaction,
-							const uint64 &projection_size)		const	;
-
-	private:
-		void	MakeProjectionTransactionList	(const Transaction *pTransaction)	;
+		void	SetSupport		(const float32 &support)	;
+		void	SetConfidence		(const float32 &confidence)	;
+		void	SetMinRuleLen		(const uint32 &min_rul_len)	;
+		void	SetMaxRuleLen		(const uint32 &max_rul_len)	;
+		void	LoadTrainData		(const string &file)		;
+		void	LoadTestData		(const string &file)		;
+		void	SortTransactions	()				;
+		void	ClassifyTestData	()				;
 
 	public:
 		void	Print	()	const	;
@@ -66,15 +59,15 @@ class DataBase : private IOManager, private Tokenizer
 		uint32	mMinRuleLen	;
 		uint32	mMaxRuleLen	;
 
+	private:
 		ClassList	mClassList		;
 		ItemList	mItemList		;
 		TransactionList	mTrainTransactionList	;
 		TransactionList	mTestTransactionList	;
 
+	private:
 		uint32	mCorrectGuesses	;
 		uint32	mWrongGuesses	;
-
-		TransactionList mProjectionTransactionList	;
 };
 
 

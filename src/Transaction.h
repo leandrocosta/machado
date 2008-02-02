@@ -7,8 +7,9 @@
 #include <string>
 using std::string;
 
-class Class	;
-class Pattern	;
+class Class		;
+class Pattern		;
+class PatternList	;
 
 
 class Transaction : public ItemSet
@@ -21,21 +22,24 @@ class Transaction : public ItemSet
 		static	const	uint32	GetSeqTransactionID	()	;
 
 	public:
-		const	uint32&	GetTransactionID	()	const	;
-		const	Class*	GetClass		()	const	;
-
-	public:
-		const	bool	IsCoveredBy		(const Pattern *pPattern)	const	;
+		const	uint32&		GetTransactionID	()				const	;
+		const	Class*		GetClass		()				const	;
+		const	bool		IsCoveredBy		(const Pattern *pPattern)	const	;
+			PatternList*	GetFrequentPatternList	(
+								const float32 &support,
+								const uint64 &projection_size,
+								const uint32 &min_rule_len,
+								const uint32 &max_rule_len)	const	;
 
 	public:
 		void	Print	()	const	;
 
 	private:
-		static	uint32	msSeqTransactionID	;
-
-	private:
 		const	uint32	mTransactionID	;
 		const	Class*	mpClass		;
+
+	private:
+		static	uint32	msSeqTransactionID	;
 };
 
 

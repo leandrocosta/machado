@@ -21,9 +21,11 @@ class ItemList : public ObjectList
 		typedef STLItemList::const_iterator	STLItemList_cit	;
 
 	public:
-		virtual	const	bool	operator==	(const Object& rObject)	const	;
 		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
+		virtual	const	bool	operator<=	(const Object& rObject)	const	;
+		virtual	const	bool	operator>=	(const Object& rObject)	const	;
+		virtual	const	bool	operator==	(const Object& rObject)	const	;
 
 	public:
 			Item*	GetItemByValue	(const string &value)	const	;
