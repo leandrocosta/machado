@@ -1,0 +1,15 @@
+
+1) ORIGAMI
+
+Conjunto alfa-ortogonal e beta-representativo
+
+	* O subconjunto R deve possuir elementos cuja similaridade entre quaisquer dois deles é menor que alfa;
+	* Para cada elemento que não pertence a R deve existir, pelo menos, um elemento em R cuja similaridade entre os dois seja maior que beta.
+
+2) Ortogonalidade por classes
+
+	* Dois padrões são ortogonais se cobrem CLASSES diferentes, ex.: Sejam P1 e P2 dois padrões presentes numa base. Se P1 está presente em transações com classes A, B e C, e P2 está presente em transações com classes D, E e F, eles são totalmente ortogonais (mesmo que exista ambiguidade em cada um deles).
+
+3) Ortogonalidade no ranking
+
+	* Depois de geradas as regras, separá-las por classe, e, para cada classe, obter apenas as regras cujos padrões são ortogonais entre si. Utilizar a abordagem do Zaki pra isso, ou seja, Obter um conjunto de regras cuja similaridade entre cada uma delas é maior que alfa, e para cada regra que não pertence ao conjunto, deve existir uma regra do conjunto cuja similaridade entre elas é maior que beta.
