@@ -20,96 +20,165 @@ ItemList::~ItemList ()
 	LOGMSG (HIGH_LEVEL, "ItemList::~ItemList () - p [%p]\n", this);
 }
 
-const bool ItemList::operator== (const Object &rObject) const
-{
-	LOGMSG (HIGH_LEVEL, "ItemList::operator== () - p [%p]\n", this);
-
-	bool ret = true;
-
-	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
-
-	if (GetSize () != rItemList.GetSize ())
-	{
-		ret = false;
-	}
-	else
-	{
-		for (uint64 i = 0; i < GetSize (); i++)
-		{
-			Item*	pItem1 = static_cast<Item *>(GetAt (i));
-			Item*	pItem2 = static_cast<Item *>(rItemList.GetAt (i));
-
-			if (pItem1->GetValue () != pItem2->GetValue ())
-			{
-				ret = false;
-				break;
-			}
-		}
-	}
-
-	return ret;
-}
-
 const bool ItemList::operator< (const Object &rObject) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::operator< () - p [%p]\n", this);
 
-	bool ret = true;
-
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	if (GetSize () != rItemList.GetSize ())
+	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+
+	bool	bRet	= true;
+	uint32	i	= 0;
+
+	while (i < min_size)
 	{
-		ret = GetSize () < rItemList.GetSize ();
-	}
-	else
-	{
-		for (uint64 i = 0; i < GetSize (); i++)
+		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
 		{
-			Item*	pItem1 = static_cast<Item *>(GetAt (i));
-			Item*	pItem2 = static_cast<Item *>(rItemList.GetAt (i));
-
-			if (pItem1->GetValue () > pItem2->GetValue ())
-			{
-				ret = false;
-				break;
-			}
+			bRet = true;
+			break;
 		}
+		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		{
+			bRet = false;
+			break;
+		}
+
+		i++;
 	}
 
-	return ret;
+	if (i == min_size)
+		bRet = (min_size < rItemList.GetSize ());
+
+	return bRet;
 }
 
 const bool ItemList::operator> (const Object &rObject) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::operator> () - p [%p]\n", this);
 
-	bool ret = true;
+	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
+
+	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+
+	bool	bRet	= true;
+	uint32	i	= 0;
+
+	while (i < min_size)
+	{
+		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		{
+			bRet = true;
+			break;
+		}
+		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		{
+			bRet = false;
+			break;
+		}
+
+		i++;
+	}
+
+	if (i == min_size)
+		bRet = (min_size > rItemList.GetSize ());
+
+	return bRet;
+}
+
+const bool ItemList::operator<= (const Object &rObject) const
+{
+	LOGMSG (HIGH_LEVEL, "ItemList::operator<= () - p [%p]\n", this);
 
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	if (GetSize () != rItemList.GetSize ())
+	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+
+	bool	bRet	= true;
+	uint32	i	= 0;
+
+	while (i < min_size)
 	{
-		ret = GetSize () > rItemList.GetSize ();
+		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		{
+			bRet = true;
+			break;
+		}
+		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		{
+			bRet = false;
+			break;
+		}
+
+		i++;
+	}
+
+	if (i == min_size)
+		bRet = (min_size <= rItemList.GetSize ());
+
+	return bRet;
+}
+
+const bool ItemList::operator>= (const Object &rObject) const
+{
+	LOGMSG (HIGH_LEVEL, "ItemList::operator> () - p [%p]\n", this);
+
+	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
+
+	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+
+	bool	bRet	= true;
+	uint32	i	= 0;
+
+	while (i < min_size)
+	{
+		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		{
+			bRet = true;
+			break;
+		}
+		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		{
+			bRet = false;
+			break;
+		}
+
+		i++;
+	}
+
+	if (i == min_size)
+		bRet = (min_size >= rItemList.GetSize ());
+
+	return bRet;
+}
+
+const bool ItemList::operator== (const Object &rObject) const
+{
+	LOGMSG (HIGH_LEVEL, "ItemList::operator== () - p [%p]\n", this);
+
+	bool bRet = true;
+
+	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
+
+	const uint64 size = GetSize ();
+
+	if (size != rItemList.GetSize ())
+	{
+		bRet = false;
 	}
 	else
 	{
-		uint64		index = 0	;
-
-		for (index = 0; index < GetSize (); index++)
+		for (uint64 i = 0; i < size; i++)
 		{
-			Item*	pItem1 = static_cast<Item *>(GetAt (index));
-			Item*	pItem2 = static_cast<Item *>(rItemList.GetAt (index));
-
-			if (pItem1->GetValue () < pItem2->GetValue ())
+			if (*(GetAt (i)) != *(rItemList.GetAt (i)))
 			{
-				ret = false;
+				bRet = false;
 				break;
 			}
 		}
 	}
 
-	return ret;
+	return bRet;
 }
 
 Item* ItemList::GetItemByValue (const string &value) const

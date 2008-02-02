@@ -20,10 +20,20 @@ class ObjectList : public Object
 			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
 		} LessComparer;
 
+		typedef struct CompareLessEqual
+		{
+			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+		} LessEqualComparer;
+
 		typedef struct CompareGreater
 		{
 			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
 		} GreaterComparer;
+
+		typedef struct CompareGreaterEqual
+		{
+			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+		} GreaterEqualComparer;
 
 	public:
 		static	const	bool	HasIntersectionByPtr	(const ObjectList *p1, const ObjectList *p2)	;
@@ -86,8 +96,10 @@ class ObjectList : public Object
 		virtual	const	uint64	GetMemSize	()	const	;
 
 	private:
-		static	LessComparer	msLessComparer		;
-		static	GreaterComparer	msGreaterComparer	;
+		static	LessComparer		msLessComparer		;
+		static	LessEqualComparer	msLessEqualComparer	;
+		static	GreaterComparer		msGreaterComparer	;
+		static	GreaterEqualComparer	msGreaterEqualComparer	;
 
 	private:
 		STLObjectList	mList		;

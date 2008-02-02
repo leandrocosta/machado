@@ -20,6 +20,10 @@ class Item : public Object
 	public:
 		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
+		virtual	const	bool	operator<=	(const Object& rObject)	const	;
+		virtual	const	bool	operator>=	(const Object& rObject)	const	;
+		virtual	const	bool	operator==	(const Object& rObject)	const	;
+		virtual	const	bool	operator!=	(const Object& rObject)	const	;
 
 	private:
 		static	const	uint32	GetSeqItemID	()	;

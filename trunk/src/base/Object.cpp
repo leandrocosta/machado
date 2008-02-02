@@ -13,13 +13,6 @@ Object::~Object ()
 
 }
 
-const bool Object::operator== (const Object& rObject) const
-{
-	throw (ObjectException ("Operator equal (==) not defined for class " + string (typeid (*this).name ())));
-
-	return this == &rObject;
-}
-
 const bool Object::operator< (const Object& rObject) const
 {
 	throw (ObjectException ("Operator less (<) not defined for class " + string (typeid (*this).name ())));
@@ -32,6 +25,34 @@ const bool Object::operator> (const Object& rObject) const
 	throw (ObjectException ("Operator greater (>) not defined for class " + string (typeid (*this).name ())));
 
 	return this > &rObject;
+}
+
+const bool Object::operator<= (const Object& rObject) const
+{
+	throw (ObjectException ("Operator less (<=) not defined for class " + string (typeid (*this).name ())));
+
+	return this <= &rObject;
+}
+
+const bool Object::operator>= (const Object& rObject) const
+{
+	throw (ObjectException ("Operator greater (>=) not defined for class " + string (typeid (*this).name ())));
+
+	return this >= &rObject;
+}
+
+const bool Object::operator== (const Object& rObject) const
+{
+	throw (ObjectException ("Operator equal (==) not defined for class " + string (typeid (*this).name ())));
+
+	return this == &rObject;
+}
+
+const bool Object::operator!= (const Object& rObject) const
+{
+	throw (ObjectException ("Operator equal (!=) not defined for class " + string (typeid (*this).name ())));
+
+	return this != &rObject;
 }
 
 /*

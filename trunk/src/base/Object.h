@@ -20,9 +20,12 @@ class Object
 		virtual	~Object	()	;
 
 	public:
-		virtual	const	bool	operator==	(const Object& rObject)	const	;
 		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
+		virtual	const	bool	operator<=	(const Object& rObject)	const	;
+		virtual	const	bool	operator>=	(const Object& rObject)	const	;
+		virtual	const	bool	operator==	(const Object& rObject)	const	;
+		virtual	const	bool	operator!=	(const Object& rObject)	const	;
 
 //	public:
 //		virtual	void	Serialize	(void **buffer, uint32 &size)		const	;

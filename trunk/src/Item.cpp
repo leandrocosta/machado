@@ -20,26 +20,32 @@ Item::~Item ()
 
 const bool Item::operator< (const Object &rObject) const
 {
-	bool b = GetItemID () < static_cast<const Item &>(rObject).GetItemID ();
-
-	if (b)
-		LOGMSG (MAX_LEVEL, "Item::operator< () - [%s] < [%s]\n", GetValue ().c_str (), static_cast<const Item&>(rObject).GetValue ().c_str ());
-	else
-		LOGMSG (MAX_LEVEL, "Item::operator< () - [%s] >= [%s]\n", GetValue ().c_str (), static_cast<const Item&>(rObject).GetValue ().c_str ());
-
-	return b;
+	return GetItemID () < static_cast<const Item &>(rObject).GetItemID ();
 }
 
 const bool Item::operator> (const Object &rObject) const
 {
-	bool b = GetItemID () > static_cast<const Item &>(rObject).GetItemID ();
+	return GetItemID () > static_cast<const Item &>(rObject).GetItemID ();
+}
 
-	if (b)
-		LOGMSG (MAX_LEVEL, "Item::operator> () - [%s] > [%s]\n", GetValue ().c_str (), static_cast<const Item&>(rObject).GetValue ().c_str ());
-	else
-		LOGMSG (MAX_LEVEL, "Item::operator> () - [%s] <= [%s]\n", GetValue ().c_str (), static_cast<const Item&>(rObject).GetValue ().c_str ());
+const bool Item::operator<= (const Object &rObject) const
+{
+	return GetItemID () <= static_cast<const Item &>(rObject).GetItemID ();
+}
 
-	return b;
+const bool Item::operator>= (const Object &rObject) const
+{
+	return GetItemID () >= static_cast<const Item &>(rObject).GetItemID ();
+}
+
+const bool Item::operator== (const Object &rObject) const
+{
+	return GetItemID () == static_cast<const Item &>(rObject).GetItemID ();
+}
+
+const bool Item::operator!= (const Object &rObject) const
+{
+	return GetItemID () != static_cast<const Item &>(rObject).GetItemID ();
 }
 
 const uint32 Item::GetSeqItemID ()

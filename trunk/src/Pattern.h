@@ -32,8 +32,7 @@ class Pattern : public ItemSet
 		const	TransactionList&	GetTransactionList	()			const	;
 
 	public:
-		const	float32	GetSimilarityL	(const Pattern *pPattern)	;
-		const	float32	GetSimilarityH	(const Pattern *pPattern)	;
+		const	float32	GetSimilarity	(const Pattern *pPattern)	;
 
 	public:
 		void	Print	()	const	;

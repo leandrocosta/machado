@@ -65,44 +65,6 @@ void Pattern::InitFields ()
 	mGot		= false		;
 }
 
-/*
-const bool Pattern::operator< (const Object &rObject) const
-{
-	const Pattern &p = static_cast<const Pattern&>(rObject);
-
-	uint32 max_size = GetSize () > p.GetSize () ? GetSize ():p.GetSize ();
-
-	bool b = true;
-	uint32 i = 0;
-
-	while (i < max_size)
-	{
-		if (*(GetAt (i)) < *(p.GetAt (i)))
-		{
-			b = true;
-			break;
-		}
-		else if (*(GetAt (i)) > *(p.GetAt (i)))
-		{
-			b = false;
-			break;
-		}
-
-		i++;
-	}
-
-	if (i == max_size)
-		b = GetSize () < p.GetSize ();
-
-	if (b)
-		LOGMSG (MAX_LEVEL, "Pattern::operator< () - [%s] < [%s]\n", GetPrintableString ().c_str (), static_cast<const Pattern&>(rObject).GetPrintableString ().c_str ());
-	else
-		LOGMSG (MAX_LEVEL, "Pattern::operator< () - [%s] >= [%s]\n", GetPrintableString ().c_str (), static_cast<const Pattern&>(rObject).GetPrintableString ().c_str ());
-
-	return b;
-}
-*/
-
 void Pattern::AddItem (Item *pItem)
 {
 	LOGMSG (MEDIUM_LEVEL, "Pattern::AddItem () - begin\n");
@@ -250,7 +212,7 @@ const bool& Pattern::GetGot () const
 	return mGot;
 }
 
-const float32 Pattern::GetSimilarityL (const Pattern *pPattern)
+const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 {
 	LOGMSG (MEDIUM_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
 
@@ -305,64 +267,6 @@ const float32 Pattern::GetSimilarityL (const Pattern *pPattern)
 
 	return similarity;
 }
-
-const float32 Pattern::GetSimilarityH (const Pattern *pPattern)
-{
-	LOGMSG (MEDIUM_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
-
-	ItemHash	totalItemHash		;
-	STLItemList_cit itEnd = GetEnd ()	;
-
-	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
-	{
-		Item *pItem = static_cast<Item *>(*it);
-
-		LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		pItem->SetCount (1);
-		totalItemHash.Add (pItem->GetValue (), pItem);
-	}
-
-	itEnd = pPattern->GetEnd ();
-
-	for (STLItemList_cit it = pPattern->GetBegin (); it != itEnd; ++it)
-	{
-		Item *pItem = static_cast<Item *>(*it);
-
-		LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		if (totalItemHash.Find (pItem->GetValue ()))
-			pItem->IncCount ();
-		else
-		{
-			pItem->SetCount (1);
-			totalItemHash.Add (pItem->GetValue (), pItem);
-		}
-	}
-
-	uint32 num	= 0	;
-	uint32 den	= 0	;
-
-	ItemHash::STLItemHash_cit itHashEnd = totalItemHash.GetEnd ()	;
-
-	for (ItemHash::STLItemHash_cit it = totalItemHash.GetBegin (); it != itHashEnd; it++)
-	{
-		const Item *pItem = static_cast<const Item *>(it->second);
-
-		den += pItem->GetCount ();
-
-		if (pItem->GetCount () > 1)
-			num += pItem->GetCount ();
-	}
-
-	totalItemHash.RemoveAll ();
-
-	float32 similarity = (float32) num / den;
-
-	return similarity;
-}
-
-
 
 void Pattern::Print () const
 {

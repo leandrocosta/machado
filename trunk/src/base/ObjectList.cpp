@@ -35,7 +35,22 @@ ObjectList::~ObjectList ()
 
 const bool ObjectList::CompareLess::operator() (const Object *p1, const Object *p2) const
 {
+#ifdef USE_LOGGER
+	if (! p1 || ! p2)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLess () - p1 [%p], p2 [%p]\n", p1, p2);
+#endif
+
 	return (*p1 < *p2);
+}
+
+const bool ObjectList::CompareLessEqual::operator() (const Object *p1, const Object *p2) const
+{
+#ifdef USE_LOGGER
+	if (! p1 || ! p2)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLessEqual () - p1 [%p], p2 [%p]\n", p1, p2);
+#endif
+
+	return (*p1 <= *p2);
 }
 
 const bool ObjectList::CompareGreater::operator() (const Object *p1, const Object *p2) const
@@ -46,6 +61,16 @@ const bool ObjectList::CompareGreater::operator() (const Object *p1, const Objec
 #endif
 
 	return (*p1 > *p2);
+}
+
+const bool ObjectList::CompareGreaterEqual::operator() (const Object *p1, const Object *p2) const
+{
+#ifdef USE_LOGGER
+	if (! p1 || ! p2)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareGreaterEqual () - p1 [%p], p2 [%p]\n", p1, p2);
+#endif
+
+	return (*p1 >= *p2);
 }
 
 const bool ObjectList::HasIntersectionByPtr (const ObjectList *p1, const ObjectList *p2)
@@ -93,6 +118,7 @@ void ObjectList::Sort ()
 	LOGMSG (MEDIUM_LEVEL, "ObjectList::Sort () - size [%llu] - begin\n", GetSize ());
 #endif
 	sort (mList.begin (), mList.end (), ObjectList::msLessComparer);
+//	sort (mList.begin (), mList.end (), ObjectList::msLessEqualComparer);
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::Sort () - size [%llu] - end\n", GetSize ());
 #endif
