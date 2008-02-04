@@ -17,11 +17,6 @@ RuleList::~RuleList ()
 	LOGMSG (MEDIUM_LEVEL, "RuleList::~RuleList () - p [%p]\n", this);
 }
 
-Rule* RuleList::GetAt (const uint64 &index) const
-{
-	return static_cast<Rule *>(ObjectList::GetAt (index));
-}
-
 void RuleList::PrintClassification () const
 {
 	hash_map<string, uint32>	classHash;

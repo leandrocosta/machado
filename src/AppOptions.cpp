@@ -38,6 +38,7 @@ AppOptions::AppOptions ()
 	mMaxRuleLen	= AppOptions::DEFAULT_MAX_RULE_LEN;
 	m_rmode		= AppOptions::DEFAULT_RUN_MODE;
 	m_omode		= AppOptions::DEFAULT_ORT_MODE;
+	m_ometric	= AppOptions::DEFAULT_ORT_METRIC;
 	m_debug_level	= AppOptions::DEFAULT_DEBUG_LEVEL;
 	mVerbose	= AppOptions::DEFAULT_VERBOSE;
 	mHelp		= AppOptions::DEFAULT_HELP;
@@ -56,6 +57,7 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"max-rule-len"		, 1, 0, 'a'},
 		{"run-mode"		, 1, 0, 'r'},
 		{"orthogonality-mode"	, 1, 0, 'o'},
+		{"orthogonality-metric"	, 1, 0, 'e'},
 		{"debug"		, 1, 0, 'd'},
 		{"verbose"		, 0, 0, 'v'},
 		{"help"			, 0, 0, 'h'},
@@ -66,7 +68,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:s:c:m:a:r:o:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:s:c:m:a:r:o:e:d:vh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -105,6 +107,10 @@ void AppOptions::Run (int argc, char* const* argv)
 				m_omode = (e_omode) optarg [0];
 				break;
 
+			case 'e':
+				m_ometric = (e_ometric) optarg [0];
+				break;
+
 			case 'd':
 				m_debug_level = (e_debug) atoi (optarg);
 				break;
@@ -128,17 +134,18 @@ void AppOptions::Usage () const
 {
 	cout << "Usage: ./" << mAppName << " [options]" << endl;
 	cout << "Options:" << endl;
-	cout << "  -i, --training-file      Set the training file" << endl;
-	cout << "  -t, --testing-file       Set the testing file" << endl;
-	cout << "  -s, --support            Set the support" << endl;
-	cout << "  -c, --confidence         Set the confidence" << endl;
-	cout << "  -m, --min-rule-len       Set the minimum length of the rules" << endl;
-	cout << "  -a, --max-rule-len       Set the maximum lenfth of the rules" << endl;
-	cout << "  -r, --run-mode           Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
-	cout << "  -r, --orthogonality-mode           Set the orthogonality mode [s,c,b] [SIMILARITY, COVERAGE, BOTH]" << endl;
-	cout << "  -d, --debug              Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
-	cout << "  -v, --verbose            Use verbose mode" << endl;
-	cout << "  -h, --help               Display this information" << endl;
+	cout << "  -i, --training-file        Set the training file" << endl;
+	cout << "  -t, --testing-file         Set the testing file" << endl;
+	cout << "  -s, --support              Set the support" << endl;
+	cout << "  -c, --confidence           Set the confidence" << endl;
+	cout << "  -m, --min-rule-len         Set the minimum length of the rules" << endl;
+	cout << "  -a, --max-rule-len         Set the maximum lenfth of the rules" << endl;
+	cout << "  -r, --run-mode             Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
+	cout << "  -o, --orthogonality-mode   Set the orthogonality mode [h,p] [HEURISTICAL, POLYNOMIAL]" << endl;
+	cout << "  -e, --orthogonality-metric Set the orthogonality mode [s,c,b] [SIMILARITY, COVERAGE, BOTH]" << endl;
+	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
+	cout << "  -v, --verbose              Use verbose mode" << endl;
+	cout << "  -h, --help                 Display this information" << endl;
 	cout << endl;
 }
 
@@ -185,6 +192,11 @@ const e_rmode& AppOptions::GetRunMode () const
 const e_omode& AppOptions::GetOrtMode () const
 {
 	return m_omode;
+}
+
+const e_ometric& AppOptions::GetOrtMetric () const
+{
+	return m_ometric;
 }
 
 const e_debug& AppOptions::GetDebugLevel () const

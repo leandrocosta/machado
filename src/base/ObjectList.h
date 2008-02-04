@@ -17,26 +17,26 @@ class ObjectList : public Object
 	private:
 		typedef struct CompareLess
 		{
-			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
 		} LessComparer;
 
 		typedef struct CompareLessEqual
 		{
-			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
 		} LessEqualComparer;
 
 		typedef struct CompareGreater
 		{
-			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
 		} GreaterComparer;
 
 		typedef struct CompareGreaterEqual
 		{
-			const	bool	operator()	(const Object *p1, const Object *p2)	const	;
+			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
 		} GreaterEqualComparer;
 
 	public:
-		static	const	bool	HasIntersectionByPtr	(const ObjectList *p1, const ObjectList *p2)	;
+		static	const	bool	HasIntersectionByPtr	(const ObjectList *pLeft, const ObjectList *pRight)	;
 
 	protected:
 		typedef deque<Object *>			STLObjectList		;

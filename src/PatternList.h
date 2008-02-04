@@ -27,9 +27,6 @@ class PatternList : public ObjectList
 		void	PushBack	(Object *pObject)	;
 
 	public:
-		Pattern*	GetAt	(const uint64 &index)	const	;
-
-	public:
 		PatternList*	GetOrthogonalPatternList		(const TransactionList *pTransactionList)	;
 		PatternList*	GetOrthogonalPatternListHeuristical	(const TransactionList *pTransactionList)	;
 		PatternList*	GetOrthogonalPatternListPolynomial	(const TransactionList *pTransactionList)	;

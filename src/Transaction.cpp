@@ -103,7 +103,7 @@ PatternList* Transaction::GetFrequentPatternList (
 
 	while (iTryPattern < pFrequentPatternList->GetSize ())
 	{
-		Pattern *pPattern = pFrequentPatternList->GetAt (iTryPattern);
+		Pattern *pPattern = static_cast<Pattern *>(pFrequentPatternList->GetAt (iTryPattern));
 
 		if (pPattern->GetSize () < max_rule_len)
 		{
