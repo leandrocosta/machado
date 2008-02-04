@@ -24,31 +24,35 @@ const bool ItemList::operator< (const Object &rObject) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::operator< () - p [%p]\n", this);
 
+	bool bRet = false;
+
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+	STLItemList_cit itLeft		= GetBegin ();
+	STLItemList_cit itLeftEnd	= GetEnd ();
 
-	bool	bRet	= true;
-	uint32	i	= 0;
+	STLItemList_cit itRight		= rItemList.GetBegin ();
+	STLItemList_cit itRightEnd	= rItemList.GetEnd ();
 
-	while (i < min_size)
+	while (itLeft != itLeftEnd && itRight != itRightEnd)
 	{
-		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		if (*itLeft < *itRight)
 		{
 			bRet = true;
 			break;
 		}
-		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		if (*itLeft > *itRight)
 		{
 			bRet = false;
 			break;
 		}
 
-		i++;
+		++itLeft;
+		++itRight;
 	}
 
-	if (i == min_size)
-		bRet = (min_size < rItemList.GetSize ());
+	if (itLeft == itLeftEnd && itRight != itRightEnd)
+		bRet = true;
 
 	return bRet;
 }
@@ -57,31 +61,35 @@ const bool ItemList::operator> (const Object &rObject) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::operator> () - p [%p]\n", this);
 
+	bool bRet = false;
+
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+	STLItemList_cit itLeft		= GetBegin ();
+	STLItemList_cit itLeftEnd	= GetEnd ();
 
-	bool	bRet	= true;
-	uint32	i	= 0;
+	STLItemList_cit itRight		= rItemList.GetBegin ();
+	STLItemList_cit itRightEnd	= rItemList.GetEnd ();
 
-	while (i < min_size)
+	while (itLeft != itLeftEnd && itRight != itRightEnd)
 	{
-		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		if (*itLeft > *itRight)
 		{
 			bRet = true;
 			break;
 		}
-		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		if (*itLeft < *itRight)
 		{
 			bRet = false;
 			break;
 		}
 
-		i++;
+		++itLeft;
+		++itRight;
 	}
 
-	if (i == min_size)
-		bRet = (min_size > rItemList.GetSize ());
+	if (itLeft != itLeftEnd && itRight == itRightEnd)
+		bRet = true;
 
 	return bRet;
 }
@@ -90,64 +98,72 @@ const bool ItemList::operator<= (const Object &rObject) const
 {
 	LOGMSG (HIGH_LEVEL, "ItemList::operator<= () - p [%p]\n", this);
 
+	bool bRet = false;
+
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+	STLItemList_cit itLeft		= GetBegin ();
+	STLItemList_cit itLeftEnd	= GetEnd ();
 
-	bool	bRet	= true;
-	uint32	i	= 0;
+	STLItemList_cit itRight		= rItemList.GetBegin ();
+	STLItemList_cit itRightEnd	= rItemList.GetEnd ();
 
-	while (i < min_size)
+	while (itLeft != itLeftEnd && itRight != itRightEnd)
 	{
-		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		if (*itLeft < *itRight)
 		{
 			bRet = true;
 			break;
 		}
-		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		if (*itLeft > *itRight)
 		{
 			bRet = false;
 			break;
 		}
 
-		i++;
+		++itLeft;
+		++itRight;
 	}
 
-	if (i == min_size)
-		bRet = (min_size <= rItemList.GetSize ());
+	if (itLeft == itLeftEnd)
+		bRet = true;
 
 	return bRet;
 }
 
 const bool ItemList::operator>= (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator> () - p [%p]\n", this);
+	LOGMSG (HIGH_LEVEL, "ItemList::operator>= () - p [%p]\n", this);
+
+	bool bRet = false;
 
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	uint32 min_size = GetSize () <= rItemList.GetSize () ? GetSize ():rItemList.GetSize ();
+	STLItemList_cit itLeft		= GetBegin ();
+	STLItemList_cit itLeftEnd	= GetEnd ();
 
-	bool	bRet	= true;
-	uint32	i	= 0;
+	STLItemList_cit itRight		= rItemList.GetBegin ();
+	STLItemList_cit itRightEnd	= rItemList.GetEnd ();
 
-	while (i < min_size)
+	while (itLeft != itLeftEnd && itRight != itRightEnd)
 	{
-		if (*(GetAt (i)) > *(rItemList.GetAt (i)))
+		if (*itLeft > *itRight)
 		{
 			bRet = true;
 			break;
 		}
-		if (*(GetAt (i)) < *(rItemList.GetAt (i)))
+		if (*itLeft < *itRight)
 		{
 			bRet = false;
 			break;
 		}
 
-		i++;
+		++itLeft;
+		++itRight;
 	}
 
-	if (i == min_size)
-		bRet = (min_size >= rItemList.GetSize ());
+	if (itRight == itRightEnd)
+		bRet = true;
 
 	return bRet;
 }
@@ -160,21 +176,28 @@ const bool ItemList::operator== (const Object &rObject) const
 
 	const ItemList& rItemList = static_cast<const ItemList&>(rObject);
 
-	const uint64 size = GetSize ();
-
-	if (size != rItemList.GetSize ())
+	if (GetSize () != rItemList.GetSize ())
 	{
 		bRet = false;
 	}
 	else
 	{
-		for (uint64 i = 0; i < size; i++)
+		STLItemList_cit itLeft		= GetBegin ();
+		STLItemList_cit itLeftEnd	= GetEnd ();
+
+		STLItemList_cit itRight		= rItemList.GetBegin ();
+		STLItemList_cit itRightEnd	= rItemList.GetEnd ();
+
+		while (itLeft != itLeftEnd && itRight != itRightEnd)
 		{
-			if (*(GetAt (i)) != *(rItemList.GetAt (i)))
+			if (*itLeft != *itRight)
 			{
 				bRet = false;
 				break;
 			}
+
+			++itLeft;
+			++itRight;
 		}
 	}
 

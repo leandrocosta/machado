@@ -134,9 +134,11 @@ void DataBase::ClassifyTestData ()
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
-	for (uint64 i = 0; i < mTestTransactionList.GetSize (); i++)
+	TransactionList::STLTransactionList_cit itEnd = mTestTransactionList.GetEnd ();
+
+	for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; it++)
 	{
-		Transaction *pTransaction = static_cast<Transaction *>(mTestTransactionList.GetAt (i));
+		Transaction *pTransaction = static_cast<Transaction *>(*it);
 
 		try
 		{

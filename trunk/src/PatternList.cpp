@@ -35,16 +35,24 @@ void PatternList::PushBack (Object *pObject)
 		mMaxPatternLen = static_cast<Pattern *>(pObject)->GetSize ();
 }
 
-Pattern* PatternList::GetAt (const uint64 &index) const
-{
-	return static_cast<Pattern *>(ObjectList::GetAt (index));
-}
-
 PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList)
 {
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternList () - pTransactionList [%p], transactions [%llu]\n", pTransactionList, pTransactionList ? pTransactionList->GetSize ():0);
+	PatternList *pOrthogonalPatternList = NULL;
 
-	return GetOrthogonalPatternListHeuristical (pTransactionList);
+	switch (AppOptions::GetInstance ()->GetOrtMode ())
+	{
+		case ORTH_HEURISTICAL:
+			pOrthogonalPatternList = GetOrthogonalPatternListHeuristical (pTransactionList);
+			break;
+		case ORTH_POLYNOMIAL:
+			pOrthogonalPatternList = GetOrthogonalPatternListPolynomial (pTransactionList);
+			break;
+		default:
+			LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternList () - unknown orthogonality mode\n");
+			break;
+	}
+
+	return pOrthogonalPatternList;
 }
 
 PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList)
@@ -53,53 +61,59 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
-	if (GetSize () <= 2)
+	uint64 size = GetSize ();
+
+	if (size <= 2)
 	{
-		if (GetSize () > 0)
+		if (size > 0)
 			pOrthogonalPatternList->PushBack (GetAt (0));
 
-		if (GetSize () > 1)
+		if (size > 1)
 			pOrthogonalPatternList->PushBack (GetAt (1));
 	}
 	else
 	{
 		ReverseSort ();
 
-		pOrthogonalPatternList->PushBack (GetAt (0));
-		pOrthogonalPatternList->PushBack (GetAt (1));
+		Pattern *pPatternAt0 = static_cast<Pattern *>(GetAt (0));
+		Pattern *pPatternAt1 = static_cast<Pattern *>(GetAt (1));
 
-		GetAt (0)->SetGot (true);
-		GetAt (1)->SetGot (true);
+		pOrthogonalPatternList->PushBack (pPatternAt0);
+		pOrthogonalPatternList->PushBack (pPatternAt1);
 
-		uint64 index = 0;
+		pPatternAt0->SetGot (true);
+		pPatternAt1->SetGot (true);
 
-		// two items
-		for (index = 0; index < GetSize (); index++)
+		float32 rate_prv = pOrthogonalPatternList->GetRate (pTransactionList);
+
+		STLPatternList_cit itEnd = GetEnd ();
+
+		for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
 		{
-			Pattern *pPattern1 = static_cast<Pattern *>(GetAt (index));
+			Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
 
-			if (! pPattern1->GetGot ())
+			if (! pCandToGetInPattern->GetGot ())
 			{
-				Pattern *pPattern2 = pOrthogonalPatternList->GetMoreSimilar (pPattern1);
-				float32 rate_prv = pOrthogonalPatternList->GetRate (pTransactionList);
+				Pattern *pCandToGetOutPattern = pOrthogonalPatternList->GetMoreSimilar (pCandToGetInPattern);
 
-				pOrthogonalPatternList->Remove (pPattern2);
-				pOrthogonalPatternList->PushBack (pPattern1);
+				pOrthogonalPatternList->Remove (pCandToGetOutPattern);
+				pOrthogonalPatternList->PushBack (pCandToGetInPattern);
 
 				float32 rate_new = pOrthogonalPatternList->GetRate (pTransactionList);
 
 				if (rate_new > rate_prv)
 				{
-					pPattern1->SetGot (true);
-					pPattern2->SetGot (false);
+					pCandToGetInPattern->SetGot (true);
+					pCandToGetOutPattern->SetGot (false);
+
+					rate_prv = rate_new;
 				}
 				else
 				{
-					pOrthogonalPatternList->Remove (pPattern1);
-					pOrthogonalPatternList->PushBack (pPattern2);
+					pOrthogonalPatternList->Remove (pCandToGetInPattern);
+					pOrthogonalPatternList->PushBack (pCandToGetOutPattern);
 				}
 			}
-
 		}
 	}
 
@@ -108,59 +122,44 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList)
 {
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - begin\n");
+	uint64 size = GetSize ();
+
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - patterns [%llu]\n", size);
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
 	Pattern *pPattern1 = NULL;
 	Pattern *pPattern2 = NULL;
 
-	if (GetSize () <= 2)
+	if (size <= 2)
 	{
-		if (GetSize () > 0)
-			pPattern1 = GetAt (0);
+		if (size > 0)
+			pPattern1 = static_cast<Pattern *>(GetAt (0));
 
-		if (GetSize () > 1)
-			pPattern2 = GetAt (1);
+		if (size > 1)
+			pPattern2 = static_cast<Pattern *>(GetAt (1));
 	}
 	else
 	{
-		float32 rate = -1;
+		float32 rate_prv = -1;
 
-		for (uint32 i = 0; i < GetSize () - 1; i++)
+		STLPatternList_cit itEnd = GetEnd ();
+
+		for (STLPatternList_cit it_i = GetBegin (); it_i < itEnd-1; it_i++)
 		{
-			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - try pattern 1 [%s]\n", GetAt (i)->GetPrintableString ().c_str ());
-
-			for (uint32 j = i+1; j < GetSize (); j++)
+			for (STLPatternList_cit it_j = it_i+1; it_j != itEnd; it_j++)
 			{
-				LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - try pattern 2 [%s]\n", GetAt (j)->GetPrintableString ().c_str ());
+				pOrthogonalPatternList->PushBack (*it_i);
+				pOrthogonalPatternList->PushBack (*it_j);
 
-				pOrthogonalPatternList->PushBack (GetAt (i));
-				pOrthogonalPatternList->PushBack (GetAt (j));
+				float32 rate_new = pOrthogonalPatternList->GetRate (pTransactionList);
 
-				float32 rate_new = -1;
-
-				switch (AppOptions::GetInstance ()->GetOrtMode ())
+				if (rate_new > rate_prv)
 				{
-					case ORTH_SIMILARITY:
-						rate_new = pOrthogonalPatternList->GetSimilarityRate ();
-						break;
-					case ORTH_COVERAGE:
-						rate_new = pOrthogonalPatternList->GetCoverageRate (pTransactionList);
-						break;
-					case ORTH_BOTH:
-						rate_new = pOrthogonalPatternList->GetRate (pTransactionList);
-						break;
-					case ORTH_UNKNOWN:
-					default:
-						LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListPolynomial () - unknown orthogonality mode\n");
-						break;
-				}
+					pPattern1 = static_cast<Pattern *>(*it_i);
+					pPattern2 = static_cast<Pattern *>(*it_j);
 
-				if (rate_new > rate)
-				{
-					pPattern1 = GetAt (i);
-					pPattern2 = GetAt (j);
+					rate_prv = rate_new;
 				}
 
 				pOrthogonalPatternList->RemoveAll ();
@@ -181,15 +180,19 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 {
 	RuleList *pRuleList = new RuleList ();
 
-	for (uint32 i = 0; i < pClassList->GetSize (); i++)
+	ClassList::STLClassList_cit itClassEnd = pClassList->GetEnd ();
+
+	for (ClassList::STLClassList_cit itClass = pClassList->GetBegin (); itClass != itClassEnd; itClass++)
 	{
-		Class *pClass = static_cast<Class *>(pClassList->GetAt (i));
+		Class *pClass = static_cast<Class *>(*itClass);
 
 		LOGMSG (MEDIUM_LEVEL, "DataBase::GetRuleList () - check class [%s]\n", pClass->GetValue ().c_str ());
 
-		for (uint32 j = 0; j < GetSize (); j++)
+		STLPatternList_cit itPatternEnd = GetEnd ();
+
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
 		{
-			Pattern *pPattern = static_cast<Pattern *>(GetAt (j));
+			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
 			Rule *pRule = new Rule (pClass, pPattern);
 
@@ -249,6 +252,8 @@ Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern) const
 
 const float32 PatternList::GetSimilarityRate ()
 {
+	LOGMSG (MEDIUM_LEVEL, "PatternList::GetSimilarityRate () - begin\n");
+
 	ItemList	totalItemList		;
 	uint32		num_items	= 0	;
 
@@ -304,6 +309,8 @@ const float32 PatternList::GetSimilarityRate ()
 
 const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionList) const
 {
+	LOGMSG (MEDIUM_LEVEL, "PatternList::GetCoverateRate () - begin\n");
+
 	uint32	distinct_transactions	= 0		;
 	float32 exclusive_factor	= 0.0		;
 //	float32 num_coverages		= 0.0		;
@@ -341,5 +348,24 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 
 const float32 PatternList::GetRate (const TransactionList *pTransactionList)
 {
-	return GetSimilarityRate () * GetCoverageRate (pTransactionList);
+	float32 rate = -1;
+
+	switch (AppOptions::GetInstance ()->GetOrtMetric ())
+	{
+		case METRIC_SIMILARITY:
+			rate = GetSimilarityRate ();
+			break;
+		case METRIC_COVERAGE:
+			rate = GetCoverageRate (pTransactionList);
+			break;
+		case METRIC_BOTH:
+			rate = GetSimilarityRate () * GetCoverageRate (pTransactionList);
+			break;
+		case METRIC_UNKNOWN:
+		default:
+			LOGMSG (NO_DEBUG, "PatternList::GetRate () - unknown orthogonality metric\n");
+			break;
+	}
+
+	return rate;
 }

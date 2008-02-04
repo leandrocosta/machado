@@ -18,11 +18,17 @@ typedef enum e_run_mode
 
 typedef enum e_orthogonality_mode
 {
-	ORTH_SIMILARITY	= 's',
-	ORTH_COVERAGE	= 'c',
-	ORTH_BOTH	= 'b',
-	ORTH_UNKNOWN	= 0
+	ORTH_HEURISTICAL	= 'h',
+	ORTH_POLYNOMIAL		= 'p'
 } e_omode;
+
+typedef enum e_orthogonality_metric
+{
+	METRIC_SIMILARITY	= 's',
+	METRIC_COVERAGE		= 'c',
+	METRIC_BOTH		= 'b',
+	METRIC_UNKNOWN		= 0
+} e_ometric;
 
 
 class PatternList	;

@@ -21,9 +21,6 @@ class RuleList : public ObjectList
 		typedef STLRuleList::const_iterator	STLRuleList_cit	;
 
 	public:
-		Rule*	GetAt	(const uint64 &index)	const	;
-
-	public:
 			void	PrintClassification	()	const	;
 		const	string	GetClassificationValue	()	const	;
 };

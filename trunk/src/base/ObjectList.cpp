@@ -33,60 +33,66 @@ ObjectList::~ObjectList ()
 	mList.clear ();
 }
 
-const bool ObjectList::CompareLess::operator() (const Object *p1, const Object *p2) const
+const bool ObjectList::CompareLess::operator() (const Object *pLeft, const Object *pRight) const
 {
 #ifdef USE_LOGGER
-	if (! p1 || ! p2)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareLess () - p1 [%p], p2 [%p]\n", p1, p2);
+	if (! pLeft || ! pRight)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLess () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
-	return (*p1 < *p2);
+	return (*pLeft < *pRight);
 }
 
-const bool ObjectList::CompareLessEqual::operator() (const Object *p1, const Object *p2) const
+const bool ObjectList::CompareLessEqual::operator() (const Object *pLeft, const Object *pRight) const
 {
 #ifdef USE_LOGGER
-	if (! p1 || ! p2)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareLessEqual () - p1 [%p], p2 [%p]\n", p1, p2);
+	if (! pLeft || ! pRight)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLessEqual () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
-	return (*p1 <= *p2);
+	return (*pLeft <= *pRight);
 }
 
-const bool ObjectList::CompareGreater::operator() (const Object *p1, const Object *p2) const
+const bool ObjectList::CompareGreater::operator() (const Object *pLeft, const Object *pRight) const
 {
 #ifdef USE_LOGGER
-	if (! p1 || ! p2)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareGreater () - p1 [%p], p2 [%p]\n", p1, p2);
+	if (! pLeft || ! pRight)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareGreater () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
-	return (*p1 > *p2);
+	return (*pLeft > *pRight);
 }
 
-const bool ObjectList::CompareGreaterEqual::operator() (const Object *p1, const Object *p2) const
+const bool ObjectList::CompareGreaterEqual::operator() (const Object *pLeft, const Object *pRight) const
 {
 #ifdef USE_LOGGER
-	if (! p1 || ! p2)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareGreaterEqual () - p1 [%p], p2 [%p]\n", p1, p2);
+	if (! pLeft || ! pRight)
+		LOGMSG (NO_DEBUG, "ObjectList::CompareGreaterEqual () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
-	return (*p1 >= *p2);
+	return (*pLeft >= *pRight);
 }
 
-const bool ObjectList::HasIntersectionByPtr (const ObjectList *p1, const ObjectList *p2)
+const bool ObjectList::HasIntersectionByPtr (const ObjectList *pLeft, const ObjectList *pRight)
 {
 	bool bRet = false;
 
-	for (STLObjectList_cit it1 = p1->GetBegin (); it1 != p1->GetEnd (); it1++)
+	STLObjectList_cit itLeftEnd	= pLeft->GetEnd ();
+	STLObjectList_cit itRightEnd	= pRight->GetEnd ();
+
+	for (STLObjectList_cit itLeft = pLeft->GetBegin (); itLeft != itLeftEnd; itLeft++)
 	{
-		for (STLObjectList_cit it2 = p2->GetBegin (); it2 != p2->GetEnd (); it2++)
+		for (STLObjectList_cit itRight = pRight->GetBegin (); itRight != itRightEnd; itRight++)
 		{
-			if (*it1 == *it2)
+			if (*itLeft == *itRight)
 			{
 				bRet = true;
 				break;
 			}
 		}
+
+		if (bRet)
+			break;
 	}
 
 	return bRet;
@@ -129,6 +135,7 @@ void ObjectList::ReverseSort ()
 	LOGMSG (MEDIUM_LEVEL, "ObjectList::ReverseSort () - size [%llu] - begin\n", GetSize ());
 #endif
 	sort (mList.begin (), mList.end (), ObjectList::msGreaterComparer);
+//	sort (mList.begin (), mList.end (), ObjectList::msGreaterEqualComparer);
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::ReverseSort () - size [%llu] - end\n", GetSize ());
 #endif
@@ -333,22 +340,25 @@ const bool ObjectList::IsSubList (const ObjectList& rList) const
 	LOGMSG (NO_DEBUG, "ObjectList::IsSubList () - begin [%p]\n", this);
 #endif
 
-	STLObjectList_cit it1 = GetBegin ();
-	STLObjectList_cit it2 = rList.GetBegin ();
+	STLObjectList_cit itLeft	= mList.begin ();
+	STLObjectList_cit itLeftEnd	= mList.end ();
 
-	while (it1 != GetEnd () && it2 != rList.GetEnd ())
+	STLObjectList_cit itRight	= rList.GetBegin ();
+	STLObjectList_cit itRightEnd	= rList.GetEnd ();
+
+	while (itLeft != itLeftEnd && itRight != itRightEnd)
 	{
-		if (*(*it1) == *(*it2))
-			it2++;
+		if (*(*itLeft) == *(*itRight))
+			itRight++;
 
-		it1++;
+		itLeft++;
 	}
 
 #ifdef USE_LOGGER
-	LOGMSG (NO_DEBUG, "ObjectList::IsSubList () - [%s]\n", it2 == rList.GetEnd () ? "yes":"no");
+	LOGMSG (NO_DEBUG, "ObjectList::IsSubList () - [%s]\n", itRight == itRightEnd ? "yes":"no");
 #endif
 
-	return (it2 == rList.GetEnd ());
+	return (itRight == itRightEnd);
 }
 
 /*
