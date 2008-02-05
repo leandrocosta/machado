@@ -41,6 +41,8 @@ class PatternList : public ObjectList
 		const	float32		GetSimilarityRate	()					;
 		const	float32		GetCoverageRate		(
 						const TransactionList *pTransactionList)	const	;
+		const	float32		GetClassCoverageRate	(
+						const TransactionList *pTransactionList)	const	;
 		const	float32		GetRate			(
 						const TransactionList *pTransactionList)		;
 

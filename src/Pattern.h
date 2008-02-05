@@ -4,6 +4,7 @@
 
 #include "ItemSet.h"
 #include "TransactionList.h"
+#include "base/stl_hash_include.h"
 
 
 class Pattern : public ItemSet
@@ -32,7 +33,9 @@ class Pattern : public ItemSet
 		const	TransactionList&	GetTransactionList	()			const	;
 
 	public:
-		const	float32	GetSimilarity	(const Pattern *pPattern)	;
+		const	float32	GetSimilarity		(const Pattern *pPattern)	;
+			void	IncClassCoverage	(const string &class_name)	;
+		const	uint32&	GetClassCoverage	(const string &class_name)	;
 
 	public:
 		void	Print	()	const	;
@@ -41,6 +44,9 @@ class Pattern : public ItemSet
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
 		bool		mGot			;
+
+	private:
+		hash_map<string, uint32>	mClassCoverage	;
 };
 
 

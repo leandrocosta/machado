@@ -309,7 +309,7 @@ const float32 PatternList::GetSimilarityRate ()
 
 const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionList) const
 {
-	LOGMSG (MEDIUM_LEVEL, "PatternList::GetCoverateRate () - begin\n");
+	LOGMSG (MEDIUM_LEVEL, "PatternList::GetCoverageRate () - begin\n");
 
 	uint32	distinct_transactions	= 0		;
 	float32 exclusive_factor	= 0.0		;
@@ -339,9 +339,72 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 //		num_coverages += patterns_found_in_transaction;
 	}
 
-	float rate = exclusive_factor / distinct_transactions;
+	float32 rate = exclusive_factor / distinct_transactions;
  //	rate = (float32) (exclusive_factor / distinct_transactions) * ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
 //	rate = (float32) (exclusive_factor / distinct_transactions) * log ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
+
+	return rate;
+}
+
+const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransactionList) const
+{
+	LOGMSG (MEDIUM_LEVEL, "PatternList::GetClassCoverageRate () - begin\n");
+
+	hash_map<string, uint32>	coveragesHash;
+
+	TransactionList::STLTransactionList_cit itTransactionEnd = pTransactionList->GetEnd ();
+
+	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
+	{
+		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
+
+		STLPatternList_cit itPatternEnd = GetEnd ();
+
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		{
+			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
+
+			if (pTransaction->IsCoveredBy (pPattern))
+			{
+				pPattern->IncClassCoverage (pTransaction->GetClassValue ());
+				coveragesHash [pTransaction->GetClassValue ()]++;
+			}
+		}
+	}
+
+	hash_map<string, uint32>::const_iterator it;
+
+	float32 rate = 0.0;
+
+	for (it = coveragesHash.begin (); it != coveragesHash.end (); it++)
+	{
+		const string class_name = it->first;
+
+		uint32 coverage_max = 0;
+		uint32 coverage_min = 0;
+
+		STLPatternList_cit itPatternEnd = GetEnd ();
+
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		{
+			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
+
+			uint32 coverage = pPattern->GetClassCoverage (class_name);
+
+			if (coverage > coverage_max)
+			{
+				coverage_min = coverage_max;
+				coverage_max = coverage;
+			}
+			else if (coverage > coverage_min)
+				coverage_min = coverage;
+		}
+
+		if (coverage_max)
+			rate += ((float32) (coverage_max - coverage_min) / it->second);
+	}
+
+	rate /= coveragesHash.size ();
 
 	return rate;
 }
@@ -360,6 +423,9 @@ const float32 PatternList::GetRate (const TransactionList *pTransactionList)
 			break;
 		case METRIC_BOTH:
 			rate = GetSimilarityRate () * GetCoverageRate (pTransactionList);
+			break;
+		case METRIC_CLASS_COVERAGE:
+			rate = GetClassCoverageRate (pTransactionList);
 			break;
 		case METRIC_UNKNOWN:
 		default:

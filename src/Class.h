@@ -23,7 +23,9 @@ class Class : public Object
 		const	string&	GetValue	()	const	;
 
 	public:
-		void	AddTransaction	(Transaction *pTransaction)	;
+			void	AddTransaction		(Transaction *pTransaction)		;
+			void	ClearTransactionList	()					;
+		const	uint64	GetTransactionListSize	()				const	;
 
 	public:
 		void	Print	()	const	;

@@ -13,7 +13,7 @@ using std::endl;
 uint32 Transaction::msSeqTransactionID	= 0	;
 
 
-Transaction::Transaction (const Class *pClass) : ItemSet (), mTransactionID (GetSeqTransactionID ()), mpClass (pClass)
+Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTransactionID ()), mpClass (pClass)
 {
 
 }
@@ -38,9 +38,14 @@ const uint32& Transaction::GetTransactionID () const
 	return mTransactionID;
 }
 
-const Class* Transaction::GetClass () const
+Class* Transaction::GetClass ()
 {
 	return mpClass;
+}
+
+const string& Transaction::GetClassValue () const
+{
+	return mpClass->GetValue ();
 }
 
 const bool Transaction::IsCoveredBy (const Pattern *pPattern) const

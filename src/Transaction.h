@@ -15,15 +15,16 @@ class PatternList	;
 class Transaction : public ItemSet
 {
 	public:
-			Transaction	(const Class *pClass)	;
-		virtual	~Transaction	()			;
+			Transaction	(Class *pClass)	;
+		virtual	~Transaction	()		;
 
 	private:
 		static	const	uint32	GetSeqTransactionID	()	;
 
 	public:
 		const	uint32&		GetTransactionID	()				const	;
-		const	Class*		GetClass		()				const	;
+			Class*		GetClass		()					;
+		const	string&		GetClassValue		()				const	;
 		const	bool		IsCoveredBy		(const Pattern *pPattern)	const	;
 			PatternList*	GetFrequentPatternList	(
 								const float32 &support,
@@ -36,7 +37,7 @@ class Transaction : public ItemSet
 
 	private:
 		const	uint32	mTransactionID	;
-		const	Class*	mpClass		;
+			Class*	mpClass		;
 
 	private:
 		static	uint32	msSeqTransactionID	;

@@ -38,6 +38,16 @@ void Class::AddTransaction (Transaction *pTransaction)
 	mTransactionList.PushBack (pTransaction);
 }
 
+void Class::ClearTransactionList ()
+{
+	mTransactionList.RemoveAll ();
+}
+
+const uint64 Class::GetTransactionListSize () const
+{
+	return mTransactionList.GetSize ();
+}
+
 void Class::Print () const
 {
 	LOGMSG (NO_DEBUG, "Class::Print () - mClassID [%u], mValue [%s]\n", mClassID, mValue.c_str ());
