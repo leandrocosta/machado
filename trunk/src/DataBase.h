@@ -27,6 +27,7 @@ typedef enum e_orthogonality_metric
 	METRIC_SIMILARITY	= 's',
 	METRIC_COVERAGE		= 'c',
 	METRIC_BOTH		= 'b',
+	METRIC_CLASS_COVERAGE	= 'a',
 	METRIC_UNKNOWN		= 0
 } e_ometric;
 

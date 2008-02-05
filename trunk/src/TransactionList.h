@@ -21,8 +21,8 @@ class TransactionList : public ObjectList
 		typedef STLTransactionList::const_iterator	STLTransactionList_cit	;
 
 	public:
-		void			SortTransactions	()						;
-		TransactionList*	GetProjection		(const Transaction *pTransaction)	const	;
+		void			SortTransactions	()					;
+		TransactionList*	GetProjection		(const Transaction *pBaseTransaction)	;
 };
 
 

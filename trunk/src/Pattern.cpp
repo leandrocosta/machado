@@ -268,6 +268,16 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 	return similarity;
 }
 
+void Pattern::IncClassCoverage (const string &class_name)
+{
+	mClassCoverage [class_name]++;
+}
+
+const uint32& Pattern::GetClassCoverage (const string &class_name)
+{
+	return mClassCoverage [class_name];
+}
+
 void Pattern::Print () const
 {
 	LOGMSG (LOW_LEVEL, "Pattern::Print () - support [%0.2f] - [%s]\n", mSupport, GetPrintableString ().c_str ());

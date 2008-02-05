@@ -54,7 +54,7 @@ void DataBase::LoadTrainData (const string &file)
 			Class *pClass = mClassList.GetClassByValue (items.front ());
 
 			Transaction *pTransaction = new Transaction (pClass);
-			pClass->AddTransaction (pTransaction);
+//			pClass->AddTransaction (pTransaction);
 
 			items.pop_front ();
 
@@ -159,6 +159,11 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	pTransaction->Print ();
 
+	ClassList::STLClassList_cit itEnd = mClassList.GetEnd ();
+
+	for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; it++)
+		static_cast<Class *>(*it)->ClearTransactionList ();
+
 	TransactionList *pProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
 
 	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, pProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
@@ -203,6 +208,27 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	delete pProjectionTransactionList;
 	delete pFrequentPatternList;
+
+	if (class_guess.empty ())
+	{
+		uint32 num_transactions = 0;
+		Class	*pClassGuess = NULL;
+
+		ClassList::STLClassList_cit itEnd = mClassList.GetEnd ();
+
+		for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; it++)
+		{
+			Class *pClass = static_cast<Class *>(*it);
+
+			if (pClass->GetTransactionListSize () > num_transactions)
+			{
+				pClassGuess = pClass;
+				num_transactions = pClass->GetTransactionListSize ();
+			}
+		}
+
+		class_guess = pClassGuess->GetValue ();
+	}
 
 	if (class_guess == pTransaction->GetClass ()->GetValue ())
 		mCorrectGuesses++;
