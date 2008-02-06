@@ -10,7 +10,7 @@ using std::cout;
 using std::endl;
 
 
-uint32 Transaction::msSeqTransactionID	= 0	;
+uint64 Transaction::msSeqTransactionID	= 0	;
 
 
 Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTransactionID ()), mpClass (pClass)
@@ -25,15 +25,15 @@ Transaction::~Transaction ()
 	RemoveAll ();
 }
 
-const uint32 Transaction::GetSeqTransactionID ()
+const uint64 Transaction::GetSeqTransactionID ()
 {
-	uint32 transactionID = msSeqTransactionID;
+	uint64 transactionID = msSeqTransactionID;
 	msSeqTransactionID++;
 
 	return transactionID;
 }
 
-const uint32& Transaction::GetTransactionID () const
+const uint64& Transaction::GetTransactionID () const
 {
 	return mTransactionID;
 }
@@ -101,8 +101,8 @@ PatternList* Transaction::GetFrequentPatternList (
 
 //	pFrequentPatternList->Sort ();
 
-	uint32 numFrequentOneItemPatterns = pFrequentPatternList->GetSize ();
-	uint32 iTryPattern = 0;
+	uint64 numFrequentOneItemPatterns = pFrequentPatternList->GetSize ();
+	uint64 iTryPattern = 0;
 
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add combined-item patterns\n");
 
@@ -114,7 +114,7 @@ PatternList* Transaction::GetFrequentPatternList (
 		{
 			Item *pItemBack = static_cast<Item *>(pPattern->GetBack ());
 
-			for (uint32 i = 0; i < numFrequentOneItemPatterns; i++)
+			for (uint64 i = 0; i < numFrequentOneItemPatterns; i++)
 			{
 				Item *pItem = static_cast<Item *>(static_cast<Pattern *>(pFrequentPatternList->GetAt (i))->GetAt (0));
 
@@ -139,9 +139,11 @@ PatternList* Transaction::GetFrequentPatternList (
 					}
 				}
 			}
-		}
 
-		iTryPattern++;
+			iTryPattern++;
+		}
+		else
+			break;
 	}
 
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - remove short patterns\n");

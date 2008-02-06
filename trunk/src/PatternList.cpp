@@ -209,9 +209,9 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 	return pRuleList;
 }
 
-const uint32 PatternList::GetSumPatternLen () const
+const uint64 PatternList::GetSumPatternLen () const
 {
-	uint32 sumPatternLen = 0;
+	uint64 sumPatternLen = 0;
 
 	STLPatternList_cit	it			;
 	STLPatternList_cit	itEnd = GetEnd ()	;
@@ -224,7 +224,7 @@ const uint32 PatternList::GetSumPatternLen () const
 	return sumPatternLen;
 }
 
-const uint32& PatternList::GetMaxPatternLen () const
+const uint64& PatternList::GetMaxPatternLen () const
 {
 	return mMaxPatternLen;
 }
