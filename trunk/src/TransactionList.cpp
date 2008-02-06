@@ -41,3 +41,20 @@ TransactionList* TransactionList::GetProjection (const Transaction *pBaseTransac
 
 	return pTransactionList;
 }
+
+const uint64 TransactionList::GetNumTransactionsOfClass (const Class *pClass) const
+{
+	uint64 num_transactions = 0;
+
+	STLTransactionList_cit itEnd = GetEnd ();
+
+	for (STLTransactionList_cit it = GetBegin (); it != itEnd; it++)
+	{
+		Transaction *pTransaction = static_cast<Transaction *>(*it);
+
+		if (pTransaction->GetClass () == pClass)
+			num_transactions++;
+	}
+
+	return num_transactions;
+}
