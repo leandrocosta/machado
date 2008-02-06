@@ -10,23 +10,31 @@ using std::endl;
 
 Rule::Rule (const Class *pClass, const Pattern *pPattern) : Object (), mpClass (pClass), mpPattern (pPattern)
 {
+	uint32 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass);
+
+/*
 	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
 
-	for (uint32 i = 0; i < rTransactionList.GetSize (); i++)
+	TransactionList::STLTransactionList_cit itEnd = rTransactionList.GetEnd ();
+
+	for (TransactionList::STLTransactionList_cit it = rTransactionList.GetBegin (); it != itEnd; it++)
 	{
-		Transaction *pTransaction = static_cast<Transaction *>(rTransactionList.GetAt (i));
+		Transaction *pTransaction = static_cast<Transaction *>(*it);
 
 		if (pTransaction->GetClass () == mpClass)
-			mTransactionList.PushBack (pTransaction);
+			correct_transactions++;
+//			mTransactionList.PushBack (pTransaction);
 	}
+*/
 
 	mSupport	= mpPattern->GetSupport ();
-	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
+//	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
+	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
 }
 
 Rule::~Rule ()
 {
-	mTransactionList.RemoveAll ();
+//	mTransactionList.RemoveAll ();
 }
 
 const bool Rule::operator> (const Object &rObject) const
@@ -40,26 +48,6 @@ const bool Rule::operator> (const Object &rObject) const
 
 	return bRet;
 }
-
-/*
-void Rule::MakeTransactionList ()
-{
-	LOGMSG (MEDIUM_LEVEL, "Rule::MakeTransactionList () - begin\n");
-
-	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
-
-	for (uint32 i = 0; i < rTransactionList.GetSize (); i++)
-	{
-		Transaction *pTransaction = static_cast<Transaction *>(rTransactionList.GetAt (i));
-
-		if (pTransaction->GetClass () == mpClass)
-			mTransactionList.PushBack (pTransaction);
-	}
-
-	mSupport	= mpPattern->GetSupport ();
-	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
-}
-*/
 
 const float32& Rule::GetSupport () const
 {

@@ -174,6 +174,11 @@ const TransactionList& Pattern::GetTransactionList () const
 	return mTransactionList;
 }
 
+const uint64 Pattern::GetNumTransactionsOfClass (const Class *pClass) const
+{
+	return mTransactionList.GetNumTransactionsOfClass (pClass);
+}
+
 void Pattern::SetGot (const bool &got)
 {
 	mGot = got;

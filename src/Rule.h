@@ -23,28 +23,22 @@ class Rule : public Object
 //		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
 
-//	public:
-//		void	MakeTransactionList	()	;
-
 	public:
-		const	float32&	GetSupport		()	const	;
-		const	float32&	GetConfidence		()	const	;
+		const	float32&	GetSupport	()	const	;
+		const	float32&	GetConfidence	()	const	;
+		const	string&		GetClassValue	()	const	;
 
 	public:
 		void	Print	()	const	;
 
 	private:
+			float32		mSupport	;
+			float32		mConfidence	;
+
 		const	Class*		mpClass		;
 		const	Pattern*	mpPattern	;
 
-	public:
-		const	string&	GetClassValue	()	const	;
-
-	private:
-		float32		mSupport		;
-		float32		mConfidence		;
-
-		TransactionList	mTransactionList	;
+//		TransactionList	mTransactionList	;
 };
 
 

@@ -23,6 +23,9 @@ class TransactionList : public ObjectList
 	public:
 		void			SortTransactions	()					;
 		TransactionList*	GetProjection		(const Transaction *pBaseTransaction)	;
+
+	public:
+		const	uint64	GetNumTransactionsOfClass	(const Class *pClass)	const	;
 };
 
 

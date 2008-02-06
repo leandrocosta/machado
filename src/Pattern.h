@@ -27,10 +27,11 @@ class Pattern : public ItemSet
 		const	float32&	GetSupport		()				const	;
 
 	public:
-			void			AddItem			(Item *pItem)			;
-			void			SetGot			(const bool &got)		;
-		const	bool&			GetGot			()			const	;
-		const	TransactionList&	GetTransactionList	()			const	;
+			void			AddItem				(Item *pItem)			;
+			void			SetGot				(const bool &got)		;
+		const	bool&			GetGot				()			const	;
+		const	TransactionList&	GetTransactionList		()			const	;
+		const	uint64			GetNumTransactionsOfClass	(const Class *pClass)	const	;
 
 	public:
 		const	float32	GetSimilarity		(const Pattern *pPattern)	;
