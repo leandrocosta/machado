@@ -91,7 +91,7 @@ PatternList* Transaction::GetFrequentPatternList (
 	{
 		Item *pItem = static_cast<Item *>(*it);
 
-		if ((float32) pItem->GetFrequence () / projection_size >= support)
+		if ((float32) pItem->GetProjectionFrequence () / projection_size >= support)
 		{
 			Pattern *pPattern = new Pattern (pItem);
 			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
@@ -167,6 +167,14 @@ PatternList* Transaction::GetFrequentPatternList (
 	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - return pFrequentPatternList [%p], patterns [%llu]\n", pFrequentPatternList, pFrequentPatternList->GetSize ());
 
 	return pFrequentPatternList;
+}
+
+void Transaction::AddTransactionToItemsProjectionTransactionLists ()
+{
+	STLItemList_cit itEnd = GetEnd ();
+
+	for (STLItemList_cit it = GetBegin (); it != itEnd; it++)
+		static_cast<Item *>(*it)->AddProjectTransaction (this);
 }
 
 void Transaction::Print () const

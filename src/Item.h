@@ -29,19 +29,20 @@ class Item : public Object
 		static	const	uint32	GetSeqItemID	()	;
 
 	public:
-		const	uint32&	GetItemID	()	const	;
-		const	string&	GetValue	()	const	;
+		const	uint32&			GetItemID			()				const	;
+		const	string&			GetValue			()				const	;
 
-			void	IncCount	()			;
-			void	SetCount	(const uint32 &count)	;
-		const	uint32& GetCount	()	const		;
+			void			IncCount			()					;
+			void			SetCount			(const uint32 &count)			;
+		const	uint32&			GetCount			()				const	;
 
-	public:
-			void			AddTransaction		(Transaction *pTransaction)		;
-		const	TransactionList*	GetTransactionList	()				const	;
+			void			AddTransaction			(Transaction *pTransaction)		;
+			void			AddProjectTransaction		(Transaction *pTransaction)		;
+		const	TransactionList*	GetProjectionTransactionList	()				const	;
 
-	public:
-		const	uint64	GetFrequence	()	const	;
+		const	uint64			GetProjectionFrequence		()				const	;
+
+			void			ClearProjectionTransactionList	()					;
 
 	public:
 		void	Print	()	const	;
@@ -50,12 +51,12 @@ class Item : public Object
 		static	uint32	msSeqItemID	;
 
 	private:
-		const	uint32	mItemID	;
-		const	string	mValue	;
+		const	uint32			mItemID				;
+		const	string			mValue				;
 
-	private:
-		TransactionList*	mpTransactionList	;
-		uint32			mCount			;
+			uint32			mCount				;
+			TransactionList*	mpTransactionList		;
+			TransactionList*	mpProjectionTransactionList	;
 };
 
 

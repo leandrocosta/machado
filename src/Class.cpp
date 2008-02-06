@@ -13,6 +13,7 @@ Class::Class (const string &value) : Object (), mClassID (GetSeqClassID ()), mVa
 Class::~Class ()
 {
 	mTransactionList.RemoveAll ();
+	mProjectionTransactionList.RemoveAll ();
 }
 
 const uint32 Class::GetSeqClassID ()
@@ -38,14 +39,19 @@ void Class::AddTransaction (Transaction *pTransaction)
 	mTransactionList.PushBack (pTransaction);
 }
 
-void Class::ClearTransactionList ()
+void Class::AddProjectionTransaction (Transaction *pTransaction)
 {
-	mTransactionList.RemoveAll ();
+	mProjectionTransactionList.PushBack (pTransaction);
 }
 
-const uint64 Class::GetTransactionListSize () const
+void Class::ClearProjectionTransactionList ()
 {
-	return mTransactionList.GetSize ();
+	mProjectionTransactionList.RemoveAll ();
+}
+
+const uint64 Class::GetProjectionTransactionListSize () const
+{
+	return mProjectionTransactionList.GetSize ();
 }
 
 void Class::Print () const

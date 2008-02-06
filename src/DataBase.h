@@ -46,6 +46,7 @@ class DataBase : private IOManager, private Tokenizer
 
 	private:
 		void	ClassifyTransaction	(Transaction *pTransaction)	;
+		void	MakeProjection		(Transaction *pTransaction)	;
 
 	public:
 		void	SetSupport		(const float32 &support)	;
@@ -67,14 +68,15 @@ class DataBase : private IOManager, private Tokenizer
 		uint32	mMaxRuleLen	;
 
 	private:
-		ClassList	mClassList		;
-		ItemList	mItemList		;
-		TransactionList	mTrainTransactionList	;
-		TransactionList	mTestTransactionList	;
+		ClassList		mClassList			;
+		ItemList		mItemList			;
 
-	private:
-		uint32	mCorrectGuesses	;
-		uint32	mWrongGuesses	;
+		TransactionList		mTrainTransactionList		;
+		TransactionList		mTestTransactionList		;
+		TransactionList*	mpProjectionTransactionList	;
+
+		uint32			mCorrectGuesses			;
+		uint32			mWrongGuesses			;
 };
 
 

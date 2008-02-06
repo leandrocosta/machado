@@ -31,6 +31,8 @@ class Transaction : public ItemSet
 								const uint64 &projection_size,
 								const uint32 &min_rule_len,
 								const uint32 &max_rule_len)	const	;
+	public:
+		void	AddTransactionToItemsProjectionTransactionLists ()	;
 
 	public:
 		void	Print	()	const	;
