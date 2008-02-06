@@ -1,5 +1,4 @@
 #include "Pattern.h"
-#include "ItemHash.h"
 #include "base/Logger.h"
 
 #include <iostream>
