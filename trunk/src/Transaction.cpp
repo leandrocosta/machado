@@ -171,5 +171,5 @@ PatternList* Transaction::GetFrequentPatternList (
 
 void Transaction::Print () const
 {
-	LOGMSG (LOW_LEVEL, "Transaction::Print () - mTransactionID [%u], class [%s], items [%s]\n",  mTransactionID, mpClass->GetValue ().c_str (), GetPrintableString ().c_str ());
+	LOGMSG (LOW_LEVEL, "Transaction::Print () - mTransactionID [%llu], class [%s], items [%s]\n",  mTransactionID, mpClass->GetValue ().c_str (), GetPrintableString ().c_str ());
 }
