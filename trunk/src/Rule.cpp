@@ -14,20 +14,20 @@ Rule::Rule (const Class *pClass, const Pattern *pPattern, const uint64 &projecti
 {
 	uint64 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass);
 
-//	mSupport	= mpPattern->GetSupport ();
+	mSupport	= mpPattern->GetSupport ();
 //	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
 
-	mSupport	= (float32) correct_transactions / projection_size;
+//	mSupport	= (float32) correct_transactions / projection_size;
 	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
-	mGain		= mSupport * (log2 (mConfidence) - log2 (pClass->GetTransactionListSize () / projection_size));
-	mJaccard	= (float32) correct_transactions / (mpPattern->GetFrequence () + pClass->GetTransactionListSize () - correct_transactions);
-	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) mpPattern->GetFrequence () / projection_size) + (float32) 1.0 / ((float32) pClass->GetTransactionListSize () / projection_size));
-	mCosine		= mSupport / sqrt (((float32) mpPattern->GetFrequence () / projection_size) * ((float32) pClass->GetTransactionListSize () / projection_size));
-	mCoherence	= mSupport /((mpPattern->GetFrequence () + pClass->GetTransactionListSize () - (float32) correct_transactions) / projection_size);
-	mSensitivity	= (float32) correct_transactions / pClass->GetTransactionListSize ();
-	mSpecificity	= (float32) (projection_size - pClass->GetTransactionListSize () - mpPattern->GetFrequence () + correct_transactions) / (projection_size - pClass->GetTransactionListSize ());
+	mGain		= mSupport * (log2 (mConfidence) - log2 (pClass->GetProjectionTransactionListSize () / projection_size));
+	mJaccard	= (float32) correct_transactions / (mpPattern->GetFrequence () + pClass->GetProjectionTransactionListSize () - correct_transactions);
+	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) mpPattern->GetFrequence () / projection_size) + (float32) 1.0 / ((float32) pClass->GetProjectionTransactionListSize () / projection_size));
+	mCosine		= mSupport / sqrt (((float32) mpPattern->GetFrequence () / projection_size) * ((float32) pClass->GetProjectionTransactionListSize () / projection_size));
+	mCoherence	= mSupport /((mpPattern->GetFrequence () + pClass->GetProjectionTransactionListSize () - (float32) correct_transactions) / projection_size);
+	mSensitivity	= (float32) correct_transactions / pClass->GetProjectionTransactionListSize ();
+	mSpecificity	= (float32) (projection_size - pClass->GetProjectionTransactionListSize () - mpPattern->GetFrequence () + correct_transactions) / (projection_size - pClass->GetProjectionTransactionListSize ());
 	mLaplace	= (float32) (correct_transactions + 1) / (mpPattern->GetFrequence () + num_classes);
-	mCorrelation	= mSupport / ((float32) mpPattern->GetFrequence () / projection_size * pClass->GetTransactionListSize () / projection_size);
+	mCorrelation	= mSupport / ((float32) mpPattern->GetFrequence () / projection_size * pClass->GetProjectionTransactionListSize () / projection_size);
 }
 
 Rule::~Rule ()

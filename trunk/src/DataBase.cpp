@@ -14,18 +14,26 @@ DataBase::DataBase (
 		const float32 &support, const float32 &confidence,
 		const uint32 &min_rule_len, const uint32 &max_rule_len) : IOManager (), Tokenizer (", \t\n")
 {
-	mSupport	= support	;
-	mConfidence	= confidence	;
-	mMinRuleLen	= min_rule_len	;
-	mMaxRuleLen	= max_rule_len	;
+	mSupport			= support	;
+	mConfidence			= confidence	;
+	mMinRuleLen			= min_rule_len	;
+	mMaxRuleLen			= max_rule_len	;
 
-	mCorrectGuesses	= 0;
-	mWrongGuesses	= 0;
+	mpProjectionTransactionList	= NULL		;
+
+	mCorrectGuesses			= 0		;
+	mWrongGuesses			= 0		;
 }
 
 DataBase::~DataBase ()
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::~DataBase () - p [%p]\n", this);
+
+	if (mpProjectionTransactionList)
+	{
+		mpProjectionTransactionList->RemoveAll ();
+		delete mpProjectionTransactionList;
+	}
 }
 
 void DataBase::LoadTrainData (const string &file)
@@ -54,7 +62,7 @@ void DataBase::LoadTrainData (const string &file)
 			Class *pClass = mClassList.GetClassByValue (items.front ());
 
 			Transaction *pTransaction = new Transaction (pClass);
-//			pClass->AddTransaction (pTransaction);
+			pClass->AddTransaction (pTransaction);
 
 			items.pop_front ();
 
@@ -159,14 +167,18 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	pTransaction->Print ();
 
+	/*
 	ClassList::STLClassList_cit itEnd = mClassList.GetEnd ();
 
 	for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; it++)
 		static_cast<Class *>(*it)->ClearTransactionList ();
 
 	TransactionList *pProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
+	*/
 
-	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, pProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
+	MakeProjection (pTransaction);
+
+	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
 //	pFrequentPatternList->Print ();
 //	exit (1);
 
@@ -176,7 +188,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, pProjectionTransactionList->GetSize ());
+		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize ());
 		pRuleList->Print ();
 		class_guess = pRuleList->GetClassificationValue ();
 
@@ -186,10 +198,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (pProjectionTransactionList);
+		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList);
 		pOrthogonalFrequentPatternList->Print ();
 
-		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, pProjectionTransactionList->GetSize ());
+		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize ());
 		pRuleList->Print ();
 		class_guess = pRuleList->GetClassificationValue ();
 
@@ -204,9 +216,6 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - unknown run mode\n");
 	}
 
-	pProjectionTransactionList->RemoveAll ();
-
-	delete pProjectionTransactionList;
 	delete pFrequentPatternList;
 
 	if (class_guess.empty ())
@@ -220,10 +229,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		{
 			Class *pClass = static_cast<Class *>(*it);
 
-			if (pClass->GetTransactionListSize () > num_transactions)
+			if (pClass->GetProjectionTransactionListSize () > num_transactions)
 			{
 				pClassGuess = pClass;
-				num_transactions = pClass->GetTransactionListSize ();
+				num_transactions = pClass->GetProjectionTransactionListSize ();
 			}
 		}
 
@@ -236,6 +245,20 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		mWrongGuesses++;
 
 	cout << class_guess << endl;
+}
+
+void DataBase::MakeProjection (Transaction *pTransaction)
+{
+	if (mpProjectionTransactionList)
+	{
+		mpProjectionTransactionList->RemoveAll ();
+		delete mpProjectionTransactionList;
+	}
+
+	mItemList.ClearItemProjectionTransactionLists ();
+	mClassList.ClearClassProjectionTransactionLists ();
+
+	mpProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
 }
 
 void DataBase::Print () const

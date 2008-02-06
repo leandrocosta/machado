@@ -61,6 +61,14 @@ Class* ClassList::GetClassByValue (const string &value) const
 	return pClass;
 }
 
+void ClassList::ClearClassProjectionTransactionLists ()
+{
+	STLClassList_cit itEnd = GetEnd ();
+
+	for (STLClassList_cit it = GetBegin (); it != itEnd; it++)
+		static_cast<Class *>(*it)->ClearProjectionTransactionList ();
+}
+
 /*
 void ClassList::Print () const
 {

@@ -8,14 +8,17 @@ uint32 Item::msSeqItemID	= 0	;
 
 Item::Item (const string &value, const uint32 &count) : Object (), mItemID (GetSeqItemID ()), mValue (value), mCount (count)
 {
-	mpTransactionList = new TransactionList ();
+	mpTransactionList		= new TransactionList ();
+	mpProjectionTransactionList	= new TransactionList ();
 }
 
 Item::~Item ()
 {
 	mpTransactionList->RemoveAll ();
+	mpProjectionTransactionList->RemoveAll ();
 
 	delete mpTransactionList;
+	delete mpProjectionTransactionList;
 }
 
 const bool Item::operator< (const Object &rObject) const
@@ -88,14 +91,24 @@ void Item::AddTransaction (Transaction *pTransaction)
 	mpTransactionList->PushBack (pTransaction);
 }
 
-const TransactionList* Item::GetTransactionList () const
+void Item::AddProjectTransaction (Transaction *pTransaction)
 {
-	return mpTransactionList;
+	mpProjectionTransactionList->PushBack (pTransaction);
 }
 
-const uint64 Item::GetFrequence () const
+const TransactionList* Item::GetProjectionTransactionList () const
 {
-	return mpTransactionList->GetSize ();
+	return mpProjectionTransactionList;
+}
+
+const uint64 Item::GetProjectionFrequence () const
+{
+	return mpProjectionTransactionList->GetSize ();
+}
+
+void Item::ClearProjectionTransactionList ()
+{
+	mpProjectionTransactionList->RemoveAll ();
 }
 
 void Item::Print () const

@@ -34,7 +34,7 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 
 	PushBack (pItem);
 
-	const TransactionList *pItemTransactionList = pItem->GetTransactionList ();
+	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = pItemTransactionList->GetEnd ();
 
@@ -72,7 +72,7 @@ void Pattern::AddItem (Item *pItem)
 
 	LOGMSG (MEDIUM_LEVEL, "Pattern::AddItem () - merge lists\n");
 
-	const TransactionList *pItemTransactionList = pItem->GetTransactionList ();
+	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
 
 	TransactionList::STLTransactionList_it it	= mTransactionList.GetBegin ()	;
 	TransactionList::STLTransactionList_it itEnd	= mTransactionList.GetEnd ()	;
@@ -105,7 +105,7 @@ void Pattern::MakeTransactionList ()
 
 	while (it != itEnd)
 	{
-		if (static_cast<const Item*>(*it)->GetFrequence () < pLessFrequentItem->GetFrequence ())
+		if (static_cast<const Item*>(*it)->GetProjectionFrequence () < pLessFrequentItem->GetProjectionFrequence ())
 			pLessFrequentItem = static_cast<const Item*>(*it);
 
 		it++;
@@ -113,7 +113,7 @@ void Pattern::MakeTransactionList ()
 
 	LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList () - less frequent item [%s]\n", pLessFrequentItem->GetValue ().c_str ());
 
-	const TransactionList *pItemTransactionList = pLessFrequentItem->GetTransactionList ();
+	const TransactionList *pItemTransactionList = pLessFrequentItem->GetProjectionTransactionList ();
 
 	for (uint32 i = 0; i < pItemTransactionList->GetSize (); i++)
 		mTransactionList.PushBack (static_cast<Transaction *>(pItemTransactionList->GetAt (i)));
@@ -126,7 +126,7 @@ void Pattern::MakeTransactionList ()
 
 			LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList () - merge list with item [%s]\n", pItem->GetValue ().c_str ());
 
-			pItemTransactionList = pItem->GetTransactionList ();
+			pItemTransactionList = pItem->GetProjectionTransactionList ();
 
 			TransactionList::STLTransactionList_it itTransaction	= mTransactionList.GetBegin ()	;
 			TransactionList::STLTransactionList_it itTransactionEnd	= mTransactionList.GetEnd ()	;
@@ -146,7 +146,7 @@ void Pattern::MakeTransactionList (Item *pItem)
 {
 	LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList (Item *pItem) - begin\n");
 
-	const TransactionList *pItemTransactionList	= pItem->GetTransactionList ()		;
+	const TransactionList *pItemTransactionList	= pItem->GetProjectionTransactionList ();
 	TransactionList::STLTransactionList_cit itEnd	= pItemTransactionList->GetEnd ()	;
 
 	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itEnd; it++)

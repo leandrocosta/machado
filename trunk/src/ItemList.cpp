@@ -224,6 +224,14 @@ Item* ItemList::GetItemByValue (const string &value) const
 	return pItem;
 }
 
+void ItemList::ClearItemProjectionTransactionLists ()
+{
+	STLItemList_cit itEnd = GetEnd ();
+
+	for (STLItemList_cit it = GetBegin (); it != itEnd; it++)
+		static_cast<Item *>(*it)->ClearProjectionTransactionList ();
+}
+
 const string ItemList::GetPrintableString () const
 {
 	stringstream	sstream			;

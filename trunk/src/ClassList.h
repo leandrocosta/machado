@@ -24,7 +24,8 @@ class ClassList : public ObjectList
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
 
 	public:
-		Class*	GetClassByValue	(const string &value)	const	;
+		Class*	GetClassByValue				(const string &value)	const	;
+		void	ClearClassProjectionTransactionLists	()				;
 };
 
 

@@ -23,9 +23,10 @@ class Class : public Object
 		const	string&	GetValue	()	const	;
 
 	public:
-			void	AddTransaction		(Transaction *pTransaction)		;
-			void	ClearTransactionList	()					;
-		const	uint64	GetTransactionListSize	()				const	;
+			void	AddTransaction				(Transaction *pTransaction)		;
+			void	AddProjectionTransaction		(Transaction *pTransaction)		;
+			void	ClearProjectionTransactionList		()					;
+		const	uint64	GetProjectionTransactionListSize	()				const	;
 
 	public:
 		void	Print	()	const	;
@@ -38,7 +39,8 @@ class Class : public Object
 		const	string	mValue		;
 
 	private:
-		TransactionList	mTransactionList	;
+		TransactionList	mTransactionList		;
+		TransactionList	mProjectionTransactionList	;
 };
 
 
