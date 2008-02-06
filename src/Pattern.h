@@ -10,28 +10,25 @@
 class Pattern : public ItemSet
 {
 	public:
-			Pattern		(const Pattern *pPattern)	;
-			Pattern		(Item *pItem)			;
-			Pattern		()				;
-		virtual	~Pattern	()				;
+			Pattern		(const Pattern *pPattern, Item *pItem)	;
+			Pattern		(Item *pItem)				;
+		virtual	~Pattern	()					;
 
 	private:
-		void	InitFields	()	;
+		void	InitFields	()		;
+		void	AddItem		(Item *pItem)	;
 
 	public:
-			void		MakeTransactionList	()					;
-			void		MakeTransactionList	(Item *pItem)				;
 		const	uint64		GetFrequence		()				const	;
 
 			void		SetSupport		(const float32 &support)		;
 		const	float32&	GetSupport		()				const	;
 
 	public:
-			void			AddItem				(Item *pItem)			;
-			void			SetGot				(const bool &got)		;
-		const	bool&			GetGot				()			const	;
-		const	TransactionList&	GetTransactionList		()			const	;
-		const	uint64			GetNumTransactionsOfClass	(const Class *pClass)	const	;
+			void			SetGot				(const bool &got)			;
+		const	bool&			GetGot				()				const	;
+		const	TransactionList&	GetTransactionList		()				const	;
+		const	uint64			GetNumTransactionsOfClass	(const string &class_name)	const	;
 
 	public:
 		const	float32	GetSimilarity		(const Pattern *pPattern)	;
@@ -43,12 +40,14 @@ class Pattern : public ItemSet
 		void	Print	()	const	;
 
 	private:
+		uint64		mFrequence		;
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
 		bool		mGot			;
 
 	private:
-		hash_map<string, uint32>	mClassCoverage	;
+		hash_map<string, uint32>	mClassCoverageHsh		;
+		hash_map<string, uint64>	mNumTransactionsOfClassHsh	;
 };
 
 
