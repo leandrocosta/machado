@@ -167,15 +167,6 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	pTransaction->Print ();
 
-	/*
-	ClassList::STLClassList_cit itEnd = mClassList.GetEnd ();
-
-	for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; it++)
-		static_cast<Class *>(*it)->ClearTransactionList ();
-
-	TransactionList *pProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
-	*/
-
 	MakeProjection (pTransaction);
 
 	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
@@ -236,7 +227,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 			}
 		}
 
-		class_guess = pClassGuess->GetValue ();
+		if (pClassGuess)
+			class_guess = pClassGuess->GetValue ();
 	}
 
 	if (class_guess == pTransaction->GetClass ()->GetValue ())

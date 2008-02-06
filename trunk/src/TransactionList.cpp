@@ -33,7 +33,7 @@ TransactionList* TransactionList::GetProjection (const Transaction *pBaseTransac
 		{
 			Transaction *pTransaction = static_cast<Transaction *>(*it);
 
-			pTransaction->GetClass ()->AddTransaction (pTransaction);
+			pTransaction->GetClass ()->AddProjectionTransaction (pTransaction);
 			pTransaction->AddTransactionToItemsProjectionTransactionLists ();
 
 			pTransactionList->PushBack (pTransaction);
