@@ -176,8 +176,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence);
-
+		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, pProjectionTransactionList->GetSize ());
+		pRuleList->Print ();
 		class_guess = pRuleList->GetClassificationValue ();
 
 		delete pRuleList;
@@ -189,8 +189,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (pProjectionTransactionList);
 		pOrthogonalFrequentPatternList->Print ();
 
-		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence);
-
+		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, pProjectionTransactionList->GetSize ());
+		pRuleList->Print ();
 		class_guess = pRuleList->GetClassificationValue ();
 
 		delete pRuleList;

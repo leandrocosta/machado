@@ -22,6 +22,7 @@ const string RuleList::GetClassificationValue () const
 	hash_map<string, uint32>	rulesHash;
 	hash_map<string, float32>	supportHash;
 	hash_map<string, float32>	confidenceHash;
+	hash_map<string, float32>	rankHash;
 
 //	uint32 total_rules = GetSize ();
 
@@ -34,6 +35,23 @@ const string RuleList::GetClassificationValue () const
 		rulesHash[pRule->GetClassValue ()]++;
 		supportHash[pRule->GetClassValue ()] += pRule->GetSupport ();
 		confidenceHash[pRule->GetClassValue ()] += pRule->GetConfidence ();
+
+		/*
+		rankHash[pRule->GetClassValue ()] +=
+			pRule->GetSupport () +
+			pRule->GetConfidence () +
+			pRule->GetGain () +
+			pRule->GetJaccard () +
+			pRule->GetKulc () +
+			pRule->GetCosine () +
+			pRule->GetCoherence () +
+			pRule->GetSensitivity () +
+			pRule->GetSpecificity () +
+			pRule->GetLaplace () +
+			pRule->GetCorrelation ();
+		*/
+
+		rankHash[pRule->GetClassValue ()] += pRule->GetConfidence ();
 	}
 
 	string	class_guess	= "";
@@ -52,7 +70,8 @@ const string RuleList::GetClassificationValue () const
 
 		LOGMSG (LOW_LEVEL, "RuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean);
 
-		rank_try = support_mean + confidence_mean;
+//		rank_try = support_mean + confidence_mean;
+		rank_try = rankHash [it->first] / rules;
 
 		if (rank_try > rank)
 		{

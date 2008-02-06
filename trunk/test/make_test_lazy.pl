@@ -32,7 +32,7 @@ my @data_bases = (
 	'ionosphere.ac',
 	'iris.ac',
 	'labor.ac',
-	'led7.ac',
+#	'led7.ac',
 	'lymph.ac',
 	'pima.ac',
 	'sick.ac',
@@ -72,17 +72,17 @@ sub test_data_base ($)
 	my $confidence_f	= 1;
 	my $confidence_s	= 0.3;
 
-	my $min_rules_i	= 1;
+	my $min_rules_i	= 1000;
 	my $min_rules_f	= 1000000;
 	my $min_rules_s	= 1000;
 
-	my $max_size_i	= 1;
-	my $max_size_f	= 10;
-	my $max_size_s	= 3;
+	my $max_size_i	= 2;
+	my $max_size_f	= 4;
+	my $max_size_s	= 1;
 
-	my $ranking_size_i	= 1;
-	my $ranking_size_f	= 1000000;
-	my $ranking_size_s	= 1000;
+#	my $ranking_size_i	= 1000;
+#	my $ranking_size_f	= 1000000;
+#	my $ranking_size_s	= 1000;
 
 	my $data_base = $_[0];
 
@@ -101,8 +101,10 @@ sub test_data_base ($)
 		{
 			for ($max_size = $max_size_i; $max_size <= $max_size_f; $max_size += $max_size_s)
 			{
-				for ($ranking_size = $ranking_size_i; $ranking_size <= $ranking_size_f; $ranking_size *= $ranking_size_s)
-				{
+#				for ($ranking_size = $ranking_size_i; $ranking_size <= $ranking_size_f; $ranking_size *= $ranking_size_s)
+#				{
+					$ranking_size = $min_rules;
+
 					$accuracy = run_lazy ($data_base, $training_file, $testing_file, 1, $confidence, $min_rules, $max_size, $ranking_size);
 
 #					print OUTPUT "confidence: $confidence, min_rules: %min_rules, max_size: $max_size, ranking_size: $ranking_size, accuracy: $lazy_acc\n";
@@ -116,20 +118,13 @@ sub test_data_base ($)
 						$best_ranking_size	= $ranking_size;
 						$best_accuracy		= $accuracy;
 					}
-				}
+#				}
 			}
 		}
 	}
 
 	print OUTPUT "best:\n";
-
-	$confidence	= $best_confidence;
-	$min_rules	= $best_min_rules;
-	$max_size	= $best_max_size;
-	$ranking_size	= $best_ranking_size;
-	$accuracy	= $best_accuracy;
-
-	write OUTPUT;
+	print OUTPUT "best: confidence: $best_confidence, min_rules: $best_min_rules, max_size: $best_max_size, ranking_size: $best_ranking_size, accuracy: $best_accuracy\n";
 
 	close OUTPUT;
 }

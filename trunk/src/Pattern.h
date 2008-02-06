@@ -37,6 +37,7 @@ class Pattern : public ItemSet
 		const	float32	GetSimilarity		(const Pattern *pPattern)	;
 			void	IncClassCoverage	(const string &class_name)	;
 		const	uint32&	GetClassCoverage	(const string &class_name)	;
+			void	ResetClassCoverage	()				;
 
 	public:
 		void	Print	()	const	;

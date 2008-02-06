@@ -9,14 +9,13 @@ my $APP_CLASSIFIER = "../src/$CLASSIFIER";
 my $OUTPUT_DIR = "output/compare";
 
 sub test_data_base ($);
-sub run_all ($$$$$$);
 sub run_lazy ($$$$$$$$);
 sub run_classifier_c ($$$$$$$);
 sub run_classifier_o ($$$$$$$$$);
 sub compare_all ($$$$$$$$$);
 
 my @data_bases = (
-	'anneal.ac',
+#	'anneal.ac',
 	'austra.ac',
 	'auto.ac',
 	'breast.ac',
@@ -74,19 +73,19 @@ $first,    $no_yes,        $no_no_y,$no_no_n
 
 sub test_data_base ($)
 {
-	my $support_i = 0.1;
-	my $support_f = 1;
+	my $support_i = 0.001;
+	my $support_f = 0.001;
 	my $support_s = 0.3;
 
-	my $confidence_i = 0.1;
-	my $confidence_f = 1;
+	my $confidence_i = 0.9;
+	my $confidence_f = 0.9;
 	my $confidence_s = 0.3;
 
-	my $min_rules		= 1000000;
-	my $max_size		= 10;
-	my $ranking_size	= 1000000;
+	my $min_rules		= 1;
+	my $max_size		= 3;
+	my $ranking_size	= 1000;
 	my $min_rule_len	= 1;
-	my $max_rule_len	= 10;
+	my $max_rule_len	= $max_size - 1;
 
 	my $data_base = $_[0];
 
@@ -100,32 +99,18 @@ sub test_data_base ($)
 	{
 		for ($confidence = $confidence_i; $confidence <= $confidence_f; $confidence += $confidence_s)
 		{
-#			run_all ($data_base, $training_file, $testing_file, $support, $confidence, 's');
-#			run_all ($data_base, $training_file, $testing_file, $support, $confidence, 'c');
-#			run_all ($data_base, $training_file, $testing_file, $support, $confidence, 'b');
-#			run_all ($data_base, $training_file, $testing_file, $support, $confidence, 'a');
-
 			my $lazy_out = run_lazy ($data_base, $training_file, $testing_file, 1, $confidence, $min_rules, $max_size, $ranking_size);
 			my $cl_c_out = run_classifier_c ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len);
 			my $cl_s_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 's');
-			my $cl_o_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'c');
-			my $cl_b_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'b');
-			my $cl_a_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'a');
+			my $cl_o_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'c');
+			my $cl_b_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'b');
+			my $cl_a_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'a');
 
 			my $compare_file = "$OUTPUT_DIR/$data_base.s$support.c$confidence.compare";
 
 			compare_all ($data_base, $compare_file, $class_file, $lazy_out, $cl_c_out, $cl_s_out, $cl_o_out, $cl_b_out, $cl_a_out);
 		}
 	}
-}
-
-sub run_all ($$$$$$)
-{
-	my ($data_base, $training_file, $testing_file, $support, $confidence, $ort_metric) = @_;
-
-	run_lazy ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_size, $ranking_size);
-	run_classifier_c ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len);
-	run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', $ort_metric);
 }
 
 sub run_lazy ($$$$$$$$)
@@ -171,7 +156,7 @@ sub compare_all ($$$$$$$$$)
 	open TESTING,		"<$class_file";
 	open LAZY,		"<$lazy_out";
 	open CLASSIFIER_C,	"<$cl_c_out";
-	open CLASSIFIER_O,	"<$cl_b_out";
+	open CLASSIFIER_O,	"<$cl_s_out";
 
 	my $tests = 0;
 
