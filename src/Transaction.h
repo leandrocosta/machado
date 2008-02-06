@@ -19,10 +19,10 @@ class Transaction : public ItemSet
 		virtual	~Transaction	()		;
 
 	private:
-		static	const	uint32	GetSeqTransactionID	()	;
+		static	const	uint64	GetSeqTransactionID	()	;
 
 	public:
-		const	uint32&		GetTransactionID	()				const	;
+		const	uint64&		GetTransactionID	()				const	;
 			Class*		GetClass		()					;
 		const	string&		GetClassValue		()				const	;
 		const	bool		IsCoveredBy		(const Pattern *pPattern)	const	;
@@ -36,11 +36,11 @@ class Transaction : public ItemSet
 		void	Print	()	const	;
 
 	private:
-		const	uint32	mTransactionID	;
+		const	uint64	mTransactionID	;
 			Class*	mpClass		;
 
 	private:
-		static	uint32	msSeqTransactionID	;
+		static	uint64	msSeqTransactionID	;
 };
 
 
