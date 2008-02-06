@@ -138,33 +138,6 @@ void Pattern::MakeTransactionList ()
 				else
 					itTransaction = mTransactionList.Erase (itTransaction);
 			}
-
-			/*
-			uint32 i = 0;
-
-			while (i < mTransactionList.GetSize ())
-			{
-				Transaction *pTransaction = static_cast<Transaction *>(mTransactionList.GetAt (i));
-
-				if (pItemTransactionList->FindByPtr (pTransaction))
-					i++;
-				else
-					mTransactionList.Remove (pTransaction);
-			}
-			*/
-
-			/*
-			for (uint32 i = 0; i < mTransactionList.GetSize (); i++)
-			{
-				Transaction *pTransaction = static_cast<Transaction *>(mTransactionList.GetAt (i));
-
-				if (! pItemTransactionList->FindByPtr (pTransaction))
-				{
-					mTransactionList.Remove (pTransaction);
-					i--;
-				}
-			}
-			*/
 		}
 	}
 }
