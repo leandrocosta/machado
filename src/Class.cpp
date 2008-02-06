@@ -41,6 +41,8 @@ void Class::AddTransaction (Transaction *pTransaction)
 
 void Class::AddProjectionTransaction (Transaction *pTransaction)
 {
+	LOGMSG (HIGH_LEVEL, "Class::AddProjectionTransaction () - class [%s]\n", mValue.c_str ());
+
 	mProjectionTransactionList.PushBack (pTransaction);
 }
 
