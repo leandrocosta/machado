@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 
-Pattern::Pattern (const Pattern *pPattern) : ItemSet ()
+Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 {
 	LOGMSG (MEDIUM_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
 
@@ -22,7 +22,15 @@ Pattern::Pattern (const Pattern *pPattern) : ItemSet ()
 	TransactionList::STLTransactionList_cit itTransactionEnd = rPatternTransactionList.GetEnd ();
 
 	for (TransactionList::STLTransactionList_cit it = rPatternTransactionList.GetBegin (); it != itTransactionEnd; it++)
-		mTransactionList.PushBack (static_cast<Transaction *>(*it));
+	{
+		Transaction *pTransaction = static_cast<Transaction *>(*it);
+		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+		mTransactionList.PushBack (pTransaction);
+	}
+
+	AddItem (pItem);
+
+	mFrequence = mTransactionList.GetSize ();
 }
 
 
@@ -39,29 +47,30 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 	TransactionList::STLTransactionList_cit itTransactionEnd = pItemTransactionList->GetEnd ();
 
 	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itTransactionEnd; it++)
-		mTransactionList.PushBack (static_cast<Transaction *>(*it));
-}
+	{
+		Transaction *pTransaction = static_cast<Transaction *>(*it);
+		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+		mTransactionList.PushBack (pTransaction);
+	}
 
-
-
-Pattern::Pattern () : ItemSet ()
-{
-	LOGMSG (MEDIUM_LEVEL, "Pattern::Patern () - p [%p]\n", this);
-
-	InitFields ();
+	mFrequence = mTransactionList.GetSize ();
 }
 
 Pattern::~Pattern ()
 {
 	mTransactionList.RemoveAll ();
 
+	mClassCoverageHsh.clear ();
+	mNumTransactionsOfClassHsh.clear ();
+
 	RemoveAll ();
 }
 
 void Pattern::InitFields ()
 {
-	mSupport	= 0.0		;
-	mGot		= false		;
+	mFrequence	= 0	;
+	mSupport	= 0.0	;
+	mGot		= false	;
 }
 
 void Pattern::AddItem (Item *pItem)
@@ -83,80 +92,18 @@ void Pattern::AddItem (Item *pItem)
 			it++;
 		else
 		{
+			Transaction *pTransaction = static_cast<Transaction *>(*it);
+			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]--;
+
 			it = mTransactionList.Erase (it);
 			itEnd = mTransactionList.GetEnd ();
 		}
 	}
 }
 
-void Pattern::MakeTransactionList ()
-{
-	LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList () - begin\n");
-
-	const Item *pLessFrequentItem = NULL;
-	STLItemList_cit it	= GetBegin ()	;
-	STLItemList_cit itEnd	= GetEnd ()	;
-
-	if (it != itEnd)
-	{
-		pLessFrequentItem = static_cast<const Item*>(*it);
-		it++;
-	}
-
-	while (it != itEnd)
-	{
-		if (static_cast<const Item*>(*it)->GetProjectionFrequence () < pLessFrequentItem->GetProjectionFrequence ())
-			pLessFrequentItem = static_cast<const Item*>(*it);
-
-		it++;
-	}
-
-	LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList () - less frequent item [%s]\n", pLessFrequentItem->GetValue ().c_str ());
-
-	const TransactionList *pItemTransactionList = pLessFrequentItem->GetProjectionTransactionList ();
-
-	for (uint32 i = 0; i < pItemTransactionList->GetSize (); i++)
-		mTransactionList.PushBack (static_cast<Transaction *>(pItemTransactionList->GetAt (i)));
-
-	for (it = GetBegin (); it != itEnd; it++)
-	{
-		if (*it != pLessFrequentItem)
-		{
-			const Item *pItem = static_cast<const Item*>(*it);
-
-			LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList () - merge list with item [%s]\n", pItem->GetValue ().c_str ());
-
-			pItemTransactionList = pItem->GetProjectionTransactionList ();
-
-			TransactionList::STLTransactionList_it itTransaction	= mTransactionList.GetBegin ()	;
-			TransactionList::STLTransactionList_it itTransactionEnd	= mTransactionList.GetEnd ()	;
-
-			while (itTransaction != itTransactionEnd)
-			{
-				if (pItemTransactionList->FindByPtr (*itTransaction))
-					itTransaction++;
-				else
-					itTransaction = mTransactionList.Erase (itTransaction);
-			}
-		}
-	}
-}
-
-void Pattern::MakeTransactionList (Item *pItem)
-{
-	LOGMSG (MEDIUM_LEVEL, "Pattern::MakeTransactionList (Item *pItem) - begin\n");
-
-	const TransactionList *pItemTransactionList	= pItem->GetProjectionTransactionList ();
-	TransactionList::STLTransactionList_cit itEnd	= pItemTransactionList->GetEnd ()	;
-
-	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itEnd; it++)
-		mTransactionList.PushBack (static_cast<Transaction *>(*it));
-}
-
-
 const uint64 Pattern::GetFrequence () const
 {
-	return mTransactionList.GetSize ();
+	return mFrequence;
 }
 
 void Pattern::SetSupport (const float32 &support)
@@ -174,9 +121,16 @@ const TransactionList& Pattern::GetTransactionList () const
 	return mTransactionList;
 }
 
-const uint64 Pattern::GetNumTransactionsOfClass (const Class *pClass) const
+const uint64 Pattern::GetNumTransactionsOfClass (const string &class_name) const
 {
-	return mTransactionList.GetNumTransactionsOfClass (pClass);
+	uint64 num_transactions = 0;
+
+	hash_map<string, uint64>::const_iterator it = mNumTransactionsOfClassHsh.find (class_name);
+
+	if (it != mNumTransactionsOfClassHsh.end ())
+		num_transactions = it->second;
+
+	return num_transactions;
 }
 
 void Pattern::SetGot (const bool &got)
@@ -247,22 +201,20 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 
 void Pattern::IncClassCoverage (const string &class_name)
 {
-	mClassCoverage [class_name]++;
+	mClassCoverageHsh [class_name]++;
 }
 
 const uint32& Pattern::GetClassCoverage (const string &class_name)
 {
-	return mClassCoverage [class_name];
+	return mClassCoverageHsh [class_name];
 }
 
 void Pattern::ResetClassCoverage ()
 {
-	hash_map<string, uint32>::iterator itEnd = mClassCoverage.end ();
+	hash_map<string, uint32>::iterator itEnd = mClassCoverageHsh.end ();
 
-	for (hash_map<string, uint32>::iterator it = mClassCoverage.begin (); it != itEnd; it++)
-	{
+	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; it++)
 		it->second = 0;
-	}
 }
 
 void Pattern::Print () const

@@ -120,8 +120,8 @@ PatternList* Transaction::GetFrequentPatternList (
 
 				if (pItemBack->GetItemID () < pItem->GetItemID ())
 				{
-					Pattern *pNewPattern = new Pattern (pPattern);
-					pNewPattern->AddItem (pItem);
+					Pattern *pNewPattern = new Pattern (pPattern, pItem);
+//					pNewPattern->AddItem (pItem);
 
 					pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
 

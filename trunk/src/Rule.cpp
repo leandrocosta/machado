@@ -12,7 +12,7 @@ using std::endl;
 
 Rule::Rule (const Class *pClass, const Pattern *pPattern, const uint64 &projection_size, const uint64 &num_classes) : Object (), mpClass (pClass), mpPattern (pPattern)
 {
-	uint64 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass);
+	uint64 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass->GetValue ());
 
 	mSupport	= mpPattern->GetSupport ();
 //	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
