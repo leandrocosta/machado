@@ -28,7 +28,7 @@ class ItemList : public ObjectList
 		virtual	const	bool	operator==	(const Object& rObject)	const	;
 
 	public:
-			Item*	GetItemByValue	(const string &value)	const	;
+		Item*	GetItemByValue	(const string &value)	const	;
 
 	public:
 		virtual	const	string	GetPrintableString	()	const	;
