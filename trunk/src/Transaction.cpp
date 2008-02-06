@@ -147,19 +147,19 @@ PatternList* Transaction::GetFrequentPatternList (
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - remove short patterns\n");
 
 	PatternList::STLPatternList_it it		= pFrequentPatternList->GetBegin ()	;
-	PatternList::STLPatternList_it itEndPattern	= pFrequentPatternList->GetEnd ()	;
+	PatternList::STLPatternList_it itPatternEnd	= pFrequentPatternList->GetEnd ()	;
 
-	while (it != itEndPattern)
+	while (it != itPatternEnd)
 	{
 		if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
 		{
 			LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - delete pattern [%s], frequence [%llu]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
 			delete *it;
 			it = pFrequentPatternList->Erase (it);
-			itEndPattern = pFrequentPatternList->GetEnd ();
+			itPatternEnd = pFrequentPatternList->GetEnd ();
 		}
 		else
-			it++;
+			break;
 	}
 
 	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - return pFrequentPatternList [%p], patterns [%llu]\n", pFrequentPatternList, pFrequentPatternList->GetSize ());
