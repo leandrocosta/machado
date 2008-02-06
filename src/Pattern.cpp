@@ -255,9 +255,19 @@ const uint32& Pattern::GetClassCoverage (const string &class_name)
 	return mClassCoverage [class_name];
 }
 
+void Pattern::ResetClassCoverage ()
+{
+	hash_map<string, uint32>::iterator itEnd = mClassCoverage.end ();
+
+	for (hash_map<string, uint32>::iterator it = mClassCoverage.begin (); it != itEnd; it++)
+	{
+		it->second = 0;
+	}
+}
+
 void Pattern::Print () const
 {
-	LOGMSG (LOW_LEVEL, "Pattern::Print () - support [%0.2f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
+	LOGMSG (LOW_LEVEL, "Pattern::Print () - support [%0.6f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
 
 //	cout << "suporte [" << mSupport << "], padrão [" << GetPrintableString () << "]" << endl;
 }

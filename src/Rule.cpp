@@ -3,33 +3,31 @@
 #include "Pattern.h"
 #include "base/Logger.h"
 
+#include <math.h>
+
 #include <iostream>
 using std::cout;
 using std::endl;
 
 
-Rule::Rule (const Class *pClass, const Pattern *pPattern) : Object (), mpClass (pClass), mpPattern (pPattern)
+Rule::Rule (const Class *pClass, const Pattern *pPattern, const uint64 &projection_size, const uint64 &num_classes) : Object (), mpClass (pClass), mpPattern (pPattern)
 {
-	uint32 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass);
+	uint64 correct_transactions = pPattern->GetNumTransactionsOfClass (mpClass);
 
-/*
-	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
+//	mSupport	= mpPattern->GetSupport ();
+//	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
 
-	TransactionList::STLTransactionList_cit itEnd = rTransactionList.GetEnd ();
-
-	for (TransactionList::STLTransactionList_cit it = rTransactionList.GetBegin (); it != itEnd; it++)
-	{
-		Transaction *pTransaction = static_cast<Transaction *>(*it);
-
-		if (pTransaction->GetClass () == mpClass)
-			correct_transactions++;
-//			mTransactionList.PushBack (pTransaction);
-	}
-*/
-
-	mSupport	= mpPattern->GetSupport ();
-//	mConfidence	= (float32) mTransactionList.GetSize () / mpPattern->GetFrequence ();
+	mSupport	= (float32) correct_transactions / projection_size;
 	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
+	mGain		= mSupport * (log2 (mConfidence) - log2 (pClass->GetTransactionListSize () / projection_size));
+	mJaccard	= (float32) correct_transactions / (mpPattern->GetFrequence () + pClass->GetTransactionListSize () - correct_transactions);
+	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) mpPattern->GetFrequence () / projection_size) + (float32) 1.0 / ((float32) pClass->GetTransactionListSize () / projection_size));
+	mCosine		= mSupport / sqrt (((float32) mpPattern->GetFrequence () / projection_size) * ((float32) pClass->GetTransactionListSize () / projection_size));
+	mCoherence	= mSupport /((mpPattern->GetFrequence () + pClass->GetTransactionListSize () - (float32) correct_transactions) / projection_size);
+	mSensitivity	= (float32) correct_transactions / pClass->GetTransactionListSize ();
+	mSpecificity	= (float32) (projection_size - pClass->GetTransactionListSize () - mpPattern->GetFrequence () + correct_transactions) / (projection_size - pClass->GetTransactionListSize ());
+	mLaplace	= (float32) (correct_transactions + 1) / (mpPattern->GetFrequence () + num_classes);
+	mCorrelation	= mSupport / ((float32) mpPattern->GetFrequence () / projection_size * pClass->GetTransactionListSize () / projection_size);
 }
 
 Rule::~Rule ()
@@ -59,6 +57,51 @@ const float32& Rule::GetConfidence () const
 	return mConfidence;
 }
 
+const float32& Rule::GetGain () const
+{
+	return mGain;
+}
+
+const float32& Rule::GetJaccard () const
+{
+	return mJaccard;
+}
+
+const float32& Rule::GetKulc () const
+{
+	return mKulc;
+}
+
+const float32& Rule::GetCosine () const
+{
+	return mCosine;
+}
+
+const float32& Rule::GetCoherence () const
+{
+	return mCoherence;
+}
+
+const float32& Rule::GetSensitivity () const
+{
+	return mSensitivity;
+}
+
+const float32& Rule::GetSpecificity () const
+{
+	return mSpecificity;
+}
+
+const float32& Rule::GetLaplace () const
+{
+	return mLaplace;
+}
+
+const float32& Rule::GetCorrelation () const
+{
+	return mCorrelation;
+}
+
 const string& Rule::GetClassValue () const
 {
 	return mpClass->GetValue ();
@@ -67,7 +110,7 @@ const string& Rule::GetClassValue () const
 void Rule::Print () const
 {
 //	LOGMSG (LOW_LEVEL, "Rule::Print () - confidence [%0.2f] - pattern [%s] => class [%s]\n", mConfidence, mpPattern->GetPrintableString ().c_str (), mpClass->GetValue ().c_str ());
-	LOGMSG (LOW_LEVEL, "Rule::Print () - confidence [%0.2f] - class [%s] <= pattern [%s]\n", mConfidence, mpClass->GetValue ().c_str (), mpPattern->GetPrintableString ().c_str ());
+	LOGMSG (LOW_LEVEL, "Rule::Print () - support [%0.6f], confidence [%0.6f] - class [%s] <= pattern [%s]\n", mSupport, mConfidence, mpClass->GetValue ().c_str (), mpPattern->GetPrintableString ().c_str ());
 
-	cout << "classe [" << mpClass->GetValue () << "], suporte [" << mSupport << "], confiança [" << mConfidence << "], padrão [" << mpPattern->GetPrintableString () << "]" << endl;
+//	cout << "classe [" << mpClass->GetValue () << "], suporte [" << mSupport << "], confiança [" << mConfidence << "], padrão [" << mpPattern->GetPrintableString () << "]" << endl;
 }

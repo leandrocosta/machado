@@ -32,7 +32,10 @@ class PatternList : public ObjectList
 		PatternList*	GetOrthogonalPatternListPolynomial	(const TransactionList *pTransactionList)	;
 
 	public:
-		RuleList*	GetRuleList	(const ClassList *pClassList, const float32 &confidence)	const	;
+		RuleList*	GetRuleList	(
+				const ClassList *pClassList,
+				const float32 &confidence,
+				const uint64 &projection_size)	const	;
 
 	public:
 		const	uint64&		GetMaxPatternLen	()				const	;

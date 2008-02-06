@@ -115,6 +115,82 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 				}
 			}
 		}
+
+		float32 rate_result;
+		float32 rate_now = rate_prv;
+
+		do
+		{
+			rate_result = rate_now;
+
+			PatternList *pTryPatternList = new PatternList ();
+
+			STLPatternList_cit itEnd = pOrthogonalPatternList->GetEnd ();
+
+			for (STLPatternList_cit it = pOrthogonalPatternList->GetBegin (); it != itEnd; it++)
+				pTryPatternList->PushBack (*it);
+
+			// adiciona um novo elemento ao try
+			itEnd = GetEnd ();
+
+			for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+			{
+				Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
+
+				if (! pCandToGetInPattern->GetGot ())
+				{
+					pTryPatternList->PushBack (pCandToGetInPattern);
+					break;
+				}
+			}
+
+			rate_prv = pTryPatternList->GetRate (pTransactionList);
+
+			// tenta obter o melhor conjunto
+
+			itEnd = GetEnd ();
+
+			for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+			{
+				Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
+
+				if (! pCandToGetInPattern->GetGot ())
+				{
+					Pattern *pCandToGetOutPattern = pTryPatternList->GetMoreSimilar (pCandToGetInPattern);
+
+					pTryPatternList->Remove (pCandToGetOutPattern);
+					pTryPatternList->PushBack (pCandToGetInPattern);
+
+					float32 rate_new = pTryPatternList->GetRate (pTransactionList);
+
+					if (rate_new > rate_prv)
+					{
+						pCandToGetInPattern->SetGot (true);
+						pCandToGetOutPattern->SetGot (false);
+
+						rate_prv = rate_new;
+					}
+					else
+					{
+						pTryPatternList->Remove (pCandToGetInPattern);
+						pTryPatternList->PushBack (pCandToGetOutPattern);
+					}
+				}
+			}
+
+			// atualiza o rate_now com a métrica obtida
+			rate_now = rate_prv;
+
+			if (rate_now >= rate_result)
+			{
+				LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - add one more element - rate_result [%f], rate_now [%f]\n", rate_result, rate_now);
+				// atualiza resultado com try
+
+				pOrthogonalPatternList->RemoveAll ();
+				delete pOrthogonalPatternList;
+				pOrthogonalPatternList = pTryPatternList;
+			}
+		} while (rate_now >= rate_result);
 	}
 
 	return pOrthogonalPatternList;
@@ -176,7 +252,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
-RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence) const
+RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence, const uint64 &projection_size) const
 {
 	RuleList *pRuleList = new RuleList ();
 
@@ -194,7 +270,7 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 		{
 			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
-			Rule *pRule = new Rule (pClass, pPattern);
+			Rule *pRule = new Rule (pClass, pPattern, projection_size, pClassList->GetSize ());
 
 			if (pRule->GetConfidence () >= confidence)
 			{
@@ -350,6 +426,15 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 {
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetClassCoverageRate () - begin\n");
 
+	STLPatternList_cit itPatternEnd = GetEnd ();
+
+	for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+	{
+		Pattern *pPattern = static_cast<Pattern *>(*itPattern);
+
+		pPattern->ResetClassCoverage ();
+	}
+
 	hash_map<string, uint32>	coveragesHash;
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = pTransactionList->GetEnd ();
@@ -379,7 +464,7 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 	for (it = coveragesHash.begin (); it != coveragesHash.end (); it++)
 	{
 		const string class_name = it->first;
-
+	
 		uint32 coverage_max = 0;
 		uint32 coverage_min = 0;
 
@@ -391,7 +476,7 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 
 			uint32 coverage = pPattern->GetClassCoverage (class_name);
 
-			if (coverage > coverage_max)
+			if (coverage >= coverage_max)
 			{
 				coverage_min = coverage_max;
 				coverage_max = coverage;
@@ -399,6 +484,8 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 			else if (coverage > coverage_min)
 				coverage_min = coverage;
 		}
+
+		LOGMSG (HIGH_LEVEL, "PatternList::GetClassCoverageRate () - class [%s], coverages [%u], coverage_max [%u], coverage_min [%u]\n", class_name.c_str (), it->second, coverage_max, coverage_min);
 
 		if (coverage_max)
 			rate += ((float32) (coverage_max - coverage_min) / it->second);

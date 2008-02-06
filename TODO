@@ -1,15 +1,34 @@
+* Foram formatados os 25 arquivos. Até agora, o resultado dos padrões ortogonais foi melhor em 1 arquivo e igual em 6. O resultado dos padrões frequentes (clássico) fom melhor em 5 e igual em 1;
+* Depois de removida a parcela de normalização, o número de padrões ortogonais aumentou. (6, 8 padrões em média);
+* Existem arquivos com transações muito grandes (38 itens), o programa está ineficiente. Foram feitas algumas melhorias quanto ao desempenho, e ainda há mais a fazer;
+* Abordagem ortogonalidade por classes foi implementada, mas aparentemente não obteve melhorias;
+* Foram implementadas todas as métricas utilizadas pelo 'lazy' (SUPPORT, CONFIDENCE, GAIN, JACCARD, KULC, COSINE, COHERENCE, SENSITIVITY, SPECIFICITY, LAPLACE, CORRELATION);
+* Foi observado que o 'lazy' sempre gera um número mínimo de regras (diminuindo o valor da confiança, quando necessário);
+* Foi feito dois scripts de teste: um para descobrir a configuração do lazy que produz os melhores resultados, e outro para comparar as execuções lazy/orth/freq para cada configuração.
 
-1) ORIGAMI
+Tarefas:
 
-Conjunto alfa-ortogonal e beta-representativo
-
-	* O subconjunto R deve possuir elementos cuja similaridade entre quaisquer dois deles é menor que alfa;
-	* Para cada elemento que não pertence a R deve existir, pelo menos, um elemento em R cuja similaridade entre os dois seja maior que beta.
-
-2) Ortogonalidade por classes
+1) Tentar melhorar abordagem ortogonalidade por classes
 
 	* Dois padrões são ortogonais se cobrem CLASSES diferentes, ex.: Sejam P1 e P2 dois padrões presentes numa base. Se P1 está presente em transações com classes A, B e C, e P2 está presente em transações com classes D, E e F, eles são totalmente ortogonais (mesmo que exista ambiguidade em cada um deles).
 
-3) Ortogonalidade no ranking
+---
 
-	* Depois de geradas as regras, separá-las por classe, e, para cada classe, obter apenas as regras cujos padrões são ortogonais entre si. Utilizar a abordagem do Zaki pra isso, ou seja, Obter um conjunto de regras cuja similaridade entre cada uma delas é maior que alfa, e para cada regra que não pertence ao conjunto, deve existir uma regra do conjunto cuja similaridade entre elas é maior que beta.
+2) Implementar abordagem ortogonalidade por classes baseada no ORIGAMI
+
+O conjunto R deve ser alfa-ortogonal e beta-representativo
+
+	* O conjunto R deve possuir elementos cuja similaridade par-a-par entre o seus membros sejam menores que alfa para todos os pares possíves;
+	* Para cada elemento que não pertence a R deve existir, pelo menos, um elemento em R cuja similaridade entre os dois seja maior que beta.
+
+---
+
+3) Implementar ortogonalidade no ranking
+
+	* Depois de geradas as regras, separá-las por classe, e, para cada classe, obter apenas as regras cujos padrões sejam ortogonais entre si. Utilizar a abordagem do ORIGAMI.
+
+4) Estudar métricas do 'lazy', e suas relações com o resultado final
+
+5) Inserir gráficos nos scripts de teste
+
+6) Otimizar o código tanto memória quanto processamento
