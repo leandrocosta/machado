@@ -10,9 +10,6 @@ using std::endl;
 
 Rule::Rule (const Class *pClass, const Pattern *pPattern) : Object (), mpClass (pClass), mpPattern (pPattern)
 {
-//	mSupport	= -1	;
-//	mConfidence	= -1	;
-
 	const TransactionList &rTransactionList = mpPattern->GetTransactionList ();
 
 	for (uint32 i = 0; i < rTransactionList.GetSize (); i++)
