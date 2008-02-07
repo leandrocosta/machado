@@ -87,13 +87,17 @@ class ObjectList : public Object
 		const	uint64	GetSize	()	const	;
 
 	public:
+#ifdef USE_SERIALIZE
 		virtual	void	Serialize	(ostream &stream)	const	;
+#endif
 
 	public:
 		virtual	void	Print	()	const	;
 
 	public:
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()	const	;
+#endif
 
 	private:
 		static	LessComparer		msLessComparer		;

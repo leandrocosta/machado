@@ -228,7 +228,7 @@ void ItemList::ClearItemProjectionTransactionLists ()
 {
 	STLItemList_cit itEnd = GetEnd ();
 
-	for (STLItemList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
 		static_cast<Item *>(*it)->ClearProjectionTransactionList ();
 }
 
@@ -243,14 +243,14 @@ const string ItemList::GetPrintableString () const
 	{
 		pItem = static_cast<Item *>(*it);
 		sstream << pItem->GetValue ();
-		it++;
+		++it;
 	}
 
 	while (it != itEnd)
 	{
 		pItem = static_cast<Item *>(*it);
 		sstream << " " << pItem->GetValue ();
-		it++;
+		++it;
 	}
 
 	return sstream.str ();

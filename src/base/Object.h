@@ -27,6 +27,7 @@ class Object
 		virtual	const	bool	operator==	(const Object& rObject)	const	;
 		virtual	const	bool	operator!=	(const Object& rObject)	const	;
 
+#ifdef USE_SERIALIZE
 //	public:
 //		virtual	void	Serialize	(void **buffer, uint32 &size)		const	;
 //		virtual	void	Unserialize	(const void *buffer, uint32 &size)		;
@@ -34,6 +35,7 @@ class Object
 	public:
 		virtual	void	Serialize	(ostream &stream)	const	;
 		virtual	void	Unserialize	(istream &stream)		;
+#endif
 
 	public:
 		virtual	Object*	Clone	()	const	;
@@ -42,7 +44,9 @@ class Object
 		virtual	void	Print	()	const	;
 
 	public:
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()	const	;
+#endif
 };
 
 

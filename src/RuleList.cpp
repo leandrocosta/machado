@@ -28,7 +28,7 @@ const string RuleList::GetClassificationValue () const
 
 	STLRuleList_cit itEnd = GetEnd ();
 
-	for (STLObjectList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLObjectList_cit it = GetBegin (); it != itEnd; ++it)
 	{
 		const Rule *pRule = static_cast<const Rule *>(*it);
 
@@ -58,7 +58,7 @@ const string RuleList::GetClassificationValue () const
 	float32	rank		= -1;
 	float32	rank_try	= -1;
 
-	for (hash_map<string, uint32>::iterator it = rulesHash.begin (); it != rulesHash.end (); it++)
+	for (hash_map<string, uint32>::iterator it = rulesHash.begin (); it != rulesHash.end (); ++it)
 	{
 		uint32	rules		= it->second			;
 		float32 support		= supportHash [it->first]	;

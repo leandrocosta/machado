@@ -14,14 +14,14 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 
 	STLItemList_cit itPatternEnd = pPattern->GetEnd ();
 
-	for (STLItemList_cit it = pPattern->GetBegin (); it != itPatternEnd; it++)
+	for (STLItemList_cit it = pPattern->GetBegin (); it != itPatternEnd; ++it)
 		PushBack (static_cast<Item *>(*it));
 
 	const TransactionList &rPatternTransactionList = pPattern->GetTransactionList ();
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = rPatternTransactionList.GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit it = rPatternTransactionList.GetBegin (); it != itTransactionEnd; it++)
+	for (TransactionList::STLTransactionList_cit it = rPatternTransactionList.GetBegin (); it != itTransactionEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
@@ -46,7 +46,7 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = pItemTransactionList->GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itTransactionEnd; it++)
+	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itTransactionEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
@@ -89,7 +89,7 @@ void Pattern::AddItem (Item *pItem)
 	while (it != itEnd)
 	{
 		if (pItemTransactionList->FindByPtr (*it))
-			it++;
+			++it;
 		else
 		{
 			Transaction *pTransaction = static_cast<Transaction *>(*it);
@@ -182,7 +182,7 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 
 	itEnd = totalItemList.GetEnd ();
 
-	for (STLItemList_cit it = totalItemList.GetBegin (); it != itEnd; it++)
+	for (STLItemList_cit it = totalItemList.GetBegin (); it != itEnd; ++it)
 	{
 		const Item *pItem = static_cast<const Item *>(*it);
 
@@ -213,13 +213,13 @@ void Pattern::ResetClassCoverage ()
 {
 	hash_map<string, uint32>::iterator itEnd = mClassCoverageHsh.end ();
 
-	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; it++)
+	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; ++it)
 		it->second = 0;
 }
 
 void Pattern::Print () const
 {
-	LOGMSG (LOW_LEVEL, "Pattern::Print () - support [%0.6f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
+	LOGMSG (MEDIUM_LEVEL, "Pattern::Print () - support [%0.6f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
 
 //	cout << "suporte [" << mSupport << "], padrão [" << GetPrintableString () << "]" << endl;
 }

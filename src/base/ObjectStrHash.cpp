@@ -19,7 +19,7 @@ ObjectStrHash::~ObjectStrHash ()
 
 	STLObjectStrHash_cit it;
 
-	for (it = mHash.begin (); it != mHash.end (); it++)
+	for (it = mHash.begin (); it != mHash.end (); ++it)
 		delete it->second;
 
 	mHash.clear ();
@@ -69,7 +69,7 @@ void ObjectStrHash::DeleteAll ()
 
 	STLObjectStrHash_it it;
 
-	for (it = mHash.begin (); it != mHash.end (); it++)
+	for (it = mHash.begin (); it != mHash.end (); ++it)
 		delete it->second;
 
 	mHash.clear ();
@@ -89,6 +89,7 @@ const uint64 ObjectStrHash::GetSize () const
 	return mHash.size ();
 }
 
+#ifdef USE_MEM_SIZE
 const uint64 ObjectStrHash::GetMemSize () const
 {
 	uint64 size = 0;
@@ -99,8 +100,9 @@ const uint64 ObjectStrHash::GetMemSize () const
 
 	STLObjectStrHash_cit it;
 
-	for (it = mHash.begin (); it != mHash.end (); it++)
+	for (it = mHash.begin (); it != mHash.end (); ++it)
 		size += (*it).first.size () + 1;
 
 	return size;
 }
+#endif

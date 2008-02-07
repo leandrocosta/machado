@@ -64,7 +64,9 @@ class Logger
 		void	Print		(e_debug debug, char *msg, ...)	;
 
 	public:
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()	const	;
+#endif
 
 	// Private fields
 	private:

@@ -65,7 +65,7 @@ void ClassList::ClearClassProjectionTransactionLists ()
 {
 	STLClassList_cit itEnd = GetEnd ();
 
-	for (STLClassList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLClassList_cit it = GetBegin (); it != itEnd; ++it)
 		static_cast<Class *>(*it)->ClearProjectionTransactionList ();
 }
 

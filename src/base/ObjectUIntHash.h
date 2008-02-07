@@ -40,7 +40,9 @@ class ObjectUIntHash : public Object
 		const	uint32	GetSize	()	const	;
 
 	public:
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()	const	;
+#endif
 
 	private:
 		STLObjectUIntHash	mHash		;

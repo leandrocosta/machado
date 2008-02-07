@@ -55,6 +55,7 @@ const bool Object::operator!= (const Object& rObject) const
 	return this != &rObject;
 }
 
+#ifdef USE_SERIALIZE
 /*
 void Object::Serialize (void **buffer, uint32 &size) const
 {
@@ -76,6 +77,7 @@ void Object::Unserialize (istream &stream)
 {
 	throw (ObjectException ("Method Unserialize () not defined for class " + string (typeid (*this).name ())));
 }
+#endif
 
 Object* Object::Clone () const
 {
@@ -87,9 +89,11 @@ void Object::Print () const
 	throw (ObjectException ("Method Print () not defined for class " + string (typeid (*this).name ())));
 }
 
+#ifdef USE_MEM_SIZE
 const uint64 Object::GetMemSize () const
 {
 	throw (ObjectException ("Method GetMemSize () not defined for class " + string (typeid (*this).name ())));
 
 	return 0;
 }
+#endif

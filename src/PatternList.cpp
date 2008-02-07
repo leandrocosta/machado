@@ -88,7 +88,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 		STLPatternList_cit itEnd = GetEnd ();
 
-		for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+		for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
 		{
 			Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
 
@@ -127,13 +127,13 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			STLPatternList_cit itEnd = pOrthogonalPatternList->GetEnd ();
 
-			for (STLPatternList_cit it = pOrthogonalPatternList->GetBegin (); it != itEnd; it++)
+			for (STLPatternList_cit it = pOrthogonalPatternList->GetBegin (); it != itEnd; ++it)
 				pTryPatternList->PushBack (*it);
 
 			// adiciona um novo elemento ao try
 			itEnd = GetEnd ();
 
-			for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+			for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
 			{
 				Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
 
@@ -150,7 +150,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			itEnd = GetEnd ();
 
-			for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+			for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
 			{
 				Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
 
@@ -183,7 +183,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			if (rate_now >= rate_result)
 			{
-				LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - add one more element - rate_result [%f], rate_now [%f]\n", rate_result, rate_now);
+				LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - add one more element - rate_result [%f], rate_now [%f]\n", rate_result, rate_now);
 				// atualiza resultado com try
 
 				pOrthogonalPatternList->RemoveAll ();
@@ -258,7 +258,7 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 
 	ClassList::STLClassList_cit itClassEnd = pClassList->GetEnd ();
 
-	for (ClassList::STLClassList_cit itClass = pClassList->GetBegin (); itClass != itClassEnd; itClass++)
+	for (ClassList::STLClassList_cit itClass = pClassList->GetBegin (); itClass != itClassEnd; ++itClass)
 	{
 		Class *pClass = static_cast<Class *>(*itClass);
 
@@ -266,7 +266,7 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 
 		STLPatternList_cit itPatternEnd = GetEnd ();
 
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
 		{
 			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
@@ -292,7 +292,7 @@ const uint64 PatternList::GetSumPatternLen () const
 	STLPatternList_cit	it			;
 	STLPatternList_cit	itEnd = GetEnd ()	;
 
-	for (it = GetBegin (); it != itEnd; it++)
+	for (it = GetBegin (); it != itEnd; ++it)
 	{
 		sumPatternLen += static_cast<const Pattern *>(*it)->GetSize ();
 	}
@@ -315,7 +315,7 @@ Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern) const
 
 	STLPatternList_cit itEnd = GetEnd ();
 
-	for (++it; it != itEnd; it++)
+	for (++it; it != itEnd; ++it)
 	{
 		Pattern *pPattern2 = static_cast<Pattern *>(*it);
 
@@ -341,7 +341,7 @@ const float32 PatternList::GetSimilarityRate ()
 
 		STLPatternList_cit itPatternEnd = pPattern->GetEnd ();
 
-		for (ItemList::STLItemList_cit itItem = pPattern->GetBegin (); itItem != itPatternEnd; itItem++)
+		for (ItemList::STLItemList_cit itItem = pPattern->GetBegin (); itItem != itPatternEnd; ++itItem)
 		{
 			Item *pItem = static_cast<Item *>(*itItem);
 
@@ -394,7 +394,7 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = pTransactionList->GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
+	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; ++itTransaction)
 	{
 		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
 
@@ -402,7 +402,7 @@ const float32 PatternList::GetCoverageRate (const TransactionList *pTransactionL
 
 		STLPatternList_cit itPatternEnd = GetEnd ();
 
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
 			if (pTransaction->IsCoveredBy (static_cast<const Pattern *>(*itPattern)))
 				patterns_found_in_transaction++;
 
@@ -428,7 +428,7 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 
 	STLPatternList_cit itPatternEnd = GetEnd ();
 
-	for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+	for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
 	{
 		Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
@@ -439,13 +439,13 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = pTransactionList->GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
+	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; ++itTransaction)
 	{
 		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
 
 		STLPatternList_cit itPatternEnd = GetEnd ();
 
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
 		{
 			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
@@ -461,7 +461,7 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 
 	float32 rate = 0.0;
 
-	for (it = coveragesHash.begin (); it != coveragesHash.end (); it++)
+	for (it = coveragesHash.begin (); it != coveragesHash.end (); ++it)
 	{
 		const string class_name = it->first;
 	
@@ -470,7 +470,7 @@ const float32 PatternList::GetClassCoverageRate (const TransactionList *pTransac
 
 		STLPatternList_cit itPatternEnd = GetEnd ();
 
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; itPattern++)
+		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
 		{
 			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 

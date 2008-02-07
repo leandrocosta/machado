@@ -25,12 +25,7 @@ ObjectList::~ObjectList ()
 	LOGMSG (HIGH_LEVEL, "ObjectList::~ObjectList () - [%p]\n", this);
 #endif
 
-	STLObjectList_cit it;
-
-	for (it = mList.begin (); it != mList.end (); it++)
-		delete (*it);
-	
-	mList.clear ();
+	DeleteAll ();
 }
 
 const bool ObjectList::CompareLess::operator() (const Object *pLeft, const Object *pRight) const
@@ -252,9 +247,9 @@ void ObjectList::MoveToEnd (Object *pObject)
 
 void ObjectList::Remove (Object *pObject)
 {
-	STLObjectList_it it;
+	STLObjectList_it itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_it it = mList.begin (); it != itEnd; ++it)
 	{
 		if (*it == pObject)
 		{
@@ -275,9 +270,9 @@ void ObjectList::DeleteAll ()
 	LOGMSG (MEDIUM_LEVEL, "ObjectList::DeleteAll () - begin [%p]\n", this);
 #endif
 
-	STLObjectList_it it;
+	STLObjectList_it itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_it it = mList.begin (); it != itEnd; ++it)
 		delete (*it);
 
 	mList.clear ();
@@ -300,9 +295,9 @@ const bool ObjectList::Find (const Object *pObject) const
 {
 	bool bRet = false;
 
-	STLObjectList_cit it;
+	STLObjectList_cit itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_cit it = mList.begin (); it != itEnd; ++it)
 	{
 		if (*pObject == *(*it))
 		{
@@ -319,7 +314,9 @@ const bool ObjectList::FindByPtr (const Object *pObject) const
 	/*
 	bool bRet = false;
 
-	for (STLObjectList_cit it = mList.begin (); it != mList.end (); it++)
+	STLObjectList_cit itEnd = mList.end ();
+
+	for (STLObjectList_cit it = mList.begin (); it != itEnd; ++it)
 	{
 		if (*it == pObject)
 		{
@@ -361,46 +358,7 @@ const bool ObjectList::IsSubList (const ObjectList& rList) const
 	return (itRight == itRightEnd);
 }
 
-/*
-void ObjectList::Serialize (void **buffer, uint32 &size) const
-{
-#ifdef USE_LOGGER
-	LOGMSG (MEDIUM_LEVEL, "ObjectList::Serialize () - [%p]\n", this);
-#endif
-
-	size = sizeof (uint64);
-
-	*buffer = malloc(sizeof (uint64));
-	char *offset = (char *) *buffer;
-
-	uint64 num_items = mList.size ();
-
-	memcpy (offset, &num_items, sizeof (uint64));
-
-	STLObjectList_cit it;
-
-	for (it = mList.begin (); it != mList.end (); it++)
-	{
-		void*	obj_buffer	= NULL	;
-		uint32	obj_size	= 0	;
-
-		(*it)->Serialize (&obj_buffer, obj_size);
-
-		*buffer = realloc (*buffer, size + obj_size);
-
-		offset = (char *) *buffer + size;
-		memcpy (offset, obj_buffer, obj_size);
-		size += obj_size;
-
-		free (obj_buffer);
-	}
-
-#ifdef USE_LOGGER
-	LOGMSG (NO_DEBUG, "ObjectList::Serialize () - size [%u]\n", size);
-#endif
-}
-*/
-
+#ifdef USE_SERIALIZE
 void ObjectList::Serialize (ostream &stream) const
 {
 #ifdef USE_LOGGER
@@ -410,15 +368,16 @@ void ObjectList::Serialize (ostream &stream) const
 	size_t size = mList.size ();
 	stream.write ((const char *) &size, sizeof (size_t));
 
-	STLObjectList_cit it;
+	STLObjectList_cit itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_cit it = mList.begin (); it != itEnd; ++it)
 		(*it)->Serialize (stream);
 
 #ifdef USE_LOGGER
 	LOGMSG (NO_DEBUG, "ObjectList::Serialize () - end\n");
 #endif
 }
+#endif
 
 void ObjectList::Print () const
 {
@@ -426,9 +385,9 @@ void ObjectList::Print () const
 	LOGMSG (MAX_LEVEL, "ObjectList::Print () - begin [%p]\n", this);
 #endif
 
-	STLObjectList_cit it;
+	STLObjectList_cit itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_cit it = mList.begin (); it != itEnd; ++it)
 		(*it)->Print ();
 
 #ifdef USE_LOGGER
@@ -436,6 +395,7 @@ void ObjectList::Print () const
 #endif
 }
 
+#ifdef USE_MEM_SIZE
 const uint64 ObjectList::GetMemSize () const
 {
 #ifdef USE_LOGGER
@@ -447,9 +407,9 @@ const uint64 ObjectList::GetMemSize () const
 	size += sizeof (STLObjectList);
 	size += sizeof (uint64);
 
-	STLObjectList_cit it;
+	STLObjectList_cit itEnd = mList.end ();
 
-	for (it = mList.begin (); it != mList.end (); it++)
+	for (STLObjectList_cit it = mList.begin (); it != itEnd; ++it)
 		size += (*it)->GetMemSize ();
 
 #ifdef USE_LOGGER
@@ -458,3 +418,4 @@ const uint64 ObjectList::GetMemSize () const
 
 	return size;
 }
+#endif

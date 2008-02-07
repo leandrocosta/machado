@@ -67,6 +67,7 @@ const bool ObjectHash::Find (const string &key) const
 	return (mHash.find (key) != mHash.end ());
 }
 
+#ifdef USE_MEM_SIZE
 const uint64 ObjectHash::GetMemSize () const
 {
 	uint32 size = 0;
@@ -75,9 +76,9 @@ const uint64 ObjectHash::GetMemSize () const
 	size += sizeof (uint64);
 	size += mHash.size () * sizeof (void *);
 
-	STLObjectHash_cit it;
+	STLObjectHash_cit itEnd = mHash.end ();
 
-	for (it = mHash.begin (); it != mHash.end (); it++)
+	for (STLObjectHash_cit it = mHash.begin (); it != itEnd; ++it)
 	{
 		size += (*it).first.size () + 1;
 		size += sizeof (void *);
@@ -85,3 +86,4 @@ const uint64 ObjectHash::GetMemSize () const
 
 	return size;
 }
+#endif

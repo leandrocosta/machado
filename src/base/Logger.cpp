@@ -145,6 +145,7 @@ void Logger::Print (e_debug debug, char *msg, ...)
 	}
 }
 
+#ifdef USE_MEM_SIZE
 const uint64 Logger::GetMemSize () const
 {
 #ifdef USE_LOGGER
@@ -163,3 +164,4 @@ const uint64 Logger::GetMemSize () const
 
 	return size;
 }
+#endif
