@@ -17,7 +17,7 @@ void TransactionList::SortTransactions ()
 {
 	STLTransactionList_cit itEnd = GetEnd ();
 
-	for (STLTransactionList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLTransactionList_cit it = GetBegin (); it != itEnd; ++it)
 		static_cast<Transaction *>(*it)->Sort ();
 }
 
@@ -27,7 +27,7 @@ TransactionList* TransactionList::GetProjection (const Transaction *pBaseTransac
 
 	STLTransactionList_cit itEnd = GetEnd ();
 
-	for (STLTransactionList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLTransactionList_cit it = GetBegin (); it != itEnd; ++it)
 	{
 		if (Transaction::HasIntersectionByPtr (pBaseTransaction, static_cast<const Transaction *>(*it)))
 		{
@@ -49,7 +49,7 @@ const uint64 TransactionList::GetNumTransactionsOfClass (const Class *pClass) co
 
 	STLTransactionList_cit itEnd = GetEnd ();
 
-	for (STLTransactionList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLTransactionList_cit it = GetBegin (); it != itEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 

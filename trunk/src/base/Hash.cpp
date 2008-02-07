@@ -57,7 +57,7 @@ const uint64 Hash::GetMemSize () const
 
 	STLHash_cit it;
 
-	for (it = mHash.begin (); it != mHash.end (); it++)
+	for (it = mHash.begin (); it != mHash.end (); ++it)
 	{
 		size += (*it).first.size () + 1;
 		size += sizeof (void *);

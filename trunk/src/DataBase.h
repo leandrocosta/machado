@@ -45,18 +45,19 @@ class DataBase : private IOManager, private Tokenizer
 		virtual	~DataBase	()								;
 
 	private:
-		void	ClassifyTransaction	(Transaction *pTransaction)	;
-		void	MakeProjection		(Transaction *pTransaction)	;
+		void	ClassifyTransaction	(Transaction *pTransaction)		;
+		void	MakeProjection		(Transaction *pTransaction)		;
 
 	public:
-		void	SetSupport		(const float32 &support)	;
-		void	SetConfidence		(const float32 &confidence)	;
-		void	SetMinRuleLen		(const uint32 &min_rul_len)	;
-		void	SetMaxRuleLen		(const uint32 &max_rul_len)	;
-		void	LoadTrainData		(const string &file)		;
-		void	LoadTestData		(const string &file)		;
-		void	SortTransactions	()				;
-		void	ClassifyTestData	()				;
+		void	SetSupport		(const float32 &support)		;
+		void	SetConfidence		(const float32 &confidence)		;
+		void	SetMinRuleLen		(const uint32 &min_rul_len)		;
+		void	SetMaxRuleLen		(const uint32 &max_rul_len)		;
+		void	LoadTrainData		(const string &file)			;
+		void	LoadTestData		(const string &file)			;
+		void	SortTransactions	()					;
+		void	ClassifyTestData	()					;
+		void	PrintDataInfo		()				const	;
 
 	public:
 		void	Print	()	const	;

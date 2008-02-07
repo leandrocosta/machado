@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
 
 		base.LoadTrainData (pAppOptions->GetTrainingFile ());
 		base.LoadTestData (pAppOptions->GetTestingFile ());
+		base.PrintDataInfo ();
 		base.SortTransactions ();
-
 		base.ClassifyTestData ();
 	}
 

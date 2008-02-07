@@ -64,9 +64,9 @@ const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 			break;
 
 		if (*itTransaction == *itPattern)
-			itPattern++;
+			++itPattern;
 
-		itTransaction++;
+		++itTransaction;
 	}
 
 	if (itPattern != itPatternEnd)
@@ -81,13 +81,14 @@ PatternList* Transaction::GetFrequentPatternList (
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - items [%llu]\n", GetSize ());
 
-	PatternList *pFrequentPatternList = new PatternList ();
+	PatternList*	pFrequentPatternList	= new PatternList ()	;
+	ItemList*	pFrequentItemList	= new ItemList ()	;
 
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add single-item patterns\n");
 
 	STLItemList_cit itEnd = GetEnd ();
 
-	for (STLItemList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
 	{
 		Item *pItem = static_cast<Item *>(*it);
 
@@ -96,12 +97,13 @@ PatternList* Transaction::GetFrequentPatternList (
 			Pattern *pPattern = new Pattern (pItem);
 			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
 			pFrequentPatternList->PushBack (pPattern);
+			pFrequentItemList->PushBack (pItem);
 		}
 	}
 
-//	pFrequentPatternList->Sort ();
+	uint64 numFrequentItems		= pFrequentItemList->GetSize ();
+	uint32 frequentItemBackID	= static_cast<Item *>(pFrequentItemList->GetBack ())->GetItemID ();
 
-	uint64 numFrequentOneItemPatterns = pFrequentPatternList->GetSize ();
 	uint64 iTryPattern = 0;
 
 	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add combined-item patterns\n");
@@ -110,32 +112,29 @@ PatternList* Transaction::GetFrequentPatternList (
 	{
 		Pattern *pPattern = static_cast<Pattern *>(pFrequentPatternList->GetAt (iTryPattern));
 
-		if (pPattern->GetSize () < max_rule_len)
+		uint64 pattern_size = pPattern->GetSize ();
+
+		if (pattern_size < max_rule_len)
 		{
-			Item *pItemBack = static_cast<Item *>(pPattern->GetBack ());
+			uint32 patternItemBackID = static_cast<Item *>(pPattern->GetBack ())->GetItemID ();
 
-			for (uint64 i = 0; i < numFrequentOneItemPatterns; i++)
+			if (patternItemBackID < frequentItemBackID)
 			{
-				Item *pItem = static_cast<Item *>(static_cast<Pattern *>(pFrequentPatternList->GetAt (i))->GetAt (0));
-
-				if (pItemBack->GetItemID () < pItem->GetItemID ())
+				for (uint64 i = pattern_size; i < numFrequentItems; i++)
 				{
-					Pattern *pNewPattern = new Pattern (pPattern, pItem);
-//					pNewPattern->AddItem (pItem);
+					Item *pItem = static_cast<Item *>(pFrequentItemList->GetAt (i));
 
-					pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
-
-					if ((float32) pNewPattern->GetFrequence () / projection_size >= support)
+					if (patternItemBackID < pItem->GetItemID ())
 					{
-						LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add pattern [%s], frequence [%llu]\n", pNewPattern->GetPrintableString ().c_str (), pNewPattern->GetFrequence ());
+						Pattern *pNewPattern = new Pattern (pPattern, pItem);
 
-						pFrequentPatternList->PushBack (pNewPattern);
-					}
-					else
-					{
-						LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - doesn't add pattern [%s], frequence [%llu]\n", pNewPattern->GetPrintableString ().c_str (), pNewPattern->GetFrequence ());
-
-						delete pNewPattern;
+						if ((float32) pNewPattern->GetFrequence () / projection_size >= support)
+						{
+							pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
+							pFrequentPatternList->PushBack (pNewPattern);
+						}
+						else
+							delete pNewPattern;
 					}
 				}
 			}
@@ -164,6 +163,9 @@ PatternList* Transaction::GetFrequentPatternList (
 			break;
 	}
 
+	pFrequentItemList->RemoveAll ();
+	delete pFrequentItemList;
+
 	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - return pFrequentPatternList [%p], patterns [%llu]\n", pFrequentPatternList, pFrequentPatternList->GetSize ());
 
 	return pFrequentPatternList;
@@ -173,7 +175,7 @@ void Transaction::AddTransactionToItemsProjectionTransactionLists ()
 {
 	STLItemList_cit itEnd = GetEnd ();
 
-	for (STLItemList_cit it = GetBegin (); it != itEnd; it++)
+	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
 		static_cast<Item *>(*it)->AddProjectTransaction (this);
 }
 

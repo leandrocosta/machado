@@ -144,7 +144,7 @@ void DataBase::ClassifyTestData ()
 
 	TransactionList::STLTransactionList_cit itEnd = mTestTransactionList.GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; it++)
+	for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 
@@ -190,6 +190,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
 		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList);
+		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
 		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize ());
@@ -216,7 +217,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 		ClassList::STLClassList_cit itEnd = mClassList.GetEnd ();
 
-		for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; it++)
+		for (ClassList::STLClassList_cit it = mClassList.GetBegin (); it != itEnd; ++it)
 		{
 			Class *pClass = static_cast<Class *>(*it);
 
@@ -251,6 +252,11 @@ void DataBase::MakeProjection (Transaction *pTransaction)
 	mClassList.ClearClassProjectionTransactionLists ();
 
 	mpProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
+}
+
+void DataBase::PrintDataInfo () const
+{
+	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - transactions [%llu], items [%llu]\n", mTrainTransactionList.GetSize (), mItemList.GetSize ());
 }
 
 void DataBase::Print () const

@@ -43,7 +43,9 @@ class ObjectStrHash : public Object
 		const	uint64	GetSize	()	const	;
 
 	public:
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()	const	;
+#endif
 
 	private:
 		STLObjectStrHash	mHash		;

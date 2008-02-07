@@ -41,7 +41,9 @@ class ObjectHash : public Object
 
 	public:
 		virtual	const	bool	Find		(const string &key)	const	;
+#ifdef USE_MEM_SIZE
 		virtual	const	uint64	GetMemSize	()			const	;
+#endif
 
 	private:
 		STLObjectHash	mHash		;
