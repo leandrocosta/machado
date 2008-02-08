@@ -13,46 +13,46 @@ Object::~Object ()
 
 }
 
-const bool Object::operator< (const Object& rObject) const
+const bool Object::operator< (const Object& rRight) const
 {
 	throw (ObjectException ("Operator less (<) not defined for class " + string (typeid (*this).name ())));
 
-	return this < &rObject;
+	return this < &rRight;
 }
 
-const bool Object::operator> (const Object& rObject) const
+const bool Object::operator> (const Object& rRight) const
 {
 	throw (ObjectException ("Operator greater (>) not defined for class " + string (typeid (*this).name ())));
 
-	return this > &rObject;
+	return this > &rRight;
 }
 
-const bool Object::operator<= (const Object& rObject) const
+const bool Object::operator<= (const Object& rRight) const
 {
 	throw (ObjectException ("Operator less (<=) not defined for class " + string (typeid (*this).name ())));
 
-	return this <= &rObject;
+	return this <= &rRight;
 }
 
-const bool Object::operator>= (const Object& rObject) const
+const bool Object::operator>= (const Object& rRight) const
 {
 	throw (ObjectException ("Operator greater (>=) not defined for class " + string (typeid (*this).name ())));
 
-	return this >= &rObject;
+	return this >= &rRight;
 }
 
-const bool Object::operator== (const Object& rObject) const
+const bool Object::operator== (const Object& rRight) const
 {
 	throw (ObjectException ("Operator equal (==) not defined for class " + string (typeid (*this).name ())));
 
-	return this == &rObject;
+	return this == &rRight;
 }
 
-const bool Object::operator!= (const Object& rObject) const
+const bool Object::operator!= (const Object& rRight) const
 {
 	throw (ObjectException ("Operator equal (!=) not defined for class " + string (typeid (*this).name ())));
 
-	return this != &rObject;
+	return this != &rRight;
 }
 
 #ifdef USE_SERIALIZE

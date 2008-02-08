@@ -27,8 +27,7 @@ Transaction::~Transaction ()
 
 const uint32 Transaction::GetSeqTransactionID ()
 {
-	uint32 transactionID = msSeqTransactionID;
-	msSeqTransactionID++;
+	uint32 transactionID = msSeqTransactionID++;
 
 	return transactionID;
 }

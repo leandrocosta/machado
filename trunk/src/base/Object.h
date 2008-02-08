@@ -20,12 +20,12 @@ class Object
 		virtual	~Object	()	;
 
 	public:
-		virtual	const	bool	operator<	(const Object& rObject)	const	;
-		virtual	const	bool	operator>	(const Object& rObject)	const	;
-		virtual	const	bool	operator<=	(const Object& rObject)	const	;
-		virtual	const	bool	operator>=	(const Object& rObject)	const	;
-		virtual	const	bool	operator==	(const Object& rObject)	const	;
-		virtual	const	bool	operator!=	(const Object& rObject)	const	;
+		virtual	const	bool	operator<	(const Object& rRight)	const	;
+		virtual	const	bool	operator>	(const Object& rRight)	const	;
+		virtual	const	bool	operator<=	(const Object& rRight)	const	;
+		virtual	const	bool	operator>=	(const Object& rRight)	const	;
+		virtual	const	bool	operator==	(const Object& rRight)	const	;
+		virtual	const	bool	operator!=	(const Object& rRight)	const	;
 
 #ifdef USE_SERIALIZE
 //	public:

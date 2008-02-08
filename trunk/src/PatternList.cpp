@@ -1,7 +1,8 @@
 #include "PatternList.h"
 #include "TransactionList.h"
 #include "ItemList.h"
-#include "RuleList.h"
+#include "RankingRuleList.h"
+#include "RankingRule.h"
 #include "ClassList.h"
 #include "DataBaseException.h"
 #include "base/Logger.h"
@@ -354,11 +355,11 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
-RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence, const uint32 &projection_size) const
+RankingRuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence, const uint32 &projection_size) const
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetRuleList () - confidence [%f]\n", confidence);
 
-	RuleList *pRuleList = new RuleList ();
+	RankingRuleList *pRuleList = new RankingRuleList ();
 
 	ClassList::STLClassList_cit itClassEnd = pClassList->GetEnd ();
 
@@ -374,7 +375,7 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 		{
 			Pattern *pPattern = static_cast<Pattern *>(*itPattern);
 
-			Rule *pRule = new Rule (pClass, pPattern, projection_size, pClassList->GetSize ());
+			RankingRule *pRule = new RankingRule (pClass, pPattern, projection_size, pClassList->GetSize ());
 
 			if (pRule->GetConfidence () >= confidence)
 			{
@@ -387,6 +388,10 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 
 		LOGMSG (MEDIUM_LEVEL, "PatternList::GetRuleList () - class [%s], rules [%u]\n", pClass->GetValue ().c_str (), rules);
 	}
+
+	uint32 rules = pRuleList->GetSize ();
+
+	LOGMSG (MEDIUM_LEVEL, "PatternList::GetRuleList () - rules [%u]\n", rules);
 
 	return pRuleList;
 }

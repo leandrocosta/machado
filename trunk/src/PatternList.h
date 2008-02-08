@@ -7,7 +7,7 @@
 
 
 class TransactionList	;
-class RuleList		;
+class RankingRuleList	;
 class ClassList		;
 
 
@@ -53,10 +53,10 @@ class PatternList : public ObjectList
 					const OrtMetric &metric)			;
 
 	public:
-		RuleList*	GetRuleList	(
-				const ClassList *pClassList,
-				const float32 &confidence,
-				const uint32 &projection_size)	const	;
+		RankingRuleList*	GetRuleList	(
+					const ClassList *pClassList,
+					const float32 &confidence,
+					const uint32 &projection_size)	const	;
 
 	public:
 		const	uint32&		GetMaxPatternLen	()				const	;
