@@ -48,4 +48,27 @@ Resolvidos alguns detalhes de desempenho:
   melhorias no algoritmo de obtenção de padrões frequentes;
   revisão da implementação da heurística de obtenção de padrões ortogonais.
 
+Resultado:
+
+  Execução anterior às modificações:
+    * orth 7 vezes em primeiro lugar, sendo 1 empatado com freq, 3 empatadas com lazy, e 3 empatadas com ambos;
+    * freq 10 vezes em primeiro lugar, sendo 5 isoladas, 1 com orth 1 com lazy e 3 com ambos;
+    * lazy 21 vezes em primeiro lugar, sendo 12 isoladas, 3 com orth, 1 com freq e 3 com ambos;
+    * das 5 vezes em que freq esteve isolado em primeiro lugar, orth empatou 2 vezes com lazy e perdeu 3.
+
+  Execução após as modificações (com os mesmos parâmetros da execução anterior):
+    * orth 12 vezes em primeiro lugar, sendo 2 isoladas, 8 empatadas com lazy e 2 empatadas com lazy e freq;
+    * freq 13 vezes em primeiro lugar, sendo 11 vezes isoladas e 2 empatadas com lazy e freq;
+    * lazy 12 vezes em primeiro lugar, sendo 2 isoladas, 8 empatadas com orth e 2 empatadas com lazy e freq;
+    * das 11 vezes em que freq esteve isolado em primeiro lugar, orth ganhou 4, empatou 3 com lazy e perdeu 4.
+
+  Parâmetros de execução:
+    suporte: 0.001 (para o lazy, 1 elemento)
+    confiança: 0.9
+    número mínimo de regras: 1
+    tamanho máximo de regra: 2 elementos no lado esquerdo
+    número máximo de regras no rank: 1000
+
+    (métrica de ortogonalidade: similaridade)
+
 ---
