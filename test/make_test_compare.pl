@@ -10,8 +10,8 @@ my $OUTPUT_DIR = "output/compare";
 
 sub test_data_base ($);
 sub run_lazy ($$$$$$$$);
-sub run_classifier_c ($$$$$$$);
-sub run_classifier_o ($$$$$$$$$);
+sub run_classifier_c ($$$$$$$$$);
+sub run_classifier_o ($$$$$$$$$$$);
 sub compare_all ($$$$$$$$$);
 
 my @data_bases = (
@@ -100,8 +100,8 @@ sub test_data_base ($)
 		for ($confidence = $confidence_i; $confidence <= $confidence_f; $confidence += $confidence_s)
 		{
 			my $lazy_out = run_lazy ($data_base, $training_file, $testing_file, 1, $confidence, $min_rules, $max_size, $ranking_size);
-			my $cl_c_out = run_classifier_c ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len);
-			my $cl_s_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 's');
+			my $cl_c_out = run_classifier_c ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, $min_rules, $ranking_size);
+			my $cl_s_out = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 's', $min_rules, $ranking_size);
 			my $cl_o_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'c');
 			my $cl_b_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'b');
 			my $cl_a_out = ""; #run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, 'h', 'a');
@@ -125,26 +125,26 @@ sub run_lazy ($$$$$$$$)
 	$output_file;
 }
 
-sub run_classifier_c ($$$$$$$)
+sub run_classifier_c ($$$$$$$$$)
 {
-	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len) = @_;
+	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, $min_rules, $ranking_size) = @_;
 
 	my $output_file = "$OUTPUT_DIR/$CLASSIFIER.c.$data_base.s$support.c$confidence.m$min_rule_len.a$max_rule_len.out";
 
-	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r c >$output_file\n";
-	system "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r c >$output_file";
+	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r c -n $min_rules -l $ranking_size -d -1 >$output_file\n";
+	system "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r c -n $min_rules -l $ranking_size -d -1 >$output_file";
 
 	$output_file;
 }
 
-sub run_classifier_o ($$$$$$$$$)
+sub run_classifier_o ($$$$$$$$$$$)
 {
-	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, $ort_mode, $ort_metric) = @_;
+	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rule_len, $max_rule_len, $ort_mode, $ort_metric, $min_rules, $ranking_size) = @_;
 
 	my $output_file = "$OUTPUT_DIR/$CLASSIFIER.o.$data_base.s$support.c$confidence.m$min_rule_len.a$max_rule_len.o$ort_mode.e$ort_metric.out";
 
-	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r o -o $ort_mode -e $ort_metric >$output_file\n";
-	system "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r o -o $ort_mode -e $ort_metric >$output_file";
+	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r o -o $ort_mode -e $ort_metric -n $min_rules -l $ranking_size -d -1 >$output_file\n";
+	system "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -m $min_rule_len -a $max_rule_len -r o -o $ort_mode -e $ort_metric -n $min_rules -l $ranking_size -d -1 >$output_file";
 
 	$output_file;
 }
