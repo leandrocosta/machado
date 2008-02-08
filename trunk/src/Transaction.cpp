@@ -20,7 +20,7 @@ Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTra
 
 Transaction::~Transaction ()
 {
-	LOGMSG (MEDIUM_LEVEL, "Transaction::~Transaction () - p [%p]\n", this);
+	LOGMSG (HIGH_LEVEL, "Transaction::~Transaction () - p [%p]\n", this);
 
 	RemoveAll ();
 }
@@ -79,12 +79,12 @@ PatternList* Transaction::GetFrequentPatternList (
 		const float32 &support, const uint64 &projection_size,
 		const uint32 &min_rule_len, const uint32 &max_rule_len) const
 {
-	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - items [%llu]\n", GetSize ());
+	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - items [%llu]\n", GetSize ());
 
 	PatternList*	pFrequentPatternList	= new PatternList ()	;
 	ItemList*	pFrequentItemList	= new ItemList ()	;
 
-	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add single-item patterns\n");
+	LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - add single-item patterns\n");
 
 	STLItemList_cit itEnd = GetEnd ();
 
@@ -106,7 +106,7 @@ PatternList* Transaction::GetFrequentPatternList (
 
 	uint64 iTryPattern = 0;
 
-	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - add combined-item patterns\n");
+	LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - add combined-item patterns\n");
 
 	while (iTryPattern < pFrequentPatternList->GetSize ())
 	{
@@ -145,7 +145,7 @@ PatternList* Transaction::GetFrequentPatternList (
 			break;
 	}
 
-	LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - remove short patterns\n");
+	LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - remove short patterns\n");
 
 	PatternList::STLPatternList_it it		= pFrequentPatternList->GetBegin ()	;
 	PatternList::STLPatternList_it itPatternEnd	= pFrequentPatternList->GetEnd ()	;
@@ -154,7 +154,7 @@ PatternList* Transaction::GetFrequentPatternList (
 	{
 		if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
 		{
-			LOGMSG (MEDIUM_LEVEL, "PatternList::GetFrequentPatternList () - delete pattern [%s], frequence [%llu]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
+			LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - delete pattern [%s], frequence [%llu]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
 			delete *it;
 			it = pFrequentPatternList->Erase (it);
 			itPatternEnd = pFrequentPatternList->GetEnd ();
@@ -166,7 +166,7 @@ PatternList* Transaction::GetFrequentPatternList (
 	pFrequentItemList->RemoveAll ();
 	delete pFrequentItemList;
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetFrequentPatternList () - return pFrequentPatternList [%p], patterns [%llu]\n", pFrequentPatternList, pFrequentPatternList->GetSize ());
+	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - patterns [%llu]\n", pFrequentPatternList->GetSize ());
 
 	return pFrequentPatternList;
 }

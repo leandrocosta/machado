@@ -23,8 +23,7 @@ class Rule : public Object
 		virtual	~Rule	()				;
 
 	public:
-//		virtual	const	bool	operator==	(const Object& rObject)	const	;
-//		virtual	const	bool	operator<	(const Object& rObject)	const	;
+		virtual	const	bool	operator<	(const Object& rObject)	const	;
 		virtual	const	bool	operator>	(const Object& rObject)	const	;
 
 	public:
@@ -43,7 +42,8 @@ class Rule : public Object
 		const	string&		GetClassValue	()	const	;
 
 	public:
-		void	Print	()	const	;
+		void	Print		()	const	;
+		void	PrintRank	()	const	;
 
 	private:
 			float32		mSupport	;
@@ -61,7 +61,9 @@ class Rule : public Object
 		const	Class*		mpClass		;
 		const	Pattern*	mpPattern	;
 
-//		TransactionList	mTransactionList	;
+	private:
+		static	const	float32	RANK_FACTOR_LOWER	= 0.95	;
+		static	const	float32	RANK_FACTOR_GREATER	= 1.05	;
 };
 
 

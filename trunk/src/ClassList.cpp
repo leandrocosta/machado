@@ -8,12 +8,12 @@ using std::endl;
 
 ClassList::ClassList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (MEDIUM_LEVEL, "ClassList::ClassList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "ClassList::ClassList () - p [%p]\n", this);
 }
 
 ClassList::~ClassList ()
 {
-	LOGMSG (MEDIUM_LEVEL, "ClassList::~ClassList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "ClassList::~ClassList () - p [%p]\n", this);
 }
 
 const bool ClassList::operator> (const Object &rObject) const

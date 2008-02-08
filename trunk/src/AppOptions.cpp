@@ -29,19 +29,21 @@ void AppOptions::Finalize ()
 
 AppOptions::AppOptions ()
 {
-	mAppName	= AppOptions::DEFAULT_APP_NAME;
-	mTrainingFile	= AppOptions::DEFAULT_TRAINING_FILE;
-	mTestingFile	= AppOptions::DEFAULT_TESTING_FILE;
-	mSupport	= AppOptions::DEFAULT_SUPPORT;
-	mConfidence	= AppOptions::DEFAULT_CONFIDENCE;
-	mMinRuleLen	= AppOptions::DEFAULT_MIN_RULE_LEN;
-	mMaxRuleLen	= AppOptions::DEFAULT_MAX_RULE_LEN;
-	m_rmode		= AppOptions::DEFAULT_RUN_MODE;
-	m_omode		= AppOptions::DEFAULT_ORT_MODE;
-	m_ometric	= AppOptions::DEFAULT_ORT_METRIC;
-	m_debug_level	= AppOptions::DEFAULT_DEBUG_LEVEL;
-	mVerbose	= AppOptions::DEFAULT_VERBOSE;
-	mHelp		= AppOptions::DEFAULT_HELP;
+	mAppName		= AppOptions::DEFAULT_APP_NAME			;
+	mTrainingFile		= AppOptions::DEFAULT_TRAINING_FILE		;
+	mTestingFile		= AppOptions::DEFAULT_TESTING_FILE		;
+	mSupport		= AppOptions::DEFAULT_SUPPORT			;
+	mConfidence		= AppOptions::DEFAULT_CONFIDENCE		;
+	mMinNumRules		= AppOptions::DEFAULT_MIN_NUM_RULES		;
+	mMaxNumRankRules	= AppOptions::DEFAULT_MAX_NUM_RANK_RULES	;
+	mMinRuleLen		= AppOptions::DEFAULT_MIN_RULE_LEN		;
+	mMaxRuleLen		= AppOptions::DEFAULT_MAX_RULE_LEN		;
+	mRunMode		= AppOptions::DEFAULT_RUN_MODE			;
+	mOrtMode		= AppOptions::DEFAULT_ORT_MODE			;
+	mOrtMetric		= AppOptions::DEFAULT_ORT_METRIC		;
+	m_debug_level		= AppOptions::DEFAULT_DEBUG_LEVEL		;
+	mVerbose		= AppOptions::DEFAULT_VERBOSE			;
+	mHelp			= AppOptions::DEFAULT_HELP			;
 }
 
 void AppOptions::Run (int argc, char* const* argv)
@@ -53,6 +55,8 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"testing-file"		, 1, 0, 't'},
 		{"support"		, 1, 0, 's'},
 		{"confidence"		, 1, 0, 'c'},
+		{"min-num-rules"	, 1, 0, 'n'},
+		{"max-num-rank-rules"	, 1, 0, 'l'},
 		{"min-rule-len"		, 1, 0, 'm'},
 		{"max-rule-len"		, 1, 0, 'a'},
 		{"run-mode"		, 1, 0, 'r'},
@@ -68,7 +72,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:s:c:m:a:r:o:e:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:s:c:n:l:m:a:r:o:e:d:vh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -91,6 +95,14 @@ void AppOptions::Run (int argc, char* const* argv)
 				mConfidence = atof (optarg);
 				break;
 
+			case 'n':
+				mMinNumRules = atoi (optarg);
+				break;
+
+			case 'l':
+				mMaxNumRankRules = atoi (optarg);
+				break;
+
 			case 'm':
 				mMinRuleLen = atoi (optarg);
 				break;
@@ -100,15 +112,15 @@ void AppOptions::Run (int argc, char* const* argv)
 				break;
 
 			case 'r':
-				m_rmode = (e_rmode) optarg [0];
+				mRunMode = (DataBase::RunMode) optarg [0];
 				break;
 
 			case 'o':
-				m_omode = (e_omode) optarg [0];
+				mOrtMode = (PatternList::OrtMode) optarg [0];
 				break;
 
 			case 'e':
-				m_ometric = (e_ometric) optarg [0];
+				mOrtMetric = (PatternList::OrtMetric) optarg [0];
 				break;
 
 			case 'd':
@@ -138,6 +150,8 @@ void AppOptions::Usage () const
 	cout << "  -t, --testing-file         Set the testing file" << endl;
 	cout << "  -s, --support              Set the support" << endl;
 	cout << "  -c, --confidence           Set the confidence" << endl;
+	cout << "  -n, --min-num-rules        Set the minimum number of rules" << endl;
+	cout << "  -l, --max-num-rank-rules   Set the maximum number of rules considered in rank time" << endl;
 	cout << "  -m, --min-rule-len         Set the minimum length of the rules" << endl;
 	cout << "  -a, --max-rule-len         Set the maximum lenfth of the rules" << endl;
 	cout << "  -r, --run-mode             Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
@@ -174,6 +188,16 @@ const float32& AppOptions::GetConfidence () const
 	return mConfidence;
 }
 
+const uint32& AppOptions::GetMinNumRules () const
+{
+	return mMinNumRules;
+}
+
+const uint32& AppOptions::GetMaxNumRankRules () const
+{
+	return mMaxNumRankRules;
+}
+
 const uint32& AppOptions::GetMinRuleLen () const
 {
 	return mMinRuleLen;
@@ -184,19 +208,19 @@ const uint32& AppOptions::GetMaxRuleLen () const
 	return mMaxRuleLen;
 }
 
-const e_rmode& AppOptions::GetRunMode () const
+const DataBase::RunMode& AppOptions::GetRunMode () const
 {
-	return m_rmode;
+	return mRunMode;
 }
 
-const e_omode& AppOptions::GetOrtMode () const
+const PatternList::OrtMode& AppOptions::GetOrtMode () const
 {
-	return m_omode;
+	return mOrtMode;
 }
 
-const e_ometric& AppOptions::GetOrtMetric () const
+const PatternList::OrtMetric& AppOptions::GetOrtMetric () const
 {
-	return m_ometric;
+	return mOrtMetric;
 }
 
 const e_debug& AppOptions::GetDebugLevel () const

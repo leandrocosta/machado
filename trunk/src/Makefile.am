@@ -3,7 +3,7 @@ LDADD_BASE	= $(top_builddir)/src/base/libbase.la
 SRCS		= Class.cpp ClassList.cpp DataBase.cpp Transaction.cpp		\
 	Item.cpp ItemHash.cpp ItemList.cpp ItemSet.cpp Pattern.cpp		\
 	PatternList.cpp Rule.cpp RuleList.cpp RuleUIntHash.cpp AppOptions.cpp	\
-	TransactionList.cpp main.cpp
+	TransactionList.cpp DataBaseException.cpp main.cpp
 
 SUBDIRS = base
 

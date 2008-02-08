@@ -5,31 +5,9 @@
 #include "ClassList.h"
 #include "ItemList.h"
 #include "TransactionList.h"
+#include "PatternList.h"
 #include "base/IOManager.h"
 #include "base/Tokenizer.h"
-
-
-typedef enum e_run_mode
-{
-	MODE_CLASSICAL	= 'c',
-	MODE_ORTHOGONAL	= 'o',
-	MODE_UNKNOWN	= 0
-} e_rmode;
-
-typedef enum e_orthogonality_mode
-{
-	ORTH_HEURISTICAL	= 'h',
-	ORTH_POLYNOMIAL		= 'p'
-} e_omode;
-
-typedef enum e_orthogonality_metric
-{
-	METRIC_SIMILARITY	= 's',
-	METRIC_COVERAGE		= 'c',
-	METRIC_BOTH		= 'b',
-	METRIC_CLASS_COVERAGE	= 'a',
-	METRIC_UNKNOWN		= 0
-} e_ometric;
 
 
 class PatternList	;
@@ -44,8 +22,22 @@ class DataBase : private IOManager, private Tokenizer
 				const uint32 &min_rule_len = 1, const uint32 &max_rule_len = 100)	;
 		virtual	~DataBase	()								;
 
+	public:
+		typedef enum e_run_mode
+		{
+			MODE_CLASSICAL	= 'c',
+			MODE_ORTHOGONAL	= 'o',
+			MODE_UNKNOWN	= 0
+		} RunMode;
+
 	private:
-		void	ClassifyTransaction	(Transaction *pTransaction)		;
+		void	ClassifyTransaction	(
+				Transaction *pTransaction,
+				const RunMode &rRunMode,
+				const PatternList::OrtMode &rOrtMode,
+				const PatternList::OrtMetric &rOrtMetric,
+				const uint32 &rMinNumRules,
+				const uint32 &rMaxNumRankRules)				;
 		void	MakeProjection		(Transaction *pTransaction)		;
 
 	public:
@@ -56,7 +48,12 @@ class DataBase : private IOManager, private Tokenizer
 		void	LoadTrainData		(const string &file)			;
 		void	LoadTestData		(const string &file)			;
 		void	SortTransactions	()					;
-		void	ClassifyTestData	()					;
+		void	ClassifyTestData	(
+				const RunMode &rRunMode,
+				const PatternList::OrtMode &rOrtMode,
+				const PatternList::OrtMetric &rOrtMetric,
+				const uint32 &rMinNumRules,
+				const uint32 &rMaxNumRankRules)				;
 		void	PrintDataInfo		()				const	;
 
 	public:

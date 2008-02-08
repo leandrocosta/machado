@@ -8,7 +8,7 @@ using std::endl;
 
 Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 {
-	LOGMSG (MEDIUM_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
 
 	InitFields ();
 
@@ -36,7 +36,7 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 
 Pattern::Pattern (Item *pItem) : ItemSet ()
 {
-	LOGMSG (MEDIUM_LEVEL, "Pattern::Patern (Item *pItem) - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "Pattern::Patern (Item *pItem) - p [%p]\n", this);
 
 	InitFields ();
 
@@ -75,11 +75,11 @@ void Pattern::InitFields ()
 
 void Pattern::AddItem (Item *pItem)
 {
-	LOGMSG (MEDIUM_LEVEL, "Pattern::AddItem () - begin\n");
+	LOGMSG (HIGH_LEVEL, "Pattern::AddItem () - begin\n");
 
 	PushBack (pItem);
 
-	LOGMSG (MEDIUM_LEVEL, "Pattern::AddItem () - merge lists\n");
+	LOGMSG (HIGH_LEVEL, "Pattern::AddItem () - merge lists\n");
 
 	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
 
@@ -145,7 +145,7 @@ const bool& Pattern::GetGot () const
 
 const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 {
-	LOGMSG (MEDIUM_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
+	LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
 
 	ItemList	totalItemList		;
 	STLItemList_cit itEnd = GetEnd ()	;

@@ -1,8 +1,7 @@
 #include "DataBase.h"
 #include "PatternList.h"
 #include "RuleList.h"
-#include "AppOptions.h"
-#include "base/Exception.h"
+#include "DataBaseException.h"
 #include "base/Logger.h"
 
 #include <iostream>
@@ -27,7 +26,7 @@ DataBase::DataBase (
 
 DataBase::~DataBase ()
 {
-	LOGMSG (MEDIUM_LEVEL, "DataBase::~DataBase () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "DataBase::~DataBase () - p [%p]\n", this);
 
 	if (mpProjectionTransactionList)
 	{
@@ -138,30 +137,30 @@ void DataBase::SortTransactions ()
 	mTestTransactionList.SortTransactions ();
 }
 
-void DataBase::ClassifyTestData ()
+void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
 	TransactionList::STLTransactionList_cit itEnd = mTestTransactionList.GetEnd ();
 
-	for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
+	try
 	{
-		Transaction *pTransaction = static_cast<Transaction *>(*it);
+		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
+			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMetric, rMinNumRules, rMaxNumRankRules);
 
-		try
-		{
-			ClassifyTransaction (pTransaction);
-		}
-		catch (Exception &e)
-		{
-			LOGMSG (NO_DEBUG, "DataBase::ClassifyTestData () - exception [%s]\n", e.GetMessage ().c_str ());
-		}
+		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)), mCorrectGuesses, mWrongGuesses);
 	}
-
-	LOGMSG (NO_DEBUG, "accuracy [%0.2f] (correct [%u], wrong [%u])\n", ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)), mCorrectGuesses, mWrongGuesses);
+	catch (DataBaseException &e)
+	{
+		LOGMSG (NO_DEBUG, "DataBaseException: %s\n", e.GetMessage ().c_str ());
+	}
+	catch (Exception &e)
+	{
+		LOGMSG (NO_DEBUG, "Exception: %s\n", e.GetMessage ().c_str ());
+	}
 }
 
-void DataBase::ClassifyTransaction (Transaction *pTransaction)
+void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - pTransaction\n");
 
@@ -170,33 +169,57 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	MakeProjection (pTransaction);
 
 	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
-//	pFrequentPatternList->Print ();
-//	exit (1);
+	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
+	pFrequentPatternList->Print ();
 
 	string class_guess = "";
 
-	if (AppOptions::GetInstance ()->GetRunMode () == MODE_CLASSICAL)
+	if (rRunMode == MODE_CLASSICAL)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		RuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize ());
-		pRuleList->Print ();
-		class_guess = pRuleList->GetClassificationValue ();
+		RuleList *pRuleList = NULL;
+		float32 confidence = mConfidence;
+		
+		do
+		{
+			if (pRuleList)
+				delete pRuleList;
 
+			pRuleList = pFrequentPatternList->GetRuleList (&mClassList, confidence, mpProjectionTransactionList->GetSize ());
+
+			if (pRuleList->GetSize () < rMinNumRules)
+				confidence *= 0.9;
+		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
+
+		pRuleList->Print ();
+		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
 		delete pRuleList;
 	}
-	else if (AppOptions::GetInstance ()->GetRunMode () == MODE_ORTHOGONAL)
+	else if (rRunMode == MODE_ORTHOGONAL)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList);
+		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
-		RuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize ());
-		pRuleList->Print ();
-		class_guess = pRuleList->GetClassificationValue ();
+		RuleList *pRuleList = NULL;
+		float32 confidence = mConfidence;
+		
+		do
+		{
+			if (pRuleList)
+				delete pRuleList;
 
+			pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, confidence, mpProjectionTransactionList->GetSize ());
+
+			if (pRuleList->GetSize () < rMinNumRules)
+				confidence *= 0.9;
+		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
+
+		pRuleList->Print ();
+		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
 		delete pRuleList;
 
 		pOrthogonalFrequentPatternList->RemoveAll ();
@@ -212,6 +235,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 
 	if (class_guess.empty ())
 	{
+		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - no rule, using more frequent class\n");
+
 		uint32 num_transactions = 0;
 		Class	*pClassGuess = NULL;
 
@@ -237,6 +262,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction)
 	else
 		mWrongGuesses++;
 
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - class [%s], guess [%s], correct [%s]\n", pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"));
+
 	cout << class_guess << endl;
 }
 
@@ -252,11 +279,13 @@ void DataBase::MakeProjection (Transaction *pTransaction)
 	mClassList.ClearClassProjectionTransactionLists ();
 
 	mpProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
+
+	LOGMSG (LOW_LEVEL, "DataBase::MakeProjection () - transactions [%llu]\n", mpProjectionTransactionList->GetSize ());
 }
 
 void DataBase::PrintDataInfo () const
 {
-	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - transactions [%llu], items [%llu]\n", mTrainTransactionList.GetSize (), mItemList.GetSize ());
+	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - items [%llu], train transactions [%llu], test transactions [%llu]\n", mItemList.GetSize (), mTrainTransactionList.GetSize (), mTestTransactionList.GetSize ());
 }
 
 void DataBase::Print () const
