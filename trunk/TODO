@@ -38,7 +38,7 @@ O conjunto R deve ser alfa-ortogonal e beta-representativo
 07/02/2008
 
 Implementados os parâmetros utilizados pelo lazy:
-  min-num-rules: número mínimo de regras (o valor da confiança é decrementado em 10% a cada iteração até que o número mínimo de regras seja gerado, o a confiança chegue a 0.001);
+  min-num-rules: número mínimo de regras (o valor da confiança é decrementado em 10% a cada iteração até que o número mínimo de regras seja gerado, ou a confiança chegue a 0.001);
   max-num-rank-rules: número máximo de regras consideradas durante o classificação (a lista de regras é ordenada descrescentemente, e apenas as primeiras 'max-num-rank-ruels' são consideradas para a classificação);
 
 Resolvidos alguns detalhes de desempenho:
