@@ -72,3 +72,13 @@ Resultado:
     (métrica de ortogonalidade: similaridade)
 
 ---
+
+08/02/2008
+
+O mesmo código de ontem foi executado com os mesmos parâmetros, e ortogonalidade por classes ao invés de similaridade, porém, apenas 20 arquivos foram processados em tempo hábil.
+
+Resultado:
+    * orth 8 vezes em primeiro lugar, sendo 4 vezes isoladas, 3 empatadas com freq e 1 empatada com lazy e freq;
+    * freq 10 vezes em primeiro lugar, sendo 6 isoladas, 3 com orth 1 com lazy e orth;
+    * lazy 7 vezes em primeiro lugar, sendo 6 isoladas e 1 com freq e orth;
+    * das 6 vezes em que freq esteve isolado em primeiro lugar, orth ganhou 3, empatou 1 e perdeu 2 vezes para lazy.

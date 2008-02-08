@@ -8,13 +8,13 @@
 Metrics::Metrics (
 		const Class *pClass,
 		const Pattern *pPattern,
-		const uint64 &proj_size,
-		const uint64 &num_classes)
+		const uint32 &proj_size,
+		const uint32 &num_classes)
 {
-	uint64	correct_trans	= pPattern->GetNumTransactionsOfClass (pClass);
+	uint32	correct_trans	= pPattern->GetNumTransactionsOfClass (pClass);
 	float32	pattern_support	= pPattern->GetSupport ();
-	uint64	pattern_freq	= pPattern->GetFrequence ();
-	uint64	class_proj_freq	= pClass->GetProjectionTransactionListSize ();
+	uint32	pattern_freq	= pPattern->GetFrequence ();
+	uint32	class_proj_freq	= pClass->GetProjectionTransactionListSize ();
 
 	mSupport	= (float32) correct_trans / proj_size;
 	mConfidence	= (float32) correct_trans / pattern_freq;

@@ -12,7 +12,7 @@ using std::string;
 class ClassList : public ObjectList
 {
 	public:
-			ClassList	(const uint64 &max_size = ULONG_MAX)	;
+			ClassList	(const uint64 &max_size = UINT_MAX)	;
 		virtual	~ClassList	()					;
 
 	public:

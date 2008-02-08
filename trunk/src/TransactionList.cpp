@@ -5,12 +5,12 @@
 
 TransactionList::TransactionList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (HIGH_LEVEL, "TransactionList::TransactionList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "TransactionList::TransactionList () - p [%p]\n", this);
 }
 
 TransactionList::~TransactionList ()
 {
-	LOGMSG (MAX_LEVEL, "TransactionList::~TransactionList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "TransactionList::~TransactionList () - p [%p]\n", this);
 }
 
 void TransactionList::SortTransactions ()
@@ -43,9 +43,9 @@ TransactionList* TransactionList::GetProjection (const Transaction *pBaseTransac
 	return pTransactionList;
 }
 
-const uint64 TransactionList::GetNumTransactionsOfClass (const Class *pClass) const
+const uint32 TransactionList::GetNumTransactionsOfClass (const Class *pClass) const
 {
-	uint64 num_transactions = 0;
+	uint32 num_transactions = 0;
 
 	STLTransactionList_cit itEnd = GetEnd ();
 

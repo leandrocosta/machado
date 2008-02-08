@@ -9,14 +9,14 @@
 
 PatternList::PatternList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (MAX_LEVEL, "PatternList::PatternList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "PatternList::PatternList () - p [%p]\n", this);
 
 	mMaxPatternLen = 0;
 }
 
 PatternList::~PatternList ()
 {
-	LOGMSG (MAX_LEVEL, "PatternList::~PatternList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "PatternList::~PatternList () - p [%p]\n", this);
 }
 
 void PatternList::PushFront (Object *pObject)
@@ -87,7 +87,9 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			rate_prv = rate_new;
 
-			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - elements [%llu], rate [%f]\n", pOrthogonalPatternList->GetSize (), rate_prv);
+			uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
+
+			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - elements [%u], rate [%f]\n", orthogonal_size, rate_prv);
 
 			itEnd = GetEnd ();
 
@@ -146,7 +148,9 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 		delete pTryPatternList;
 	}
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - patterns [%llu]\n", pOrthogonalPatternList->GetSize ());
+	uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
+
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - patterns [%u]\n", orthogonal_size);
 
 	return pOrthogonalPatternList;
 }
@@ -158,7 +162,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
-	uint64 size = GetSize ();
+	uint32 size = GetSize ();
 
 	if (size <= 2)
 	{
@@ -296,9 +300,9 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMetric &metric)
 {
-	uint64 size = GetSize ();
+	uint32 size = GetSize ();
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - patterns [%llu]\n", size);
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - patterns [%u]\n", size);
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
@@ -350,7 +354,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
-RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence, const uint64 &projection_size) const
+RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &confidence, const uint32 &projection_size) const
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetRuleList () - confidence [%f]\n", confidence);
 
@@ -387,9 +391,9 @@ RuleList* PatternList::GetRuleList (const ClassList *pClassList, const float32 &
 	return pRuleList;
 }
 
-const uint64 PatternList::GetSumPatternLen () const
+const uint32 PatternList::GetSumPatternLen () const
 {
-	uint64 sumPatternLen = 0;
+	uint32 sumPatternLen = 0;
 
 	STLPatternList_cit	it			;
 	STLPatternList_cit	itEnd = GetEnd ()	;
@@ -402,7 +406,7 @@ const uint64 PatternList::GetSumPatternLen () const
 	return sumPatternLen;
 }
 
-const uint64& PatternList::GetMaxPatternLen () const
+const uint32& PatternList::GetMaxPatternLen () const
 {
 	return mMaxPatternLen;
 }
@@ -472,7 +476,9 @@ const float32 PatternList::GetSimilarityRate ()
 		exclusive_items += (GetSize () - pItem->GetCount ()) / (GetSize () - 1);
 	}
 
-	LOGMSG (HIGH_LEVEL, "PatternList::PatternList () - max_pattern_len [%u], num_patterns [%llu], num_items [%u], distinct_items [%u], exclusive_items [%f]\n", mMaxPatternLen, GetSize (), num_items, distinct_items, exclusive_items);
+	uint32 size = GetSize ();
+
+	LOGMSG (HIGH_LEVEL, "PatternList::PatternList () - max_pattern_len [%u], num_patterns [%u], num_items [%u], distinct_items [%u], exclusive_items [%f]\n", mMaxPatternLen, size, num_items, distinct_items, exclusive_items);
 
 	float32 rate = (float32) (exclusive_items / distinct_items);
 //      rate = (float32) (exclusive_items / distinct_items) * ((float32) num_items / (mMaxPatternLen * GetSize ()));

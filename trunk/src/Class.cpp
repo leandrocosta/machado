@@ -7,7 +7,7 @@ uint32 Class::msSeqClassID	= 0	;
 
 Class::Class (const string &value) : Object (), mClassID (GetSeqClassID ()), mValue (value)
 {
-	LOGMSG (MAX_LEVEL, "Class::Class () - value [%s]\n", value.c_str ());
+//	LOGMSG (MAX_LEVEL, "Class::Class () - value [%s]\n", value.c_str ());
 }
 
 Class::~Class ()
@@ -41,7 +41,7 @@ void Class::AddTransaction (Transaction *pTransaction)
 
 void Class::AddProjectionTransaction (Transaction *pTransaction)
 {
-	LOGMSG (HIGH_LEVEL, "Class::AddProjectionTransaction () - class [%s]\n", mValue.c_str ());
+	LOGMSG (MAX_LEVEL, "Class::AddProjectionTransaction () - class [%s]\n", mValue.c_str ());
 
 	mProjectionTransactionList.PushBack (pTransaction);
 }
@@ -51,7 +51,7 @@ void Class::ClearProjectionTransactionList ()
 	mProjectionTransactionList.RemoveAll ();
 }
 
-const uint64 Class::GetProjectionTransactionListSize () const
+const uint32 Class::GetProjectionTransactionListSize () const
 {
 	return mProjectionTransactionList.GetSize ();
 }

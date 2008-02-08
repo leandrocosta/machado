@@ -26,7 +26,7 @@ class Class : public Object
 			void	AddTransaction				(Transaction *pTransaction)		;
 			void	AddProjectionTransaction		(Transaction *pTransaction)		;
 			void	ClearProjectionTransactionList		()					;
-		const	uint64	GetProjectionTransactionListSize	()				const	;
+		const	uint32	GetProjectionTransactionListSize	()				const	;
 
 	public:
 		void	Print	()	const	;

@@ -18,8 +18,8 @@ class Rule : public Object
 		Rule		(
 				const Class *pClass,
 				const Pattern *pPattern,
-				const uint64 &projection_size,
-				const uint64 &num_classes)	;
+				const uint32 &projection_size,
+				const uint32 &num_classes)	;
 		virtual	~Rule	()				;
 
 	public:

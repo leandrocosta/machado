@@ -12,7 +12,7 @@ using std::string;
 class TransactionList : public ObjectList
 {
 	public:
-			TransactionList		(const uint64 &max_size = ULONG_MAX)	;
+			TransactionList		(const uint64 &max_size = UINT_MAX)	;
 		virtual	~TransactionList	()					;
 
 	public:
@@ -25,7 +25,7 @@ class TransactionList : public ObjectList
 		TransactionList*	GetProjection		(const Transaction *pBaseTransaction)	;
 
 	public:
-		const	uint64	GetNumTransactionsOfClass	(const Class *pClass)	const	;
+		const	uint32	GetNumTransactionsOfClass	(const Class *pClass)	const	;
 };
 
 
