@@ -1,6 +1,6 @@
 #include "DataBase.h"
 #include "PatternList.h"
-#include "RuleList.h"
+#include "RankingRuleList.h"
 #include "DataBaseException.h"
 #include "base/Logger.h"
 
@@ -178,7 +178,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		RuleList *pRuleList = NULL;
+		RankingRuleList *pRuleList = NULL;
 		float32 confidence = mConfidence;
 		
 		do
@@ -204,7 +204,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
-		RuleList *pRuleList = NULL;
+		RankingRuleList *pRuleList = NULL;
 		float32 confidence = mConfidence;
 		
 		do
@@ -262,7 +262,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	else
 		mWrongGuesses++;
 
-	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - class [%s], guess [%s], correct [%s]\n", pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"));
+	uint32 train_size = mTrainTransactionList.GetSize ();
+	uint32 test_size = mTestTransactionList.GetSize ();
+
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s]\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"));
 
 	cout << class_guess << endl;
 }

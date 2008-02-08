@@ -32,7 +32,7 @@ const bool ObjectList::CompareLess::operator() (const Object *pLeft, const Objec
 {
 #ifdef USE_LOGGER
 	if (! pLeft || ! pRight)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareLess () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLess::operator() - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
 	return (*pLeft < *pRight);
@@ -42,7 +42,7 @@ const bool ObjectList::CompareLessEqual::operator() (const Object *pLeft, const 
 {
 #ifdef USE_LOGGER
 	if (! pLeft || ! pRight)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareLessEqual () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
+		LOGMSG (NO_DEBUG, "ObjectList::CompareLessEqual::operator() - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
 	return (*pLeft <= *pRight);
@@ -52,7 +52,7 @@ const bool ObjectList::CompareGreater::operator() (const Object *pLeft, const Ob
 {
 #ifdef USE_LOGGER
 	if (! pLeft || ! pRight)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareGreater () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
+		LOGMSG (NO_DEBUG, "ObjectList::CompareGreater::operator() - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
 	return (*pLeft > *pRight);
@@ -62,7 +62,7 @@ const bool ObjectList::CompareGreaterEqual::operator() (const Object *pLeft, con
 {
 #ifdef USE_LOGGER
 	if (! pLeft || ! pRight)
-		LOGMSG (NO_DEBUG, "ObjectList::CompareGreaterEqual () - pLeft [%p], pRight [%p]\n", pLeft, pRight);
+		LOGMSG (NO_DEBUG, "ObjectList::CompareGreaterEqual::operator() - pLeft [%p], pRight [%p]\n", pLeft, pRight);
 #endif
 
 	return (*pLeft >= *pRight);
@@ -131,6 +131,7 @@ void ObjectList::ReverseSort ()
 #endif
 	sort (mList.begin (), mList.end (), ObjectList::msGreaterComparer);
 //	sort (mList.begin (), mList.end (), ObjectList::msGreaterEqualComparer);
+//	sort (mList.rbegin (), mList.rend (), ObjectList::msLessComparer);
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::ReverseSort () - size [%llu] - end\n", GetSize ());
 #endif
