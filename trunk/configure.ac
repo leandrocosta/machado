@@ -29,6 +29,8 @@ AC_STRUCT_TM
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([localtime_r])
 
+CPPFLAGS="-O3 -Wall"
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/base/Makefile])
