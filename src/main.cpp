@@ -1,7 +1,5 @@
 #include "main.h"
 #include "AppOptions.h"
-#include "DataBase.h"
-#include "base/Logger.h"
 
 
 int main(int argc, char* argv[])
@@ -26,7 +24,12 @@ int main(int argc, char* argv[])
 		base.LoadTestData (pAppOptions->GetTestingFile ());
 		base.PrintDataInfo ();
 		base.SortTransactions ();
-		base.ClassifyTestData ();
+		base.ClassifyTestData (
+				pAppOptions->GetRunMode (),
+				pAppOptions->GetOrtMode (),
+				pAppOptions->GetOrtMetric (),
+				pAppOptions->GetMinNumRules (),
+				pAppOptions->GetMaxNumRankRules ());
 	}
 
 	AppOptions::Finalize ();

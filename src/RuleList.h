@@ -21,7 +21,7 @@ class RuleList : public ObjectList
 		typedef STLRuleList::const_iterator	STLRuleList_cit	;
 
 	public:
-		const	string	GetClassificationValue	()	const	;
+		const	string	GetClassificationValue	(const uint32 &rMaxNumRankRules)	;
 };
 
 

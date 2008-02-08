@@ -9,16 +9,18 @@ using std::endl;
 
 RuleList::RuleList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (MEDIUM_LEVEL, "RuleList::RuleList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "RuleList::RuleList () - p [%p]\n", this);
 }
 
 RuleList::~RuleList ()
 {
-	LOGMSG (MEDIUM_LEVEL, "RuleList::~RuleList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "RuleList::~RuleList () - p [%p]\n", this);
 }
 
-const string RuleList::GetClassificationValue () const
+const string RuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
 {
+	LOGMSG (MEDIUM_LEVEL, "RuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
+
 	hash_map<string, uint32>	rulesHash;
 	hash_map<string, float32>	supportHash;
 	hash_map<string, float32>	confidenceHash;
@@ -26,11 +28,18 @@ const string RuleList::GetClassificationValue () const
 
 //	uint32 total_rules = GetSize ();
 
+	ReverseSort ();
+
+	uint32 rules = 0;
+
 	STLRuleList_cit itEnd = GetEnd ();
 
-	for (STLObjectList_cit it = GetBegin (); it != itEnd; ++it)
+	for (STLRuleList_cit it = GetBegin (); it != itEnd; ++it)
 	{
 		const Rule *pRule = static_cast<const Rule *>(*it);
+
+		pRule->Print ();
+		pRule->PrintRank ();
 
 		rulesHash[pRule->GetClassValue ()]++;
 		supportHash[pRule->GetClassValue ()] += pRule->GetSupport ();
@@ -52,6 +61,11 @@ const string RuleList::GetClassificationValue () const
 		*/
 
 		rankHash[pRule->GetClassValue ()] += pRule->GetConfidence ();
+
+		rules++;
+
+		if (rules == rMaxNumRankRules)
+			break;
 	}
 
 	string	class_guess	= "";
@@ -68,7 +82,7 @@ const string RuleList::GetClassificationValue () const
 //		float32 confidence_mean	= confidence / total_rules	;
 		float32 confidence_mean	= confidence / rules		;
 
-		LOGMSG (LOW_LEVEL, "RuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean);
+		LOGMSG (MEDIUM_LEVEL, "RuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean);
 
 //		rank_try = support_mean + confidence_mean;
 		rank_try = rankHash [it->first] / rules;
