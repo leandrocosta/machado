@@ -8,12 +8,12 @@ using std::endl;
 
 ClassList::ClassList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (MAX_LEVEL, "ClassList::ClassList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ClassList::ClassList () - p [%p]\n", this);
 }
 
 ClassList::~ClassList ()
 {
-	LOGMSG (MAX_LEVEL, "ClassList::~ClassList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ClassList::~ClassList () - p [%p]\n", this);
 }
 
 const bool ClassList::operator> (const Object &rObject) const
@@ -26,7 +26,7 @@ const bool ClassList::operator> (const Object &rObject) const
 		return GetSize () > itemList.GetSize ();
 	else
 	{
-		uint64		index = 0	;
+		uint32 index = 0;
 
 		for (index = 0; index < GetSize (); index++)
 		{
@@ -43,7 +43,7 @@ const bool ClassList::operator> (const Object &rObject) const
 
 Class* ClassList::GetClassByValue (const string &value) const
 {
-	LOGMSG (HIGH_LEVEL, "ClassList::GetClassByValue () - value [%s]\n", value.c_str ());
+	LOGMSG (MAX_LEVEL, "ClassList::GetClassByValue () - value [%s]\n", value.c_str ());
 
 	Class*			pClass = NULL		;
 	STLClassList_cit	it			;

@@ -14,8 +14,8 @@ class Metrics : public Object
 			Metrics		(
 					const Class *pClass,
 					const Pattern *pPattern,
-					const uint64 &proj_size,
-					const uint64 &num_classes)	;
+					const uint32 &proj_size,
+					const uint32 &num_classes)	;
 		virtual	~Metrics	()				;
 
 	public:

@@ -12,17 +12,17 @@ using std::stringstream;
 
 ItemList::ItemList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::ItemList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::ItemList () - p [%p]\n", this);
 }
 
 ItemList::~ItemList ()
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::~ItemList () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::~ItemList () - p [%p]\n", this);
 }
 
 const bool ItemList::operator< (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator< () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::operator< () - p [%p]\n", this);
 
 	bool bRet = false;
 
@@ -59,7 +59,7 @@ const bool ItemList::operator< (const Object &rObject) const
 
 const bool ItemList::operator> (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator> () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::operator> () - p [%p]\n", this);
 
 	bool bRet = false;
 
@@ -96,7 +96,7 @@ const bool ItemList::operator> (const Object &rObject) const
 
 const bool ItemList::operator<= (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator<= () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::operator<= () - p [%p]\n", this);
 
 	bool bRet = false;
 
@@ -133,7 +133,7 @@ const bool ItemList::operator<= (const Object &rObject) const
 
 const bool ItemList::operator>= (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator>= () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::operator>= () - p [%p]\n", this);
 
 	bool bRet = false;
 
@@ -170,7 +170,7 @@ const bool ItemList::operator>= (const Object &rObject) const
 
 const bool ItemList::operator== (const Object &rObject) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::operator== () - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "ItemList::operator== () - p [%p]\n", this);
 
 	bool bRet = true;
 
@@ -206,7 +206,7 @@ const bool ItemList::operator== (const Object &rObject) const
 
 Item* ItemList::GetItemByValue (const string &value) const
 {
-	LOGMSG (HIGH_LEVEL, "ItemList::GetItemByValue () - value [%s]\n", value.c_str ());
+//	LOGMSG (MAX_LEVEL, "ItemList::GetItemByValue () - value [%s]\n", value.c_str ());
 
 	Item*		pItem = NULL		;
 	STLItemList_cit	it			;

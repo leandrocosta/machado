@@ -19,7 +19,7 @@ class Pattern : public ItemSet
 		void	AddItem		(Item *pItem)	;
 
 	public:
-		const	uint64		GetFrequence		()				const	;
+		const	uint32		GetFrequence		()				const	;
 
 			void		SetSupport		(const float32 &support)		;
 		const	float32&	GetSupport		()				const	;
@@ -28,7 +28,7 @@ class Pattern : public ItemSet
 			void			SetGot				(const bool &got)			;
 		const	bool&			GetGot				()				const	;
 		const	TransactionList&	GetTransactionList		()				const	;
-		const	uint64			GetNumTransactionsOfClass	(const string &class_name)	const	;
+		const	uint32			GetNumTransactionsOfClass	(const string &class_name)	const	;
 
 	public:
 		const	float32	GetSimilarity		(const Pattern *pPattern)	;
@@ -40,14 +40,14 @@ class Pattern : public ItemSet
 		void	Print	()	const	;
 
 	private:
-		uint64		mFrequence		;
+		uint32		mFrequence		;
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
 		bool		mGot			;
 
 	private:
 		hash_map<string, uint32>	mClassCoverageHsh		;
-		hash_map<string, uint64>	mNumTransactionsOfClassHsh	;
+		hash_map<string, uint32>	mNumTransactionsOfClassHsh	;
 };
 
 

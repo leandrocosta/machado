@@ -76,7 +76,7 @@ void Item::SetCount (const uint32 &count)
 
 void Item::IncCount ()
 {
-	LOGMSG (HIGH_LEVEL, "Item::IncCount () - p [%p]\n", this);
+//	LOGMSG (HIGH_LEVEL, "Item::IncCount () - p [%p]\n", this);
 
 	mCount++;
 }
@@ -101,7 +101,7 @@ const TransactionList* Item::GetProjectionTransactionList () const
 	return mpProjectionTransactionList;
 }
 
-const uint64 Item::GetProjectionFrequence () const
+const uint32 Item::GetProjectionFrequence () const
 {
 	return mpProjectionTransactionList->GetSize ();
 }

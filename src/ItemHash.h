@@ -9,7 +9,7 @@
 class ItemHash : public ObjectHash
 {
 	public:
-			ItemHash	(const uint64 &max_size = ULONG_MAX)	;
+			ItemHash	(const uint64 &max_size = UINT_MAX)	;
 		virtual	~ItemHash	()					;
 
 	public:

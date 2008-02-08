@@ -12,7 +12,7 @@ using std::string;
 class ItemList : public ObjectList
 {
 	public:
-			ItemList	(const uint64 &max_size = ULONG_MAX)	;
+			ItemList	(const uint64 &max_size = UINT_MAX)	;
 		virtual	~ItemList	()					;
 
 	public:

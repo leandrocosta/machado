@@ -169,7 +169,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	MakeProjection (pTransaction);
 
 	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
-	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
+	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
 	pFrequentPatternList->Print ();
 
 	string class_guess = "";
@@ -201,7 +201,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
 		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
-		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
+		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
 		RuleList *pRuleList = NULL;
@@ -280,12 +280,18 @@ void DataBase::MakeProjection (Transaction *pTransaction)
 
 	mpProjectionTransactionList = mTrainTransactionList.GetProjection (pTransaction);
 
-	LOGMSG (LOW_LEVEL, "DataBase::MakeProjection () - transactions [%llu]\n", mpProjectionTransactionList->GetSize ());
+	uint32 projection_size = mpProjectionTransactionList->GetSize ();
+
+	LOGMSG (LOW_LEVEL, "DataBase::MakeProjection () - transactions [%u]\n", projection_size);
 }
 
 void DataBase::PrintDataInfo () const
 {
-	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - items [%llu], train transactions [%llu], test transactions [%llu]\n", mItemList.GetSize (), mTrainTransactionList.GetSize (), mTestTransactionList.GetSize ());
+	uint32 item_list_size	= mItemList.GetSize ();
+	uint32 train_list_size	= mTrainTransactionList.GetSize ();
+	uint32 test_list_size	= mTestTransactionList.GetSize ();
+
+	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - items [%u], train transactions [%u], test transactions [%u]\n", item_list_size, train_list_size, test_list_size);
 }
 
 void DataBase::Print () const

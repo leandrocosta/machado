@@ -40,7 +40,7 @@ class Item : public Object
 			void			AddProjectTransaction		(Transaction *pTransaction)		;
 		const	TransactionList*	GetProjectionTransactionList	()				const	;
 
-		const	uint64			GetProjectionFrequence		()				const	;
+		const	uint32			GetProjectionFrequence		()				const	;
 
 			void			ClearProjectionTransactionList	()					;
 

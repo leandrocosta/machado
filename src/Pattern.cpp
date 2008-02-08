@@ -8,7 +8,7 @@ using std::endl;
 
 Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 {
-	LOGMSG (MAX_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
 
 	InitFields ();
 
@@ -36,7 +36,7 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 
 Pattern::Pattern (Item *pItem) : ItemSet ()
 {
-	LOGMSG (MAX_LEVEL, "Pattern::Patern (Item *pItem) - p [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "Pattern::Patern (Item *pItem) - p [%p]\n", this);
 
 	InitFields ();
 
@@ -75,11 +75,11 @@ void Pattern::InitFields ()
 
 void Pattern::AddItem (Item *pItem)
 {
-	LOGMSG (HIGH_LEVEL, "Pattern::AddItem () - begin\n");
+//	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - begin\n");
 
 	PushBack (pItem);
 
-	LOGMSG (HIGH_LEVEL, "Pattern::AddItem () - merge lists\n");
+//	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - merge lists\n");
 
 	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
 
@@ -101,7 +101,7 @@ void Pattern::AddItem (Item *pItem)
 	}
 }
 
-const uint64 Pattern::GetFrequence () const
+const uint32 Pattern::GetFrequence () const
 {
 	return mFrequence;
 }
@@ -121,11 +121,11 @@ const TransactionList& Pattern::GetTransactionList () const
 	return mTransactionList;
 }
 
-const uint64 Pattern::GetNumTransactionsOfClass (const string &class_name) const
+const uint32 Pattern::GetNumTransactionsOfClass (const string &class_name) const
 {
-	uint64 num_transactions = 0;
+	uint32 num_transactions = 0;
 
-	hash_map<string, uint64>::const_iterator it = mNumTransactionsOfClassHsh.find (class_name);
+	hash_map<string, uint32>::const_iterator it = mNumTransactionsOfClassHsh.find (class_name);
 
 	if (it != mNumTransactionsOfClassHsh.end ())
 		num_transactions = it->second;
@@ -145,7 +145,7 @@ const bool& Pattern::GetGot () const
 
 const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 {
-	LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
+//	LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
 
 	ItemList	totalItemList		;
 	STLItemList_cit itEnd = GetEnd ()	;
@@ -154,7 +154,7 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 	{
 		Item *pItem = static_cast<Item *>(*it);
 
-		LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
+//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
 
 		pItem->SetCount (1);
 		totalItemList.PushBack (pItem);
@@ -166,7 +166,7 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern)
 	{
 		Item *pItem = static_cast<Item *>(*it);
 
-		LOGMSG (HIGH_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
+//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
 
 		if (totalItemList.FindByPtr (pItem))
 			pItem->IncCount ();
@@ -219,7 +219,7 @@ void Pattern::ResetClassCoverage ()
 
 void Pattern::Print () const
 {
-	LOGMSG (MEDIUM_LEVEL, "Pattern::Print () - support [%0.6f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
+	LOGMSG (HIGH_LEVEL, "Pattern::Print () - support [%0.6f] - [%s]\n", mSupport, GetPrintableString ().c_str ());
 
 //	cout << "suporte [" << mSupport << "], padrão [" << GetPrintableString () << "]" << endl;
 }

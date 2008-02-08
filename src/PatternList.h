@@ -14,7 +14,7 @@ class ClassList		;
 class PatternList : public ObjectList
 {
 	public:
-			PatternList		(const uint64 &max_size = ULONG_MAX)	;
+			PatternList	(const uint64 &max_size = UINT_MAX)	;
 		virtual	~PatternList	()					;
 
 	public:
@@ -56,11 +56,11 @@ class PatternList : public ObjectList
 		RuleList*	GetRuleList	(
 				const ClassList *pClassList,
 				const float32 &confidence,
-				const uint64 &projection_size)	const	;
+				const uint32 &projection_size)	const	;
 
 	public:
-		const	uint64&		GetMaxPatternLen	()				const	;
-		const	uint64		GetSumPatternLen	()				const	;
+		const	uint32&		GetMaxPatternLen	()				const	;
+		const	uint32		GetSumPatternLen	()				const	;
 			Pattern*	GetMoreSimilar		(const Pattern *pPattern)	const	;
 		const	float32		GetSimilarityRate	()					;
 		const	float32		GetCoverageRate		(
@@ -72,7 +72,7 @@ class PatternList : public ObjectList
 						const OrtMetric &metric)		;
 
 	private:
-		uint64	mMaxPatternLen	;
+		uint32	mMaxPatternLen	;
 };
 
 
