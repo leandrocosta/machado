@@ -1,4 +1,5 @@
-#include "RuleList.h"
+#include "RankingRuleList.h"
+#include "RankingRule.h"
 #include "base/Logger.h"
 #include "base/stl_hash_include.h"
 
@@ -7,19 +8,19 @@ using std::cout;
 using std::endl;
 
 
-RuleList::RuleList (const uint64 &max_size) : ObjectList (max_size)
+RankingRuleList::RankingRuleList (const uint64 &max_size) : ObjectList (max_size)
 {
-	LOGMSG (MAX_LEVEL, "RuleList::RuleList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "RankingRuleList::RankingRuleList () - p [%p]\n", this);
 }
 
-RuleList::~RuleList ()
+RankingRuleList::~RankingRuleList ()
 {
-	LOGMSG (MAX_LEVEL, "RuleList::~RuleList () - p [%p]\n", this);
+	LOGMSG (MAX_LEVEL, "RankingRuleList::~RankingRuleList () - p [%p]\n", this);
 }
 
-const string RuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
+const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
 {
-	LOGMSG (MEDIUM_LEVEL, "RuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
+	LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
 
 	hash_map<string, uint32>	rulesHash;
 	hash_map<string, float32>	supportHash;
@@ -32,14 +33,13 @@ const string RuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
 
 	uint32 rules = 0;
 
-	STLRuleList_cit itEnd = GetEnd ();
+	STLRankingRuleList_cit itEnd = GetEnd ();
 
-	for (STLRuleList_cit it = GetBegin (); it != itEnd; ++it)
+	for (STLRankingRuleList_cit it = GetBegin (); it != itEnd; ++it)
 	{
-		const Rule *pRule = static_cast<const Rule *>(*it);
+		const RankingRule *pRule = static_cast<const RankingRule *>(*it);
 
 		pRule->Print ();
-		pRule->PrintRank ();
 
 		rulesHash[pRule->GetClassValue ()]++;
 		supportHash[pRule->GetClassValue ()] += pRule->GetSupport ();
@@ -82,7 +82,7 @@ const string RuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
 //		float32 confidence_mean	= confidence / total_rules	;
 		float32 confidence_mean	= confidence / rules		;
 
-		LOGMSG (MEDIUM_LEVEL, "RuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean);
+		LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean);
 
 //		rank_try = support_mean + confidence_mean;
 		rank_try = rankHash [it->first] / rules;
