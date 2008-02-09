@@ -10,7 +10,7 @@ using std::out_of_range;
 using std::find;
 
 
-ObjectList::ObjectList (const uint64 &max_size) : Object ()
+	ObjectList::ObjectList (const uint64 &max_size, const uint64 &size, Object *pValue) : Object (), mList (size, pValue)
 {
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::ObjectList () - [%p]\n", this);
@@ -113,6 +113,26 @@ const ObjectList::STLObjectList_cit ObjectList::GetEnd () const
 	return mList.end ();
 }
 
+ObjectList::STLObjectList_rit ObjectList::GetRBegin ()
+{
+	return mList.rbegin ();
+}
+
+const ObjectList::STLObjectList_crit ObjectList::GetRBegin () const
+{
+	return mList.rbegin ();
+}
+
+ObjectList::STLObjectList_rit ObjectList::GetREnd ()
+{
+	return mList.rend ();
+}
+
+const ObjectList::STLObjectList_crit ObjectList::GetREnd () const
+{
+	return mList.rend ();
+}
+
 void ObjectList::Sort ()
 {
 #ifdef USE_LOGGER
@@ -124,17 +144,36 @@ void ObjectList::Sort ()
 	LOGMSG (HIGH_LEVEL, "ObjectList::Sort () - size [%llu] - end\n", GetSize ());
 #endif
 }
+
 void ObjectList::ReverseSort ()
 {
 #ifdef USE_LOGGER
 	LOGMSG (MEDIUM_LEVEL, "ObjectList::ReverseSort () - size [%llu] - begin\n", GetSize ());
 #endif
-	sort (mList.begin (), mList.end (), ObjectList::msGreaterComparer);
+//	sort (mList.begin (), mList.end (), ObjectList::msGreaterComparer);
 //	sort (mList.begin (), mList.end (), ObjectList::msGreaterEqualComparer);
-//	sort (mList.rbegin (), mList.rend (), ObjectList::msLessComparer);
+	sort (mList.rbegin (), mList.rend (), ObjectList::msLessComparer);
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::ReverseSort () - size [%llu] - end\n", GetSize ());
 #endif
+}
+
+const ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
+{
+	ObjectList *pObjectList = new ObjectList (mMaxSize, size, NULL);
+
+	 partial_sort_copy (mList.begin (), mList.end (), pObjectList->GetBegin (), pObjectList->GetEnd (), ObjectList::msLessComparer);
+
+	return pObjectList;
+}
+
+const ObjectList* ObjectList::GetPartialReverseSortCopy	(const uint64 &size) const
+{
+	ObjectList *pObjectList = new ObjectList (mMaxSize, size, NULL);
+
+	 partial_sort_copy (mList.rbegin (), mList.rend (), pObjectList->GetRBegin (), pObjectList->GetREnd (), ObjectList::msLessComparer);
+
+	return pObjectList;
 }
 
 const uint64 ObjectList::GetSize () const

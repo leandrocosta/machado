@@ -11,8 +11,11 @@ using std::deque;
 class ObjectList : public Object
 {
 	public:
-			ObjectList	(const uint64 &max_size = ULONG_MAX)	;
-		virtual	~ObjectList	()					;
+			ObjectList	(
+					const 	uint64&	max_size	= ULONG_MAX,
+					const 	uint64&	size		= 0,
+						Object*	pValue		= NULL		)	;
+		virtual	~ObjectList	()							;
 
 	private:
 		typedef struct CompareLess
@@ -39,15 +42,21 @@ class ObjectList : public Object
 		static	const	bool	HasIntersectionByPtr	(const ObjectList *pLeft, const ObjectList *pRight)	;
 
 	protected:
-		typedef deque<Object *>			STLObjectList		;
-		typedef STLObjectList::iterator		STLObjectList_it	;
-		typedef STLObjectList::const_iterator	STLObjectList_cit	;
+		typedef deque<Object *>				STLObjectList		;
+		typedef STLObjectList::iterator			STLObjectList_it	;
+		typedef STLObjectList::const_iterator		STLObjectList_cit	;
+		typedef STLObjectList::reverse_iterator		STLObjectList_rit	;
+		typedef STLObjectList::const_reverse_iterator	STLObjectList_crit	;
 
 	public:
 			STLObjectList_it	GetBegin	()		;
 		const	STLObjectList_cit	GetBegin	()	const	;
 			STLObjectList_it	GetEnd		()		;
 		const	STLObjectList_cit	GetEnd		()	const	;
+			STLObjectList_rit	GetRBegin	()		;
+		const	STLObjectList_crit	GetRBegin	()	const	;
+			STLObjectList_rit	GetREnd		()		;
+		const	STLObjectList_crit	GetREnd		()	const	;
 
 	public:
 		void	SetMaxSize	(const uint64 &max_size)	;
@@ -66,15 +75,11 @@ class ObjectList : public Object
 		virtual	Object*	GetAt		(const uint64 &index)	const	;
 
 	public:
-		void	Sort		()			;
-		void	ReverseSort	()			;
-		void	MoveToEnd	(Object *pObject)	;
-		void	Remove		(Object *pObject)	;
-		void	RemoveAll	()			;
-		void	DeleteAll	()			;
-
-	public:
-		STLObjectList_it	Erase	(STLObjectList_it it)	;
+		void			MoveToEnd	(Object *pObject)	;
+		void			Remove		(Object *pObject)	;
+		void			RemoveAll	()			;
+		void			DeleteAll	()			;
+		STLObjectList_it	Erase		(STLObjectList_it it)	;
 
 	public:
 		const	bool	Find		(const Object *pObject) const	;
@@ -82,6 +87,12 @@ class ObjectList : public Object
 
 	public:
 		virtual	const	bool	IsSubList (const ObjectList& rList)	const	;
+
+	public:
+			void		Sort				()				;
+			void		ReverseSort			()				;
+		const ObjectList*	GetPartialSortCopy		(const uint64 &size)	const	;
+		const ObjectList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
 
 	public:
 		const	uint64	GetSize	()	const	;

@@ -391,7 +391,7 @@ RankingRuleList* PatternList::GetRuleList (const ClassList *pClassList, const fl
 
 	uint32 rules = pRuleList->GetSize ();
 
-	LOGMSG (MEDIUM_LEVEL, "PatternList::GetRuleList () - rules [%u]\n", rules);
+	LOGMSG (LOW_LEVEL, "PatternList::GetRuleList () - rules [%u]\n", rules);
 
 	return pRuleList;
 }

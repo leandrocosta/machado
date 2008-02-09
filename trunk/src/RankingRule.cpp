@@ -40,11 +40,15 @@ const bool RankingRule::operator< (const Object &rRight) const
 
 	const RankingRule &rRule = static_cast<const RankingRule &>(rRight);
 
-//	LOGMSG (NO_DEBUG, "RankingRule::operator< () - p [%p]\n", this);
-//	LOGMSG (NO_DEBUG, "RankingRule::operator< () - &rRule [%p]\n", &rRule);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - p [%p]\n", this);
+//	Print ();
+//	rRule.Print ();
+
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - p [%p]\n", this);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - &rRule [%p]\n", &rRule);
 //
 //	float32 right_confidence = rRule.GetConfidence ();
-//	LOGMSG (NO_DEBUG, "RankingRule::operator< () - right_confidence [%f]\n", right_confidence);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - right_confidence [%f]\n", right_confidence);
 
 	if (mConfidence < RANK_FACTOR_LOWER * rRule.GetConfidence ())
 		bRet = true;
@@ -121,11 +125,15 @@ const bool RankingRule::operator> (const Object &rRight) const
 
 	const RankingRule& rRule = static_cast<const RankingRule&>(rRight);
 
-//	LOGMSG (NO_DEBUG, "RankingRule::operator> () - p [%p]\n", this);
-//	LOGMSG (NO_DEBUG, "RankingRule::operator> () - &rRule [%p]\n", &rRule);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - p [%p]\n", this);
+//	Print ();
+//	rRule.Print ();
+
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - p [%p]\n", this);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - &rRule [%p]\n", &rRule);
 //
 //	float32 right_confidence = rRule.GetConfidence ();
-//	LOGMSG (NO_DEBUG, "RankingRule::operator> () - right_confidence [%f]\n", right_confidence);
+//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - right_confidence [%f]\n", right_confidence);
 
 	if (mConfidence > RANK_FACTOR_GREATER * rRule.GetConfidence ())
 		bRet = true;
