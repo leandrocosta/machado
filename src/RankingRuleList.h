@@ -20,7 +20,7 @@ class RankingRuleList : public ObjectList
 		typedef STLRankingRuleList::const_iterator	STLRankingRuleList_cit		;
 
 	public:
-		const	string	GetClassificationValue	(const uint32 &rMaxNumRankRules)	;
+		const	string	GetClassificationValue	(const uint32 &rMaxNumRankRules)	const	;
 };
 
 

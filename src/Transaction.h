@@ -3,6 +3,7 @@
 
 
 #include "ItemSet.h"
+#include "base/stl_hash_include.h"
 
 #include <string>
 using std::string;
@@ -25,7 +26,7 @@ class Transaction : public ItemSet
 		const	uint32&		GetTransactionID	()				const	;
 			Class*		GetClass		()					;
 		const	string&		GetClassValue		()				const	;
-		const	bool		IsCoveredBy		(const Pattern *pPattern)	const	;
+		const	bool		IsCoveredBy		(const Pattern *pPattern)		;
 			PatternList*	GetFrequentPatternList	(
 								const float32 &support,
 								const uint32 &projection_size,
@@ -40,6 +41,9 @@ class Transaction : public ItemSet
 	private:
 		const	uint32	mTransactionID	;
 			Class*	mpClass		;
+
+	private:
+		hash_map<uint32, bool>	mPatternCoverageHsh	;
 
 	private:
 		static	uint32	msSeqTransactionID	;

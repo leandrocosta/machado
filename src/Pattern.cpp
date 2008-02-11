@@ -6,6 +6,9 @@ using std::cout;
 using std::endl;
 
 
+uint32 Pattern::msSeqPatternID	= 0	;
+
+
 Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 {
 //	LOGMSG (MAX_LEVEL, "Pattern::Patern (const Pattern *pPattern) - p [%p]\n", this);
@@ -66,8 +69,27 @@ Pattern::~Pattern ()
 	RemoveAll ();
 }
 
+const uint32 Pattern::GetSeqPatternID ()
+{
+	uint32 patternID = msSeqPatternID;
+	msSeqPatternID++;
+
+	return patternID;
+}
+
+void Pattern::SetPatternID ()
+{
+	mPatternID = GetSeqPatternID ();
+}
+
+const uint32& Pattern::GetPatternID () const
+{
+	return mPatternID;
+}
+
 void Pattern::InitFields ()
 {
+	mPatternID	= 0	;
 	mFrequence	= 0	;
 	mSupport	= 0.0	;
 	mGot		= false	;
@@ -143,58 +165,68 @@ const bool& Pattern::GetGot () const
 	return mGot;
 }
 
-const float32 Pattern::GetSimilarity (const Pattern *pPattern)
+const float32 Pattern::GetSimilarity (Pattern *pPattern)
 {
 //	LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - begin [%p]\n", this);
 
-	ItemList	totalItemList		;
-	STLItemList_cit itEnd = GetEnd ()	;
+	float32 similarity = -1;
 
-	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
-	{
-		Item *pItem = static_cast<Item *>(*it);
+//	if (mPatternSimilarityHsh.find (pPattern->GetPatternID ()) != mPatternSimilarityHsh.end ())
+//		similarity = mPatternSimilarityHsh [pPattern->GetPatternID ()];
+//	else
+//	{
+		ItemList	totalItemList		;
+		STLItemList_cit itEnd = GetEnd ()	;
 
-//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		pItem->SetCount (1);
-		totalItemList.PushBack (pItem);
-	}
-
-	itEnd = pPattern->GetEnd ();
-
-	for (STLItemList_cit it = pPattern->GetBegin (); it != itEnd; ++it)
-	{
-		Item *pItem = static_cast<Item *>(*it);
-
-//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
-
-		if (totalItemList.FindByPtr (pItem))
-			pItem->IncCount ();
-		else
+		for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
 		{
+			Item *pItem = static_cast<Item *>(*it);
+
+			//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
+
 			pItem->SetCount (1);
 			totalItemList.PushBack (pItem);
 		}
-	}
 
-	uint32 num	= 0	;
-	uint32 den	= 0	;
+		itEnd = pPattern->GetEnd ();
 
-	itEnd = totalItemList.GetEnd ();
+		for (STLItemList_cit it = pPattern->GetBegin (); it != itEnd; ++it)
+		{
+			Item *pItem = static_cast<Item *>(*it);
 
-	for (STLItemList_cit it = totalItemList.GetBegin (); it != itEnd; ++it)
-	{
-		const Item *pItem = static_cast<const Item *>(*it);
+			//		LOGMSG (MAX_LEVEL, "Pattern::GetSimilarity () - key [%s]\n", pItem->GetValue ().c_str ());
 
-		den += pItem->GetCount ();
+			if (totalItemList.FindByPtr (pItem))
+				pItem->IncCount ();
+			else
+			{
+				pItem->SetCount (1);
+				totalItemList.PushBack (pItem);
+			}
+		}
 
-		if (pItem->GetCount () > 1)
-			num += pItem->GetCount ();
-	}
+		uint32 num	= 0	;
+		uint32 den	= 0	;
 
-	totalItemList.RemoveAll ();
+		itEnd = totalItemList.GetEnd ();
 
-	float32 similarity = (float32) num / den;
+		for (STLItemList_cit it = totalItemList.GetBegin (); it != itEnd; ++it)
+		{
+			const Item *pItem = static_cast<const Item *>(*it);
+
+			den += pItem->GetCount ();
+
+			if (pItem->GetCount () > 1)
+				num += pItem->GetCount ();
+		}
+
+		totalItemList.RemoveAll ();
+
+		similarity = (float32) num / den;
+
+//		mPatternSimilarityHsh [pPattern->GetPatternID ()] = similarity;
+//		pPattern->SetSimilarityHsh (mPatternID, similarity);
+//	}
 
 	return similarity;
 }
@@ -215,6 +247,11 @@ void Pattern::ResetClassCoverage ()
 
 	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; ++it)
 		it->second = 0;
+}
+
+void Pattern::SetSimilarityHsh (const uint32 &rPatternID, const float32 &similarity)
+{
+	mPatternSimilarityHsh [rPatternID] = similarity;
 }
 
 void Pattern::Print () const

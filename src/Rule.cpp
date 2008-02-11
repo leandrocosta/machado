@@ -5,9 +5,9 @@
 
 #include <math.h>
 
-#include <iostream>
-using std::cout;
-using std::endl;
+//#include <iostream>
+//using std::cout;
+//using std::endl;
 
 
 Rule::Rule (const Class *pClass, const Pattern *pPattern) : Object ()

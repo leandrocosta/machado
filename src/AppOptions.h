@@ -71,9 +71,9 @@ class AppOptions
 		static	const	string	DEFAULT_TRAINING_FILE	;
 		static	const	string	DEFAULT_TESTING_FILE	;
 
-		static	const	float32	DEFAULT_SUPPORT			= 0.01	;
-		static	const	float32	DEFAULT_CONFIDENCE		= 0.95	;
-		static	const	uint32	DEFAULT_MAX_NUM_RANK_RULES	= 5	;
+		static	const	float32	DEFAULT_SUPPORT			= 0.001	;
+		static	const	float32	DEFAULT_CONFIDENCE		= 0.9	;
+		static	const	uint32	DEFAULT_MAX_NUM_RANK_RULES	= 100	;
 		static	const	uint32	DEFAULT_MIN_NUM_RULES		= 1	;
 		static	const	uint32	DEFAULT_MIN_RULE_LEN		= 1	;
 		static	const	uint32	DEFAULT_MAX_RULE_LEN		= 10	;

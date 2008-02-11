@@ -178,6 +178,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
+		/*
 		RankingRuleList *pRuleList = NULL;
 		float32 confidence = mConfidence;
 		
@@ -191,9 +192,15 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 			if (pRuleList->GetSize () < rMinNumRules)
 				confidence *= 0.9;
 		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
+		*/
 
+		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+
+		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
+
 		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
+
 		delete pRuleList;
 	}
 	else if (rRunMode == MODE_ORTHOGONAL)
@@ -204,6 +211,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
+		/*
 		RankingRuleList *pRuleList = NULL;
 		float32 confidence = mConfidence;
 		
@@ -217,9 +225,15 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 			if (pRuleList->GetSize () < rMinNumRules)
 				confidence *= 0.9;
 		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
+		*/
 
+		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+
+		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
+
 		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
+
 		delete pRuleList;
 
 		pOrthogonalFrequentPatternList->RemoveAll ();

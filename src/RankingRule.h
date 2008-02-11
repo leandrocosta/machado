@@ -48,8 +48,8 @@ class RankingRule : public Rule
 		float32	mLaplace	;
 		float32	mCorrelation	;
 	private:
-		static	const	float32	RANK_FACTOR_LOWER	= 1.00	;
-		static	const	float32	RANK_FACTOR_GREATER	= 1.00	;
+		static	const	float32	RANK_FACTOR_LOWER	= /* 1.00 */ 0.95	;
+		static	const	float32	RANK_FACTOR_GREATER	= /* 1.00 */ 1.05	;
 };
 
 

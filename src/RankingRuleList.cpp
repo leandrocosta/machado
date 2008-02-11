@@ -18,7 +18,7 @@ RankingRuleList::~RankingRuleList ()
 	LOGMSG (MAX_LEVEL, "RankingRuleList::~RankingRuleList () - p [%p]\n", this);
 }
 
-const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankRules)
+const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankRules) const
 {
 	LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
 
@@ -29,13 +29,13 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 
 //	uint32 total_rules = GetSize ();
 
-	ReverseSort ();
+	RankingRuleList *pReverseSortedRuleList = static_cast<const RankingRuleList *>(GetPartialReverseSortCopy (rMaxNumRankRules));
 
 	uint32 rules = 0;
 
-	STLRankingRuleList_cit itEnd = GetEnd ();
+	STLRankingRuleList_cit itEnd = pReverseSortedRuleList->GetEnd ();
 
-	for (STLRankingRuleList_cit it = GetBegin (); it != itEnd; ++it)
+	for (STLRankingRuleList_cit it = pReverseSortedRuleList->GetBegin (); it != itEnd; ++it)
 	{
 		const RankingRule *pRule = static_cast<const RankingRule *>(*it);
 
@@ -67,6 +67,9 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 		if (rules == rMaxNumRankRules)
 			break;
 	}
+
+	pReverseSortedRuleList->RemoveAll ();
+	delete pReverseSortedRuleList;
 
 	string	class_guess	= "";
 	float32	rank		= -1;
