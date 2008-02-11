@@ -15,8 +15,15 @@ class Pattern : public ItemSet
 		virtual	~Pattern	()					;
 
 	private:
+		static	const	uint32	GetSeqPatternID	()	;
+
+	private:
 		void	InitFields	()		;
 		void	AddItem		(Item *pItem)	;
+
+	public:
+			void	SetPatternID	()		;
+		const	uint32&	GetPatternID	()	const	;
 
 	public:
 		const	uint32		GetFrequence		()				const	;
@@ -31,13 +38,22 @@ class Pattern : public ItemSet
 		const	uint32			GetNumTransactionsOfClass	(const string &class_name)	const	;
 
 	public:
-		const	float32	GetSimilarity		(const Pattern *pPattern)	;
+		const	float32	GetSimilarity		(Pattern *pPattern)		;
 			void	IncClassCoverage	(const string &class_name)	;
 		const	uint32&	GetClassCoverage	(const string &class_name)	;
 			void	ResetClassCoverage	()				;
 
 	public:
+		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;
+
+	public:
 		void	Print	()	const	;
+
+	private:
+		static	uint32	msSeqPatternID	;
+
+	private:
+		uint32	mPatternID	;
 
 	private:
 		uint32		mFrequence		;
@@ -48,6 +64,7 @@ class Pattern : public ItemSet
 	private:
 		hash_map<string, uint32>	mClassCoverageHsh		;
 		hash_map<string, uint32>	mNumTransactionsOfClassHsh	;
+		hash_map<uint32, float32>	mPatternSimilarityHsh		;
 };
 
 

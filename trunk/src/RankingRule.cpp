@@ -262,5 +262,5 @@ const float32& RankingRule::GetCorrelation () const
 
 void RankingRule::Print () const
 {
-	LOGMSG (HIGH_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mCorrelation [%f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mCorrelation);
+	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mCorrelation [%f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mCorrelation);
 }

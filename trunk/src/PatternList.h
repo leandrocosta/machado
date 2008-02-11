@@ -56,12 +56,13 @@ class PatternList : public ObjectList
 		RankingRuleList*	GetRuleList	(
 					const ClassList *pClassList,
 					const float32 &confidence,
-					const uint32 &projection_size)	const	;
+					const uint32 &projection_size,
+					const uint32 &min_num_rules	)	const	;
 
 	public:
-		const	uint32&		GetMaxPatternLen	()				const	;
+//		const	uint32&		GetMaxPatternLen	()				const	;
 		const	uint32		GetSumPatternLen	()				const	;
-			Pattern*	GetMoreSimilar		(const Pattern *pPattern)	const	;
+			Pattern*	GetMoreSimilar		(Pattern *pPattern)		const	;
 		const	float32		GetSimilarityRate	()					;
 		const	float32		GetCoverageRate		(
 						const TransactionList *pTransactionList)	const	;
@@ -72,7 +73,7 @@ class PatternList : public ObjectList
 						const OrtMetric &metric)		;
 
 	private:
-		uint32	mMaxPatternLen	;
+//		uint32	mMaxPatternLen	;
 };
 
 

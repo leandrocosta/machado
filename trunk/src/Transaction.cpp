@@ -47,29 +47,35 @@ const string& Transaction::GetClassValue () const
 	return mpClass->GetValue ();
 }
 
-const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
+const bool Transaction::IsCoveredBy (const Pattern *pPattern)
 {
-	bool bRet = true;
+	bool bRet = false;
 
-	ItemList::STLItemList_cit itTransaction		= GetBegin ();
-	ItemList::STLItemList_cit itTransactionEnd	= GetEnd ();
+//	if (mPatternCoverageHsh.find (pPattern->GetPatternID ()) != mPatternCoverageHsh.end ())
+//		bRet = mPatternCoverageHsh [pPattern->GetPatternID ()];
+//	else
+//	{
+		ItemList::STLItemList_cit itTransactionItem	= GetBegin ();
+		ItemList::STLItemList_cit itTransactionItemEnd	= GetEnd ();
 
-	ItemList::STLItemList_cit itPattern		= pPattern->GetBegin ();
-	ItemList::STLItemList_cit itPatternEnd		= pPattern->GetEnd ();
+		ItemList::STLItemList_cit itPatternItem		= pPattern->GetBegin ();
+		ItemList::STLItemList_cit itPatternItemEnd	= pPattern->GetEnd ();
 
-	while (itTransaction != itTransactionEnd && itPattern != itPatternEnd)
-	{
-		if (*itTransaction > *itPattern)
-			break;
+		while (itTransactionItem != itTransactionItemEnd && itPatternItem != itPatternItemEnd)
+		{
+			if (*itTransactionItem == *itPatternItem)
+				++itPatternItem;
+			else if (*itTransactionItem > *itPatternItem)
+				break;
 
-		if (*itTransaction == *itPattern)
-			++itPattern;
+			++itTransactionItem;
+		}
 
-		++itTransaction;
-	}
+		if (itPatternItem == itPatternItemEnd)
+			bRet = true;
 
-	if (itPattern != itPatternEnd)
-		bRet = false;
+//		mPatternCoverageHsh [pPattern->GetPatternID ()] = bRet;
+//	}
 
 	return bRet;
 }
@@ -96,6 +102,7 @@ PatternList* Transaction::GetFrequentPatternList (
 		if ((float32) pItem->GetProjectionFrequence () / projection_size >= support)
 		{
 			Pattern *pPattern = new Pattern (pItem);
+			pPattern->SetPatternID ();
 			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
 			pFrequentPatternList->PushBack (pPattern);
 			pFrequentItemList->PushBack (pItem);
@@ -136,6 +143,7 @@ PatternList* Transaction::GetFrequentPatternList (
 
 							if ((float32) pNewPattern->GetFrequence () / projection_size >= support)
 							{
+								pNewPattern->SetPatternID ();
 								pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
 								pFrequentPatternList->PushBack (pNewPattern);
 							}
