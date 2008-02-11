@@ -39,7 +39,7 @@ my @data_bases = (
 	'sonar.ac',
 	'tic-tac.ac',
 	'vehicle.ac',
-	'waveform.ac',
+#	'waveform.ac',
 	'wine.ac',
 	'zoo.ac'
 );
@@ -60,29 +60,29 @@ exit;
 my ($confidence, $min_rules, $max_size, $ranking_size, $accuracy);
 
 format OUTPUT =
-confidence: @<<<, min_rules: @<<<<<<, max_size: @<, ranking_size: @<<<<<<, accuracy: @#####.###
-            $confidence,     $min_rules,        $max_size,        $ranking_size,     $accuracy
+confidence: @<<<, max_size: @<, min_rules: @<<<<<<, ranking_size: @<<<<<<, accuracy: @#####.###
+            $confidence,    $max_size,  $min_rules,               $ranking_size,     $accuracy
 .
 
 ###
 
 sub test_data_base ($)
 {
-	my $confidence_i	= 0.1;
-	my $confidence_f	= 1;
-	my $confidence_s	= 0.3;
+	my $confidence_i	= 0.01;
+	my $confidence_f	= 0.1;
+	my $confidence_s	= 0.03;
 
-	my $min_rules_i	= 1000;
-	my $min_rules_f	= 1000000;
-	my $min_rules_s	= 1000;
+	my $min_rules_i	= 10;
+	my $min_rules_f	= 100;
+	my $min_rules_s	= 30;
 
 	my $max_size_i	= 2;
-	my $max_size_f	= 4;
+	my $max_size_f	= 5;
 	my $max_size_s	= 1;
 
-#	my $ranking_size_i	= 1000;
-#	my $ranking_size_f	= 1000000;
-#	my $ranking_size_s	= 1000;
+	my $ranking_size_i	= 10;
+	my $ranking_size_f	= 100;
+	my $ranking_size_s	= 10;
 
 	my $data_base = $_[0];
 
@@ -97,34 +97,30 @@ sub test_data_base ($)
 
 	for ($confidence = $confidence_i; $confidence <= $confidence_f; $confidence += $confidence_s)
 	{
-		for ($min_rules = $min_rules_i; $min_rules <= $min_rules_f; $min_rules *= $min_rules_s)
+		for ($max_size = $max_size_i; $max_size <= $max_size_f; $max_size += $max_size_s)
 		{
-			for ($max_size = $max_size_i; $max_size <= $max_size_f; $max_size += $max_size_s)
+			for ($min_rules = $min_rules_i; $min_rules <= $min_rules_f; $min_rules += $min_rules_s)
 			{
-#				for ($ranking_size = $ranking_size_i; $ranking_size <= $ranking_size_f; $ranking_size *= $ranking_size_s)
-#				{
-					$ranking_size = $min_rules;
-
+				for ($ranking_size = $ranking_size_i; $ranking_size <= $ranking_size_f; $ranking_size += $ranking_size_s)
+				{
 					$accuracy = run_lazy ($data_base, $training_file, $testing_file, 1, $confidence, $min_rules, $max_size, $ranking_size);
 
-#					print OUTPUT "confidence: $confidence, min_rules: %min_rules, max_size: $max_size, ranking_size: $ranking_size, accuracy: $lazy_acc\n";
 					write OUTPUT;
 
 					if ($accuracy > $best_accuracy)
 					{
 						$best_confidence	= $confidence;
-						$best_min_rules		= $min_rules;
 						$best_max_size		= $max_size;
+						$best_min_rules		= $min_rules;
 						$best_ranking_size	= $ranking_size;
 						$best_accuracy		= $accuracy;
 					}
-#				}
+				}
 			}
 		}
 	}
 
-	print OUTPUT "best:\n";
-	print OUTPUT "best: confidence: $best_confidence, min_rules: $best_min_rules, max_size: $best_max_size, ranking_size: $best_ranking_size, accuracy: $best_accuracy\n";
+	print OUTPUT "best: confidence: $best_confidence, max_size: $best_max_size, min_rules: $best_min_rules, ranking_size: $best_ranking_size, accuracy: $best_accuracy\n";
 
 	close OUTPUT;
 }
