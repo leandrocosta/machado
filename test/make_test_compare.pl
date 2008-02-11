@@ -4,7 +4,7 @@ my $LAZY = "lazy";
 my $APP_LAZY = "./lazy_class";
 
 my $CLASSIFIER = "classifier";
-my $APP_CLASSIFIER = "../src/$CLASSIFIER";
+my $APP_CLASSIFIER = "./$CLASSIFIER";
 
 my $OUTPUT_DIR = "output/compare";
 
@@ -16,18 +16,18 @@ sub compare_all ($$$$$$$$$);
 
 my @data_bases = (
 #	'anneal.ac',
-	'austra.ac',
-	'auto.ac',
-	'breast.ac',
-	'cleve.ac',
-	'crx.ac',
-	'diabetes.ac',
-	'german.ac',
-	'glass.ac',
-	'heart.ac',
-	'hepati.ac',
-	'horse.ac',
-	'hypo.ac',
+#	'austra.ac',
+#	'auto.ac',
+#	'breast.ac',
+#	'cleve.ac',
+#	'crx.ac',
+#	'diabetes.ac',
+#	'german.ac',
+#	'glass.ac',
+#	'heart.ac',
+#	'hepati.ac',
+#	'horse.ac',
+#	'hypo.ac',
 	'ionosphere.ac',
 	'iris.ac',
 	'labor.ac',
@@ -44,6 +44,8 @@ my @data_bases = (
 );
 
 my $data_base;
+
+system "cp ../src/$CLASSIFIER .";
 
 foreach $data_base (sort @data_bases)
 {
