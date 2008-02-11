@@ -160,7 +160,12 @@ void ObjectList::ReverseSort ()
 
 const ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
 {
-	ObjectList *pObjectList = new ObjectList (mMaxSize, size, NULL);
+	uint64 reverse_size = mList.size ();
+
+	if (size < reverse_size)
+		reverse_size = size;
+
+	ObjectList *pObjectList = new ObjectList (mMaxSize, reverse_size, NULL);
 
 	 partial_sort_copy (mList.begin (), mList.end (), pObjectList->GetBegin (), pObjectList->GetEnd (), ObjectList::msLessComparer);
 
@@ -169,9 +174,14 @@ const ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
 
 const ObjectList* ObjectList::GetPartialReverseSortCopy	(const uint64 &size) const
 {
-	ObjectList *pObjectList = new ObjectList (mMaxSize, size, NULL);
+	uint64 reverse_size = mList.size ();
 
-	 partial_sort_copy (mList.rbegin (), mList.rend (), pObjectList->GetRBegin (), pObjectList->GetREnd (), ObjectList::msLessComparer);
+	if (size < reverse_size)
+		reverse_size = size;
+
+	ObjectList *pObjectList = new ObjectList (mMaxSize, reverse_size, NULL);
+
+	partial_sort_copy (mList.rbegin (), mList.rend (), pObjectList->GetRBegin (), pObjectList->GetREnd (), ObjectList::msLessComparer);
 
 	return pObjectList;
 }
