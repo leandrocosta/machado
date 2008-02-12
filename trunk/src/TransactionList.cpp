@@ -13,6 +13,14 @@ TransactionList::~TransactionList ()
 //	LOGMSG (MAX_LEVEL, "TransactionList::~TransactionList () - p [%p]\n", this);
 }
 
+void TransactionList::MakeItemCoverageArrays (const uint32 &num_items)
+{
+	STLTransactionList_cit itEnd = GetEnd ();
+
+	for (STLTransactionList_cit it = GetBegin (); it != itEnd; ++it)
+		static_cast<Transaction *>(*it)->MakeItemCoverageArray (num_items);
+}
+
 void TransactionList::SortTransactions ()
 {
 	STLTransactionList_cit itEnd = GetEnd ();
@@ -43,6 +51,7 @@ TransactionList* TransactionList::GetProjection (const Transaction *pBaseTransac
 	return pTransactionList;
 }
 
+/*
 const uint32 TransactionList::GetNumTransactionsOfClass (const Class *pClass) const
 {
 	uint32 num_transactions = 0;
@@ -59,3 +68,4 @@ const uint32 TransactionList::GetNumTransactionsOfClass (const Class *pClass) co
 
 	return num_transactions;
 }
+*/

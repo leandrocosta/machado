@@ -15,12 +15,15 @@ uint32 Transaction::msSeqTransactionID	= 0	;
 
 Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTransactionID ()), mpClass (pClass)
 {
-
+	mItemCoverageArray = NULL;
 }
 
 Transaction::~Transaction ()
 {
 //	LOGMSG (HIGH_LEVEL, "Transaction::~Transaction () - p [%p]\n", this);
+
+	if (mItemCoverageArray)
+		delete[] mItemCoverageArray;
 
 	RemoveAll ();
 }
@@ -49,12 +52,14 @@ const string& Transaction::GetClassValue () const
 
 const bool Transaction::IsCoveredBy (const Pattern *pPattern)
 {
-	bool bRet = false;
+//	bool bRet = false;
 
 //	if (mPatternCoverageHsh.find (pPattern->GetPatternID ()) != mPatternCoverageHsh.end ())
 //		bRet = mPatternCoverageHsh [pPattern->GetPatternID ()];
 //	else
 //	{
+
+/*
 		ItemList::STLItemList_cit itTransactionItem	= GetBegin ();
 		ItemList::STLItemList_cit itTransactionItemEnd	= GetEnd ();
 
@@ -73,11 +78,29 @@ const bool Transaction::IsCoveredBy (const Pattern *pPattern)
 
 		if (itPatternItem == itPatternItemEnd)
 			bRet = true;
+*/
+	bool bRet = true;
+
+	ItemList::STLItemList_cit itEnd = pPattern->GetEnd ();
+
+	for (ItemList::STLItemList_cit it = pPattern->GetBegin (); it != itEnd; it++)
+	{
+		if (! mItemCoverageArray [static_cast<const Item *>(*it)->GetItemID ()])
+		{
+			bRet = false;
+			break;
+		}
+	}
 
 //		mPatternCoverageHsh [pPattern->GetPatternID ()] = bRet;
 //	}
 
 	return bRet;
+}
+
+const bool Transaction::IsCoveredBy (const Item *pItem)
+{
+	return mItemCoverageArray [pItem->GetItemID ()];
 }
 
 PatternList* Transaction::GetFrequentPatternList (
@@ -186,6 +209,31 @@ PatternList* Transaction::GetFrequentPatternList (
 	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - patterns [%u]\n", frequent_size);
 
 	return pFrequentPatternList;
+}
+
+void Transaction::MakeItemCoverageArray (const uint32 &num_items)
+{
+	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - transaction [%u], num_items [%u]\n", mTransactionID, num_items);
+
+	mItemCoverageArray = new bool [num_items];
+
+	uint32 i = 0;
+
+	STLItemList_cit itEnd = GetEnd ();
+
+	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
+	{
+		const Item *pItem = static_cast<const Item *>(*it);
+
+		LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - item [%u]\n", pItem->GetItemID ());
+
+		while (i < pItem->GetItemID ())
+			mItemCoverageArray [i++] = false;
+
+		mItemCoverageArray [i++] = true;
+	}
+
+	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - end\n");
 }
 
 void Transaction::AddTransactionToItemsProjectionTransactionLists ()

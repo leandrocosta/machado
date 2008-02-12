@@ -30,16 +30,17 @@ class PatternList : public ObjectList
 
 		typedef enum e_orthogonality_metric
 		{
-			METRIC_SIMILARITY	= 's',
-			METRIC_COVERAGE		= 'c',
-			METRIC_BOTH		= 'b',
-			METRIC_CLASS_COVERAGE	= 'a',
-			METRIC_UNKNOWN		= 0
+			METRIC_SIMILARITY		= 's',
+			METRIC_COVERAGE			= 'c',
+			METRIC_SIM_COV			= 'b',
+			METRIC_CLASS_COVERAGE		= 'a',
+			METRIC_CLASS_MEAN_COVERAGE	= 'm',
+			METRIC_UNKNOWN			= 0
 		} OrtMetric;
 
-	public:
-		void	PushFront	(Object *pObject)	;
-		void	PushBack	(Object *pObject)	;
+//	public:
+//		void	PushFront	(Object *pObject)	;
+//		void	PushBack	(Object *pObject)	;
 
 	public:
 		PatternList*	GetOrthogonalPatternList		(
@@ -51,6 +52,10 @@ class PatternList : public ObjectList
 		PatternList*	GetOrthogonalPatternListPolynomial	(
 					const TransactionList *pTransactionList,
 					const OrtMetric &metric)			;
+		PatternList*	GetOrthogonalPatternListPolynomial	(
+					const TransactionList *pTransactionList,
+					const OrtMetric &metric,
+					const uint32 &num_patterns)			;
 
 	public:
 		RankingRuleList*	GetRuleList	(
@@ -60,17 +65,19 @@ class PatternList : public ObjectList
 					const uint32 &min_num_rules	)	const	;
 
 	public:
-//		const	uint32&		GetMaxPatternLen	()				const	;
-		const	uint32		GetSumPatternLen	()				const	;
-			Pattern*	GetMoreSimilar		(Pattern *pPattern)		const	;
-		const	float32		GetSimilarityRate	()					;
-		const	float32		GetCoverageRate		(
-						const TransactionList *pTransactionList)	const	;
-		const	float32		GetClassCoverageRate	(
-						const TransactionList *pTransactionList)	const	;
-		const	float32		GetRate			(
+//		const	uint32&		GetMaxPatternLen			()			const	;
+		const	uint32		GetSumPatternLen			()			const	;
+			Pattern*	GetMoreSimilar				(Pattern *pPattern)	const	;
+		const	float32		GetSimilarityRate			()				;
+		const	float32		GetCoverageRate				(
+						const TransactionList *pTransactionList)		const	;
+		const	float32		GetClassCoverageRate			(
+						const TransactionList *pTransactionList)		const	;
+		const	float32		GetClassCoverageMeanRate		(
+						const TransactionList *pTransactionList)		const	;
+		const	float32		GetRate					(
 						const TransactionList *pTransactionList,
-						const OrtMetric &metric)		;
+						const OrtMetric &metric)					;
 
 	private:
 //		uint32	mMaxPatternLen	;

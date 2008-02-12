@@ -131,6 +131,11 @@ void DataBase::LoadTestData (const string &file)
 	}
 }
 
+void DataBase::MakeItemCoverageArrays ()
+{
+	mTrainTransactionList.MakeItemCoverageArrays (mItemList.GetSize ());
+}
+
 void DataBase::SortTransactions ()
 {
 	mTrainTransactionList.SortTransactions ();
@@ -227,7 +232,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
 		*/
 
-		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+		RankingRuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
 
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();

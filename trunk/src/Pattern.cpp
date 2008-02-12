@@ -18,7 +18,9 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 	STLItemList_cit itPatternEnd = pPattern->GetEnd ();
 
 	for (STLItemList_cit it = pPattern->GetBegin (); it != itPatternEnd; ++it)
-		PushBack (static_cast<Item *>(*it));
+		PushBack (*it);
+
+	PushBack (pItem);
 
 	const TransactionList &rPatternTransactionList = pPattern->GetTransactionList ();
 
@@ -27,11 +29,16 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 	for (TransactionList::STLTransactionList_cit it = rPatternTransactionList.GetBegin (); it != itTransactionEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
-		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
-		mTransactionList.PushBack (pTransaction);
+
+		if (pTransaction->IsCoveredBy (pItem))
+		{
+//			mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) + 1);
+			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+			mTransactionList.PushBack (pTransaction);
+		}
 	}
 
-	AddItem (pItem);
+//	AddItem (pItem);
 
 	mFrequence = mTransactionList.GetSize ();
 }
@@ -52,6 +59,7 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 	for (TransactionList::STLTransactionList_cit it = pItemTransactionList->GetBegin (); it != itTransactionEnd; ++it)
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
+//		mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) + 1);
 		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
 		mTransactionList.PushBack (pTransaction);
 	}
@@ -63,8 +71,10 @@ Pattern::~Pattern ()
 {
 	mTransactionList.RemoveAll ();
 
-	mClassCoverageHsh.clear ();
+//	mNumTransactionsOfClassHsh.Clear ();
+//	mClassCoverageHsh.Clear ();
 	mNumTransactionsOfClassHsh.clear ();
+	mClassCoverageHsh.clear ();
 
 	RemoveAll ();
 }
@@ -103,18 +113,18 @@ void Pattern::AddItem (Item *pItem)
 
 //	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - merge lists\n");
 
-	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
-
 	TransactionList::STLTransactionList_it it	= mTransactionList.GetBegin ()	;
 	TransactionList::STLTransactionList_it itEnd	= mTransactionList.GetEnd ()	;
 
 	while (it != itEnd)
 	{
-		if (pItemTransactionList->FindByPtr (*it))
+//		if (static_cast<const Transaction *>(*it)->FindByPtr (pItem))
+		if (static_cast<const Transaction *>(*it)->IsCoveredBy (pItem))
 			++it;
 		else
 		{
 			Transaction *pTransaction = static_cast<Transaction *>(*it);
+//			mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) - 1);
 			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]--;
 
 			it = mTransactionList.Erase (it);
@@ -145,6 +155,8 @@ const TransactionList& Pattern::GetTransactionList () const
 
 const uint32 Pattern::GetNumTransactionsOfClass (const string &class_name) const
 {
+//	return mNumTransactionsOfClassHsh.Get (class_name);
+
 	uint32 num_transactions = 0;
 
 	hash_map<string, uint32>::const_iterator it = mNumTransactionsOfClassHsh.find (class_name);
@@ -233,26 +245,35 @@ const float32 Pattern::GetSimilarity (Pattern *pPattern)
 
 void Pattern::IncClassCoverage (const string &class_name)
 {
+//	mClassCoverageHsh.Set (class_name, mClassCoverageHsh.Get (class_name) + 1);
 	mClassCoverageHsh [class_name]++;
 }
 
-const uint32& Pattern::GetClassCoverage (const string &class_name)
+const uint32 Pattern::GetClassCoverage (const string &class_name)
 {
+//	return mClassCoverageHsh.Get (class_name);
 	return mClassCoverageHsh [class_name];
 }
 
 void Pattern::ResetClassCoverage ()
 {
+/*
 	hash_map<string, uint32>::iterator itEnd = mClassCoverageHsh.end ();
 
 	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; ++it)
 		it->second = 0;
+*/
+
+//	mClassCoverageHsh.Clear ();
+	mClassCoverageHsh.clear ();
 }
 
+/*
 void Pattern::SetSimilarityHsh (const uint32 &rPatternID, const float32 &similarity)
 {
-	mPatternSimilarityHsh [rPatternID] = similarity;
+	mPatternSimilarityHsh.Set (rPatternID, similarity);
 }
+*/
 
 void Pattern::Print () const
 {

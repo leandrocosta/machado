@@ -47,6 +47,7 @@ class DataBase : private IOManager, private Tokenizer
 		void	SetMaxRuleLen		(const uint32 &max_rul_len)		;
 		void	LoadTrainData		(const string &file)			;
 		void	LoadTestData		(const string &file)			;
+		void	MakeItemCoverageArrays	()					;
 		void	SortTransactions	()					;
 		void	ClassifyTestData	(
 				const RunMode &rRunMode,
