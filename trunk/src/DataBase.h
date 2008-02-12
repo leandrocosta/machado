@@ -76,6 +76,7 @@ class DataBase : private IOManager, private Tokenizer
 
 		uint32			mCorrectGuesses			;
 		uint32			mWrongGuesses			;
+		float32			mAccuracy			;
 };
 
 

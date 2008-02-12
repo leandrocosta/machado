@@ -156,7 +156,8 @@ void AppOptions::Usage () const
 	cout << "  -a, --max-rule-len         Set the maximum lenfth of the rules" << endl;
 	cout << "  -r, --run-mode             Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
 	cout << "  -o, --orthogonality-mode   Set the orthogonality mode [h,p] [HEURISTICAL, POLYNOMIAL]" << endl;
-	cout << "  -e, --orthogonality-metric Set the orthogonality mode [s,c,b,l,m,a] [SIMILARITY, COVERAGE, SIMILARITY/COVERAGE, CLASS COVERAGE, CLASS MEAN COVERAGE, ALL]" << endl;
+	cout << "  -e, --orthogonality-metric Set the orthogonality mode [s,c,b,l,m,a] [SIMILARITY, COVERAGE," << endl;
+	cout << "                               SIMILARITY/COVERAGE, CLASS COVERAGE, CLASS MEAN COVERAGE, ALL]" << endl;
 	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
 	cout << "  -v, --verbose              Use verbose mode" << endl;
 	cout << "  -h, --help                 Display this information" << endl;
