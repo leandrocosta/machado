@@ -135,7 +135,7 @@ sub test_data_base ($)
 
 	my @omode = (
 		'h',
-		'p'
+#		'p'
 	);
 
 	my @ometric = (
