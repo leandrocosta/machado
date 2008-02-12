@@ -33,8 +33,9 @@ class PatternList : public ObjectList
 			METRIC_SIMILARITY		= 's',
 			METRIC_COVERAGE			= 'c',
 			METRIC_SIM_COV			= 'b',
-			METRIC_CLASS_COVERAGE		= 'a',
+			METRIC_CLASS_COVERAGE		= 'l',
 			METRIC_CLASS_MEAN_COVERAGE	= 'm',
+			METRIC_ALL			= 'a',
 			METRIC_UNKNOWN			= 0
 		} OrtMetric;
 

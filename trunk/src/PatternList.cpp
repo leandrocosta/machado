@@ -632,6 +632,9 @@ const float32 PatternList::GetRate (const TransactionList *pTransactionList, con
 		case METRIC_CLASS_MEAN_COVERAGE:
 			rate = GetClassCoverageMeanRate (pTransactionList);
 			break;
+		case METRIC_ALL:
+			rate = GetSimilarityRate () * GetCoverateRate (pTransactionList) * GetClassCoverageMeanRate (pTransactionList);
+			break;
 		case METRIC_UNKNOWN:
 		default:
 			LOGMSG (NO_DEBUG, "PatternList::GetRate () - unknown orthogonality metric\n");
