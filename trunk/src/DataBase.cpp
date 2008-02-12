@@ -177,29 +177,18 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
 	pFrequentPatternList->Print ();
 
-	string class_guess = "";
+	string	class_guess	= "";
+	uint32	patterns	= 0;
+	uint32	rules		= 0;
 
 	if (rRunMode == MODE_CLASSICAL)
 	{
 		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		/*
-		RankingRuleList *pRuleList = NULL;
-		float32 confidence = mConfidence;
-		
-		do
-		{
-			if (pRuleList)
-				delete pRuleList;
-
-			pRuleList = pFrequentPatternList->GetRuleList (&mClassList, confidence, mpProjectionTransactionList->GetSize ());
-
-			if (pRuleList->GetSize () < rMinNumRules)
-				confidence *= 0.9;
-		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
-		*/
-
 		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+
+		patterns	= pFrequentPatternList->GetSize ();
+		rules		= pRuleList->GetSize ();
 
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
@@ -216,23 +205,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
-		/*
-		RankingRuleList *pRuleList = NULL;
-		float32 confidence = mConfidence;
-		
-		do
-		{
-			if (pRuleList)
-				delete pRuleList;
-
-			pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, confidence, mpProjectionTransactionList->GetSize ());
-
-			if (pRuleList->GetSize () < rMinNumRules)
-				confidence *= 0.9;
-		} while (pRuleList->GetSize () < rMinNumRules && confidence > 0.001);
-		*/
-
 		RankingRuleList *pRuleList = pOrthogonalFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+
+		patterns	= pOrthogonalFrequentPatternList->GetSize ();
+		rules		= pRuleList->GetSize ();
 
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
@@ -284,7 +260,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	uint32 train_size = mTrainTransactionList.GetSize ();
 	uint32 test_size = mTestTransactionList.GetSize ();
 
-	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s]\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"));
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s] (patterns [%u], rules [%u])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), patterns, rules);
 
 	cout << class_guess << endl;
 }

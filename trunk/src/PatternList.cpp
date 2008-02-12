@@ -309,7 +309,7 @@ RankingRuleList* PatternList::GetRuleList (const ClassList *pClassList, const fl
 
 	if (rules < min_num_rules)
 	{
-		LOGMSG (MEDIUM_LEVEL, "PatternList::GetRuleList () - min_num_rules [%u], try to add %u more rules to result\n", min_num_rules, (min_num_rules - rules));
+		LOGMSG (LOW_LEVEL, "PatternList::GetRuleList () - min_num_rules [%u], try to add %u more rules to result\n", min_num_rules, (min_num_rules - rules));
 
 		RankingRuleList *pAddRuleList = static_cast<const RankingRuleList *>(pLowConfidenceRuleList->GetPartialReverseSortCopy (min_num_rules - rules));
 
