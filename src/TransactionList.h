@@ -21,11 +21,12 @@ class TransactionList : public ObjectList
 		typedef STLTransactionList::const_iterator	STLTransactionList_cit	;
 
 	public:
+		void			MakeItemCoverageArrays	(const uint32 &num_items)		;
 		void			SortTransactions	()					;
 		TransactionList*	GetProjection		(const Transaction *pBaseTransaction)	;
 
 	public:
-		const	uint32	GetNumTransactionsOfClass	(const Class *pClass)	const	;
+//		const	uint32	GetNumTransactionsOfClass	(const Class *pClass)	const	;
 };
 
 

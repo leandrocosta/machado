@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
 		base.LoadTestData (pAppOptions->GetTestingFile ());
 		base.PrintDataInfo ();
 		base.SortTransactions ();
+		base.MakeItemCoverageArrays ();
 		base.ClassifyTestData (
 				pAppOptions->GetRunMode (),
 				pAppOptions->GetOrtMode (),

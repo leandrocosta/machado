@@ -27,23 +27,24 @@ class Transaction : public ItemSet
 			Class*		GetClass		()					;
 		const	string&		GetClassValue		()				const	;
 		const	bool		IsCoveredBy		(const Pattern *pPattern)		;
+		const	bool		IsCoveredBy		(const Item *pItem)			;
 			PatternList*	GetFrequentPatternList	(
 								const float32 &support,
 								const uint32 &projection_size,
 								const uint32 &min_rule_len,
 								const uint32 &max_rule_len)	const	;
 	public:
-		void	AddTransactionToItemsProjectionTransactionLists ()	;
+			void	MakeItemCoverageArray				(const uint32 &num_items)	;
+			void	AddTransactionToItemsProjectionTransactionLists ()				;
 
 	public:
 		void	Print	()	const	;
 
 	private:
-		const	uint32	mTransactionID	;
-			Class*	mpClass		;
-
-	private:
-		hash_map<uint32, bool>	mPatternCoverageHsh	;
+		const	uint32			mTransactionID		;
+			Class*			mpClass			;
+			bool*			mItemCoverageArray	;
+			hash_map<uint32, bool>	mPatternCoverageHsh	;
 
 	private:
 		static	uint32	msSeqTransactionID	;
