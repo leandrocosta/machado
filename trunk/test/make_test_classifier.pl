@@ -109,26 +109,26 @@ sub test_data_base ($)
 		1,
 #		10,
 #		50,
-		100
+#		100
 	);
 
 	my @max_num_rank_rules = (
 		1,
-#		10,
+		10,
 #		100,
-		1000
+#		1000
 	);
 
 	my @min_rule_len = (
 		1,
 #		2,
-		3
+#		3
 	);
 
 	my @max_rule_len = (
 		1,
 		2,
-		3,
+#		3,
 #		4,
 #		5
 	);
