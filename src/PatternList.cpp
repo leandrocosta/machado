@@ -633,7 +633,7 @@ const float32 PatternList::GetRate (const TransactionList *pTransactionList, con
 			rate = GetClassCoverageMeanRate (pTransactionList);
 			break;
 		case METRIC_ALL:
-			rate = GetSimilarityRate () * GetCoverateRate (pTransactionList) * GetClassCoverageMeanRate (pTransactionList);
+			rate = GetSimilarityRate () * GetCoverageRate (pTransactionList) * GetClassCoverageMeanRate (pTransactionList);
 			break;
 		case METRIC_UNKNOWN:
 		default:
