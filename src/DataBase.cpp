@@ -153,7 +153,9 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
 			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMetric, rMinNumRules, rMaxNumRankRules);
 
-		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)), mCorrectGuesses, mWrongGuesses);
+		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mWrongGuesses);
+
+		cout << mAccuracy << endl;
 	}
 	catch (DataBaseException &e)
 	{
@@ -260,7 +262,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	uint32 train_size = mTrainTransactionList.GetSize ();
 	uint32 test_size = mTestTransactionList.GetSize ();
 
-	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), ((float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses)), patterns, rules);
+	mAccuracy = (mCorrectGuesses + mWrongGuesses > 0 ? (float32) mCorrectGuesses / (mCorrectGuesses + mWrongGuesses) : 0);
+
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules);
 
 	cout << class_guess << endl;
 }
