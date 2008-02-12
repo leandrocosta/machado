@@ -129,8 +129,6 @@ sub run_lazy ($$$$$$$$)
 {
 	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_rule, $ranking_size) = @_;
 
-	my $output_file = "$OUTPUT_DIR/$LAZY.$data_base.s$support.c$confidence.n$min_rules.m$max_rule.l$ranking_size.out";
-
 	print "$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size\n";
 	my $accuracy = `$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size`;
 
