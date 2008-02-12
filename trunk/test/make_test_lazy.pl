@@ -82,7 +82,7 @@ sub test_data_base ($)
 
 	my $ranking_size_i	= 10;
 	my $ranking_size_f	= 100;
-	my $ranking_size_s	= 10;
+	my $ranking_size_s	= 30;
 
 	my $data_base = $_[0];
 
