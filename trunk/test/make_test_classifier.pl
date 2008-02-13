@@ -85,7 +85,7 @@ sub test_data_base ($)
 		0.9,
 #		0.95,
 #		0.99,
-		1
+#		1
 	);
 
 	my @confidence = (
@@ -102,7 +102,7 @@ sub test_data_base ($)
 		0.9,
 #		0.95,
 #		0.99,
-		1
+#		1
 	);
 
 	my @min_num_rules = (
@@ -114,8 +114,8 @@ sub test_data_base ($)
 
 	my @max_num_rank_rules = (
 		1,
-		10,
-#		100,
+#		10,
+		100,
 #		1000
 	);
 
@@ -142,7 +142,7 @@ sub test_data_base ($)
 		's',
 		'c',
 #		'b',
-#		'l',
+		'l',
 		'm',
 #		'a'
 	);
