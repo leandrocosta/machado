@@ -18,9 +18,12 @@ class Pattern : public ItemSet
 	private:
 		static	const	uint32	GetSeqPatternID	()	;
 
+	public:
+		static	const	uint32	GetMaxPatternID	()	;
+
 	private:
 		void	InitFields	()		;
-		void	AddItem		(Item *pItem)	;
+//		void	AddItem		(Item *pItem)	;
 
 	public:
 			void	SetPatternID	()		;
@@ -40,9 +43,9 @@ class Pattern : public ItemSet
 
 	public:
 		const	float32	GetSimilarity		(Pattern *pPattern)		;
-			void	IncClassCoverage	(const string &class_name)	;
-		const	uint32	GetClassCoverage	(const string &class_name)	;
-			void	ResetClassCoverage	()				;
+//			void	IncClassCoverage	(const string &class_name)	;
+//		const	uint32	GetClassCoverage	(const string &class_name)	;
+//			void	ResetClassCoverage	()				;
 
 	public:
 		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;
@@ -67,7 +70,7 @@ class Pattern : public ItemSet
 //		StringUInt32Hash	mNumTransactionsOfClassHsh	;
 //		UInt32Float32Hash	mPatternSimilarityHsh		;
 
-		hash_map<string, uint32>	mClassCoverageHsh		;
+//		hash_map<string, uint32>	mClassCoverageHsh		;
 		hash_map<string, uint32>	mNumTransactionsOfClassHsh	;
 };
 

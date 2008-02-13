@@ -20,7 +20,7 @@ RankingRuleList::~RankingRuleList ()
 
 const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankRules) const
 {
-	LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
+	LOGMSG (LOW_LEVEL, "RankingRuleList::GetClassificationValue () - rMaxNumRankRules [%u]\n", rMaxNumRankRules);
 
 	hash_map<string, uint32>	rulesHash;
 	hash_map<string, float32>	supportHash;
@@ -96,6 +96,8 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 			rank		= rank_try;
 		}
 	}
+
+	LOGMSG (LOW_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s]\n", class_guess.c_str ());
 
 	return class_guess;
 }

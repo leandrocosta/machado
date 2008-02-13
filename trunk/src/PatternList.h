@@ -30,14 +30,28 @@ class PatternList : public ObjectList
 
 		typedef enum e_orthogonality_metric
 		{
-			METRIC_SIMILARITY		= 's',
-			METRIC_COVERAGE			= 'c',
-			METRIC_SIM_COV			= 'b',
-			METRIC_CLASS_COVERAGE		= 'l',
-			METRIC_CLASS_MEAN_COVERAGE	= 'm',
+			METRIC_SET_SIMILARITY		= 's',
+			METRIC_SET_COVERAGE		= 'c',
+			METRIC_SET_SIM_COV		= 'b',
+			METRIC_SET_CLASS_COVERAGE	= 'l',
+			METRIC_PAIR_MEAN_CLASS_COVERAGE	= 'm',
 			METRIC_ALL			= 'a',
 			METRIC_UNKNOWN			= 0
 		} OrtMetric;
+
+	private:
+		static	void	MakeItemPatternCoverageMatrix		(
+					const PatternList *pPatternList	)	;
+		static	void	MakeTransactionPatternCoverageMatrix	(
+					const TransactionList *pTransactionList,
+					const PatternList *pPatternList	)	;
+		static	void	MakeClassPatternCoverageMatrix		(
+					const TransactionList *pTransactionList,
+					const PatternList *pPatternList	)	;
+
+		static	void	DestroyItemPatternCoverageMatrix	()	;
+		static	void	DestroyTransactionPatternCoverageMatrix	()	;
+		static	void	DestroyClassPatternCoverageMatrix	()	;
 
 //	public:
 //		void	PushFront	(Object *pObject)	;
@@ -69,12 +83,12 @@ class PatternList : public ObjectList
 //		const	uint32&		GetMaxPatternLen			()			const	;
 		const	uint32		GetSumPatternLen			()			const	;
 			Pattern*	GetMoreSimilar				(Pattern *pPattern)	const	;
-		const	float32		GetSimilarityRate			()				;
-		const	float32		GetCoverageRate				(
+		const	float32		GetSetSimilarityRate			()				;
+		const	float32		GetSetCoverageRate			(
 						const TransactionList *pTransactionList)		const	;
-		const	float32		GetClassCoverageRate			(
+		const	float32		GetSetClassCoverageRate			(
 						const TransactionList *pTransactionList)		const	;
-		const	float32		GetClassCoverageMeanRate		(
+		const	float32		GetPairMeanClassCoverageRate		(
 						const TransactionList *pTransactionList)		const	;
 		const	float32		GetRate					(
 						const TransactionList *pTransactionList,
@@ -82,6 +96,11 @@ class PatternList : public ObjectList
 
 	private:
 //		uint32	mMaxPatternLen	;
+
+	private:
+		static	bool**		mItemPatternCoverageMatrix		;
+		static	bool**		mTransactionPatternCoverageMatrix	;
+		static	uint32**	mClassPatternCoverageMatrix		;
 };
 
 

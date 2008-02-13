@@ -19,6 +19,9 @@ class Class : public Object
 		static	const	uint32	GetSeqClassID	()	;
 
 	public:
+		static	const	uint32	GetMaxClassID	()	;
+
+	public:
 		const	uint32&	GetClassID	()	const	;
 		const	string&	GetValue	()	const	;
 

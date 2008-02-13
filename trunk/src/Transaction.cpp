@@ -35,6 +35,11 @@ const uint32 Transaction::GetSeqTransactionID ()
 	return transactionID;
 }
 
+const uint32 Transaction::GetMaxTransactionID ()
+{
+	return msSeqTransactionID - 1;
+}
+
 const uint32& Transaction::GetTransactionID () const
 {
 	return mTransactionID;
@@ -45,12 +50,17 @@ Class* Transaction::GetClass ()
 	return mpClass;
 }
 
+const uint32& Transaction::GetClassID () const
+{
+	return mpClass->GetClassID ();
+}
+
 const string& Transaction::GetClassValue () const
 {
 	return mpClass->GetValue ();
 }
 
-const bool Transaction::IsCoveredBy (const Pattern *pPattern)
+const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 {
 //	bool bRet = false;
 
@@ -98,9 +108,14 @@ const bool Transaction::IsCoveredBy (const Pattern *pPattern)
 	return bRet;
 }
 
-const bool Transaction::IsCoveredBy (const Item *pItem)
+const bool Transaction::IsCoveredBy (const Item *pItem) const
 {
 	return mItemCoverageArray [pItem->GetItemID ()];
+}
+
+const bool Transaction::IsCoveredByItem (const uint32 &rItemID) const
+{
+	return mItemCoverageArray [rItemID];
 }
 
 PatternList* Transaction::GetFrequentPatternList (
@@ -109,7 +124,7 @@ PatternList* Transaction::GetFrequentPatternList (
 {
 	uint32 size = GetSize ();
 
-	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - items [%u]\n", size);
+	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - items [%u], support [%f], projection_size [%u], min_rule_len [%u], max_rule_len [%u]\n", size, support, projection_size, min_rule_len, max_rule_len);
 
 	PatternList*	pFrequentPatternList	= new PatternList ()	;
 	ItemList*	pFrequentItemList	= new ItemList ()	;
@@ -125,83 +140,90 @@ PatternList* Transaction::GetFrequentPatternList (
 		if ((float32) pItem->GetProjectionFrequence () / projection_size >= support)
 		{
 			Pattern *pPattern = new Pattern (pItem);
+
 			pPattern->SetPatternID ();
 			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
 			pFrequentPatternList->PushBack (pPattern);
+
 			pFrequentItemList->PushBack (pItem);
 		}
 	}
 
 	uint32 numFrequentItems		= pFrequentItemList->GetSize ();
-	uint32 frequentItemBackID	= static_cast<Item *>(pFrequentItemList->GetBack ())->GetItemID ();
 
-	uint32 iTryPattern = 0;
-
-	while (iTryPattern < pFrequentPatternList->GetSize ())
+	if (numFrequentItems > 0)
 	{
-		uint32 pattern_size = static_cast<const Pattern *>(pFrequentPatternList->GetAt (iTryPattern))->GetSize ();
+		uint32 frequentItemBackID	= static_cast<Item *>(pFrequentItemList->GetBack ())->GetItemID ();
 
-		if (pattern_size < max_rule_len)
+		uint32 iTryPattern = 0;
+
+		while (iTryPattern < pFrequentPatternList->GetSize ())
 		{
-			LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - add patterns size [%u]\n", pattern_size+1);
+			uint32 pattern_size = static_cast<const Pattern *>(pFrequentPatternList->GetAt (iTryPattern))->GetSize ();
 
-			uint32 iNumTryPatterns = pFrequentPatternList->GetSize ();
-
-			do
+			if (pattern_size < max_rule_len)
 			{
-				Pattern *pPattern = static_cast<Pattern *>(pFrequentPatternList->GetAt (iTryPattern));
-				uint32 pattern_size = pPattern->GetSize ();
+				LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - add patterns size [%u]\n", pattern_size+1);
 
-				uint32 patternItemBackID = static_cast<Item *>(pPattern->GetBack ())->GetItemID ();
+				uint32 iNumTryPatterns = pFrequentPatternList->GetSize ();
 
-				if (patternItemBackID < frequentItemBackID)
+				do
 				{
-					for (uint32 i = pattern_size; i < numFrequentItems; i++)
+					Pattern *pPattern = static_cast<Pattern *>(pFrequentPatternList->GetAt (iTryPattern));
+					uint32 pattern_size = pPattern->GetSize ();
+
+					uint32 patternItemBackID = static_cast<Item *>(pPattern->GetBack ())->GetItemID ();
+
+					if (patternItemBackID < frequentItemBackID)
 					{
-						Item *pItem = static_cast<Item *>(pFrequentItemList->GetAt (i));
-
-						if (patternItemBackID < pItem->GetItemID ())
+						for (uint32 i = pattern_size; i < numFrequentItems; i++)
 						{
-							Pattern *pNewPattern = new Pattern (pPattern, pItem);
+							Item *pItem = static_cast<Item *>(pFrequentItemList->GetAt (i));
 
-							if ((float32) pNewPattern->GetFrequence () / projection_size >= support)
+							if (patternItemBackID < pItem->GetItemID ())
 							{
-								pNewPattern->SetPatternID ();
-								pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
-								pFrequentPatternList->PushBack (pNewPattern);
+								Pattern *pNewPattern = new Pattern (pPattern, pItem);
+
+								if ((float32) pNewPattern->GetFrequence () / projection_size >= support)
+								{
+									pNewPattern->SetPatternID ();
+									pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
+									pFrequentPatternList->PushBack (pNewPattern);
+								}
+								else
+									delete pNewPattern;
 							}
-							else
-								delete pNewPattern;
 						}
 					}
-				}
 
-				iTryPattern++;
-			} while (iTryPattern < iNumTryPatterns);
+					iTryPattern++;
+				} while (iTryPattern < iNumTryPatterns);
+			}
+			else
+				break;
 		}
-		else
-			break;
-	}
 
-	LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - remove short patterns\n");
+		LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - remove short patterns\n");
 
-	PatternList::STLPatternList_it it		= pFrequentPatternList->GetBegin ()	;
-	PatternList::STLPatternList_it itPatternEnd	= pFrequentPatternList->GetEnd ()	;
+		PatternList::STLPatternList_it it		= pFrequentPatternList->GetBegin ()	;
+		PatternList::STLPatternList_it itPatternEnd	= pFrequentPatternList->GetEnd ()	;
 
-	while (it != itPatternEnd)
-	{
-		if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
+		while (it != itPatternEnd)
 		{
-			LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - delete pattern [%s], frequence [%u]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
-			delete *it;
-			it = pFrequentPatternList->Erase (it);
-			itPatternEnd = pFrequentPatternList->GetEnd ();
+			if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
+			{
+				LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - delete pattern [%s], frequence [%u]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
+				delete *it;
+				it = pFrequentPatternList->Erase (it);
+				itPatternEnd = pFrequentPatternList->GetEnd ();
+			}
+			else
+				break;
 		}
-		else
-			break;
+
+		pFrequentItemList->RemoveAll ();
 	}
 
-	pFrequentItemList->RemoveAll ();
 	delete pFrequentItemList;
 
 	uint32 frequent_size = pFrequentPatternList->GetSize ();
@@ -241,7 +263,7 @@ void Transaction::AddTransactionToItemsProjectionTransactionLists ()
 	STLItemList_cit itEnd = GetEnd ();
 
 	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
-		static_cast<Item *>(*it)->AddProjectTransaction (this);
+		static_cast<Item *>(*it)->AddProjectionTransaction (this);
 }
 
 void Transaction::Print () const

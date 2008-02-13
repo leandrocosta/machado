@@ -29,6 +29,9 @@ class Item : public Object
 		static	const	uint32	GetSeqItemID	()	;
 
 	public:
+		static	const	uint32	GetMaxItemID	()	;
+
+	public:
 		const	uint32&			GetItemID			()				const	;
 		const	string&			GetValue			()				const	;
 
@@ -37,7 +40,7 @@ class Item : public Object
 		const	uint32&			GetCount			()				const	;
 
 			void			AddTransaction			(Transaction *pTransaction)		;
-			void			AddProjectTransaction		(Transaction *pTransaction)		;
+			void			AddProjectionTransaction	(Transaction *pTransaction)		;
 		const	TransactionList*	GetProjectionTransactionList	()				const	;
 
 		const	uint32			GetProjectionFrequence		()				const	;

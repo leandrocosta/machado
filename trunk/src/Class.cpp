@@ -18,10 +18,15 @@ Class::~Class ()
 
 const uint32 Class::GetSeqClassID ()
 {
-	uint32 itemID = msSeqClassID;
-	msSeqClassID++;
+	uint32 itemID = msSeqClassID++;
 
 	return itemID;
+}
+
+
+const uint32 Class::GetMaxClassID ()
+{
+	return msSeqClassID - 1;
 }
 
 const uint32& Class::GetClassID () const

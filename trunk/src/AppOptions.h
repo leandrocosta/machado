@@ -78,9 +78,9 @@ class AppOptions
 		static	const	uint32	DEFAULT_MIN_RULE_LEN		= 1	;
 		static	const	uint32	DEFAULT_MAX_RULE_LEN		= 10	;
 
-		static	const	DataBase::RunMode	DEFAULT_RUN_MODE	= DataBase::MODE_ORTHOGONAL	;
-		static	const	PatternList::OrtMode	DEFAULT_ORT_MODE	= PatternList::ORTH_HEURISTICAL	;
-		static	const	PatternList::OrtMetric	DEFAULT_ORT_METRIC	= PatternList::METRIC_SIM_COV	;
+		static	const	DataBase::RunMode	DEFAULT_RUN_MODE	= DataBase::MODE_ORTHOGONAL		;
+		static	const	PatternList::OrtMode	DEFAULT_ORT_MODE	= PatternList::ORTH_HEURISTICAL		;
+		static	const	PatternList::OrtMetric	DEFAULT_ORT_METRIC	= PatternList::METRIC_SET_SIM_COV	;
 
 		static	const	e_debug	DEFAULT_DEBUG_LEVEL	= NO_DEBUG	;
 		static	const	bool	DEFAULT_VERBOSE		= false		;

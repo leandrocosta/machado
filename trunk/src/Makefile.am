@@ -11,5 +11,5 @@ SUBDIRS = base
 bin_PROGRAMS		= classifier
 classifier_SOURCES	= $(SRCS)
 classifier_LDADD	= $(LDADD_BASE)
-classifier_CPPFLAGS	= -pg
-classifier_LDFLAGS	= -pg
+#classifier_CPPFLAGS	= -pg
+#classifier_LDFLAGS	= -pg
