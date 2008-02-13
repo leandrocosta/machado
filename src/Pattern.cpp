@@ -22,6 +22,8 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 
 	PushBack (pItem);
 
+	const uint32 &rItemID = pItem->GetItemID ();
+
 	const TransactionList &rPatternTransactionList = pPattern->GetTransactionList ();
 
 	TransactionList::STLTransactionList_cit itTransactionEnd = rPatternTransactionList.GetEnd ();
@@ -30,7 +32,8 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 
-		if (pTransaction->IsCoveredBy (pItem))
+//		if (pTransaction->IsCoveredBy (pItem))
+		if (pTransaction->IsCoveredByItem (rItemID))
 		{
 //			mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) + 1);
 			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
@@ -74,17 +77,21 @@ Pattern::~Pattern ()
 //	mNumTransactionsOfClassHsh.Clear ();
 //	mClassCoverageHsh.Clear ();
 	mNumTransactionsOfClassHsh.clear ();
-	mClassCoverageHsh.clear ();
+//	mClassCoverageHsh.clear ();
 
 	RemoveAll ();
 }
 
 const uint32 Pattern::GetSeqPatternID ()
 {
-	uint32 patternID = msSeqPatternID;
-	msSeqPatternID++;
+	uint32 patternID = msSeqPatternID++;
 
 	return patternID;
+}
+
+const uint32 Pattern::GetMaxPatternID ()
+{
+	return msSeqPatternID - 1;
 }
 
 void Pattern::SetPatternID ()
@@ -105,6 +112,7 @@ void Pattern::InitFields ()
 	mGot		= false	;
 }
 
+/*
 void Pattern::AddItem (Item *pItem)
 {
 //	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - begin\n");
@@ -132,6 +140,7 @@ void Pattern::AddItem (Item *pItem)
 		}
 	}
 }
+*/
 
 const uint32 Pattern::GetFrequence () const
 {
@@ -243,6 +252,7 @@ const float32 Pattern::GetSimilarity (Pattern *pPattern)
 	return similarity;
 }
 
+/*
 void Pattern::IncClassCoverage (const string &class_name)
 {
 //	mClassCoverageHsh.Set (class_name, mClassCoverageHsh.Get (class_name) + 1);
@@ -257,16 +267,17 @@ const uint32 Pattern::GetClassCoverage (const string &class_name)
 
 void Pattern::ResetClassCoverage ()
 {
-/*
+//
 	hash_map<string, uint32>::iterator itEnd = mClassCoverageHsh.end ();
 
 	for (hash_map<string, uint32>::iterator it = mClassCoverageHsh.begin (); it != itEnd; ++it)
 		it->second = 0;
-*/
+//
 
 //	mClassCoverageHsh.Clear ();
 	mClassCoverageHsh.clear ();
 }
+*/
 
 /*
 void Pattern::SetSimilarityHsh (const uint32 &rPatternID, const float32 &similarity)

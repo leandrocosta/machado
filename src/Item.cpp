@@ -53,10 +53,14 @@ const bool Item::operator!= (const Object &rObject) const
 
 const uint32 Item::GetSeqItemID ()
 {
-	uint32 itemID = msSeqItemID;
-	msSeqItemID++;
+	uint32 itemID = msSeqItemID++;
 
 	return itemID;
+}
+
+const uint32 Item::GetMaxItemID ()
+{
+	return msSeqItemID - 1;
 }
 
 const uint32& Item::GetItemID () const
@@ -91,7 +95,7 @@ void Item::AddTransaction (Transaction *pTransaction)
 	mpTransactionList->PushBack (pTransaction);
 }
 
-void Item::AddProjectTransaction (Transaction *pTransaction)
+void Item::AddProjectionTransaction (Transaction *pTransaction)
 {
 	mpProjectionTransactionList->PushBack (pTransaction);
 }

@@ -185,7 +185,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	if (rRunMode == MODE_CLASSICAL)
 	{
-		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
+		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
 		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
 
@@ -201,7 +201,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	}
 	else if (rRunMode == MODE_ORTHOGONAL)
 	{
-		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
+		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
 		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
@@ -232,7 +232,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	if (class_guess.empty ())
 	{
-		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - no rule, using more frequent class\n");
+		LOGMSG (LOW_LEVEL, "DataBase::ClassifyTransaction () - no rule, using more frequent class\n");
 
 		uint32 num_transactions = 0;
 		Class	*pClassGuess = NULL;
@@ -271,6 +271,8 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 void DataBase::MakeProjection (Transaction *pTransaction)
 {
+	LOGMSG (LOW_LEVEL, "DataBase::MakeProjection () - begin\n");
+
 	if (mpProjectionTransactionList)
 	{
 		mpProjectionTransactionList->RemoveAll ();
