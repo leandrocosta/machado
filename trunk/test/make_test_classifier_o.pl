@@ -69,6 +69,23 @@ sub test_data_base ($)
 	my $testing_file	= "../data/adrianov/$data_base.testing";
 
 	my @support = (
+		0.001,	# OK (confidence = 0.9)
+		0.01,	# OK (confidence = 0.9)
+		0.1,	# OK (confidence = 0.9)
+		0.2,	# OK (confidence = 0.9)
+		0.3,	# OK (confidence = 0.9)
+		0.4,	# OK (confidence = 0.9)
+		0.5,	# OK (confidence = 0.9)
+		0.6,	# OK (confidence = 0.9)
+		0.7,	# OK (confidence = 0.9)
+		0.8,	# OK (confidence = 0.9)
+		0.9,	# OK (confidence = 0.9)
+		0.95,	# OK (confidence = 0.9)
+		0.99,	# OK (confidence = 0.9)
+		1	# OK (confidence = 0.9)
+	);
+
+	my @confidence = (
 		0.001,
 #		0.01,
 #		0.1,
@@ -79,24 +96,7 @@ sub test_data_base ($)
 #		0.6,
 #		0.7,
 #		0.8,
-#		0.9,
-#		0.95,
-#		0.99,
-#		1
-	);
-
-	my @confidence = (
-#		0.001,
-#		0.01,
-#		0.1,
-#		0.2,
-#		0.3,
-#		0.4,
-#		0.5,
-#		0.6,
-#		0.7,
-#		0.8,
-		0.9,
+# OK		0.9,
 #		0.95,
 #		0.99,
 #		1

@@ -76,26 +76,26 @@ sub test_data_base ($)
 	);
 
 	my @confidence = (
-#		0.001,
-#		0.01,
-#		0.1,
-#		0.2,
-#		0.3,
-#		0.4,
-		0.5,
-#		0.6,
-#		0.7,
-#		0.8,
-		0.9,
-#		0.95,
-#		0.99,
-#		1
+		0.001,	# OK (min_rules = (1, 10))
+		0.01,	# OK (min_rules = (1, 10))
+		0.1,	# OK (min_rules = (1, 10))
+		0.2,	# OK (min_rules = (1, 10))
+		0.3,	# OK (min_rules = (1, 10))
+		0.4,	# OK (min_rules = (1, 10))
+		0.5,	# OK (min_rules = (1, 10))
+		0.6,	# OK (min_rules = (1, 10))
+		0.7,	# OK (min_rules = (1, 10))
+		0.8,	# OK (min_rules = (1, 10))
+		0.9,	# OK (min_rules = (1, 10))
+		0.95,	# OK (min_rules = (1, 10))
+		0.99,	# OK (min_rules = (1, 10))
+		1	# OK (min_rules = (1, 10))
 	);
 
 	my @min_rules = (
-		1,
+#		1,
 #		10,
-#		50,
+		50,
 #		100
 	);
 
