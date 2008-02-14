@@ -1,0 +1,30 @@
+package Parms;
+
+@DataBases = (
+	'anneal.ac',
+	'austra.ac',
+	'auto.ac',
+	'breast.ac',
+	'cleve.ac',
+	'crx.ac',
+	'diabetes.ac',
+	'german.ac',
+	'glass.ac',
+	'heart.ac',
+	'hepati.ac',
+	'horse.ac',
+	'hypo.ac',
+	'ionosphere.ac',
+	'iris.ac',
+	'labor.ac',
+	'led7.ac',
+	'lymph.ac',
+	'pima.ac',
+	'sick.ac',
+	'sonar.ac',
+	'tic-tac.ac',
+	'vehicle.ac',
+	'waveform.ac',
+	'wine.ac',
+	'zoo.ac'
+);
