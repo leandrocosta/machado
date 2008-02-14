@@ -17,17 +17,12 @@ do
 	cat rand/$file | sed -e s/SPAM/CLASS/g >class/$file
 
 	size=`wc -l class/$file | awk '{ print $1 }'`;
-	testing=$(($size/$NUM_FOLDS+1));
-	onemores=$(($size%$NUM_FOLDS));
+	testing=$(($size/$NUM_FOLDS));
+	onemore=$(($size%$NUM_FOLDS));
 
-	echo "size: $size, testing: $testing, onemores: $onemores";
+	echo "size: $size, testing: $testing, onemore: $onemore";
 
 	mkdir -p fold/$file
-
-	if (($onemores == 0))
-	then
-		testing=$(($testing-1));
-	fi;
 
 	echo "making $file.0.training and $file.0.testing with $testing elements";
 
@@ -39,9 +34,9 @@ do
 
 	for ((i=1; $i<10; i=$i+1))
 	do
-		if (($i == $onemores))
+		if (($NUM_FOLDS - $i == $onemore))
 		then
-			testing=$(($testing-1));
+			testing=$(($testing+1));
 		fi;
 
 		echo "making $file.$i.training and $file.$i.testing with $testing elements";
