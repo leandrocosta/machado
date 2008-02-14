@@ -1,19 +1,14 @@
 #!/usr/bin/perl -w
 
-my $LAZY = "lazy";
-my $APP_LAZY = "./lazy_acc";
+use strict;
 
-my $CLASSIFIER = "classifier";
-my $APP_CLASSIFIER = "../src/$CLASSIFIER";
+my $LAZY = "lazy_new";
+my $APP_LAZY = "./$LAZY";
 
 my $OUTPUT_DIR = "output/lazy";
 
 sub test_data_base ($);
-sub run_all ($$$$$$);
 sub run_lazy ($$$$$$$$);
-sub run_classifier_c ($$$$$$$);
-sub run_classifier_o ($$$$$$$$$);
-sub compare_all ($$$$$$$$$);
 
 my @data_bases = (
 	'anneal.ac',
@@ -32,14 +27,14 @@ my @data_bases = (
 	'ionosphere.ac',
 	'iris.ac',
 	'labor.ac',
-#	'led7.ac',
+	'led7.ac',
 	'lymph.ac',
 	'pima.ac',
 	'sick.ac',
 	'sonar.ac',
 	'tic-tac.ac',
 	'vehicle.ac',
-#	'waveform.ac',
+	'waveform.ac',
 	'wine.ac',
 	'zoo.ac'
 );
@@ -57,70 +52,117 @@ exit;
 
 ###
 
-my ($confidence, $min_rules, $max_size, $ranking_size, $accuracy);
+my ($support, $confidence, $min_rules, $max_size, $ranking_size, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT =
-confidence: @<<<, max_size: @<, min_rules: @<<<<<<, ranking_size: @<<<<<<, accuracy: @#####.###
-            $confidence,    $max_size,  $min_rules,               $ranking_size,     $accuracy
+support: @<<<<, confidence: @<<<<, min_rules: @<<<<<<, max_size: @<<<<<<, ranking_size: @<<<<<<, avg_patterns: @######.######, avg_rules: @######.######, accuracy: @.######
+         $support,          $confidence,      $min_rules,        $max_size,             $ranking_size,         $avg_patterns,      $avg_rules,        $accuracy
 .
 
 ###
 
 sub test_data_base ($)
 {
-	my $confidence_i	= 0.01;
-	my $confidence_f	= 0.1;
-	my $confidence_s	= 0.03;
-
-	my $min_rules_i	= 10;
-	my $min_rules_f	= 100;
-	my $min_rules_s	= 30;
-
-	my $max_size_i	= 2;
-	my $max_size_f	= 5;
-	my $max_size_s	= 1;
-
-	my $ranking_size_i	= 10;
-	my $ranking_size_f	= 100;
-	my $ranking_size_s	= 30;
-
 	my $data_base = $_[0];
 
 	my $training_file	= "../data/adrianov/$data_base.training";
 	my $testing_file	= "../data/adrianov/$data_base.testing";
-	my $class_file		= "../data/adrianov/$data_base.out";
 
-	my ($best_confidence, $best_min_rules, $best_max_size, $best_ranking_size, $best_accuracy);
+	my @support = (
+		1,
+#		10,
+#		100,
+#		1000
+	);
+
+	my @confidence = (
+#		0.001,
+#		0.01,
+#		0.1,
+#		0.2,
+#		0.3,
+#		0.4,
+		0.5,
+#		0.6,
+#		0.7,
+#		0.8,
+		0.9,
+#		0.95,
+#		0.99,
+#		1
+	);
+
+	my @min_rules = (
+		1,
+#		10,
+#		50,
+#		100
+	);
+
+	my @max_size = (
+		2,
+#		3,
+#		4,
+#		5
+	);
+
+	my @ranking_size = (
+		1,
+#		2,
+#		3
+	);
+
+	my ($best_support, $best_confidence, $best_min_rules, $best_max_size, $best_ranking_size, $best_avg_patterns, $best_avg_rules, $best_accuracy);
+
 	$best_accuracy = 0;
 
-	open OUTPUT, ">$OUTPUT_DIR/lazy_acc.$data_base.out";
+	open OUTPUT, ">$OUTPUT_DIR/$data_base.out";
 
-	for ($confidence = $confidence_i; $confidence <= $confidence_f; $confidence += $confidence_s)
+	my ($s, $c, $n, $m, $l);
+
+	for ($s = 0; $s < scalar @support; $s++)
 	{
-		for ($max_size = $max_size_i; $max_size <= $max_size_f; $max_size += $max_size_s)
+		$support = $support[$s];
+
+		for ($c = 0; $c < scalar @confidence; $c++)
 		{
-			for ($min_rules = $min_rules_i; $min_rules <= $min_rules_f; $min_rules += $min_rules_s)
+			$confidence = $confidence[$c];
+
+			for ($n = 0; $n < scalar @min_rules; $n++)
 			{
-				for ($ranking_size = $ranking_size_i; $ranking_size <= $ranking_size_f; $ranking_size += $ranking_size_s)
+				$min_rules = $min_rules[$n];
+
+				for ($m = 0; $m < scalar @max_size; $m++)
 				{
-					$accuracy = run_lazy ($data_base, $training_file, $testing_file, 1, $confidence, $min_rules, $max_size, $ranking_size);
+					$max_size = $max_size[$m];
 
-					write OUTPUT;
-
-					if ($accuracy > $best_accuracy)
+					for ($l = 0; $l < scalar @ranking_size; $l++)
 					{
-						$best_confidence	= $confidence;
-						$best_max_size		= $max_size;
-						$best_min_rules		= $min_rules;
-						$best_ranking_size	= $ranking_size;
-						$best_accuracy		= $accuracy;
+						$ranking_size = $ranking_size[$l];
+
+						run_lazy ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_size, $ranking_size);
+
+						write OUTPUT;
+
+						if ($accuracy > $best_accuracy)
+						{
+							$best_support		= $support;
+							$best_confidence	= $confidence;
+							$best_min_rules		= $min_rules;
+							$best_max_size		= $max_size;
+							$best_ranking_size	= $ranking_size;
+							$best_avg_patterns	= $avg_patterns;
+							$best_avg_rules		= $avg_rules;
+							$best_accuracy		= $accuracy;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	print OUTPUT "best: confidence: $best_confidence, max_size: $best_max_size, min_rules: $best_min_rules, ranking_size: $best_ranking_size, accuracy: $best_accuracy\n";
+	print OUTPUT "\n";
+	print OUTPUT "best: support [$best_support], confidence [$best_confidence], min_rules [$best_min_rules], max_size [$best_max_size], ranking_size [$best_ranking_size], avg_patterns [$best_avg_patterns], avg_rules [$best_avg_rules], accuracy [$best_accuracy]\n";
 
 	close OUTPUT;
 }
@@ -130,11 +172,18 @@ sub run_lazy ($$$$$$$$)
 	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_rule, $ranking_size) = @_;
 
 	print "$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size\n";
-	my $accuracy = `$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size`;
+	my @result = `$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size`;
+
+	$accuracy = pop @result;
 
 	chomp $accuracy;
 
-	print "accuracy: $accuracy\n";
+	$avg_patterns = $accuracy;
+	$avg_rules = $accuracy;
 
-	$accuracy;
+	$accuracy	=~ s/^accuracy \[(.*)\], average patterns.*/$1/;
+	$avg_patterns	=~ s/.*average patterns \[(.*)\], average rules.*/$1/;
+	$avg_rules	=~ s/.*average rules \[(.*)\]$/$1/;
+
+	print "accuracy: $accuracy, average patterns: $avg_patterns, average rules: $avg_rules\n";
 }

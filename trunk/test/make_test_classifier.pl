@@ -42,7 +42,7 @@ my @data_bases = (
 
 my $data_base;
 
-system "cp ../src/$CLASSIFIER .";
+#system "cp ../src/$CLASSIFIER .";
 
 foreach $data_base (sort @data_bases)
 {
@@ -55,11 +55,11 @@ exit;
 
 ###
 
-my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $accuracy);
+my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT =
-support: @<<<<, confidence: @<<<<, min_num_rules: @<<<, max_num_rank_rules: @<<<, min_rule_len: @<, max_rule_len: @<<<<<<, omode: @<, ometric: @<, accuracy: @#####.###
-         $support,         $confidence,         $min_num_rules,           $max_num_rank_rules, $min_rule_len,   $max_rule_len,  $omode,      $ometric,     $accuracy
+support: @<<<<, confidence: @<<<<, min_num_rules: @<<<, max_num_rank_rules: @<<<, min_rule_len: @<, max_rule_len: @<<<<<<, omode: @<, ometric: @<, avg_patterns: @######.######, avg_rules: @######.######, accuracy: @#####.###
+         $support,         $confidence,         $min_num_rules,           $max_num_rank_rules, $min_rule_len,   $max_rule_len,  $omode,      $ometric,           $avg_patterns,             $avg_rules,               $accuracy
 .
 
 ###
@@ -82,14 +82,14 @@ sub test_data_base ($)
 #		0.6,
 #		0.7,
 #		0.8,
-		0.9,
+#		0.9,
 #		0.95,
 #		0.99,
 #		1
 	);
 
 	my @confidence = (
-		0.001,
+#		0.001,
 #		0.01,
 #		0.1,
 #		0.2,
@@ -115,7 +115,7 @@ sub test_data_base ($)
 	my @max_num_rank_rules = (
 		1,
 #		10,
-		100,
+#		100,
 #		1000
 	);
 
@@ -127,7 +127,7 @@ sub test_data_base ($)
 
 	my @max_rule_len = (
 		1,
-		2,
+#		2,
 #		3,
 #		4,
 #		5
@@ -147,7 +147,7 @@ sub test_data_base ($)
 #		'a'
 	);
 
-	my ($best_support, $best_confidence, $best_min_num_rules, $best_max_num_rank_rules, $best_min_rule_len, $best_max_rule_len, $best_omode, $best_ometric, $best_accuracy);
+	my ($best_support, $best_confidence, $best_min_num_rules, $best_max_num_rank_rules, $best_min_rule_len, $best_max_rule_len, $best_omode, $best_ometric, $best_avg_patterns, $best_avg_rules, $best_accuracy);
 
 	$best_accuracy = 0;
 
@@ -187,7 +187,7 @@ sub test_data_base ($)
 								{
 									$ometric = $ometric[$e];
 
-									$accuracy = run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric);
+									run_classifier_o ($data_base, $training_file, $testing_file, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric);
 
 									write OUTPUT;
 
@@ -201,6 +201,8 @@ sub test_data_base ($)
 										$best_max_rule_len		= $max_rule_len;
 										$best_omode			= $omode;
 										$best_ometric			= $ometric;
+										$best_avg_patterns		= $avg_patterns;
+										$best_avg_rules			= $avg_rules;
 										$best_accuracy			= $accuracy;
 									}
 								}
@@ -212,7 +214,7 @@ sub test_data_base ($)
 		}
 	}
 
-	print OUTPUT "best: support [$best_support], confidence [$best_confidence], min_num_rules [$best_min_num_rules], max_num_rank_rules [$best_max_num_rank_rules], min_rule_len [$best_min_rule_len], max_rule_len [$best_max_rule_len], omode [$best_omode], ometric [$best_ometric], accuracy [$best_accuracy]\n";
+	print OUTPUT "best: support [$best_support], confidence [$best_confidence], min_num_rules [$best_min_num_rules], max_num_rank_rules [$best_max_num_rank_rules], min_rule_len [$best_min_rule_len], max_rule_len [$best_max_rule_len], omode [$best_omode], ometric [$best_ometric], avg_patterns [$best_avg_patterns], avg_rules [$best_avg_rules], accuracy [$best_accuracy]\n";
 
 	close OUTPUT;
 }
@@ -224,11 +226,16 @@ sub run_classifier_o ($$$$$$$$$$$)
 	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1\n";
 	my @result = `$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1`;
 
-	my $accuracy = pop @result;
+	$accuracy = pop @result;
 
 	chomp $accuracy;
 
-	print "accuracy: $accuracy\n";
+	$avg_patterns = $accuracy;
+	$avg_rules = $accuracy;
 
-	$accuracy;
+	$accuracy	=~ s/^accuracy \[(.*)\], average patterns.*/$1/;
+	$avg_patterns	=~ s/.*average patterns \[(.*)\], average rules.*/$1/;
+	$avg_rules	=~ s/.*average rules \[(.*)\]$/$1/;
+
+	print "accuracy: $accuracy, average patterns: $avg_patterns, average rules: $avg_rules\n";
 }
