@@ -69,37 +69,37 @@ sub test_data_base ($)
 	my $testing_file	= "../data/adrianov/$data_base.testing";
 
 	my @support = (
-		0.001,	# OK (confidence = 0.9)
-		0.01,	# OK (confidence = 0.9)
-		0.1,	# OK (confidence = 0.9)
-		0.2,	# OK (confidence = 0.9)
-		0.3,	# OK (confidence = 0.9)
-		0.4,	# OK (confidence = 0.9)
-		0.5,	# OK (confidence = 0.9)
-		0.6,	# OK (confidence = 0.9)
-		0.7,	# OK (confidence = 0.9)
-		0.8,	# OK (confidence = 0.9)
-		0.9,	# OK (confidence = 0.9)
-		0.95,	# OK (confidence = 0.9)
-		0.99,	# OK (confidence = 0.9)
-		1	# OK (confidence = 0.9)
+#		0.001,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1, 2))
+		0.01,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.1,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.2,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.3,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.4,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.5,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.6,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.7,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.8,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.9,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.95,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.99,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		1	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 	);
 
 	my @confidence = (
-		0.001,
-#		0.01,
-#		0.1,
-#		0.2,
-#		0.3,
-#		0.4,
-#		0.5,
-#		0.6,
-#		0.7,
-#		0.8,
-# OK		0.9,
-#		0.95,
-#		0.99,
-#		1
+		0.001,	# OK (max_num_rank_rules = (1, 2))
+		0.01,
+		0.1,
+		0.2,
+		0.3,
+		0.4,
+		0.5,
+		0.6,
+		0.7,
+		0.8,
+		0.9,	# OK (max_num_rank_rules = (1))
+		0.95,
+		0.99,
+		1
 	);
 
 	my @min_num_rules = (
@@ -110,9 +110,9 @@ sub test_data_base ($)
 	);
 
 	my @max_num_rank_rules = (
-		1,
+# OK		1,
 #		10,
-#		100,
+		100,
 #		1000
 	);
 
@@ -123,8 +123,8 @@ sub test_data_base ($)
 	);
 
 	my @max_rule_len = (
-		1,
-#		2,
+#		1,
+		2,
 #		3,
 #		4,
 #		5
