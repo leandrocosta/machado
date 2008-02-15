@@ -233,6 +233,8 @@ sub get_ometric_run_for_classifier_o ($$$$$$$$$)
 
 sub make_accuracy_histogram_graph ()
 {
+	print "make_acurracy_histogram_graph ()\n";
+
 	my $data_base;
 
 	foreach $data_base (@Parms::DataBases)
@@ -294,6 +296,8 @@ sub make_accuracy_histogram_graph ()
 
 sub make_avg_patterns_histogram_graph ()
 {
+	print "make_avg_patterns_histogram_graph ()\n";
+
 	my $data_base;
 
 	foreach $data_base (@Parms::DataBases)
@@ -355,6 +359,8 @@ sub make_avg_patterns_histogram_graph ()
 
 sub make_avg_rules_histogram_graph ()
 {
+	print "make_avg_rules_histogram_graph ()\n";
+
 	my $data_base;
 
 	foreach $data_base (@Parms::DataBases)
@@ -416,6 +422,8 @@ sub make_avg_rules_histogram_graph ()
 
 sub make_ometric_acc_histogram_graph ($$$$$$$)
 {
+	print "make_ometric_acc_histogram_graph ()\n";
+
 	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode) = @_;
 
 	my $data_base;
