@@ -70,7 +70,7 @@ sub test_data_base ($)
 
 	my @support = (
 #		0.001,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1, 2))
-		0.01,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+#		0.01,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 #		0.1,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 #		0.2,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 #		0.3,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
@@ -79,10 +79,10 @@ sub test_data_base ($)
 #		0.6,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 #		0.7,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 #		0.8,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
-#		0.9,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
-#		0.95,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
-#		0.99,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
-#		1	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+		0.9,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+		0.95,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+		0.99,	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
+		1	# OK (confidence = (0.001, 0.9), max_num_rank_rules = (1))
 	);
 
 	my @confidence = (
@@ -104,16 +104,16 @@ sub test_data_base ($)
 
 	my @min_num_rules = (
 		1,
-#		10,
-#		50,
-#		100
+		10,
+		50,
+		100
 	);
 
 	my @max_num_rank_rules = (
-# OK		1,
-#		10,
+		1,
+		10,
 		100,
-#		1000
+		1000
 	);
 
 	my @min_rule_len = (
@@ -123,11 +123,11 @@ sub test_data_base ($)
 	);
 
 	my @max_rule_len = (
-#		1,
+		1,
 		2,
-#		3,
-#		4,
-#		5
+		3,
+		4,
+		5
 	);
 
 	my @omode = (
