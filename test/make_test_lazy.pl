@@ -76,27 +76,27 @@ sub test_data_base ($)
 	);
 
 	my @confidence = (
-		0.001,	# OK (min_rules = (1, 10))
-		0.01,	# OK (min_rules = (1, 10))
-		0.1,	# OK (min_rules = (1, 10))
-		0.2,	# OK (min_rules = (1, 10))
-		0.3,	# OK (min_rules = (1, 10))
-		0.4,	# OK (min_rules = (1, 10))
-		0.5,	# OK (min_rules = (1, 10))
-		0.6,	# OK (min_rules = (1, 10))
-		0.7,	# OK (min_rules = (1, 10))
-		0.8,	# OK (min_rules = (1, 10))
-		0.9,	# OK (min_rules = (1, 10))
-		0.95,	# OK (min_rules = (1, 10))
+#		0.001,	# OK (min_rules = (1, 10))
+#		0.01,	# OK (min_rules = (1, 10))
+#		0.1,	# OK (min_rules = (1, 10))
+#		0.2,	# OK (min_rules = (1, 10))
+#		0.3,	# OK (min_rules = (1, 10))
+#		0.4,	# OK (min_rules = (1, 10))
+#		0.5,	# OK (min_rules = (1, 10))
+#		0.6,	# OK (min_rules = (1, 10))
+#		0.7,	# OK (min_rules = (1, 10))
+#		0.8,	# OK (min_rules = (1, 10))
+#		0.9,	# OK (min_rules = (1, 10))
+#		0.95,	# OK (min_rules = (1, 10))
 		0.99,	# OK (min_rules = (1, 10))
-		1	# OK (min_rules = (1, 10))
+# OK		1	# OK (min_rules = (1, 10))
 	);
 
 	my @min_rules = (
 #		1,
 #		10,
-		50,
-#		100
+#		50,
+		100
 	);
 
 	my @max_size = (
@@ -108,8 +108,9 @@ sub test_data_base ($)
 
 	my @ranking_size = (
 		1,
-#		2,
-#		3
+		10,
+		100,
+		1000
 	);
 
 	my $best_accuracy = 0;
@@ -183,8 +184,8 @@ sub run_lazy ($$$$$$$$$)
 {
 	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_rule, $ranking_size, $log_file) = @_;
 
-	print "$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file\n";
-	system "$APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file";
+	print "nice -n 10 $APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file\n";
+	system "nice -n 10 $APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file";
 
 	open INPUT, "<$log_file";
 
