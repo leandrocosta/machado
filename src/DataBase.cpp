@@ -22,6 +22,8 @@ DataBase::DataBase (
 
 	mCorrectGuesses			= 0		;
 	mWrongGuesses			= 0		;
+	mPatterns			= 0		;
+	mRules				= 0		;
 }
 
 DataBase::~DataBase ()
@@ -155,7 +157,11 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mWrongGuesses);
 
-		cout << mAccuracy << endl;
+//		cout << mAccuracy << endl;
+
+//		cout << "average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "], accuracy [" << mAccuracy << "]" << endl;
+
+		cout << "accuracy [" << mAccuracy << "], average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "]" << endl;
 	}
 	catch (DataBaseException &e)
 	{
@@ -266,7 +272,12 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules);
 
-	cout << class_guess << endl;
+	cout << "transaction [" << (pTransaction->GetTransactionID () - train_size + 1) << "/" << test_size << "], class [" << pTransaction->GetClass ()->GetValue () << "], guess [" << class_guess << "], correct [" << (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no") << "], patterns [" << patterns << "], rules [" << rules << "], accuracy [" << mAccuracy << "]" << endl;
+
+	mPatterns	+= patterns	;
+	mRules		+= rules	;
+
+//	cout << class_guess << endl;
 }
 
 void DataBase::MakeProjection (Transaction *pTransaction)
@@ -291,11 +302,12 @@ void DataBase::MakeProjection (Transaction *pTransaction)
 
 void DataBase::PrintDataInfo () const
 {
+	uint32 class_list_size	= mClassList.GetSize ();
 	uint32 item_list_size	= mItemList.GetSize ();
 	uint32 train_list_size	= mTrainTransactionList.GetSize ();
 	uint32 test_list_size	= mTestTransactionList.GetSize ();
 
-	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - items [%u], train transactions [%u], test transactions [%u]\n", item_list_size, train_list_size, test_list_size);
+	LOGMSG (NO_DEBUG, "DataBase::PrintDataInfo () - classes [%u], items [%u], train transactions [%u], test transactions [%u]\n", class_list_size, item_list_size, train_list_size, test_list_size);
 }
 
 void DataBase::Print () const
