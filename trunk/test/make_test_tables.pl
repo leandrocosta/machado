@@ -5,11 +5,14 @@ use strict;
 use Common;
 
 sub make_app_comparison_table ();
+sub make_best_runs_table ();
+
 sub get_comparisons_for_data_base ($$);
 
 my @comparison_array;
 
 make_app_comparison_table ();
+make_best_runs_table ();
 
 
 exit;
@@ -18,7 +21,7 @@ exit;
 
 sub make_app_comparison_table ()
 {
-	print "make_app_cpmparison_table ()\n";
+	print "make_app_comparison_table ()\n";
 
 	my $db;
 
@@ -91,6 +94,190 @@ $db, $y_lazy_y_classo, $y_lazy_n_classo, $n_lazy_y_classo, $n_lazy_n_classo, $y_
 	}
 
 	close OUTPUT;
+}
+
+sub make_best_runs_table ()
+{
+	print "make_best_runs_table ()\n";
+
+	make_best_runs_table_for_lazy ();
+	make_best_runs_table_for_classifier_c ();
+	make_best_runs_table_for_classifier_o ();
+}
+
+sub make_best_runs_table_for_lazy ()
+{
+	my $db;
+
+	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $avg_patterns, $avg_rules, $accuracy);
+
+format OUTPUT_BEST_RUNS_LAZY =
+@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+$db,                $support,     $confidence,  $min_rules,   $max_size,    $ranking_size, $avg_patterns, $avg_rules, $accuracy
+.
+
+	my $out_file = "$Common::OutputDirTables/table_best_runs_lazy.out";
+
+	open OUTPUT_BEST_RUNS_LAZY, ">$out_file";
+	print OUTPUT_BEST_RUNS_LAZY "data set            support       confidence    min_rules     max_size      ranking_size  avg_patterns  avg_rules     accuracy\n";
+
+	my $data_base;
+
+	foreach $data_base (@Common::DataBases)
+	{
+		print "base: $data_base\n";
+
+		$db = $data_base;
+
+		my $file_best_run = Common::GetBestOutputFile ('lazy', $data_base);
+
+		open INPUT, "<$file_best_run";
+
+		$support = <INPUT>;
+
+		chomp $support;
+
+		$confidence	= $support;
+		$min_rules	= $support;
+		$max_size	= $support;
+		$ranking_size	= $support;
+		$avg_patterns	= $support;
+		$avg_rules	= $support;
+		$accuracy	= $support;
+
+		$support	=~ s/.*support: (.*), confidence.*/$1/;
+		$confidence	=~ s/.*confidence: (.*), min_rules.*/$1/;
+		$min_rules	=~ s/.*min_rules: (.*), max_size.*/$1/;
+		$max_size	=~ s/.*max_size: (.*), ranking_size.*/$1/;
+		$ranking_size	=~ s/.*ranking_size: (.*), avg_patterns.*/$1/;
+		$avg_patterns	=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
+		$avg_rules	=~ s/.*avg_rules: (.*), accuracy.*/$1/;
+		$accuracy	=~ s/.*accuracy: (.*)$/$1/;
+
+		write OUTPUT_BEST_RUNS_LAZY;
+	}
+
+	close OUTPUT_BEST_RUNS_LAZY;
+}
+
+sub make_best_runs_table_for_classifier_c ()
+{
+	my $db;
+
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $avg_patterns, $avg_rules, $accuracy);
+
+format OUTPUT_BEST_RUNS_CLASSC =
+@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$avg_patterns,$avg_rules,$accuracy
+.
+
+	my $out_file = "$Common::OutputDirTables/table_best_runs_classc.out";
+
+	open OUTPUT_BEST_RUNS_CLASSC, ">$out_file";
+	print OUTPUT_BEST_RUNS_CLASSC "data set            support       confidence    min_num_rules max_num_rank_rules min_rule_len   max_rule_len avg_patterns  avg_rules     accuracy      \n";
+
+	my $data_base;
+
+	foreach $data_base (@Common::DataBases)
+	{
+		print "base: $data_base\n";
+
+		$db = $data_base;
+
+		my $file_best_run = Common::GetBestOutputFile ('classifier_c', $data_base);
+
+		open INPUT, "<$file_best_run";
+
+		$support = <INPUT>;
+
+		chomp $support;
+
+		$confidence		= $support;
+		$min_num_rules		= $support;
+		$max_num_rank_rules	= $support;
+		$min_rule_len		= $support;
+		$max_rule_len		= ''; #$support;	TODO: fix
+		$avg_patterns		= $support;
+		$avg_rules		= $support;
+		$accuracy		= $support;
+
+		$support		=~ s/.*support: (.*), confidence.*/$1/;
+		$confidence		=~ s/.*confidence: (.*), min_num_rules.*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules: (.*), max_num_rank_rules.*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules: (.*), min_rule_len.*/$1/;
+#		$min_rule_len		=~ s/.*min_rule_len: (.*), max_rule_len.*/$1/;		# TODO: fix
+#		$max_rule_len		=~ s/.*max_rule_len: (.*), avg_patterns.*/$1/;		# TODO: fix
+		$min_rule_len		=~ s/.*min_rule_len: (.*), avg_patterns.*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
+		$avg_rules		=~ s/.*avg_rules: (.*), accuracy.*/$1/;
+		$accuracy		=~ s/.*accuracy: (.*)$/$1/;
+
+		write OUTPUT_BEST_RUNS_CLASSC;
+	}
+
+	close OUTPUT_BEST_RUNS_CLASSC;
+}
+
+sub make_best_runs_table_for_classifier_o ()
+{
+	my $db;
+
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $avg_patterns, $avg_rules, $accuracy);
+
+format OUTPUT_BEST_RUNS_CLASSO =
+@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$omode,$ometric,$avg_patterns,$avg_rules,$accuracy
+.
+
+	my $out_file = "$Common::OutputDirTables/table_best_runs_classo.out";
+
+	open OUTPUT_BEST_RUNS_CLASSO, ">$out_file";
+	print OUTPUT_BEST_RUNS_CLASSO "data set            support       confidence    min_num_rules max_num_rank_rules min_rule_len   max_rule_len omode         ometric       avg_patterns  avg_rules     accuracy      \n";
+
+	my $data_base;
+
+	foreach $data_base (@Common::DataBases)
+	{
+		print "base: $data_base\n";
+
+		$db = $data_base;
+
+		my $file_best_run = Common::GetBestOutputFile ('classifier_o', $data_base);
+
+		open INPUT, "<$file_best_run";
+
+		$support = <INPUT>;
+
+		chomp $support;
+
+		$confidence		= $support;
+		$min_num_rules		= $support;
+		$max_num_rank_rules	= $support;
+		$min_rule_len		= $support;
+		$max_rule_len		= ''; #$support;	TODO: fix
+		$omode			= $support;
+		$ometric		= $support;
+		$avg_patterns		= $support;
+		$avg_rules		= $support;
+		$accuracy		= $support;
+
+		$support		=~ s/.*support: (.*), confidence.*/$1/;
+		$confidence		=~ s/.*confidence: (.*), min_num_rules.*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules: (.*), max_num_rank_rules.*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules: (.*), min_rule_len.*/$1/;
+#		$min_rule_len		=~ s/.*min_rule_len: (.*), max_rule_len.*/$1/;		# TODO: fix
+#		$max_rule_len		=~ s/.*max_rule_len: (.*), omode.*/$1/;			# TODO: fix
+		$min_rule_len		=~ s/.*min_rule_len: (.*), omode.*/$1/;
+		$omode			=~ s/.*omode: (.*), ometric.*/$1/;
+		$ometric		=~ s/.*ometric: (.*), avg_patterns.*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
+		$avg_rules		=~ s/.*avg_rules: (.*), accuracy.*/$1/;
+		$accuracy		=~ s/.*accuracy: (.*)$/$1/;
+
+		write OUTPUT_BEST_RUNS_CLASSO;
+	}
+
+	close OUTPUT_BEST_RUNS_CLASSO;
 }
 
 sub get_comparisons_for_data_base ($$)

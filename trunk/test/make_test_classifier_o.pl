@@ -206,7 +206,7 @@ sub test_data_base ($)
 									system "mkdir -p $OUTPUT_DIR/$data_base/";
 
 									open OUTPUT, ">$out_file";
-									print OUTPUT "support: $support, confidence: $confidence, min_num_rules: $min_num_rules, max_num_rank_rules: $max_num_rank_rules, min_rule_len: $min_rule_len, omode: $omode, ometric: $ometric, avg_patterns: $avg_patterns, avg_rules: $avg_rules, accuracy: $accuracy\n";
+									print OUTPUT "support: $support, confidence: $confidence, min_num_rules: $min_num_rules, max_num_rank_rules: $max_num_rank_rules, min_rule_len: $min_rule_len, max_rule_len: $max_rule_len, omode: $omode, ometric: $ometric, avg_patterns: $avg_patterns, avg_rules: $avg_rules, accuracy: $accuracy\n";
 									close OUTPUT;
 
 									if ($accuracy > $best_accuracy)
@@ -230,8 +230,8 @@ sub run_classifier_o ($$$$$$$$$$$$)
 {
 	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $log_file) = @_;
 
-	print "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1 2&>$log_file\n";
-	system "$APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1 2&>$log_file";
+	print "nice -n 10 $APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1 2&>$log_file\n";
+	system "nice -n 10 $APP_CLASSIFIER -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r o -o $omode -e $ometric -d -1 2&>$log_file";
 
 	open INPUT, "<$log_file";
 
