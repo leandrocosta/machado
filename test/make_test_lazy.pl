@@ -88,7 +88,7 @@ sub test_data_base ($)
 #		0.8,	# OK (min_rules = (1, 10))
 #		0.9,	# OK (min_rules = (1, 10))
 #		0.95,	# OK (min_rules = (1, 10))
-		0.99,	# OK (min_rules = (1, 10))
+# OK		0.99,	# OK (min_rules = (1, 10))
 # OK		1	# OK (min_rules = (1, 10))
 	);
 
