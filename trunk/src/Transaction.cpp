@@ -189,6 +189,7 @@ PatternList* Transaction::GetFrequentPatternList (
 									pNewPattern->SetPatternID ();
 									pNewPattern->SetSupport ((float32) pNewPattern->GetFrequence () / projection_size);
 									pFrequentPatternList->PushBack (pNewPattern);
+									pPattern->AddChildPattern (pNewPattern);
 								}
 								else
 									delete pNewPattern;
@@ -231,6 +232,14 @@ PatternList* Transaction::GetFrequentPatternList (
 	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - patterns [%u]\n", frequent_size);
 
 	return pFrequentPatternList;
+}
+
+PatternList* Transaction::GetMaximalFrequentPatternList (
+		const float32 &support, const uint32 &projection_size) const
+{
+	PatternList *pMaximalFrequentPatternList = new PatternList ();
+//	PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, 1, Item::GetMaxItemID () + 1);
+	return pMaximalFrequentPatternList;
 }
 
 void Transaction::MakeItemCoverageArray (const uint32 &num_items)
