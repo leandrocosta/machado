@@ -1,4 +1,5 @@
 #include "Pattern.h"
+#include "Class.h"
 #include "base/Logger.h"
 
 #include <iostream>
@@ -36,7 +37,8 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 		if (pTransaction->IsCoveredByItem (rItemID))
 		{
 //			mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) + 1);
-			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+//			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+			mClassCoverageArray [pTransaction->GetClassID ()]++;
 			mTransactionList.PushBack (pTransaction);
 		}
 	}
@@ -63,7 +65,8 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 //		mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) + 1);
-		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+//		mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]++;
+		mClassCoverageArray [pTransaction->GetClassID ()]++;
 		mTransactionList.PushBack (pTransaction);
 	}
 
@@ -76,8 +79,10 @@ Pattern::~Pattern ()
 
 //	mNumTransactionsOfClassHsh.Clear ();
 //	mClassCoverageHsh.Clear ();
-	mNumTransactionsOfClassHsh.clear ();
+//	mNumTransactionsOfClassHsh.clear ();
 //	mClassCoverageHsh.clear ();
+
+	delete[] mClassCoverageArray;
 
 	RemoveAll ();
 }
@@ -110,37 +115,14 @@ void Pattern::InitFields ()
 	mFrequence	= 0	;
 	mSupport	= 0.0	;
 	mGot		= false	;
+
+	const uint32 num_classes = Class::GetMaxClassID () + 1;
+
+	mClassCoverageArray = new uint32 [num_classes];
+
+	for (uint32 classID = 0; classID < num_classes; classID++)
+		mClassCoverageArray [classID] = 0;
 }
-
-/*
-void Pattern::AddItem (Item *pItem)
-{
-//	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - begin\n");
-
-	PushBack (pItem);
-
-//	LOGMSG (MAX_LEVEL, "Pattern::AddItem () - merge lists\n");
-
-	TransactionList::STLTransactionList_it it	= mTransactionList.GetBegin ()	;
-	TransactionList::STLTransactionList_it itEnd	= mTransactionList.GetEnd ()	;
-
-	while (it != itEnd)
-	{
-//		if (static_cast<const Transaction *>(*it)->FindByPtr (pItem))
-		if (static_cast<const Transaction *>(*it)->IsCoveredBy (pItem))
-			++it;
-		else
-		{
-			Transaction *pTransaction = static_cast<Transaction *>(*it);
-//			mNumTransactionsOfClassHsh.Set (pTransaction->GetClassValue (), mNumTransactionsOfClassHsh.Get (pTransaction->GetClassValue ()) - 1);
-			mNumTransactionsOfClassHsh [pTransaction->GetClassValue ()]--;
-
-			it = mTransactionList.Erase (it);
-			itEnd = mTransactionList.GetEnd ();
-		}
-	}
-}
-*/
 
 const uint32 Pattern::GetFrequence () const
 {
@@ -162,6 +144,7 @@ const TransactionList& Pattern::GetTransactionList () const
 	return mTransactionList;
 }
 
+/*
 const uint32 Pattern::GetNumTransactionsOfClass (const string &class_name) const
 {
 //	return mNumTransactionsOfClassHsh.Get (class_name);
@@ -174,6 +157,12 @@ const uint32 Pattern::GetNumTransactionsOfClass (const string &class_name) const
 		num_transactions = it->second;
 
 	return num_transactions;
+}
+*/
+
+const uint32 Pattern::GetNumTransactionsOfClass (const uint32 &classID) const
+{
+	return mClassCoverageArray [classID];
 }
 
 void Pattern::SetGot (const bool &got)

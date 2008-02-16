@@ -22,8 +22,7 @@ class Pattern : public ItemSet
 		static	const	uint32	GetMaxPatternID	()	;
 
 	private:
-		void	InitFields	()		;
-//		void	AddItem		(Item *pItem)	;
+		void	InitFields	()	;
 
 	public:
 			void	SetPatternID	()		;
@@ -36,16 +35,11 @@ class Pattern : public ItemSet
 		const	float32&	GetSupport		()				const	;
 
 	public:
-			void			SetGot				(const bool &got)			;
-		const	bool&			GetGot				()				const	;
-		const	TransactionList&	GetTransactionList		()				const	;
-		const	uint32			GetNumTransactionsOfClass	(const string &class_name)	const	;
-
-	public:
-		const	float32	GetSimilarity		(Pattern *pPattern)		;
-//			void	IncClassCoverage	(const string &class_name)	;
-//		const	uint32	GetClassCoverage	(const string &class_name)	;
-//			void	ResetClassCoverage	()				;
+			void			SetGot				(const bool &got)		;
+		const	bool&			GetGot				()			const	;
+		const	TransactionList&	GetTransactionList		()			const	;
+		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)	const	;
+		const	float32			GetSimilarity			(Pattern *pPattern)		;
 
 	public:
 		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;
@@ -63,15 +57,8 @@ class Pattern : public ItemSet
 		uint32		mFrequence		;
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
+		uint32*		mClassCoverageArray	;
 		bool		mGot			;
-
-	private:
-//		StringUInt32Hash	mClassCoverageHsh		;
-//		StringUInt32Hash	mNumTransactionsOfClassHsh	;
-//		UInt32Float32Hash	mPatternSimilarityHsh		;
-
-//		hash_map<string, uint32>	mClassCoverageHsh		;
-		hash_map<string, uint32>	mNumTransactionsOfClassHsh	;
 };
 
 
