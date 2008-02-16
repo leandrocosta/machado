@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 
 use strict;
-
 use Common;
 
 sub make_app_histogram_graphs ();
@@ -30,9 +29,10 @@ my $min_rule_len	= '1';
 my $max_rule_len	= '1';
 my $omode		= 'h';
 
+system "mkdir -p $Common::OutputDirGraphs/";
 
 make_app_histogram_graphs ();
-make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
+#make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
 
 
 exit;
@@ -45,9 +45,13 @@ sub get_best_run_for_application ($$)
 
 	my $RunResult = Common::GetBestRunResult ($application, $data_base);
 
-	$accuracy_hsh{$data_base}{$application} = $RunResult->{ACCURACY};
-	$avg_patterns_hsh{$data_base}{$application} = $RunResult->{AVG_PATTERNS};
-	$avg_rules_hsh{$data_base}{$application} = $RunResult->{AVG_RULES};
+	$accuracy_hsh{$data_base}{$application}		= $RunResult->{ACCURACY};
+	$avg_patterns_hsh{$data_base}{$application}	= $RunResult->{AVG_PATTERNS};
+	$avg_rules_hsh{$data_base}{$application}	= $RunResult->{AVG_RULES};
+
+	$accuracy_hsh{'average'}{$application}		+= $RunResult->{ACCURACY};
+	$avg_patterns_hsh{'average'}{$application}	+= $RunResult->{AVG_PATTERNS};
+	$avg_rules_hsh{'average'}{$application}		+= $RunResult->{AVG_RULES};
 }
 
 sub get_best_runs_for_data_base ($)
@@ -90,6 +94,18 @@ sub make_app_histogram_graphs ()
 
 		get_best_runs_for_data_base ($data_base);
 	}
+
+	$accuracy_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+	$accuracy_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
+	$accuracy_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
+
+	$avg_patterns_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+	$avg_patterns_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
+	$avg_patterns_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
+
+	$avg_rules_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+	$avg_rules_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
+	$avg_rules_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 
 	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_acc', \%accuracy_hsh);
 	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_pat', \%avg_patterns_hsh);

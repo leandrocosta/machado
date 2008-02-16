@@ -11,6 +11,8 @@ sub get_comparisons_for_data_base ($$);
 
 my @comparison_array;
 
+system "mkdir -p $Common::OutputDirTables/";
+
 make_app_comparison_table ();
 make_best_runs_table ();
 
@@ -145,14 +147,14 @@ $db,                $support,     $confidence,  $min_rules,   $max_size,    $ran
 		$avg_rules	= $support;
 		$accuracy	= $support;
 
-		$support	=~ s/.*support: (.*), confidence.*/$1/;
-		$confidence	=~ s/.*confidence: (.*), min_rules.*/$1/;
-		$min_rules	=~ s/.*min_rules: (.*), max_size.*/$1/;
-		$max_size	=~ s/.*max_size: (.*), ranking_size.*/$1/;
-		$ranking_size	=~ s/.*ranking_size: (.*), avg_patterns.*/$1/;
-		$avg_patterns	=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
-		$avg_rules	=~ s/.*avg_rules: (.*), accuracy.*/$1/;
-		$accuracy	=~ s/.*accuracy: (.*)$/$1/;
+		$support	=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence	=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_rules	=~ s/.*min_rules \[([^\]]*)\].*/$1/;
+		$max_size	=~ s/.*max_size \[([^\]]*)\].*/$1/;
+		$ranking_size	=~ s/.*ranking_size \[([^\]]*)\].*/$1/;
+		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 
 		write OUTPUT_BEST_RUNS_LAZY;
 	}
@@ -196,21 +198,20 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$min_num_rules		= $support;
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
-		$max_rule_len		= ''; #$support;	TODO: fix
+		$max_rule_len		= $support;
 		$avg_patterns		= $support;
 		$avg_rules		= $support;
 		$accuracy		= $support;
 
-		$support		=~ s/.*support: (.*), confidence.*/$1/;
-		$confidence		=~ s/.*confidence: (.*), min_num_rules.*/$1/;
-		$min_num_rules		=~ s/.*min_num_rules: (.*), max_num_rank_rules.*/$1/;
-		$max_num_rank_rules	=~ s/.*max_num_rank_rules: (.*), min_rule_len.*/$1/;
-#		$min_rule_len		=~ s/.*min_rule_len: (.*), max_rule_len.*/$1/;		# TODO: fix
-#		$max_rule_len		=~ s/.*max_rule_len: (.*), avg_patterns.*/$1/;		# TODO: fix
-		$min_rule_len		=~ s/.*min_rule_len: (.*), avg_patterns.*/$1/;
-		$avg_patterns		=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
-		$avg_rules		=~ s/.*avg_rules: (.*), accuracy.*/$1/;
-		$accuracy		=~ s/.*accuracy: (.*)$/$1/;
+		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
+		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+		$accuracy		=~ s/.*accuracy \[([^\]]*)\],*/$1/;
 
 		write OUTPUT_BEST_RUNS_CLASSC;
 	}
@@ -254,25 +255,24 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$min_num_rules		= $support;
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
-		$max_rule_len		= ''; #$support;	TODO: fix
+		$max_rule_len		= $support;
 		$omode			= $support;
 		$ometric		= $support;
 		$avg_patterns		= $support;
 		$avg_rules		= $support;
 		$accuracy		= $support;
 
-		$support		=~ s/.*support: (.*), confidence.*/$1/;
-		$confidence		=~ s/.*confidence: (.*), min_num_rules.*/$1/;
-		$min_num_rules		=~ s/.*min_num_rules: (.*), max_num_rank_rules.*/$1/;
-		$max_num_rank_rules	=~ s/.*max_num_rank_rules: (.*), min_rule_len.*/$1/;
-#		$min_rule_len		=~ s/.*min_rule_len: (.*), max_rule_len.*/$1/;		# TODO: fix
-#		$max_rule_len		=~ s/.*max_rule_len: (.*), omode.*/$1/;			# TODO: fix
-		$min_rule_len		=~ s/.*min_rule_len: (.*), omode.*/$1/;
-		$omode			=~ s/.*omode: (.*), ometric.*/$1/;
-		$ometric		=~ s/.*ometric: (.*), avg_patterns.*/$1/;
-		$avg_patterns		=~ s/.*avg_patterns: (.*), avg_rules.*/$1/;
-		$avg_rules		=~ s/.*avg_rules: (.*), accuracy.*/$1/;
-		$accuracy		=~ s/.*accuracy: (.*)$/$1/;
+		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\]max_num_rank_rules.*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\]min_rule_len.*/$1/;
+		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
+		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$omode			=~ s/.*omode \[([^\]]*)\].*/$1/;
+		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 
 		write OUTPUT_BEST_RUNS_CLASSO;
 	}
@@ -284,42 +284,50 @@ sub get_comparisons_for_data_base ($$)
 {
 	my ($data_base, $comparison_array) = @_;
 
-	my $log_file_lazy		= Common::GetBestLogFile ('lazy', $data_base);
-	my $log_file_classifier_c	= Common::GetBestLogFile ('classifier_c', $data_base);
-	my $log_file_classifier_o	= Common::GetBestLogFile ('classifier_o', $data_base);
+	my $fold;
 
-
-	open LOG_FILE_LAZY, "<$log_file_lazy";
-	open LOG_FILE_CLASSIFIER_C, "<$log_file_classifier_c";
-	open LOG_FILE_CLASSIFIER_O, "<$log_file_classifier_o";
-
-	while (<LOG_FILE_LAZY>)
+	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 	{
-		my $test_lazy		= $_;
-		my $test_classifier_c	= <LOG_FILE_CLASSIFIER_C>;
-		my $test_classifier_o	= <LOG_FILE_CLASSIFIER_O>;
+		my $log_file_lazy		= Common::GetBestLogFile ('lazy', $data_base, $fold);
+		my $log_file_classifier_c	= Common::GetBestLogFile ('classifier_c', $data_base, $fold);
+		my $log_file_classifier_o	= Common::GetBestLogFile ('classifier_o', $data_base, $fold);
 
-		my $class_correct	= $test_lazy;
-		my $class_lazy		= $test_lazy;
-		my $class_classifier_c	= $test_classifier_c;
-		my $class_classifier_o	= $test_classifier_o;
+		print "lazy: $log_file_lazy\n";
+		print "classifier_c: $log_file_classifier_c\n";
+		print "classifier_o: $log_file_classifier_o\n";
 
-		$class_correct =~ s/.*class \[(.*)\], guess.*/$1/;
-		$class_lazy =~ s/.*guess \[(.*)\], correct.*/$1/;
-		$class_classifier_c =~ s/.*guess \[(.*)\], correct.*/$1/;
-		$class_classifier_o =~ s/.*guess \[(.*)\], correct.*/$1/;
+		open LOG_FILE_LAZY, "<$log_file_lazy";
+		open LOG_FILE_CLASSIFIER_C, "<$log_file_classifier_c";
+		open LOG_FILE_CLASSIFIER_O, "<$log_file_classifier_o";
 
-		my $comparison = {
-			CLASS_CORRECT		=> $class_correct,
-			CLASS_LAZY		=> $class_lazy,
-			CLASS_CLASSIFIER_C	=> $class_classifier_c,
-			CLASS_CLASSIFIER_O	=> $class_classifier_o
-		};
+		while (<LOG_FILE_LAZY>)
+		{
+			my $test_lazy		= $_;
+			my $test_classifier_c	= <LOG_FILE_CLASSIFIER_C>;
+			my $test_classifier_o	= <LOG_FILE_CLASSIFIER_O>;
 
-		push @{$comparison_array}, $comparison;
+			my $class_correct	= $test_lazy;
+			my $class_lazy		= $test_lazy;
+			my $class_classifier_c	= $test_classifier_c;
+			my $class_classifier_o	= $test_classifier_o;
+
+			$class_correct		=~ s/.*class \[([^\]]*)\].*/$1/;
+			$class_lazy		=~ s/.*guess \[([^\]]*)\].*/$1/;
+			$class_classifier_c	=~ s/.*guess \[([^\]]*)\].*/$1/;
+			$class_classifier_o	=~ s/.*guess \[([^\]]*)\].*/$1/;
+
+			my $comparison = {
+				CLASS_CORRECT		=> $class_correct,
+				CLASS_LAZY		=> $class_lazy,
+				CLASS_CLASSIFIER_C	=> $class_classifier_c,
+				CLASS_CLASSIFIER_O	=> $class_classifier_o
+			};
+
+			push @{$comparison_array}, $comparison;
+		}
+
+		close LOG_FILE_CLASSIFIER_O;
+		close LOG_FILE_CLASSIFIER_C;
+		close LOG_FILE_LAZY;
 	}
-
-	close LOG_FILE_CLASSIFIER_O;
-	close LOG_FILE_CLASSIFIER_C;
-	close LOG_FILE_LAZY;
 }
