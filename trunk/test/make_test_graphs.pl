@@ -21,10 +21,10 @@ my %ometric_rul_hsh;
 my $db;
 my $i;
 
-my $support		= '0.1';
-my $confidence		= '0.9';
+my $support		= '0.001';	#'0.1';
+my $confidence		= '0.001';	#'0.9';
 my $min_num_rules	= '1';
-my $max_num_rank_rules	= '1';
+my $max_num_rank_rules	= '100';	#'1';
 my $min_rule_len	= '1';
 my $max_rule_len	= '1';
 my $omode		= 'h';
@@ -32,7 +32,7 @@ my $omode		= 'h';
 system "mkdir -p $Common::OutputDirGraphs/";
 
 make_app_histogram_graphs ();
-#make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
+make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
 
 
 exit;
@@ -80,6 +80,10 @@ sub get_ometric_run_for_classifier_o ($$$$$$$$$)
 	$ometric_acc_hsh{$data_base}{$ometric} = $RunResult->{ACCURACY};
 	$ometric_pat_hsh{$data_base}{$ometric} = $RunResult->{AVG_PATTERNS};
 	$ometric_rul_hsh{$data_base}{$ometric} = $RunResult->{AVG_RULES};
+
+	$ometric_acc_hsh{'average'}{$ometric}	+= $RunResult->{ACCURACY};
+	$ometric_pat_hsh{'average'}{$ometric}	+= $RunResult->{AVG_PATTERNS};
+	$ometric_rul_hsh{'average'}{$ometric}	+= $RunResult->{AVG_RULES};
 }
 
 sub make_app_histogram_graphs ()
@@ -126,6 +130,21 @@ sub make_ometric_histogram_graphs ($$$$$$$)
 
 		get_ometric_runs_for_classifier_o ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
 	}
+
+	$ometric_acc_hsh{'average'}{'s'} /= scalar @Common::DataBases;
+	$ometric_acc_hsh{'average'}{'c'} /= scalar @Common::DataBases;
+	$ometric_acc_hsh{'average'}{'l'} /= scalar @Common::DataBases;
+	$ometric_acc_hsh{'average'}{'m'} /= scalar @Common::DataBases;
+
+	$ometric_pat_hsh{'average'}{'s'} /= scalar @Common::DataBases;
+	$ometric_pat_hsh{'average'}{'c'} /= scalar @Common::DataBases;
+	$ometric_pat_hsh{'average'}{'l'} /= scalar @Common::DataBases;
+	$ometric_pat_hsh{'average'}{'m'} /= scalar @Common::DataBases;
+
+	$ometric_rul_hsh{'average'}{'s'} /= scalar @Common::DataBases;
+	$ometric_rul_hsh{'average'}{'c'} /= scalar @Common::DataBases;
+	$ometric_rul_hsh{'average'}{'l'} /= scalar @Common::DataBases;
+	$ometric_rul_hsh{'average'}{'m'} /= scalar @Common::DataBases;
 
 	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_ometric_acc', \%ometric_acc_hsh);
 	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_ometric_pat', \%ometric_pat_hsh);
