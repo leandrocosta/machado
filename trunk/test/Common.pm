@@ -82,14 +82,14 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 @LazyMaxSizes = (
 # OK	2,
 # OK	3,
-	4,
+# OK	4,
 #	5
 );
 
 @ClassifierSupports = (
 # OK	0.001,
 # OK	0.01,
-	0.1,
+# OK	0.1,
 #	0.2,
 #	0.3,
 #	0.4,
