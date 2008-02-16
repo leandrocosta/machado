@@ -88,8 +88,14 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 
 	switch (metric)
 	{
+		case METRIC_SET_SIMILARITY:
+			DestroyItemPatternCoverageMatrix ();
+			break;
 		case METRIC_SET_COVERAGE:
+			DestroyTransactionPatternCoverageMatrix ();
+			break;
 		case METRIC_SET_SIM_COV:
+			DestroyItemPatternCoverageMatrix ();
 			DestroyTransactionPatternCoverageMatrix ();
 			break;
 		case METRIC_SET_CLASS_COVERAGE:
@@ -97,6 +103,7 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 			DestroyClassPatternCoverageMatrix ();
 			break;
 		case METRIC_ALL:
+			DestroyItemPatternCoverageMatrix ();
 			DestroyTransactionPatternCoverageMatrix ();
 			DestroyClassPatternCoverageMatrix ();
 			break;
@@ -519,6 +526,8 @@ const float32 PatternList::GetSetSimilarityRate ()
 			}
 		}
 
+		delete[] patternIDArray;
+
 		rate = exclusive_factor / num_items;
 	}
 
@@ -570,6 +579,8 @@ const float32 PatternList::GetSetCoverageRate (const TransactionList *pTransacti
 
 //			num_coverages += patterns_found_in_transaction;
 		}
+
+		delete[] patternIDArray;
 
 		rate = exclusive_factor / num_transactions;
 //		rate = (float32) (exclusive_factor / distinct_transactions) * ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
@@ -641,6 +652,9 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 				exclusive_factor += float32 (num_patterns - patterns_found_with_class) / (num_patterns - 1);
 			}
 		}
+
+		delete[] classCoverageMeanArray;
+		delete[] patternIDArray;
 
 		rate = exclusive_factor / num_classes;
 	}
@@ -720,7 +734,7 @@ const float32 PatternList::GetRate (const TransactionList *pTransactionList, con
 			rate = GetPairMeanClassCoverageRate (pTransactionList);
 			break;
 		case METRIC_ALL:
-			rate = GetSetSimilarityRate () * GetSetCoverageRate (pTransactionList) * GetPairMeanClassCoverageRate (pTransactionList);
+			rate = GetSetSimilarityRate () * GetSetCoverageRate (pTransactionList) * GetSetClassCoverageRate (pTransactionList) * GetPairMeanClassCoverageRate (pTransactionList);
 			break;
 		case METRIC_UNKNOWN:
 		default:
