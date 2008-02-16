@@ -1,178 +1,33 @@
 #!/usr/bin/perl -w
 
 use strict;
+use Common;
 
-my $LAZY = "lazy";
-my $APP_LAZY = "./$LAZY";
-
-my $OUTPUT_DIR = "output/lazy";
-
-sub test_data_base ($);
-sub run_lazy ($$$$$$$$$);
-
-my @data_bases = (
-	'anneal.ac',
-	'austra.ac',
-	'auto.ac',
-	'breast.ac',
-	'cleve.ac',
-	'crx.ac',
-	'diabetes.ac',
-	'german.ac',
-	'glass.ac',
-	'heart.ac',
-	'hepati.ac',
-	'horse.ac',
-	'hypo.ac',
-	'ionosphere.ac',
-	'iris.ac',
-	'labor.ac',
-	'led7.ac',
-	'lymph.ac',
-	'pima.ac',
-	'sick.ac',
-	'sonar.ac',
-	'tic-tac.ac',
-	'vehicle.ac',
-	'waveform.ac',
-	'wine.ac',
-	'zoo.ac'
-);
+sub make_test_lazy ($$$$$$);
+sub run_lazy ($$$$$$$$$$$);
 
 my $data_base;
 
-foreach $data_base (sort @data_bases)
+foreach $data_base (@Common::DataBases)
 {
-	print "base: $data_base\n";
-
-	test_data_base ($data_base);
+	system "mkdir -p $Common::OutputDirLazy/$data_base";
 }
 
-exit;
+my ($s, $c, $n, $m, $l);
 
-###
-
-my ($support, $confidence, $min_rules, $max_size, $ranking_size, $avg_patterns, $avg_rules, $accuracy);
-
-format OUTPUT =
-support: @<<<<, confidence: @<<<<, min_rules: @<<<<<<, max_size: @<<<<<<, ranking_size: @<<<<<<, avg_patterns: @######.######, avg_rules: @######.######, accuracy: @.######
-         $support,          $confidence,      $min_rules,        $max_size,             $ranking_size,         $avg_patterns,      $avg_rules,        $accuracy
-.
-
-###
-
-sub test_data_base ($)
+for ($s = 0; $s < scalar @Common::LazySupports; $s++)
 {
-	my $data_base = $_[0];
-
-	my $training_file	= "../data/adrianov/$data_base.training";
-	my $testing_file	= "../data/adrianov/$data_base.testing";
-
-	my @support = (
-		1,
-#		10,
-#		100,
-#		1000
-	);
-
-	my @confidence = (
-#		0.001,	# OK (min_rules = (1, 10))
-#		0.01,	# OK (min_rules = (1, 10))
-#		0.1,	# OK (min_rules = (1, 10))
-#		0.2,	# OK (min_rules = (1, 10))
-#		0.3,	# OK (min_rules = (1, 10))
-#		0.4,	# OK (min_rules = (1, 10))
-#		0.5,	# OK (min_rules = (1, 10))
-#		0.6,	# OK (min_rules = (1, 10))
-#		0.7,	# OK (min_rules = (1, 10))
-#		0.8,	# OK (min_rules = (1, 10))
-#		0.9,	# OK (min_rules = (1, 10))
-#		0.95,	# OK (min_rules = (1, 10))
-# OK		0.99,	# OK (min_rules = (1, 10))
-# OK		1	# OK (min_rules = (1, 10))
-	);
-
-	my @min_rules = (
-#		1,
-#		10,
-#		50,
-		100
-	);
-
-	my @max_size = (
-		2,
-#		3,
-#		4,
-#		5
-	);
-
-	my @ranking_size = (
-		1,
-		10,
-		100,
-		1000
-	);
-
-	my $best_accuracy = 0;
-
-	my $best_out_file = "$OUTPUT_DIR/$data_base/best.out";
-	my $best_log_file = "$OUTPUT_DIR/$data_base/best.log";
-
-	if (-e $best_out_file)
+	for ($c = 0; $c < scalar @Common::Confidences; $c++)
 	{
-		open INPUT, "<$OUTPUT_DIR/$data_base/best.out";
-
-		$best_accuracy = <INPUT>;
-		chomp $best_accuracy;
-		$best_accuracy =~ s/.*accuracy: (.*)$/$1/g;
-
-		close INPUT;
-	}
-	else
-	{
-		print "no best file for $data_base!\n";
-	}
-
-	my ($s, $c, $n, $m, $l);
-
-	for ($s = 0; $s < scalar @support; $s++)
-	{
-		$support = $support[$s];
-
-		for ($c = 0; $c < scalar @confidence; $c++)
+		for ($n = 0; $n < scalar @Common::MinNumRules; $n++)
 		{
-			$confidence = $confidence[$c];
-
-			for ($n = 0; $n < scalar @min_rules; $n++)
+			for ($m = 0; $m < scalar @Common::LazyMaxSizes; $m++)
 			{
-				$min_rules = $min_rules[$n];
-
-				for ($m = 0; $m < scalar @max_size; $m++)
+				for ($l = 0; $l < scalar @Common::MaxNumRankRules; $l++)
 				{
-					$max_size = $max_size[$m];
-
-					for ($l = 0; $l < scalar @ranking_size; $l++)
+					foreach $data_base (@Common::DataBases)
 					{
-						$ranking_size = $ranking_size[$l];
-
-						my $out_file = "$OUTPUT_DIR/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".out";
-						my $log_file = "$OUTPUT_DIR/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".log";
-
-						run_lazy ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_size, $ranking_size, $log_file);
-
-						system "mkdir -p $OUTPUT_DIR/$data_base/";
-
-						open OUTPUT, ">$out_file";
-						print OUTPUT "support: $support, confidence: $confidence, min_rules: $min_rules, max_size: $max_size, ranking_size: $ranking_size, avg_patterns: $avg_patterns, avg_rules: $avg_rules, accuracy: $accuracy\n";
-						close OUTPUT;
-
-						if ($accuracy > $best_accuracy)
-						{
-							system "cp $out_file $best_out_file";
-							system "cp $log_file $best_log_file";
-
-							$best_accuracy = $accuracy;
-						}
+						make_test_lazy ($data_base, $Common::LazySupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::LazyMaxSizes[$m], $Common::MaxNumRankRules[$l]);
 					}
 				}
 			}
@@ -180,32 +35,66 @@ sub test_data_base ($)
 	}
 }
 
-sub run_lazy ($$$$$$$$$)
+sub make_test_lazy ($$$$$$)
 {
-	my ($data_base, $training_file, $testing_file, $support, $confidence, $min_rules, $max_rule, $ranking_size, $log_file) = @_;
+	my ($data_base, $support, $confidence, $min_rules, $max_size, $ranking_size) = @_;
 
-	print "nice -n 10 $APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file\n";
-	system "nice -n 10 $APP_LAZY -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file";
+	my $accuracy		= 0;
+	my $avg_patterns	= 0;
+	my $avg_rules		= 0;
+	my $fold;
 
-	open INPUT, "<$log_file";
-
-	$accuracy = "";
-
-	while (<INPUT>)
+	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 	{
-		$accuracy = $_;
+		my $log_file = "$Common::OutputDirLazy/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".".$fold.".log";
+
+		my ($acc, $pat, $rul);
+
+		run_lazy ($data_base, $fold, $support, $confidence, $min_rules, $max_size, $ranking_size, $log_file, \$acc, \$pat, \$rul);
+
+		$accuracy	+= $acc;
+		$avg_patterns	+= $pat;
+		$avg_rules	+= $rul;
 	}
 
-	close INPUT;
+	$accuracy	/= $Common::NumFolds;
+	$avg_patterns	/= $Common::NumFolds;
+	$avg_rules	/= $Common::NumFolds;
 
-	chomp $accuracy;
+	print "accuracy [$accuracy], avg_patterns [$avg_patterns], avg_rules [$avg_rules]\n";
 
-	$avg_patterns = $accuracy;
-	$avg_rules = $accuracy;
+	system "mkdir -p $Common::OutputDirLazy/$data_base/";
 
-	$accuracy	=~ s/^accuracy \[(.*)\], average patterns.*/$1/;
-	$avg_patterns	=~ s/.*average patterns \[(.*)\], average rules.*/$1/;
-	$avg_rules	=~ s/.*average rules \[(.*)\]$/$1/;
+	my $out_file = "$Common::OutputDirLazy/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".out";
 
-	print "accuracy: $accuracy, average patterns: $avg_patterns, average rules: $avg_rules\n";
+	open OUTPUT, ">$out_file";
+	print OUTPUT "support [$support], confidence [$confidence], min_rules [$min_rules], max_size [$max_size], ranking_size [$ranking_size], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	close OUTPUT;
+
+	if ($accuracy > Common::GetBestAccuracy ('lazy', $data_base))
+	{
+		my $best_out_file = Common::GetBestOutputFile ('lazy', $data_base);
+
+		system "cp $out_file $best_out_file";
+
+		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+		{
+			my $log_file = "$Common::OutputDirLazy/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".".$fold.".log";
+			my $best_log_file = "$Common::OutputDirLazy/$data_base/best.$fold.log";
+			system "cp $log_file $best_log_file";
+		}
+	}
+}
+
+sub run_lazy ($$$$$$$$$$$)
+{
+	my ($data_base, $fold, $support, $confidence, $min_rules, $max_rule, $ranking_size, $log_file, $accuracy, $avg_patterns, $avg_rules) = @_;
+
+	my $training_file = Common::GetTrainingFile ($data_base, $fold);
+	my $testing_file = Common::GetTestingFile ($data_base, $fold);
+
+	print "nice -n 15 $Common::AppLazy -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file\n";
+	system "nice -n 15 $Common::AppLazy -i $training_file -t $testing_file -s $support -c $confidence -n $min_rules -m $max_rule -l $ranking_size 2&>$log_file";
+
+	Common::GetRunResultFromLogFile ($log_file, $accuracy, $avg_patterns, $avg_rules);
 }
