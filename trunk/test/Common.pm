@@ -1,5 +1,10 @@
 package Common;
 
+$AppLazy		= './lazy';
+$AppClassifier		= './classifier';
+
+$MachadoDir		= '..';
+$DataDir		= "$MachadoDir/data/adrianov/fold";
 
 $OutputDir		= 'output';
 $OutputDirLazy		= "$OutputDir/lazy";
@@ -8,9 +13,7 @@ $OutputDirClassifierO	= "$OutputDir/classifier_o";
 $OutputDirGraphs	= "$OutputDir/graphs";
 $OutputDirTables	= "$OutputDir/tables";
 
-
 $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
-
 
 @DataBases = (
 	'anneal.ac',
@@ -41,29 +44,152 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 	'zoo.ac'
 );
 
-$RunResult = {
-	ACCURACY	=> $proc,
-	AVG_PATTERNS	=> $strategy,
-	AVG_RULES	=> $num,
-};
+@Confidences = (
+		0.001,
+#		0.01,
+#		0.1,
+#		0.2,
+#		0.3,
+#		0.4,
+#		0.5,
+#		0.6,
+#		0.7,
+#		0.8,
+#		0.9,
+#		0.95,
+#		0.99,
+#		1
+);
 
-sub GetBestFile ($$$)
+@MinNumRules = (
+	1,
+#	10,
+#	100,
+#	1000
+);
+
+@MaxNumRankRules = (
+#	1,
+#	10,
+	100,
+#	1000
+);
+
+@LazySupports = (
+	1
+);
+
+@LazyMaxSizes = (
+# OK	2,
+	3,
+#	4,
+#	5
+);
+
+@ClassifierSupports = (
+	0.001,
+#	0.01,
+#	0.1,
+#	0.2,
+#	0.3,
+#	0.4,
+#	0.5,
+#	0.6,
+#	0.7,
+#	0.8,
+#	0.9,
+#	0.95,
+#	0.99,
+#	1
+);
+
+@ClassifierMinRuleLens = (
+	1,
+);
+
+@ClassifierMaxRuleLens = (
+	1,
+#	2,
+#	3,
+#	4,
+#	5
+);
+
+@ClassifierOModes = (
+	'h',
+#	'p'
+);
+
+@ClassifierOMetrics = (
+	's',
+	'c',
+#	'b',
+	'l',
+	'm',
+#	'a'
+);
+
+$NumFolds = 10;
+
+###
+
+sub GetBestAccuracy ($$)
 {
-	my ($application, $data_base, $type) = @_;
+	my ($application, $data_base) = @_;
 
-	my $out_file = "$OutputDir/$application/$data_base/best.$type";
+	my $out_file = GetBestOutputFile ($application, $data_base);
+
+	my $accuracy = 0;
+
+	if (-e $out_file)
+	{
+		$accuracy = `cat $out_file`;
+		chomp $accuracy;
+		$accuracy =~ s/.*accuracy \[([^\]]*)\].*/$1/g;
+	}
+	else
+	{
+		print "no best file for $data_base!\n";
+	}
+
+	return $accuracy;
+}
+
+sub GetTrainingFile ($$)
+{
+	my ($data_base, $fold) = @_;
+
+	return "$DataDir/$data_base/$data_base.$fold.training";
+}
+
+sub GetTestingFile ($$)
+{
+	my ($data_base, $fold) = @_;
+
+	return "$DataDir/$data_base/$data_base.$fold.testing";
+}
+
+sub GetBestFile ($$$$)
+{
+	my ($application, $data_base, $fold, $type) = @_;
+
+	my $out_file = "$OutputDir/$application/$data_base/best.$fold.$type";
 
 	return $out_file;
 }
 
 sub GetBestOutputFile ($$)
 {
-	return GetBestFile ($_[0], $_[1], 'out');
+	my ($application, $data_base) = @_;
+
+	return "$OutputDir/$application/$data_base/best.out";
 }
 
-sub GetBestLogFile ($$)
+sub GetBestLogFile ($$$)
 {
-	return GetBestFile ($_[0], $_[1], 'log');
+	my ($application, $data_base, $fold) = @_;
+
+	my $out_file = "$OutputDir/$application/$data_base/best.$fold.log";
 }
 
 sub GetLazyOutputFile ($$$$$$)
@@ -93,7 +219,24 @@ sub GetClassifierOOutputFile ($$$$$$$$$)
 	return $out_file;
 }
 
-sub GetRunResultFromFile ($)
+sub GetRunResultFromLogFile ($$$$)
+{
+	my ($log_file, $accuracy, $avg_patterns, $avg_rules) = @_;
+
+	$$accuracy = `tail -1 $log_file`;
+	chomp $$accuracy;
+
+	$$avg_patterns = $$accuracy;
+	$$avg_rules = $$accuracy;
+
+	$$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+	$$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+	$$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
+
+	print "accuracy: $$accuracy, average patterns: $$avg_patterns, average rules: $$avg_rules\n";
+}
+
+sub GetRunResultFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
@@ -110,13 +253,12 @@ sub GetRunResultFromFile ($)
 		$avg_rules = $accuracy;
 
 		chomp $accuracy;
-		$accuracy =~ s/.*accuracy: (.*)$/$1/;
-
 		chomp $avg_patterns;
-		$avg_patterns =~ s/.*avg_patterns: (.*), avg_rules.*$/$1/;
-
 		chomp $avg_rules;
-		$avg_rules =~ s/.*avg_rules: (.*), accuracy.*$/$1/;
+
+		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*$/$1/;
+		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*$/$1/;
 
 		close INPUT;
 	}
@@ -132,22 +274,22 @@ sub GetRunResultFromFile ($)
 
 sub GetBestRunResult ($$)
 {
-	return GetRunResultFromFile (GetBestOutputFile ($_[0], $_[1]));
+	return GetRunResultFromOutputFile (GetBestOutputFile ($_[0], $_[1]));
 }
 
 sub GetLazyRunResult ($$$$$$)
 {
-	return GetRunResultFromFile (GetLazyOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5]));
+	return GetRunResultFromOutputFile (GetLazyOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5]));
 }
 
 sub GetClassifierCRunResult ($$$$$$$)
 {
-	return GetRunResultFromFile (GetClassifierCOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6]));
+	return GetRunResultFromOutputFile (GetClassifierCOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6]));
 }
 
 sub GetClassifierORunResult ($$$$$$$$$)
 {
-	return GetRunResultFromFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]));
+	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]));
 }
 
 sub MakeAppHistogramGraph ($$$$$)
@@ -175,6 +317,9 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 		write OUTPUT_APP;
 	}
 
+	$db = 'average';
+	write OUTPUT_APP;
+
 	close OUTPUT_APP;
 
 	open OUTPUT, ">$gnu_file";
@@ -193,10 +338,13 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 
 	foreach $data_base (@DataBases)
 	{
-		print OUTPUT ", " if $i != 0;
-		print OUTPUT "\"$data_base\" $i";
+#		print OUTPUT ", " if $i != 0;
+#		print OUTPUT "\"$data_base\" $i";
+		print OUTPUT "\"$data_base\" $i, ";
 		$i++;
 	}
+
+	print OUTPUT "\"average\" $i";
 
 	print OUTPUT ")\n";
 	print OUTPUT "set title \"$title\"\n";
