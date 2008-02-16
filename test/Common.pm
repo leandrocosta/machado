@@ -81,15 +81,15 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 
 @LazyMaxSizes = (
 # OK	2,
-	3,
-#	4,
+# OK	3,
+	4,
 #	5
 );
 
 @ClassifierSupports = (
-	0.001,
-#	0.01,
-#	0.1,
+# OK	0.001,
+# OK	0.01,
+	0.1,
 #	0.2,
 #	0.3,
 #	0.4,
@@ -338,8 +338,6 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 
 	foreach $data_base (@DataBases)
 	{
-#		print OUTPUT ", " if $i != 0;
-#		print OUTPUT "\"$data_base\" $i";
 		print OUTPUT "\"$data_base\" $i, ";
 		$i++;
 	}
@@ -382,6 +380,9 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 		write OUTPUT_OMETRIC;
 	}
 
+	$db = 'average';
+	write OUTPUT_OMETRIC;
+
 	close OUTPUT_OMETRIC;
 
 	open OUTPUT, ">$gnu_file";
@@ -400,10 +401,11 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 
 	foreach $data_base (@Common::DataBases)
 	{
-		print OUTPUT ", " if $i != 0;
-		print OUTPUT "\"$data_base\" $i";
+		print OUTPUT "\"$data_base\" $i, ";
 		$i++;
 	}
+
+	print OUTPUT "\"average\" $i";
 
 	print OUTPUT ")\n";
 	print OUTPUT "set title \"$title\"\n";
