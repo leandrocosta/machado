@@ -125,9 +125,9 @@ sub test_data_base ($)
 	my @max_rule_len = (
 		1,
 		2,
-		3,
-		4,
-		5
+#		3,
+#		4,
+#		5
 	);
 
 	my @omode = (
