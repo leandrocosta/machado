@@ -9,7 +9,7 @@
 
 RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const uint32 &projection_size, const uint32 &num_classes) : Rule (pClass, pPattern)
 {
-	uint32	correct_trans	= pPattern->GetNumTransactionsOfClass (mpClass->GetValue ());
+	uint32	correct_trans	= pPattern->GetNumTransactionsOfClass (pClass->GetClassID ());
 	uint32	pattern_freq	= pPattern->GetFrequence ();
 	uint32	class_freq	= pClass->GetProjectionTransactionListSize ();
 
