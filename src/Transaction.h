@@ -26,18 +26,22 @@ class Transaction : public ItemSet
 		static	const	uint32	GetMaxTransactionID	()	;
 
 	public:
-		const	uint32&		GetTransactionID	()				const	;
-			Class*		GetClass		()					;
-		const	uint32&		GetClassID		()				const	;
-		const	string&		GetClassValue		()				const	;
-		const	bool		IsCoveredBy		(const Pattern *pPattern)	const	;
-		const	bool		IsCoveredBy		(const Item *pItem)		const	;
-		const	bool		IsCoveredByItem		(const uint32 &rItemID)		const	;
-			PatternList*	GetFrequentPatternList	(
-								const float32 &support,
-								const uint32 &projection_size,
-								const uint32 &min_rule_len,
-								const uint32 &max_rule_len)	const	;
+		const	uint32&		GetTransactionID		()					const	;
+			Class*		GetClass			()						;
+		const	uint32&		GetClassID			()					const	;
+		const	string&		GetClassValue			()					const	;
+		const	bool		IsCoveredBy			(const Pattern *pPattern)		const	;
+		const	bool		IsCoveredBy			(const Item *pItem)			const	;
+		const	bool		IsCoveredByItem			(const uint32 &rItemID)			const	;
+			PatternList*	GetFrequentPatternList		(
+										const float32 &support,
+										const uint32 &projection_size,
+										const uint32 &min_rule_len,
+										const uint32 &max_rule_len)	const	;
+			PatternList*	GetMaximalFrequentPatternList	(
+										const float32 &support,
+										const uint32 &projection_size)	const	;
+
 	public:
 			void	MakeItemCoverageArray				(const uint32 &num_items)	;
 			void	AddTransactionToItemsProjectionTransactionLists ()				;

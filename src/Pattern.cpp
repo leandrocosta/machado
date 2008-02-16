@@ -1,4 +1,5 @@
 #include "Pattern.h"
+#include "PatternList.h"
 #include "Class.h"
 #include "base/Logger.h"
 
@@ -76,6 +77,8 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 Pattern::~Pattern ()
 {
 	mTransactionList.RemoveAll ();
+	mpChildPatternList->RemoveAll ();
+	delete mpChildPatternList;
 
 //	mNumTransactionsOfClassHsh.Clear ();
 //	mClassCoverageHsh.Clear ();
@@ -115,6 +118,8 @@ void Pattern::InitFields ()
 	mFrequence	= 0	;
 	mSupport	= 0.0	;
 	mGot		= false	;
+
+	mpChildPatternList = new PatternList ();
 
 	const uint32 num_classes = Class::GetMaxClassID () + 1;
 
@@ -239,6 +244,11 @@ const float32 Pattern::GetSimilarity (Pattern *pPattern)
 //	}
 
 	return similarity;
+}
+
+void Pattern::AddChildPattern (Pattern *pPattern)
+{
+	mpChildPatternList->PushBack (pPattern);
 }
 
 /*

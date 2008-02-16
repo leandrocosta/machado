@@ -8,6 +8,9 @@
 #include "base/UInt32Float32Hash.h"
 
 
+class PatternList;
+
+
 class Pattern : public ItemSet
 {
 	public:
@@ -40,6 +43,7 @@ class Pattern : public ItemSet
 		const	TransactionList&	GetTransactionList		()			const	;
 		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)	const	;
 		const	float32			GetSimilarity			(Pattern *pPattern)		;
+			void			AddChildPattern			(Pattern *pPattern)		;
 
 	public:
 		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;
@@ -57,6 +61,7 @@ class Pattern : public ItemSet
 		uint32		mFrequence		;
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
+		PatternList*	mpChildPatternList	;
 		uint32*		mClassCoverageArray	;
 		bool		mGot			;
 };
