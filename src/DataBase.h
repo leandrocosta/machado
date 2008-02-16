@@ -75,7 +75,7 @@ class DataBase : private IOManager, private Tokenizer
 		TransactionList*	mpProjectionTransactionList	;
 
 		uint32			mCorrectGuesses			;
-		uint32			mWrongGuesses			;
+		uint32			mTotalGuesses			;
 		uint32			mPatterns			;
 		uint32			mRules				;
 		float32			mAccuracy			;

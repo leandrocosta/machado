@@ -249,11 +249,16 @@ void Transaction::MakeItemCoverageArray (const uint32 &num_items)
 
 		LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - item [%u]\n", pItem->GetItemID ());
 
-		while (i < pItem->GetItemID ())
+		const uint32 &rItemID = pItem->GetItemID ();
+
+		while (i < rItemID)
 			mItemCoverageArray [i++] = false;
 
 		mItemCoverageArray [i++] = true;
 	}
+
+	while (i < num_items)
+		mItemCoverageArray [i++] = false;
 
 	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - end\n");
 }
