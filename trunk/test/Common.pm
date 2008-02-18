@@ -87,9 +87,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierSupports = (
-# OK	0.001,
-# OK	0.01,
-# OK	0.1,
+#	0.001,	# OK [o: max_rule_len (1, 2)] [c: max_rule_len (1, 2)]
+#	0.01,	# OK [o: max_rule_len (1, 2)] [c: max_rule_len (1, 2)]
+#	0.1,	# OK [o: max_rule_len (1, 2)] [c: max_rule_len (1, 2)]
 #	0.2,
 #	0.3,
 #	0.4,
@@ -97,7 +97,7 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 #	0.6,
 #	0.7,
 #	0.8,
-#	0.9,
+	0.9,	# OK [o: max_rule_len (1)] [c: max_rule_len (1)]
 #	0.95,
 #	0.99,
 #	1
@@ -108,9 +108,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierMaxRuleLens = (
-	1,
+#	1,
 #	2,
-#	3,
+	3,
 #	4,
 #	5
 );
@@ -257,8 +257,8 @@ sub GetRunResultFromOutputFile ($)
 		chomp $avg_rules;
 
 		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*$/$1/;
-		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*$/$1/;
+		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
 
 		close INPUT;
 	}
