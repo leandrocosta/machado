@@ -93,7 +93,7 @@ const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 
 	ItemList::STLItemList_cit itEnd = pPattern->GetEnd ();
 
-	for (ItemList::STLItemList_cit it = pPattern->GetBegin (); it != itEnd; it++)
+	for (ItemList::STLItemList_cit it = pPattern->GetBegin (); it != itEnd; ++it)
 	{
 		if (! mItemCoverageArray [static_cast<const Item *>(*it)->GetItemID ()])
 		{
@@ -118,13 +118,53 @@ const bool Transaction::IsCoveredByItem (const uint32 &rItemID) const
 	return mItemCoverageArray [rItemID];
 }
 
+PatternList* Transaction::GetPatternList (
+		const float32 &support, const uint32 &projection_size,
+		const uint32 &min_rule_len, const uint32 &max_rule_len,
+		const bool &rUseMaximalPatterns) const
+{
+	PatternList *pPatternList = NULL;
+
+	if (rUseMaximalPatterns)
+	{
+		PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, Item::GetMaxItemID () + 1);
+		pPatternList = GetMaximalFrequentPatternList (pFrequentPatternList);
+		pFrequentPatternList->RemoveAll ();
+		delete pFrequentPatternList;
+	}
+	else
+	{
+		pPatternList = GetFrequentPatternList (support, projection_size, max_rule_len);
+
+		LOGMSG (MEDIUM_LEVEL, "Transaction::GetPatternList () - remove short patterns\n");
+
+		PatternList::STLPatternList_it it		= pPatternList->GetBegin ()	;
+		PatternList::STLPatternList_it itPatternEnd	= pPatternList->GetEnd ()	;
+
+		while (it != itPatternEnd)
+		{
+			if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
+			{
+				LOGMSG (MEDIUM_LEVEL, "Transaction::GetPatternList () - delete pattern [%s], frequence [%u]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
+				delete *it;
+				it = pPatternList->Erase (it);
+				itPatternEnd = pPatternList->GetEnd ();
+			}
+			else
+				break;
+		}
+	}
+
+	return pPatternList;
+}
+
 PatternList* Transaction::GetFrequentPatternList (
 		const float32 &support, const uint32 &projection_size,
-		const uint32 &min_rule_len, const uint32 &max_rule_len) const
+		const uint32 &rMaxPatternSize) const
 {
 	uint32 size = GetSize ();
 
-	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - items [%u], support [%f], projection_size [%u], min_rule_len [%u], max_rule_len [%u]\n", size, support, projection_size, min_rule_len, max_rule_len);
+	LOGMSG (LOW_LEVEL, "Transaction::GetFrequentPatternList () - items [%u], support [%f], projection_size [%u], rMaxPatternSize [%u]\n", size, support, projection_size, rMaxPatternSize);
 
 	PatternList*	pFrequentPatternList	= new PatternList ()	;
 	ItemList*	pFrequentItemList	= new ItemList ()	;
@@ -149,11 +189,11 @@ PatternList* Transaction::GetFrequentPatternList (
 		}
 	}
 
-	uint32 numFrequentItems		= pFrequentItemList->GetSize ();
+	uint32 numFrequentItems = pFrequentItemList->GetSize ();
 
 	if (numFrequentItems > 0)
 	{
-		uint32 frequentItemBackID	= static_cast<Item *>(pFrequentItemList->GetBack ())->GetItemID ();
+		uint32 frequentItemBackID = static_cast<Item *>(pFrequentItemList->GetBack ())->GetItemID ();
 
 		uint32 iTryPattern = 0;
 
@@ -161,7 +201,7 @@ PatternList* Transaction::GetFrequentPatternList (
 		{
 			uint32 pattern_size = static_cast<const Pattern *>(pFrequentPatternList->GetAt (iTryPattern))->GetSize ();
 
-			if (pattern_size < max_rule_len)
+			if (pattern_size < rMaxPatternSize)
 			{
 				LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - add patterns size [%u]\n", pattern_size+1);
 
@@ -203,28 +243,9 @@ PatternList* Transaction::GetFrequentPatternList (
 			else
 				break;
 		}
-
-		LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - remove short patterns\n");
-
-		PatternList::STLPatternList_it it		= pFrequentPatternList->GetBegin ()	;
-		PatternList::STLPatternList_it itPatternEnd	= pFrequentPatternList->GetEnd ()	;
-
-		while (it != itPatternEnd)
-		{
-			if (static_cast<const Pattern*>(*it)->GetSize () < min_rule_len)
-			{
-				LOGMSG (MEDIUM_LEVEL, "Transaction::GetFrequentPatternList () - delete pattern [%s], frequence [%u]\n", static_cast<const Pattern*>(*it)->GetPrintableString ().c_str (), static_cast<const Pattern*>(*it)->GetFrequence ());
-				delete *it;
-				it = pFrequentPatternList->Erase (it);
-				itPatternEnd = pFrequentPatternList->GetEnd ();
-			}
-			else
-				break;
-		}
-
-		pFrequentItemList->RemoveAll ();
 	}
 
+	pFrequentItemList->RemoveAll ();
 	delete pFrequentItemList;
 
 	uint32 frequent_size = pFrequentPatternList->GetSize ();
@@ -234,17 +255,63 @@ PatternList* Transaction::GetFrequentPatternList (
 	return pFrequentPatternList;
 }
 
-PatternList* Transaction::GetMaximalFrequentPatternList (
-		const float32 &support, const uint32 &projection_size) const
+PatternList* Transaction::GetMaximalFrequentPatternList (const PatternList *pFrequentPatternList) const
 {
-	PatternList *pMaximalFrequentPatternList = new PatternList ();
-//	PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, 1, Item::GetMaxItemID () + 1);
+	uint32 size = GetSize ();
+
+	LOGMSG (LOW_LEVEL, "Transaction::GetMaximalFrequentPatternList () - items [%u]\n", size);
+
+//	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
+//	pFrequentPatternList->Print ();
+
+	PatternList *pMaximalFrequentPatternList = NULL;
+
+	PatternList::STLPatternList_cit it	= pFrequentPatternList->GetBegin ();
+	PatternList::STLPatternList_cit itEnd	= pFrequentPatternList->GetEnd ();
+
+	Pattern *pPattern = static_cast<Pattern *>(*(it++));
+
+	pMaximalFrequentPatternList = pPattern->GetMaximalPatternList ();
+
+	while (it != itEnd)
+	{
+		pPattern = static_cast<Pattern *>(*(it++));
+
+		PatternList *pCandidatePatternList = pPattern->GetMaximalPatternList ();
+
+		PatternList::STLPatternList_cit itCandEnd = pCandidatePatternList->GetEnd ();
+
+		for (PatternList::STLPatternList_cit itCand = pCandidatePatternList->GetBegin (); itCand != itCandEnd; ++itCand)
+		{
+			/*
+			 * Insert candidate into maximal pattern
+			 * list if there is no super-pattern of
+			 * candidate in the list yet.
+			 */
+
+			Pattern *pCandidatePattern = static_cast<Pattern *>(*itCand);
+
+			if (! pMaximalFrequentPatternList->FindSuperPatternOf (pCandidatePattern))
+				pMaximalFrequentPatternList->PushBack (pCandidatePattern);
+		}
+
+		pCandidatePatternList->RemoveAll ();
+		delete pCandidatePatternList;
+
+		if (pPattern->GetSize () > 1)
+			break;
+	}
+	
+	uint32 maximal_size = pMaximalFrequentPatternList->GetSize ();
+
+	LOGMSG (LOW_LEVEL, "Transaction::GetMaximalFrequentPatternList () - patterns [%u]\n", maximal_size);
+
 	return pMaximalFrequentPatternList;
 }
 
 void Transaction::MakeItemCoverageArray (const uint32 &num_items)
 {
-	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - transaction [%u], num_items [%u]\n", mTransactionID, num_items);
+//	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - transaction [%u], num_items [%u]\n", mTransactionID, num_items);
 
 	mItemCoverageArray = new bool [num_items];
 
@@ -256,7 +323,7 @@ void Transaction::MakeItemCoverageArray (const uint32 &num_items)
 	{
 		const Item *pItem = static_cast<const Item *>(*it);
 
-		LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - item [%u]\n", pItem->GetItemID ());
+//		LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - item [%u]\n", pItem->GetItemID ());
 
 		const uint32 &rItemID = pItem->GetItemID ();
 
@@ -269,7 +336,7 @@ void Transaction::MakeItemCoverageArray (const uint32 &num_items)
 	while (i < num_items)
 		mItemCoverageArray [i++] = false;
 
-	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - end\n");
+//	LOGMSG (MAX_LEVEL, "Transaction::MakeItemCoverageArray () - end\n");
 }
 
 void Transaction::AddTransactionToItemsProjectionTransactionLists ()

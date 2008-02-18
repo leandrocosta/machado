@@ -96,7 +96,8 @@ int main(int argc, char* argv[])
 				pAppOptions->GetOrtMode (),
 				pAppOptions->GetOrtMetric (),
 				pAppOptions->GetMinNumRules (),
-				pAppOptions->GetMaxNumRankRules ());
+				pAppOptions->GetMaxNumRankRules (),
+				pAppOptions->GetUseMaximalPatterns ());
 	}
 
 	/*

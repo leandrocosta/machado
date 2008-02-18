@@ -53,9 +53,8 @@ class PatternList : public ObjectList
 		static	void	DestroyTransactionPatternCoverageMatrix	()	;
 		static	void	DestroyClassPatternCoverageMatrix	()	;
 
-//	public:
-//		void	PushFront	(Object *pObject)	;
-//		void	PushBack	(Object *pObject)	;
+	private:
+		const	uint32*	GetPatternIDArray	()	const	;
 
 	public:
 		PatternList*	GetOrthogonalPatternList		(
@@ -80,27 +79,27 @@ class PatternList : public ObjectList
 					const uint32 &min_num_rules	)	const	;
 
 	public:
-//		const	uint32&		GetMaxPatternLen			()			const	;
-		const	uint32		GetSumPatternLen			()			const	;
-			Pattern*	GetMoreSimilar				(Pattern *pPattern)	const	;
-		const	float32		GetSetSimilarityRate			()				;
-		const	float32		GetSetCoverageRate			(
-						const TransactionList *pTransactionList)		const	;
-		const	float32		GetSetClassCoverageRate			(
-						const TransactionList *pTransactionList)		const	;
-		const	float32		GetPairMeanClassCoverageRate		(
-						const TransactionList *pTransactionList)		const	;
-		const	float32		GetRate					(
-						const TransactionList *pTransactionList,
-						const OrtMetric &metric)					;
-
-	private:
-//		uint32	mMaxPatternLen	;
+			Pattern*	GetMoreSimilar			(Pattern *pPattern)		const	;
+		const	float32		GetSetSimilarityRate		()					;
+		const	float32		GetSetCoverageRate		(
+							const TransactionList *pTransactionList)	const	;
+		const	float32		GetSetClassCoverageRate		(
+							const TransactionList *pTransactionList)	const	;
+		const	float32		GetPairMeanSimilarityRate	()				const	;
+		const	float32		GetPairMeanCoverageRate	(
+							const TransactionList *pTransactionList)	const	;
+		const	float32		GetPairMeanClassCoverageRate	(
+							const TransactionList *pTransactionList)	const	;
+		const	float32		GetRate				(
+							const TransactionList *pTransactionList,
+							const OrtMetric &metric)				;
+		const	bool		FindSuperPatternOf		(const Pattern *pPattern)	const	;
 
 	private:
 		static	bool**		mItemPatternCoverageMatrix		;
 		static	bool**		mTransactionPatternCoverageMatrix	;
 		static	uint32**	mClassPatternCoverageMatrix		;
+			uint32*		mPatternIDArray				;
 };
 
 

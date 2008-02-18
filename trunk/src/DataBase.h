@@ -37,7 +37,8 @@ class DataBase : private IOManager, private Tokenizer
 				const PatternList::OrtMode &rOrtMode,
 				const PatternList::OrtMetric &rOrtMetric,
 				const uint32 &rMinNumRules,
-				const uint32 &rMaxNumRankRules)				;
+				const uint32 &rMaxNumRankRules,
+				const bool &rUseMaximalPatterns)			;
 		void	MakeProjection		(Transaction *pTransaction)		;
 
 	public:
@@ -54,7 +55,8 @@ class DataBase : private IOManager, private Tokenizer
 				const PatternList::OrtMode &rOrtMode,
 				const PatternList::OrtMetric &rOrtMetric,
 				const uint32 &rMinNumRules,
-				const uint32 &rMaxNumRankRules)				;
+				const uint32 &rMaxNumRankRules,
+				const bool &rUseMaximalPatterns)			;
 		void	PrintDataInfo		()				const	;
 
 	public:
