@@ -30,14 +30,14 @@ sub make_app_comparison_table ()
 	my ($y_lazy_y_classo, $y_lazy_n_classo, $n_lazy_y_classo, $n_lazy_n_classo, $y_lazy_y_classc, $y_lazy_n_classc, $n_lazy_y_classc, $n_lazy_n_classc, $y_classo_y_classc, $y_classo_n_classc, $n_classo_y_classc, $n_classo_n_classc);
 
 format OUTPUT =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<
+@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<
 $db, $y_lazy_y_classo, $y_lazy_n_classo, $n_lazy_y_classo, $n_lazy_n_classo, $y_lazy_y_classc, $y_lazy_n_classc, $n_lazy_y_classc, $n_lazy_n_classc, $y_classo_y_classc, $y_classo_n_classc, $n_classo_y_classc, $n_classo_n_classc
 .
 
 	my $out_file = "$Common::OutputDirTables/comparison.out";
 
 	open OUTPUT, ">$out_file";
-	print OUTPUT "data set            ylazy_yclasso ylazy_nclasso nlazy_yclasso nlazy_nclasso ylazy_yclassc ylazy_nclassc nlazy_yclassc nlazy_nclassc yclasso_yclassc yclasso_nclassc nclasso_yclassc nclasso_nclassc\n";
+	print OUTPUT "data set      ylazy_yclasso ylazy_nclasso nlazy_yclasso nlazy_nclasso ylazy_yclassc ylazy_nclassc nlazy_yclassc nlazy_nclassc yclasso_yclassc yclasso_nclassc nclasso_yclassc nclasso_nclassc\n";
 
 	my $data_base;
 
@@ -114,14 +114,14 @@ sub make_best_runs_table_for_lazy ()
 	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_LAZY =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<@<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
 $db,                $support,     $confidence,  $min_rules,   $max_size,    $ranking_size, $avg_patterns, $avg_rules, $accuracy
 .
 
 	my $out_file = "$Common::OutputDirTables/table_best_runs_lazy.out";
 
 	open OUTPUT_BEST_RUNS_LAZY, ">$out_file";
-	print OUTPUT_BEST_RUNS_LAZY "data set            support       confidence    min_rules     max_size      ranking_size  avg_patterns  avg_rules     accuracy\n";
+	print OUTPUT_BEST_RUNS_LAZY "data set      support confidence min_rules max_size ranking_size avg_patterns  avg_rules     accuracy\n";
 
 	my $data_base;
 
@@ -169,14 +169,14 @@ sub make_best_runs_table_for_classifier_c ()
 	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSC =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
 $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$avg_patterns,$avg_rules,$accuracy
 .
 
 	my $out_file = "$Common::OutputDirTables/table_best_runs_classc.out";
 
 	open OUTPUT_BEST_RUNS_CLASSC, ">$out_file";
-	print OUTPUT_BEST_RUNS_CLASSC "data set            support       confidence    min_num_rules max_num_rank_rules min_rule_len   max_rule_len avg_patterns  avg_rules     accuracy      \n";
+	print OUTPUT_BEST_RUNS_CLASSC "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len avg_patterns  avg_rules     accuracy      \n";
 
 	my $data_base;
 
@@ -226,14 +226,14 @@ sub make_best_runs_table_for_classifier_o ()
 	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSO =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
-$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$omode,$ometric,$avg_patterns,$avg_rules,$accuracy
+@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<@<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
+$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$omode,$ometric,$avg_patterns,$avg_rules,$accuracy
 .
 
 	my $out_file = "$Common::OutputDirTables/table_best_runs_classo.out";
 
 	open OUTPUT_BEST_RUNS_CLASSO, ">$out_file";
-	print OUTPUT_BEST_RUNS_CLASSO "data set            support       confidence    min_num_rules max_num_rank_rules min_rule_len   max_rule_len omode         ometric       avg_patterns  avg_rules     accuracy      \n";
+	print OUTPUT_BEST_RUNS_CLASSO "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len omode ometric avg_patterns  avg_rules     accuracy      \n";
 
 	my $data_base;
 
@@ -264,8 +264,8 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 
 		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
-		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\]max_num_rank_rules.*/$1/;
-		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\]min_rule_len.*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
 		$omode			=~ s/.*omode \[([^\]]*)\].*/$1/;
@@ -302,28 +302,34 @@ sub get_comparisons_for_data_base ($$)
 
 		while (<LOG_FILE_LAZY>)
 		{
-			my $test_lazy		= $_;
 			my $test_classifier_c	= <LOG_FILE_CLASSIFIER_C>;
 			my $test_classifier_o	= <LOG_FILE_CLASSIFIER_O>;
 
-			my $class_correct	= $test_lazy;
-			my $class_lazy		= $test_lazy;
-			my $class_classifier_c	= $test_classifier_c;
-			my $class_classifier_o	= $test_classifier_o;
+			if ($_ =~ m/^transaction/)
+			{
+				my $test_lazy		= $_;
 
-			$class_correct		=~ s/.*class \[([^\]]*)\].*/$1/;
-			$class_lazy		=~ s/.*guess \[([^\]]*)\].*/$1/;
-			$class_classifier_c	=~ s/.*guess \[([^\]]*)\].*/$1/;
-			$class_classifier_o	=~ s/.*guess \[([^\]]*)\].*/$1/;
+#				my $class_correct	= $test_lazy;
+				my $class_correct	= $test_classifier_o;
+#				my $class_correct	= $test_classifier_c;
+				my $class_lazy		= $test_lazy;
+				my $class_classifier_c	= $test_classifier_c;
+				my $class_classifier_o	= $test_classifier_o;
 
-			my $comparison = {
-				CLASS_CORRECT		=> $class_correct,
-				CLASS_LAZY		=> $class_lazy,
-				CLASS_CLASSIFIER_C	=> $class_classifier_c,
-				CLASS_CLASSIFIER_O	=> $class_classifier_o
-			};
+				$class_correct		=~ s/.*class \[([^\]]*)\].*/$1/;
+				$class_lazy		=~ s/.*guess \[([^\]]*)\].*/$1/;
+				$class_classifier_c	=~ s/.*guess \[([^\]]*)\].*/$1/;
+				$class_classifier_o	=~ s/.*guess \[([^\]]*)\].*/$1/;
 
-			push @{$comparison_array}, $comparison;
+				my $comparison = {
+					CLASS_CORRECT		=> $class_correct,
+					CLASS_LAZY		=> $class_lazy,
+					CLASS_CLASSIFIER_C	=> $class_classifier_c,
+					CLASS_CLASSIFIER_O	=> $class_classifier_o
+				};
+
+				push @{$comparison_array}, $comparison;
+			}
 		}
 
 		close LOG_FILE_CLASSIFIER_O;
