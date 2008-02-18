@@ -68,6 +68,16 @@ const bool ObjectList::CompareGreaterEqual::operator() (const Object *pLeft, con
 	return (*pLeft >= *pRight);
 }
 
+const bool ObjectList::SizeCompareLess::operator() (const Object *pLeft, const Object *pRight) const
+{
+#ifdef USE_LOGGER
+	if (! pLeft || ! pRight)
+		LOGMSG (NO_DEBUG, "ObjectList::SizeCompareLess::operator() - pLeft [%p], pRight [%p]\n", pLeft, pRight);
+#endif
+
+	return (static_cast<const ObjectList *>(pLeft)->GetSize () < static_cast<const ObjectList *>(pRight)->GetSize ());
+}
+
 const bool ObjectList::HasIntersectionByPtr (const ObjectList *pLeft, const ObjectList *pRight)
 {
 	bool bRet = false;
@@ -155,6 +165,28 @@ void ObjectList::ReverseSort ()
 	sort (mList.rbegin (), mList.rend (), ObjectList::msLessComparer);
 #ifdef USE_LOGGER
 	LOGMSG (HIGH_LEVEL, "ObjectList::ReverseSort () - size [%llu] - end\n", GetSize ());
+#endif
+}
+
+void ObjectList::SortBySize ()
+{
+#ifdef USE_LOGGER
+	LOGMSG (MEDIUM_LEVEL, "ObjectList::SortBySize () - size [%llu] - begin\n", GetSize ());
+#endif
+	sort (mList.begin (), mList.end (), ObjectList::msSizeLessComparer);
+#ifdef USE_LOGGER
+	LOGMSG (HIGH_LEVEL, "ObjectList::SortBySize () - size [%llu] - end\n", GetSize ());
+#endif
+}
+
+void ObjectList::ReverseSortBySize ()
+{
+#ifdef USE_LOGGER
+	LOGMSG (MEDIUM_LEVEL, "ObjectList::ReverseSortBySize () - size [%llu] - begin\n", GetSize ());
+#endif
+	sort (mList.rbegin (), mList.rend (), ObjectList::msSizeLessComparer);
+#ifdef USE_LOGGER
+	LOGMSG (HIGH_LEVEL, "ObjectList::ReverseSortBySize () - size [%llu] - end\n", GetSize ());
 #endif
 }
 

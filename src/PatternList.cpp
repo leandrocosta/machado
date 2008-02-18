@@ -16,32 +16,12 @@ uint32**	PatternList::mClassPatternCoverageMatrix	= NULL;
 PatternList::PatternList (const uint64 &max_size) : ObjectList (max_size)
 {
 //	LOGMSG (MAX_LEVEL, "PatternList::PatternList () - p [%p]\n", this);
-
-//	mMaxPatternLen = 0;
 }
 
 PatternList::~PatternList ()
 {
 //	LOGMSG (MAX_LEVEL, "PatternList::~PatternList () - p [%p]\n", this);
 }
-
-/*
-void PatternList::PushFront (Object *pObject)
-{
-	ObjectList::PushFront (pObject);
-
-//	if (static_cast<Pattern *>(pObject)->GetSize () > mMaxPatternLen)
-//		mMaxPatternLen = static_cast<Pattern *>(pObject)->GetSize ();
-}
-
-void PatternList::PushBack (Object *pObject)
-{
-	ObjectList::PushBack (pObject);
-
-//	if (static_cast<Pattern *>(pObject)->GetSize () > mMaxPatternLen)
-//		mMaxPatternLen = static_cast<Pattern *>(pObject)->GetSize ();
-}
-*/
 
 PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMetric &metric)
 {
@@ -127,7 +107,10 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 		PatternList *pTryPatternList = new PatternList ();
 
+//		Sort ();
+//		SortBySize ();
 		ReverseSort ();
+//		ReverseSortBySize ();
 
 		Pattern *pPatternAt0 = static_cast<Pattern *>(GetAt (0));
 
@@ -140,7 +123,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			STLPatternList_cit itEnd = pTryPatternList->GetEnd ();
 
-			for (STLPatternList_cit it = pTryPatternList->GetBegin (); it != itEnd; it++)
+			for (STLPatternList_cit it = pTryPatternList->GetBegin (); it != itEnd; ++it)
 				pOrthogonalPatternList->PushBack (*it);
 
 			rate_prv = rate_new;
@@ -153,7 +136,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			bool bGot = false;
 
-			for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+			for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
 			{
 				Pattern *pPattern = static_cast<Pattern *>(*it);
 
@@ -170,7 +153,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 			if (bGot)
 			{
-				for (STLPatternList_cit it = GetBegin (); it != itEnd; it++)
+				for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
 				{
 					Pattern *pCandToGetInPattern = static_cast<Pattern *>(*it);
 
@@ -388,117 +371,36 @@ RankingRuleList* PatternList::GetRuleList (const ClassList *pClassList, const fl
 	return pRuleList;
 }
 
-/*
-const uint32 PatternList::GetSumPatternLen () const
-{
-	uint32 sumPatternLen = 0;
-
-	STLPatternList_cit	it			;
-	STLPatternList_cit	itEnd = GetEnd ()	;
-
-	for (it = GetBegin (); it != itEnd; ++it)
-	{
-		sumPatternLen += static_cast<const Pattern *>(*it)->GetSize ();
-	}
-
-	return sumPatternLen;
-}
-
-const uint32& PatternList::GetMaxPatternLen () const
-{
-	return mMaxPatternLen;
-}
-*/
-
 Pattern* PatternList::GetMoreSimilar (Pattern *pPattern) const
 {
 	STLPatternList_cit it		= GetBegin ();
 	STLPatternList_cit itEnd	= GetEnd ();
 
-	Pattern *pPatternRet = static_cast<Pattern *>(*(it++));
+	Pattern *pRetPattern = static_cast<Pattern *>(*(it++));
 
-	float32 similarity = pPatternRet->GetSimilarity (pPattern);
+	float32 similarity = pRetPattern->GetSimilarity (pPattern);
 
 	do
 	{
-		Pattern *pPattern2 = static_cast<Pattern *>(*(it++));
+		Pattern *pTryPattern = static_cast<Pattern *>(*(it++));
 
-		if (pPattern2->GetSimilarity (pPattern) > similarity)
-			pPatternRet = pPattern2;
+		if (pTryPattern->GetSimilarity (pPattern) > similarity)
+			pRetPattern = pTryPattern;
 	} while (it != itEnd);
 
-	return pPatternRet;
+	return pRetPattern;
 }
 
 const float32 PatternList::GetSetSimilarityRate ()
 {
-	LOGMSG (HIGH_LEVEL, "PatternList::GetSetSimilarityRate () - begin\n");
+//	LOGMSG (MAX_LEVEL, "PatternList::GetSetSimilarityRate () - begin\n");
 
 	float32 rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
 	if (num_patterns > 1)
 	{
-		/*
-		ItemList	totalItemList		;
-		uint32		num_items	= 0	;
-
-		STLPatternList_cit itEnd = GetEnd ();
-
-		for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
-		{
-			const Pattern *pPattern = static_cast<const Pattern *>(*it);
-
-			STLPatternList_cit itPatternEnd = pPattern->GetEnd ();
-
-			for (ItemList::STLItemList_cit itItem = pPattern->GetBegin (); itItem != itPatternEnd; ++itItem)
-			{
-				Item *pItem = static_cast<Item *>(*itItem);
-
-				if (totalItemList.FindByPtr (pItem))
-					pItem->IncCount ();
-				else
-				{
-					pItem->SetCount (1);
-					totalItemList.PushBack (pItem);
-				}
-
-				num_items++;
-			}
-		}
-
-		uint32	distinct_items	= totalItemList.GetSize ()	;
-		float32 exclusive_items = 0				;
-
-		ItemList::STLItemList_cit itList				;
-		ItemList::STLItemList_cit itListEnd = totalItemList.GetEnd ()	;
-
-		for (itList = totalItemList.GetBegin (); itList != itListEnd; itList++)
-		{
-			const Item *pItem = static_cast<const Item *>(*itList);
-
-			exclusive_items += (GetSize () - pItem->GetCount ()) / (GetSize () - 1);
-		}
-
-		uint32 size = GetSize ();
-
-//		LOGMSG (HIGH_LEVEL, "PatternList::PatternList () - max_pattern_len [%u], num_patterns [%u], num_items [%u], distinct_items [%u], exclusive_items [%f]\n", mMaxPatternLen, size, num_items, distinct_items, exclusive_items);
-		LOGMSG (HIGH_LEVEL, "PatternList::PatternList () - num_patterns [%u], num_items [%u], distinct_items [%u], exclusive_items [%f]\n", size, num_items, distinct_items, exclusive_items);
-
-		rate = (float32) (exclusive_items / distinct_items);
-//      	rate = (float32) (exclusive_items / distinct_items) * ((float32) num_items / (mMaxPatternLen * GetSize ()));
-//		rate = (float32) (exclusive_items / distinct_items) * log ((float32) num_items / (mMaxPatternLen * GetSize ()));
-
-		totalItemList.RemoveAll ();
-		*/
-
-		uint32* patternIDArray	= new uint32 [num_patterns]	;
-		uint32	i		= 0				;
-
-		STLPatternList_cit itPatternEnd = GetEnd ();
-
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-			patternIDArray [i++] = static_cast<const Pattern *>(*itPattern)->GetPatternID ();
+		const uint32 *patternIDArray = GetPatternIDArray ();
 
 		uint32	num_items		= 0	;
 		float32 exclusive_factor	= 0.0	;
@@ -506,14 +408,6 @@ const float32 PatternList::GetSetSimilarityRate ()
 		for (uint32 itemID = 0; itemID < Item::GetMaxItemID () + 1; itemID++)
 		{
 			uint32 patterns_found_with_item = 0;
-
-			/*
-			STLPatternList_cit itPatternEnd = GetEnd ();
-
-			for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-				if (mItemPatternCoverageMatrix [itemID][static_cast<const Pattern *>(*itPattern)->GetPatternID ()])
-					patterns_found_with_item++;
-			*/
 
 			for (uint32 i = 0; i < num_patterns; i++)
 				if (mItemPatternCoverageMatrix [itemID][patternIDArray [i]])
@@ -536,36 +430,21 @@ const float32 PatternList::GetSetSimilarityRate ()
 
 const float32 PatternList::GetSetCoverageRate (const TransactionList *pTransactionList) const
 {
-	LOGMSG (HIGH_LEVEL, "PatternList::GetSetCoverageRate () - begin\n");
+//	LOGMSG (MAX_LEVEL, "PatternList::GetSetCoverageRate () - begin\n");
 
 	float32 rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
 	if (num_patterns > 1)
 	{
-		uint32* patternIDArray	= new uint32 [num_patterns]	;
-		uint32	i		= 0				;
-
-		STLPatternList_cit itPatternEnd = GetEnd ();
-
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-			patternIDArray [i++] = static_cast<const Pattern *>(*itPattern)->GetPatternID ();
+		const uint32 *patternIDArray = GetPatternIDArray ();
 
 		uint32	num_transactions	= 0		;
 		float32 exclusive_factor	= 0.0		;
-//		float32 num_coverages		= 0.0		;
 
 		for (uint32 transactionID = 0; transactionID < Transaction::GetMaxTransactionID () + 1; transactionID++)
 		{
 			uint32 patterns_found_in_transaction = 0;
-
-			/*
-			STLPatternList_cit itPatternEnd = GetEnd ();
-
-			for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-				if (mTransactionPatternCoverageMatrix [transactionID][static_cast<const Pattern *>(*itPattern)->GetPatternID ()])
-					patterns_found_in_transaction++;
-			*/
 
 			for (uint32 i = 0; i < num_patterns; i++)
 				if (mTransactionPatternCoverageMatrix [transactionID][patternIDArray [i]])
@@ -576,15 +455,11 @@ const float32 PatternList::GetSetCoverageRate (const TransactionList *pTransacti
 				num_transactions++;
 				exclusive_factor += float32 (num_patterns - patterns_found_in_transaction) / (num_patterns - 1);
 			}
-
-//			num_coverages += patterns_found_in_transaction;
 		}
 
 		delete[] patternIDArray;
 
 		rate = exclusive_factor / num_transactions;
-//		rate = (float32) (exclusive_factor / distinct_transactions) * ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
-//		rate = (float32) (exclusive_factor / distinct_transactions) * log ((float32) num_coverages / (GetSize () * pTransactionList->GetSize ()));
 	}
 
 	return rate;
@@ -592,7 +467,7 @@ const float32 PatternList::GetSetCoverageRate (const TransactionList *pTransacti
 
 const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTransactionList) const
 {
-	LOGMSG (HIGH_LEVEL, "PatternList::GetSetClassCoverageRate () - begin\n");
+//	LOGMSG (MAX_LEVEL, "PatternList::GetSetClassCoverageRate () - begin\n");
 
 	float32 rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
@@ -606,26 +481,15 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 		for (uint32 classID = 0; classID < num_total_classes; classID++)
 			classCoverageMeanArray [classID] = 0;
 
-		STLPatternList_cit itPatternEnd = GetEnd ();
-
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-		{
-			const uint32 patternID = static_cast<const Pattern *>(*itPattern)->GetPatternID ();
-
-			for (uint32 classID = 0; classID < num_total_classes; classID++)
-				classCoverageMeanArray [classID] += mClassPatternCoverageMatrix [classID][patternID];
-		}
+		const uint32 *patternIDArray = GetPatternIDArray ();
 
 		for (uint32 classID = 0; classID < num_total_classes; classID++)
+		{
+			for (uint32 i = 0; i < num_patterns; i++)
+				classCoverageMeanArray [classID] += mClassPatternCoverageMatrix [classID][patternIDArray [i]];
+
 			classCoverageMeanArray [classID] /= num_patterns;
-
-		uint32* patternIDArray	= new uint32 [num_patterns]	;
-		uint32	i		= 0				;
-
-		itPatternEnd = GetEnd ();
-
-		for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-			patternIDArray [i++] = static_cast<const Pattern *>(*itPattern)->GetPatternID ();
+		}
 
 		uint32	num_classes		= 0	;
 		float32 exclusive_factor	= 0.0	;
@@ -633,14 +497,6 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 		for (uint32 classID = 0; classID < Class::GetMaxClassID () + 1; classID++)
 		{
 			uint32 patterns_found_with_class = 0;
-
-			/*
-			STLPatternList_cit itPatternEnd = GetEnd ();
-
-			for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
-				if (mClassPatternCoverageMatrix [classID][static_cast<const Pattern *>(*itPattern)->GetPatternID ()] >= 0.9 * classCoverageMeanArray [classID])
-					patterns_found_with_class++;
-			*/
 
 			for (uint32 i = 0; i < num_patterns; i++)
 				if (mClassPatternCoverageMatrix [classID][patternIDArray [i]] >= 0.9 * classCoverageMeanArray [classID])
@@ -653,8 +509,8 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 			}
 		}
 
-		delete[] classCoverageMeanArray;
 		delete[] patternIDArray;
+		delete[] classCoverageMeanArray;
 
 		rate = exclusive_factor / num_classes;
 	}
@@ -662,32 +518,116 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 	return rate;
 }
 
-const float32 PatternList::GetPairMeanClassCoverageRate (const TransactionList *pTransactionList) const
+const float32 PatternList::GetPairMeanSimilarityRate () const
 {
-	LOGMSG (HIGH_LEVEL, "PatternList::GetPairMeanClassCoverageRate () - begin\n");
+//	LOGMSG (MAX_LEVEL, "PatternList::GetPairMeanSimilarityRate () - begin\n");
 
 	float32	rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
 	if (num_patterns > 1)
 	{
-		STLPatternList_cit itPatternEnd = GetEnd ();
+		const uint32 *patternIDArray = GetPatternIDArray ();
 
-		for (STLPatternList_cit itLeftPattern = GetBegin (); itLeftPattern != itPatternEnd; ++itLeftPattern)
+		for (uint32 leftPatternIndex = 0; leftPatternIndex < num_patterns - 1; leftPatternIndex++)
 		{
-			const Pattern *pLeftPattern = static_cast<const Pattern *>(*itLeftPattern);
-
-			for (STLPatternList_cit itRightPattern = itLeftPattern+1; itRightPattern != itPatternEnd; ++itRightPattern)
+			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
 			{
-				const Pattern *pRightPattern = static_cast<const Pattern *>(*itRightPattern);
+				uint32 num_coverages		= 0;
+				uint32 num_single_coverages	= 0;
 
+				for (uint32 itemID = 0; itemID < Item::GetMaxItemID () + 1; itemID++)
+				{
+					bool	leftCoverage	= mItemPatternCoverageMatrix [itemID][patternIDArray [leftPatternIndex]];
+					bool	rightCoverage	= mItemPatternCoverageMatrix [itemID][patternIDArray [rightPatternIndex]];
+
+					if (leftCoverage || rightCoverage)
+					{
+						num_coverages++;
+
+						if (! leftCoverage || ! rightCoverage)
+							num_single_coverages++;
+					}
+				}
+
+				rate += (float32) num_single_coverages / num_coverages;
+			}
+		}
+
+		delete[] patternIDArray;
+
+		rate /= (num_patterns * (num_patterns - 1) / 2);
+	}
+
+	return rate;
+}
+
+const float32 PatternList::GetPairMeanCoverageRate (const TransactionList *pTransactionList) const
+{
+//	LOGMSG (MAX_LEVEL, "PatternList::GetPairMeanCoverageRate () - begin\n");
+
+	float32	rate		= 0		;
+	uint32	num_patterns	= GetSize ()	;
+
+	if (num_patterns > 1)
+	{
+		const uint32 *patternIDArray = GetPatternIDArray ();
+
+		for (uint32 leftPatternIndex = 0; leftPatternIndex < num_patterns - 1; leftPatternIndex++)
+		{
+			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
+			{
+				uint32 num_coverages		= 0;
+				uint32 num_single_coverages	= 0;
+
+				for (uint32 transactionID = 0; transactionID < Transaction::GetMaxTransactionID () + 1; transactionID++)
+				{
+					bool	leftCoverage	= mTransactionPatternCoverageMatrix [transactionID][patternIDArray [leftPatternIndex]];
+					bool	rightCoverage	= mTransactionPatternCoverageMatrix [transactionID][patternIDArray [rightPatternIndex]];
+
+					if (leftCoverage || rightCoverage)
+					{
+						num_coverages++;
+
+						if (! leftCoverage || ! rightCoverage)
+							num_single_coverages++;
+					}
+				}
+
+				rate += (float32) num_single_coverages / num_coverages;
+			}
+		}
+
+		delete[] patternIDArray;
+
+		rate /= (num_patterns * (num_patterns - 1) / 2);
+	}
+
+	return rate;
+}
+
+const float32 PatternList::GetPairMeanClassCoverageRate (const TransactionList *pTransactionList) const
+{
+//	LOGMSG (MAX_LEVEL, "PatternList::GetPairMeanClassCoverageRate () - begin\n");
+
+	float32	rate		= 0		;
+	uint32	num_patterns	= GetSize ()	;
+
+	if (num_patterns > 1)
+	{
+		const uint32 *patternIDArray = GetPatternIDArray ();
+
+		for (uint32 leftPatternIndex = 0; leftPatternIndex < num_patterns - 1; leftPatternIndex++)
+		{
+			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
+			{
 				uint32	num_classes	= 0;
 				float32	pattern_rate	= 0;
 
 				for (uint32 classID = 0; classID < Class::GetMaxClassID () + 1; classID++)
 				{
-					uint32	leftCoverage	= mClassPatternCoverageMatrix [classID][pLeftPattern->GetPatternID ()];
-					uint32	rightCoverage	= mClassPatternCoverageMatrix [classID][pRightPattern->GetPatternID ()];
+					uint32	leftCoverage	= mClassPatternCoverageMatrix [classID][patternIDArray [leftPatternIndex]];
+					uint32	rightCoverage	= mClassPatternCoverageMatrix [classID][patternIDArray [rightPatternIndex]];
 
 					if (leftCoverage || rightCoverage)
 					{
@@ -705,6 +645,8 @@ const float32 PatternList::GetPairMeanClassCoverageRate (const TransactionList *
 				rate += pattern_rate;
 			}
 		}
+
+		delete[] patternIDArray;
 
 		rate /= (num_patterns * (num_patterns - 1) / 2);
 	}
@@ -762,7 +704,7 @@ void PatternList::MakeItemPatternCoverageMatrix (const PatternList *pPatternList
 			mItemPatternCoverageMatrix [i][j] = false;
 	}
 
-	PatternList::STLPatternList_cit		itPatternEnd		= pPatternList->GetEnd ()	;
+	PatternList::STLPatternList_cit itPatternEnd = pPatternList->GetEnd ();
 
 	for (PatternList::STLPatternList_cit itPattern = pPatternList->GetBegin (); itPattern != itPatternEnd; itPattern++)
 	{
@@ -799,10 +741,11 @@ void PatternList::MakeTransactionPatternCoverageMatrix (const TransactionList *p
 
 	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
 	{
+		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
+
 		for (PatternList::STLPatternList_cit itPattern = pPatternList->GetBegin (); itPattern != itPatternEnd; itPattern++)
 		{
-			const Transaction*	pTransaction	= static_cast<const Transaction *>(*itTransaction);
-			const Pattern*		pPattern	= static_cast<const Pattern*>(*itPattern);
+			const Pattern *pPattern = static_cast<const Pattern*>(*itPattern);
 
 			if (pTransaction->IsCoveredBy (pPattern))
 				mTransactionPatternCoverageMatrix [pTransaction->GetTransactionID ()][pPattern->GetPatternID ()] = true;
@@ -834,10 +777,11 @@ void PatternList::MakeClassPatternCoverageMatrix (const TransactionList *pTransa
 
 	for (TransactionList::STLTransactionList_cit itTransaction = pTransactionList->GetBegin (); itTransaction != itTransactionEnd; itTransaction++)
 	{
+		const Transaction *pTransaction = static_cast<const Transaction *>(*itTransaction);
+
 		for (PatternList::STLPatternList_cit itPattern = pPatternList->GetBegin (); itPattern != itPatternEnd; itPattern++)
 		{
-			const Transaction*	pTransaction	= static_cast<const Transaction *>(*itTransaction);
-			const Pattern*		pPattern	= static_cast<const Pattern*>(*itPattern);
+			const Pattern *pPattern = static_cast<const Pattern*>(*itPattern);
 
 			if (pTransaction->IsCoveredBy (pPattern))
 				mClassPatternCoverageMatrix [pTransaction->GetClassID ()][pPattern->GetPatternID ()]++;
@@ -845,6 +789,20 @@ void PatternList::MakeClassPatternCoverageMatrix (const TransactionList *pTransa
 	}
 
 	LOGMSG (LOW_LEVEL, "PatternList::MakeClassPatternCoverageMatrix () - end\n");
+}
+
+const uint32* PatternList::GetPatternIDArray () const
+{
+	uint32	num_patterns	= GetSize ()			;
+	uint32* patternIDArray	= new uint32 [num_patterns]	;
+	uint32	i		= 0				;
+
+	STLPatternList_cit itPatternEnd = GetEnd ();
+
+	for (STLPatternList_cit itPattern = GetBegin (); itPattern != itPatternEnd; ++itPattern)
+		patternIDArray [i++] = static_cast<const Pattern *>(*itPattern)->GetPatternID ();
+
+	return patternIDArray;
 }
 
 void PatternList::DestroyItemPatternCoverageMatrix ()
@@ -875,4 +833,22 @@ void PatternList::DestroyClassPatternCoverageMatrix ()
 		delete[] mClassPatternCoverageMatrix [i];
 
 	delete[] mClassPatternCoverageMatrix;
+}
+
+const bool PatternList::FindSuperPatternOf (const Pattern *pPattern) const
+{
+	bool bRet = false;
+
+	STLPatternList_cit itEnd = GetEnd ();
+
+	for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
+	{
+		if (static_cast<const Pattern *>(*it)->IsSuperPatternOf (pPattern))
+		{
+			bRet = true;
+			break;
+		}
+	}
+
+	return bRet;
 }

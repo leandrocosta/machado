@@ -38,12 +38,14 @@ class Pattern : public ItemSet
 		const	float32&	GetSupport		()				const	;
 
 	public:
-			void			SetGot				(const bool &got)		;
-		const	bool&			GetGot				()			const	;
-		const	TransactionList&	GetTransactionList		()			const	;
-		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)	const	;
-		const	float32			GetSimilarity			(Pattern *pPattern)		;
-			void			AddChildPattern			(Pattern *pPattern)		;
+			void			SetGot				(const bool &got)			;
+		const	bool&			GetGot				()				const	;
+		const	TransactionList&	GetTransactionList		()				const	;
+		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)		const	;
+		const	float32			GetSimilarity			(Pattern *pPattern)			;
+			void			AddChildPattern			(Pattern *pPattern)			;
+			PatternList*		GetMaximalPatternList		()					;
+		const	bool			IsSuperPatternOf		(const Pattern *pPattern)	const	;
 
 	public:
 		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;

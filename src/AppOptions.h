@@ -25,10 +25,12 @@ class AppOptions
 		void	Usage	()				const	;
 
 	public:
-			void	SetAppName	(const string &appName)	;
+		void	SetAppName	(const string &appName)	;
 
+	public:
 		const	string&		GetTrainingFile		()	const	;
 		const	string&		GetTestingFile		()	const	;
+		const	bool&		GetUseMaximalPatterns	()	const	;
 		const	float32&	GetSupport		()	const	;
 		const	float32&	GetConfidence		()	const	;
 		const	uint32&		GetMinNumRules		()	const	;
@@ -48,15 +50,16 @@ class AppOptions
 		static	AppOptions*	mpInstance;
 
 	private:
-		string		mAppName	;
-		string		mTrainingFile	;
-		string		mTestingFile	;
-		float32		mSupport	;
-		float32		mConfidence	;
-		uint32		mMinNumRules	;
-		uint32		mMaxNumRankRules;
-		uint32		mMinRuleLen	;
-		uint32		mMaxRuleLen	;
+		string		mAppName		;
+		string		mTrainingFile		;
+		string		mTestingFile		;
+		bool		mUseMaximalPatterns	;
+		float32		mSupport		;
+		float32		mConfidence		;
+		uint32		mMinNumRules		;
+		uint32		mMaxNumRankRules	;
+		uint32		mMinRuleLen		;
+		uint32		mMaxRuleLen		;
 
 		DataBase::RunMode	mRunMode	;
 		PatternList::OrtMode	mOrtMode	;
@@ -71,6 +74,7 @@ class AppOptions
 		static	const	string	DEFAULT_TRAINING_FILE	;
 		static	const	string	DEFAULT_TESTING_FILE	;
 
+		static	const	bool	DEFAULT_USE_MAXIMAL_PATTERNS	= false	;
 		static	const	float32	DEFAULT_SUPPORT			= 0.001	;
 		static	const	float32	DEFAULT_CONFIDENCE		= 0.9	;
 		static	const	uint32	DEFAULT_MAX_NUM_RANK_RULES	= 100	;

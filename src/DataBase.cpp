@@ -144,7 +144,7 @@ void DataBase::SortTransactions ()
 	mTestTransactionList.SortTransactions ();
 }
 
-void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules)
+void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
@@ -153,7 +153,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	try
 	{
 		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
-			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMetric, rMinNumRules, rMaxNumRankRules);
+			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMetric, rMinNumRules, rMaxNumRankRules, rUseMaximalPatterns);
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mTotalGuesses - mCorrectGuesses);
 
@@ -173,7 +173,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	}
 }
 
-void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules)
+void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - pTransaction\n");
 
@@ -181,9 +181,10 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	MakeProjection (pTransaction);
 
-	PatternList *pFrequentPatternList = pTransaction->GetFrequentPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen);
-	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - frequent patterns:\n");
-	pFrequentPatternList->Print ();
+	PatternList *pPatternList = pTransaction->GetPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen, rUseMaximalPatterns);
+
+	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - patterns:\n");
+	pPatternList->Print ();
 
 	string	class_guess	= "";
 	uint32	patterns	= 0;
@@ -193,9 +194,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_CLASSICAL]\n");
 
-		RankingRuleList *pRuleList = pFrequentPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
+		RankingRuleList *pRuleList = pPatternList->GetRuleList (&mClassList, mConfidence, mpProjectionTransactionList->GetSize (), rMinNumRules);
 
-		patterns	= pFrequentPatternList->GetSize ();
+		patterns	= pPatternList->GetSize ();
 		rules		= pRuleList->GetSize ();
 
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
@@ -209,7 +210,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pFrequentPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
+		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
@@ -234,7 +235,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - unknown run mode\n");
 	}
 
-	delete pFrequentPatternList;
+	delete pPatternList;
 
 	if (class_guess.empty ())
 	{

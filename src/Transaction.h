@@ -33,14 +33,17 @@ class Transaction : public ItemSet
 		const	bool		IsCoveredBy			(const Pattern *pPattern)		const	;
 		const	bool		IsCoveredBy			(const Item *pItem)			const	;
 		const	bool		IsCoveredByItem			(const uint32 &rItemID)			const	;
-			PatternList*	GetFrequentPatternList		(
+			PatternList*	GetPatternList			(
 										const float32 &support,
 										const uint32 &projection_size,
 										const uint32 &min_rule_len,
-										const uint32 &max_rule_len)	const	;
-			PatternList*	GetMaximalFrequentPatternList	(
+										const uint32 &max_rule_len,
+										const bool &rUseMaximalPatterns)const	;
+			PatternList*	GetFrequentPatternList		(
 										const float32 &support,
-										const uint32 &projection_size)	const	;
+										const uint32 &projection_size,
+										const uint32 &rMaxPatternSize)	const	;
+			PatternList*	GetMaximalFrequentPatternList	(const PatternList *pFrequentPatternList)	const	;
 
 	public:
 			void	MakeItemCoverageArray				(const uint32 &num_items)	;

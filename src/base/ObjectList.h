@@ -38,6 +38,12 @@ class ObjectList : public Object
 			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
 		} GreaterEqualComparer;
 
+		// size comparison (for lists of lists)
+		typedef struct SizeCompareLess
+		{
+			const	bool	operator()	(const Object *pLeft, const Object *pRight)	const	;
+		} SizeLessComparer;
+
 	public:
 		static	const	bool	HasIntersectionByPtr	(const ObjectList *pLeft, const ObjectList *pRight)	;
 
@@ -91,8 +97,10 @@ class ObjectList : public Object
 	public:
 			void		Sort				()				;
 			void		ReverseSort			()				;
-		const ObjectList*	GetPartialSortCopy		(const uint64 &size)	const	;
-		const ObjectList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
+			void		SortBySize			()				;
+			void		ReverseSortBySize		()				;
+		const	ObjectList*	GetPartialSortCopy		(const uint64 &size)	const	;
+		const	ObjectList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
 
 	public:
 		const	uint64	GetSize	()	const	;
@@ -112,6 +120,7 @@ class ObjectList : public Object
 
 	private:
 		static	LessComparer		msLessComparer		;
+		static	SizeLessComparer	msSizeLessComparer	;
 		static	LessEqualComparer	msLessEqualComparer	;
 		static	GreaterComparer		msGreaterComparer	;
 		static	GreaterEqualComparer	msGreaterEqualComparer	;

@@ -251,6 +251,81 @@ void Pattern::AddChildPattern (Pattern *pPattern)
 	mpChildPatternList->PushBack (pPattern);
 }
 
+PatternList* Pattern::GetMaximalPatternList ()
+{
+	PatternList *pMaximalPatternList = NULL;
+
+	if (mpChildPatternList->GetSize ())
+	{
+		PatternList::STLPatternList_cit itChild		= mpChildPatternList->GetBegin ();
+		PatternList::STLPatternList_cit itChildEnd	= mpChildPatternList->GetEnd ();
+
+		Pattern *pChildPattern = static_cast<Pattern *>(*(itChild++));
+
+		pMaximalPatternList = pChildPattern->GetMaximalPatternList ();
+
+		while (itChild != itChildEnd)
+		{
+			pChildPattern = static_cast<Pattern *>(*(itChild++));
+
+			PatternList *pCandidatePatternList = pChildPattern->GetMaximalPatternList ();
+
+			PatternList::STLPatternList_cit itCandEnd = pCandidatePatternList->GetEnd ();
+
+			for (PatternList::STLPatternList_cit itCand = pCandidatePatternList->GetBegin (); itCand != itCandEnd; ++itCand)
+			{
+				/*
+				 * Insert candidate into maximal pattern
+				 * list if there is no super-pattern of
+				 * candidate in the list yet.
+				 */
+
+				Pattern *pCandidatePattern = static_cast<Pattern *>(*itCand);
+
+				if (! pMaximalPatternList->FindSuperPatternOf (pCandidatePattern))
+					pMaximalPatternList->PushBack (pCandidatePattern);
+			}
+
+			pCandidatePatternList->RemoveAll ();
+			delete pCandidatePatternList;
+		}
+	}
+	else
+	{
+		pMaximalPatternList = new PatternList ();
+
+		pMaximalPatternList->PushBack (this);
+	}
+
+	return pMaximalPatternList;
+}
+
+const bool Pattern::IsSuperPatternOf (const Pattern *pPattern) const
+{
+	bool bRet = false;
+
+	ItemList::STLItemList_cit itMyItem	= GetBegin ();
+	ItemList::STLItemList_cit itMyItemEnd	= GetEnd ();
+
+	ItemList::STLItemList_cit itPatternItem		= pPattern->GetBegin ();
+	ItemList::STLItemList_cit itPatternItemEnd	= pPattern->GetEnd ();
+
+	while (itMyItem != itMyItemEnd && itPatternItem != itPatternItemEnd)
+	{
+		if (*itMyItem == *itPatternItem)
+			++itPatternItem;
+		else if (*itMyItem > *itPatternItem)
+			break;
+
+		++itMyItem;
+	}
+
+	if (itPatternItem == itPatternItemEnd)
+		bRet = true;
+
+	return bRet;
+}
+
 /*
 void Pattern::IncClassCoverage (const string &class_name)
 {

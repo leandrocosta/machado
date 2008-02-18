@@ -43,7 +43,7 @@ const bool ClassList::operator> (const Object &rObject) const
 
 Class* ClassList::GetClassByValue (const string &value) const
 {
-	LOGMSG (MAX_LEVEL, "ClassList::GetClassByValue () - value [%s]\n", value.c_str ());
+//	LOGMSG (MAX_LEVEL, "ClassList::GetClassByValue () - value [%s]\n", value.c_str ());
 
 	Class*			pClass = NULL		;
 	STLClassList_cit	it			;

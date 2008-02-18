@@ -32,6 +32,7 @@ AppOptions::AppOptions ()
 	mAppName		= AppOptions::DEFAULT_APP_NAME			;
 	mTrainingFile		= AppOptions::DEFAULT_TRAINING_FILE		;
 	mTestingFile		= AppOptions::DEFAULT_TESTING_FILE		;
+	mUseMaximalPatterns	= AppOptions::DEFAULT_USE_MAXIMAL_PATTERNS	;
 	mSupport		= AppOptions::DEFAULT_SUPPORT			;
 	mConfidence		= AppOptions::DEFAULT_CONFIDENCE		;
 	mMinNumRules		= AppOptions::DEFAULT_MIN_NUM_RULES		;
@@ -53,6 +54,7 @@ void AppOptions::Run (int argc, char* const* argv)
 	static struct option long_options[] = {
 		{"training-file"	, 1, 0, 'i'},
 		{"testing-file"		, 1, 0, 't'},
+		{"maximal-patterns"	, 0, 0, 'x'},
 		{"support"		, 1, 0, 's'},
 		{"confidence"		, 1, 0, 'c'},
 		{"min-num-rules"	, 1, 0, 'n'},
@@ -72,7 +74,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:s:c:n:l:m:a:r:o:e:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:s:c:n:l:m:a:r:o:e:d:xvh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -85,6 +87,10 @@ void AppOptions::Run (int argc, char* const* argv)
 
 			case 't':
 				mTestingFile = optarg;
+				break;
+
+			case 'x':
+				mUseMaximalPatterns = true;
 				break;
 
 			case 's':
@@ -148,12 +154,13 @@ void AppOptions::Usage () const
 	cout << "Options:" << endl;
 	cout << "  -i, --training-file        Set the training file" << endl;
 	cout << "  -t, --testing-file         Set the testing file" << endl;
+	cout << "  -x  --maximal-patterns     Discard non-maximal patterns" << endl;
 	cout << "  -s, --support              Set the support" << endl;
 	cout << "  -c, --confidence           Set the confidence" << endl;
 	cout << "  -n, --min-num-rules        Set the minimum number of rules" << endl;
 	cout << "  -l, --max-num-rank-rules   Set the maximum number of rules considered in rank time" << endl;
 	cout << "  -m, --min-rule-len         Set the minimum length of the rules" << endl;
-	cout << "  -a, --max-rule-len         Set the maximum lenfth of the rules" << endl;
+	cout << "  -a, --max-rule-len         Set the maximum length of the rules" << endl;
 	cout << "  -r, --run-mode             Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
 	cout << "  -o, --orthogonality-mode   Set the orthogonality mode [h,p] [HEURISTICAL, POLYNOMIAL]" << endl;
 	cout << "  -e, --orthogonality-metric Set the orthogonality mode [s,c,b,l,m,a] [SET SIMILARITY, SET COVERAGE," << endl;
@@ -177,6 +184,11 @@ const string& AppOptions::GetTrainingFile () const
 const string& AppOptions::GetTestingFile () const
 {
 	return mTestingFile;
+}
+
+const bool& AppOptions::GetUseMaximalPatterns () const
+{
+	return mUseMaximalPatterns;
 }
 
 const float32& AppOptions::GetSupport () const
