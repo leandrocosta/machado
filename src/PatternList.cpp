@@ -167,6 +167,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 						float32 rate_try = pTryPatternList->GetRate (pTransactionList, metric);
 
 						if (rate_try > rate_new)
+//						if (rate_try >= rate_new)
 						{
 							pCandToGetInPattern->SetGot (true);
 							pCandToGetOutPattern->SetGot (false);
@@ -187,11 +188,13 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 		pTryPatternList->RemoveAll ();
 		delete pTryPatternList;
+	
+		LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListHeuristical () - rate [%f]\n", rate_prv);
 	}
 
 	uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - patterns [%u]\n", orthogonal_size);
+	LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListHeuristical () - patterns [%u]\n", orthogonal_size);
 
 	return pOrthogonalPatternList;
 }
