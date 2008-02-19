@@ -45,20 +45,20 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @Confidences = (
-		0.001,
-#		0.01,
-#		0.1,
+#		0.001,	# OK [max_size (2)]
+#		0.01,	# OK [max_size (2)]
+#		0.1,	# OK [max_size (2)]
 #		0.2,
 #		0.3,
 #		0.4,
-#		0.5,
+#		0.5,	# OK [num_rank-rules, max_size (2)]
 #		0.6,
 #		0.7,
-#		0.8,
-#		0.9,
-#		0.95,
-#		0.99,
-#		1
+		0.8,
+#		0.9,	# OK [max_size (2)]
+#		0.95,	# OK [max_size (2)]
+		0.99,
+		1
 );
 
 @MinNumRules = (
@@ -80,9 +80,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @LazyMaxSizes = (
-# OK	2,
-# OK	3,
-# OK	4,
+	2,	# OK [confidence (0.001)]
+#	3,	# OK [confidence (0.001)]
+#	4,	# OK [confidence (0.001)]
 #	5
 );
 
