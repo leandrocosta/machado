@@ -122,16 +122,16 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierOMetrics = (
-	's',
-	'c',
-	'l',
-#	'a'
+#	's',
+#	'c',
+#	'l',
+	'a'
 );
 
 @ClassifierOMethods = (
 	's',
 	'p',
-#	'a'
+	'a'
 );
 
 @ClassifierOOrderings = (
@@ -139,8 +139,7 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 	'r',
 	'i',
 	'z',
-	'n',
-#	'a'
+	'n'
 );
 
 $NumFolds = 2; #10;
