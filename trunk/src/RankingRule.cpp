@@ -7,26 +7,23 @@
 #include <math.h>
 
 
-RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const uint32 &projection_size, const uint32 &num_classes) : Rule (pClass, pPattern)
+RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const uint32 &rProjectionSize, const uint32 &rNumClasses) : Rule (pClass, pPattern)
 {
-	uint32	correct_trans	= pPattern->GetNumTransactionsOfClass (pClass->GetClassID ());
-	uint32	pattern_freq	= pPattern->GetFrequence ();
-	uint32	class_freq	= pClass->GetProjectionTransactionListSize ();
+	uint32	correctTransactions	= pPattern->GetNumTransactionsOfClass (pClass->GetClassID ());
+	uint32	patternFrequence	= pPattern->GetFrequence ();
+	uint32	classFrequence		= pClass->GetProjectionTransactionListSize ();
 
-	mSupport	= (float32) correct_trans / projection_size;
-	mConfidence	= (float32) correct_trans / pattern_freq;
-	mGain		= mSupport * (log2 (mConfidence) - log2 ((float32) class_freq / projection_size));
-	mJaccard	= (float32) correct_trans / (pattern_freq + class_freq - correct_trans);
-	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) pattern_freq / projection_size) + (float32) 1.0 / ((float32) class_freq / projection_size));
-	mCosine		= mSupport / sqrt (((float32) pattern_freq / projection_size) * ((float32) class_freq / projection_size));
-	mCoherence	= mSupport /((pattern_freq + class_freq - (float32) correct_trans) / projection_size);
-	mSensitivity	= (float32) correct_trans / class_freq;
-	mSpecificity	= (float32) (projection_size - class_freq - pattern_freq + correct_trans) / (projection_size - class_freq);
-	mLaplace	= (float32) (correct_trans + 1) / (pattern_freq + num_classes);
-	mCorrelation	= mSupport / ((float32) pattern_freq / projection_size * class_freq / projection_size);
-
-//	mSupport	= mpPattern->GetSupport ();
-//	mConfidence	= (float32) correct_transactions / mpPattern->GetFrequence ();
+	mSupport	= (float32) correctTransactions / rProjectionSize;
+	mConfidence	= (float32) correctTransactions / patternFrequence;
+	mGain		= mSupport * (log2 (mConfidence) - log2 ((float32) classFrequence / rProjectionSize));
+	mJaccard	= (float32) correctTransactions / (patternFrequence + classFrequence - correctTransactions);
+	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) patternFrequence / rProjectionSize) + (float32) 1.0 / ((float32) classFrequence / rProjectionSize));
+	mCosine		= mSupport / sqrt (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
+	mCoherence	= mSupport /((patternFrequence + classFrequence - (float32) correctTransactions) / rProjectionSize);
+	mSensitivity	= (float32) correctTransactions / classFrequence;
+	mSpecificity	= (float32) (rProjectionSize - classFrequence - patternFrequence + correctTransactions) / (rProjectionSize - classFrequence);
+	mLaplace	= (float32) (correctTransactions + 1) / (patternFrequence + rNumClasses);
+	mCorrelation	= mSupport / ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
 }
 
 RankingRule::~RankingRule ()
@@ -39,16 +36,6 @@ const bool RankingRule::operator< (const Object &rRight) const
 	bool bRet = false;
 
 	const RankingRule &rRule = static_cast<const RankingRule &>(rRight);
-
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - p [%p]\n", this);
-//	Print ();
-//	rRule.Print ();
-
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - p [%p]\n", this);
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - &rRule [%p]\n", &rRule);
-//
-//	float32 right_confidence = rRule.GetConfidence ();
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator< () - right_confidence [%f]\n", right_confidence);
 
 	if (mConfidence < RANK_FACTOR_LOWER * rRule.GetConfidence ())
 		bRet = true;
@@ -107,10 +94,10 @@ const bool RankingRule::operator< (const Object &rRight) const
 
 	else
 	{
-		uint32	class_freq		= mpClass->GetProjectionTransactionListSize ();
-		uint32	class_freq_right	= static_cast<const RankingRule &>(rRight).GetClass ()->GetProjectionTransactionListSize ();
+		uint32	leftClassFrequence	= mpClass->GetProjectionTransactionListSize ();
+		uint32	rightClassFrequence	= static_cast<const RankingRule &>(rRight).GetClass ()->GetProjectionTransactionListSize ();
 
-		if (class_freq < class_freq_right)
+		if (leftClassFrequence < rightClassFrequence)
 			bRet = true;
 		else
 			bRet = false;
@@ -124,16 +111,6 @@ const bool RankingRule::operator> (const Object &rRight) const
 	bool bRet = false;
 
 	const RankingRule& rRule = static_cast<const RankingRule&>(rRight);
-
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - p [%p]\n", this);
-//	Print ();
-//	rRule.Print ();
-
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - p [%p]\n", this);
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - &rRule [%p]\n", &rRule);
-//
-//	float32 right_confidence = rRule.GetConfidence ();
-//	LOGMSG (HIGH_LEVEL, "RankingRule::operator> () - right_confidence [%f]\n", right_confidence);
 
 	if (mConfidence > RANK_FACTOR_GREATER * rRule.GetConfidence ())
 		bRet = true;
@@ -191,16 +168,14 @@ const bool RankingRule::operator> (const Object &rRight) const
 		bRet = false;
 	else
 	{
-		uint32	class_freq		= mpClass->GetProjectionTransactionListSize ();
-		uint32	class_freq_right	= static_cast<const RankingRule &>(rRight).GetClass ()->GetProjectionTransactionListSize ();
+		uint32	leftClassFrequence	= mpClass->GetProjectionTransactionListSize ();
+		uint32	rightClassFrequence	= static_cast<const RankingRule &>(rRight).GetClass ()->GetProjectionTransactionListSize ();
 
-		if (class_freq > class_freq_right)
+		if (leftClassFrequence > rightClassFrequence)
 			bRet = true;
 		else
 			bRet = false;
 	}
-
-
 
 	return bRet;
 }

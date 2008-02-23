@@ -23,6 +23,7 @@ class Pattern : public ItemSet
 
 	public:
 		static	const	uint32	GetMaxPatternID	()	;
+		static		void	ResetSeqPatternID ()	;
 
 	private:
 		void	InitFields	()	;
@@ -33,13 +34,12 @@ class Pattern : public ItemSet
 
 	public:
 		const	uint32		GetFrequence		()				const	;
+		const	float32		GetAmbiguity		()				const	;
 
 			void		SetSupport		(const float32 &support)		;
 		const	float32&	GetSupport		()				const	;
 
 	public:
-			void			SetGot				(const bool &got)			;
-		const	bool&			GetGot				()				const	;
 		const	TransactionList&	GetTransactionList		()				const	;
 		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)		const	;
 		const	float32			GetSimilarity			(Pattern *pPattern)			;
@@ -65,7 +65,6 @@ class Pattern : public ItemSet
 		TransactionList	mTransactionList	;
 		PatternList*	mpChildPatternList	;
 		uint32*		mClassCoverageArray	;
-		bool		mGot			;
 };
 
 

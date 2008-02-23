@@ -41,56 +41,29 @@ void DataBase::LoadTrainData (const string &file)
 {
 	SetFile (file);
 
-	list<string> lines;
-	LoadFile (&lines);
-
-	while (! lines.empty ())
-	{
-
-		string s = lines.front ();
-		list<string> items;
-
-		Tokenize (s, items);
-
-		if (! items.empty ())
-			items.pop_front (); // transaction ID
-
-		if (! items.empty ())
-		{
-			if (! mClassList.GetClassByValue (items.front ()))
-				mClassList.PushBack (new Class (items.front ()));
-
-			Class *pClass = mClassList.GetClassByValue (items.front ());
-
-			Transaction *pTransaction = new Transaction (pClass);
-			pClass->AddTransaction (pTransaction);
-
-			items.pop_front ();
-
-			while (! items.empty ())
-			{
-				if (! mItemList.GetItemByValue (items.front ()))
-					mItemList.PushBack (new Item (items.front ()));
-
-				Item *pItem = mItemList.GetItemByValue (items.front ());
-
-				pTransaction->PushBack (pItem);
-				pItem->AddTransaction (pTransaction);
-
-				items.pop_front ();
-			}
-
-			mTrainTransactionList.PushBack (pTransaction);
-		}
-
-		lines.pop_front ();
-	}
+	LoadData (true);
 }
 
 void DataBase::LoadTestData (const string &file)
 {
 	SetFile (file);
 
+	LoadData (false);
+}
+
+/*
+ * Load data file to transaction list.
+ * If input is the training file, load
+ * transactions to mTrainTransactionList and
+ * add transactions to the list of transactions
+ * for classes and items. If input is the testing
+ * file (not the training file), load transactions
+ * to mTestTransactionList and DO NOT add transactions
+ * to the list of transactions for classes and items.
+ */
+
+void DataBase::LoadData (const bool &train_data)
+{
 	list<string> lines;
 	LoadFile (&lines);
 
@@ -107,26 +80,43 @@ void DataBase::LoadTestData (const string &file)
 
 		if (! items.empty ())
 		{
-			if (! mClassList.GetClassByValue (items.front ()))
-				mClassList.PushBack (new Class (items.front ()));
-
 			Class *pClass = mClassList.GetClassByValue (items.front ());
 
+			if (! pClass)
+			{
+				pClass = new Class (items.front ());
+				mClassList.PushBack (pClass);
+			}
+
 			Transaction *pTransaction = new Transaction (pClass);
+
+			if (train_data)
+				pClass->AddTransaction (pTransaction);
 
 			items.pop_front ();
 
 			while (! items.empty ())
 			{
-				if (! mItemList.GetItemByValue (items.front ()))
-					mItemList.PushBack (new Item (items.front ()));
+				Item *pItem = mItemList.GetItemByValue (items.front ());
 
-				pTransaction->PushBack (mItemList.GetItemByValue (items.front ()));
+				if (! pItem)
+				{
+					pItem = new Item (items.front ());
+					mItemList.PushBack (pItem);
+				}
+
+				pTransaction->PushBack (pItem);
+
+				if (train_data)
+					pItem->AddTransaction (pTransaction);
 
 				items.pop_front ();
 			}
 
-			mTestTransactionList.PushBack (pTransaction);
+			if (train_data)
+				mTrainTransactionList.PushBack (pTransaction);
+			else
+				mTestTransactionList.PushBack (pTransaction);
 		}
 
 		lines.pop_front ();
@@ -144,7 +134,16 @@ void DataBase::SortTransactions ()
 	mTestTransactionList.SortTransactions ();
 }
 
-void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
+
+/*
+ * Classify testing transactions, using
+ * run mode, orthogonality mode, orthogonality
+ * metric, mininum number of rules and
+ * maximum number of rules in the rank list
+ * (maximum size of rank)
+ */
+
+void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const PatternList::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
@@ -153,13 +152,9 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	try
 	{
 		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
-			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMetric, rMinNumRules, rMaxNumRankRules, rUseMaximalPatterns);
+			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rMinNumRules, rMaxNumRankRules, rUseMaximalPatterns);
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mTotalGuesses - mCorrectGuesses);
-
-//		cout << mAccuracy << endl;
-
-//		cout << "average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "], accuracy [" << mAccuracy << "]" << endl;
 
 		cout << "accuracy [" << mAccuracy << "], average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "]" << endl;
 	}
@@ -173,13 +168,14 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	}
 }
 
-void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMetric &rOrtMetric, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
+void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const PatternList::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - pTransaction\n");
 
 	pTransaction->Print ();
 
 	MakeProjection (pTransaction);
+	Pattern::ResetSeqPatternID ();
 
 	PatternList *pPatternList = pTransaction->GetPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen, rUseMaximalPatterns);
 
@@ -210,7 +206,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMetric);
+		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering);
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 

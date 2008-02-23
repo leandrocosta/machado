@@ -42,6 +42,8 @@ AppOptions::AppOptions ()
 	mRunMode		= AppOptions::DEFAULT_RUN_MODE			;
 	mOrtMode		= AppOptions::DEFAULT_ORT_MODE			;
 	mOrtMetric		= AppOptions::DEFAULT_ORT_METRIC		;
+	mOrtMethod		= AppOptions::DEFAULT_ORT_METHOD		;
+	mOrtOrdering		= AppOptions::DEFAULT_ORT_ORDERING		;
 	m_debug_level		= AppOptions::DEFAULT_DEBUG_LEVEL		;
 	mVerbose		= AppOptions::DEFAULT_VERBOSE			;
 	mHelp			= AppOptions::DEFAULT_HELP			;
@@ -62,8 +64,10 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"min-rule-len"		, 1, 0, 'm'},
 		{"max-rule-len"		, 1, 0, 'a'},
 		{"run-mode"		, 1, 0, 'r'},
-		{"orthogonality-mode"	, 1, 0, 'o'},
-		{"orthogonality-metric"	, 1, 0, 'e'},
+		{"orth-mode"		, 1, 0, 'o'},
+		{"orth-metric"		, 1, 0, 'e'},
+		{"orth-method"		, 1, 0, 'w'},
+		{"orth-pat-ordering"	, 1, 0, 'g'},
 		{"debug"		, 1, 0, 'd'},
 		{"verbose"		, 0, 0, 'v'},
 		{"help"			, 0, 0, 'h'},
@@ -74,7 +78,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:s:c:n:l:m:a:r:o:e:d:xvh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:s:c:n:l:m:a:r:o:e:w:g:d:xvh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -129,6 +133,14 @@ void AppOptions::Run (int argc, char* const* argv)
 				mOrtMetric = (PatternList::OrtMetric) optarg [0];
 				break;
 
+			case 'w':
+				mOrtMethod = (PatternList::OrtMethod) optarg [0];
+				break;
+
+			case 'g':
+				mOrtOrdering = (PatternList::OrtOrdering) optarg [0];
+				break;
+
 			case 'd':
 				m_debug_level = (e_debug) atoi (optarg);
 				break;
@@ -154,17 +166,19 @@ void AppOptions::Usage () const
 	cout << "Options:" << endl;
 	cout << "  -i, --training-file        Set the training file" << endl;
 	cout << "  -t, --testing-file         Set the testing file" << endl;
-	cout << "  -x  --maximal-patterns     Discard non-maximal patterns" << endl;
+	cout << "  -x, --maximal-patterns     Discard non-maximal patterns" << endl;
 	cout << "  -s, --support              Set the support" << endl;
 	cout << "  -c, --confidence           Set the confidence" << endl;
 	cout << "  -n, --min-num-rules        Set the minimum number of rules" << endl;
-	cout << "  -l, --max-num-rank-rules   Set the maximum number of rules considered in rank time" << endl;
+	cout << "  -l, --max-num-rank-rules   Set the maximum number of rules considered in rank (rank size)" << endl;
 	cout << "  -m, --min-rule-len         Set the minimum length of the rules" << endl;
 	cout << "  -a, --max-rule-len         Set the maximum length of the rules" << endl;
 	cout << "  -r, --run-mode             Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]" << endl;
-	cout << "  -o, --orthogonality-mode   Set the orthogonality mode [h,p] [HEURISTICAL, POLYNOMIAL]" << endl;
-	cout << "  -e, --orthogonality-metric Set the orthogonality mode [s,c,b,l,m,a] [SET SIMILARITY, SET COVERAGE," << endl;
-	cout << "                               SET SIMILARITY/COVERAGE, SET CLASS COVERAGE, PAIR MEAN CLASS COVERAGE, ALL]" << endl;
+	cout << "  -o, --orth-mode            Set the orthogonality mode [h,p] [HEURISTICAL, POLYNOMIAL]" << endl;
+	cout << "  -e, --orth-metric          Set the orthogonality mode [s,c,l,a] [SIMILARITY, TRANSACTION COVERAGE, CLASS COVERAGE, ALL]" << endl;
+	cout << "  -w  --orth-method          Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE, ALL]" << endl;
+	cout << "  -g  --orth-pat-ordering    Set the way patterns are ordered for orthogonality heuristic [s,r,i,z,n] [SORTED," << endl;
+	cout << "                               REVERSE SORTED, SORTED BY SIZE, REVERSE SORTED BY SIZE, NONE]" << endl;
 	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
 	cout << "  -v, --verbose              Use verbose mode" << endl;
 	cout << "  -h, --help                 Display this information" << endl;
@@ -234,6 +248,16 @@ const PatternList::OrtMode& AppOptions::GetOrtMode () const
 const PatternList::OrtMetric& AppOptions::GetOrtMetric () const
 {
 	return mOrtMetric;
+}
+
+const PatternList::OrtMethod& AppOptions::GetOrtMethod () const
+{
+	return mOrtMethod;
+}
+
+const PatternList::OrtOrdering& AppOptions::GetOrtOrdering () const
+{
+	return mOrtOrdering;
 }
 
 const e_debug& AppOptions::GetDebugLevel () const

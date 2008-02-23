@@ -38,9 +38,11 @@ class AppOptions
 		const	uint32&		GetMinRuleLen		()	const	;
 		const	uint32&		GetMaxRuleLen		()	const	;
 
-		const	DataBase::RunMode&	GetRunMode	()	const	;
-		const	PatternList::OrtMode&	GetOrtMode	()	const	;
-		const	PatternList::OrtMetric&	GetOrtMetric	()	const	;
+		const	DataBase::RunMode&		GetRunMode	()	const	;
+		const	PatternList::OrtMode&		GetOrtMode	()	const	;
+		const	PatternList::OrtMetric&		GetOrtMetric	()	const	;
+		const	PatternList::OrtMethod&		GetOrtMethod	()	const	;
+		const	PatternList::OrtOrdering&	GetOrtOrdering	()	const	;
 
 		const	e_debug&	GetDebugLevel	()	const	;
 		const	bool&		GetVerbose	()	const	;
@@ -61,9 +63,11 @@ class AppOptions
 		uint32		mMinRuleLen		;
 		uint32		mMaxRuleLen		;
 
-		DataBase::RunMode	mRunMode	;
-		PatternList::OrtMode	mOrtMode	;
-		PatternList::OrtMetric	mOrtMetric	;
+		DataBase::RunMode		mRunMode	;
+		PatternList::OrtMode		mOrtMode	;
+		PatternList::OrtMetric		mOrtMetric	;
+		PatternList::OrtMethod		mOrtMethod	;
+		PatternList::OrtOrdering	mOrtOrdering	;
 
 		e_debug	m_debug_level	;
 		bool	mVerbose	;
@@ -82,9 +86,11 @@ class AppOptions
 		static	const	uint32	DEFAULT_MIN_RULE_LEN		= 1	;
 		static	const	uint32	DEFAULT_MAX_RULE_LEN		= 10	;
 
-		static	const	DataBase::RunMode	DEFAULT_RUN_MODE	= DataBase::MODE_ORTHOGONAL		;
-		static	const	PatternList::OrtMode	DEFAULT_ORT_MODE	= PatternList::ORTH_HEURISTICAL		;
-		static	const	PatternList::OrtMetric	DEFAULT_ORT_METRIC	= PatternList::METRIC_SET_SIM_COV	;
+		static	const	DataBase::RunMode		DEFAULT_RUN_MODE	= DataBase::MODE_ORTHOGONAL		;
+		static	const	PatternList::OrtMode		DEFAULT_ORT_MODE	= PatternList::ORTH_HEURISTICAL		;
+		static	const	PatternList::OrtMetric		DEFAULT_ORT_METRIC	= PatternList::METRIC_CLASS_COVERAGE	;
+		static	const	PatternList::OrtMethod		DEFAULT_ORT_METHOD	= PatternList::METHOD_SET		;
+		static	const	PatternList::OrtOrdering	DEFAULT_ORT_ORDERING	= PatternList::ORDERING_NONE		;
 
 		static	const	e_debug	DEFAULT_DEBUG_LEVEL	= NO_DEBUG	;
 		static	const	bool	DEFAULT_VERBOSE		= false		;

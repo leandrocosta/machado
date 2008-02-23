@@ -89,12 +89,15 @@ int main(int argc, char* argv[])
 		 * run mode, orthogonality mode, orthogonality
 		 * metric, mininum number of rules and
 		 * maximum number of rules in the rank list
+		 * (maximum size of rank)
 		 */
 
 		base.ClassifyTestData (
 				pAppOptions->GetRunMode (),
 				pAppOptions->GetOrtMode (),
+				pAppOptions->GetOrtMethod (),
 				pAppOptions->GetOrtMetric (),
+				pAppOptions->GetOrtOrdering (),
 				pAppOptions->GetMinNumRules (),
 				pAppOptions->GetMaxNumRankRules (),
 				pAppOptions->GetUseMaximalPatterns ());

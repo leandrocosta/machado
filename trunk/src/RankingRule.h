@@ -11,8 +11,8 @@ class RankingRule : public Rule
 			RankingRule	(
 				const Class *pClass,
 				const Pattern *pPattern,
-				const uint32 &projection_size,
-				const uint32 &num_classes)	;
+				const uint32 &rProjectionSize,
+				const uint32 &rNumClasses)	;
 		virtual	~RankingRule	()			;
 
 	public:
