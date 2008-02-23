@@ -82,3 +82,106 @@ Resultado:
     * freq 10 vezes em primeiro lugar, sendo 6 isoladas, 3 com orth 1 com lazy e orth;
     * lazy 7 vezes em primeiro lugar, sendo 6 isoladas e 1 com freq e orth;
     * das 6 vezes em que freq esteve isolado em primeiro lugar, orth ganhou 3, empatou 1 e perdeu 2 vezes para lazy.
+
+---
+19/02/2008
+
+	* Organizar métricas de ortogonalidade:
+
+		---------------------------------------------------------
+		|			| Set	| Pair Average	| All	|
+		---------------------------------------------------------
+		| Pattern Similarity	|	|		|	|
+		---------------------------------------------------------
+		| Transaction Coverage	|	|		|	|
+		---------------------------------------------------------
+		| Class Coverage	|	|		|	|
+		---------------------------------------------------------
+		| All			|	|		|	|
+		----------------------------------------------------------
+
+	* Parametrizar ordem dos padrões como entrada para a heurística:
+		- Sort;
+		- Reverse Sort;
+		- SizeSort;
+		- SizeReverseSort;
+		- None.
+
+	* Implementar heurística mais específica e inteligente:
+		- Class Coverage:
+			. Dar preferência por padrões cuja cobertura de classes seja menos ambígua.
+		- Transaction Coverage:
+			. Dar preferência por padrões com suportes menores;
+		- Similarity:
+			. Dar preferência por padrões com maiores quantidades de elementos.
+
+	* Implementar alfa e beta para ortogonalidades:
+		- Enquanto ortogonalidade do conjunto for maior que alfa, incluir novos elementos;
+			. Dando preferência aos citados acima.
+		- Gerar vários conjuntos-resultado de acordo com alfa;
+		- Calcular resíduo para cada conjunto-resultado de acordo com beta;
+		- Escolher o melhor conjunto-resultado de acordo com o resíduo.
+
+	* Utilizar a abordagem com alfa e beta com padrões maximais.
+
+---
+
+Geração de padrões maximais randômicos
+
+maximais_set = empty;
+maximais_set_size = 0;
+bKeepRunning = true;
+
+while (bKeepRunning)
+{
+	maximal = new MaximalPattern ();
+
+	maximal_items_array[item  IDs] = false;
+
+	item = getRandomItem ();
+
+	maximal.push (item);
+	maximal[pattern.getID ()] = true;
+
+	bTryMoreRandomItems = true;
+
+	while (bTryMoreRandomItems)
+	{
+		item = NULL;
+
+		for (i = 0; i < maximal.size () + 1; i++)
+		{
+			item = getRandomItem ();
+
+			if (maximal.find (item))
+				item = NULL;
+			else
+				break;
+		}
+
+		if (item)
+		{
+			new_maximal = maximal + item;
+
+			if (new_maximal é frequente)
+			{
+				delete maximal;
+				maximal = new_maximal;
+			}
+			else
+				bTryMoreRandomItems = false;
+		}
+		else
+			bTryMoreRandomItems = false;
+	}
+
+	// checar se é mesmo maximal ?
+
+	if (maximais_set.find (maximal)
+		duplicates++;
+	else
+		maximais_set.push (maximal);
+
+	if (duplicates > maximais_set)
+		bKeepRunning = false;
+}
