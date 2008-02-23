@@ -20,8 +20,6 @@ Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTra
 
 Transaction::~Transaction ()
 {
-//	LOGMSG (HIGH_LEVEL, "Transaction::~Transaction () - p [%p]\n", this);
-
 	if (mItemCoverageArray)
 		delete[] mItemCoverageArray;
 
@@ -62,33 +60,6 @@ const string& Transaction::GetClassValue () const
 
 const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 {
-//	bool bRet = false;
-
-//	if (mPatternCoverageHsh.find (pPattern->GetPatternID ()) != mPatternCoverageHsh.end ())
-//		bRet = mPatternCoverageHsh [pPattern->GetPatternID ()];
-//	else
-//	{
-
-/*
-		ItemList::STLItemList_cit itTransactionItem	= GetBegin ();
-		ItemList::STLItemList_cit itTransactionItemEnd	= GetEnd ();
-
-		ItemList::STLItemList_cit itPatternItem		= pPattern->GetBegin ();
-		ItemList::STLItemList_cit itPatternItemEnd	= pPattern->GetEnd ();
-
-		while (itTransactionItem != itTransactionItemEnd && itPatternItem != itPatternItemEnd)
-		{
-			if (*itTransactionItem == *itPatternItem)
-				++itPatternItem;
-			else if (*itTransactionItem > *itPatternItem)
-				break;
-
-			++itTransactionItem;
-		}
-
-		if (itPatternItem == itPatternItemEnd)
-			bRet = true;
-*/
 	bool bRet = true;
 
 	ItemList::STLItemList_cit itEnd = pPattern->GetEnd ();
@@ -101,9 +72,6 @@ const bool Transaction::IsCoveredBy (const Pattern *pPattern) const
 			break;
 		}
 	}
-
-//		mPatternCoverageHsh [pPattern->GetPatternID ()] = bRet;
-//	}
 
 	return bRet;
 }
@@ -129,6 +97,17 @@ PatternList* Transaction::GetPatternList (
 	{
 		PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, Item::GetMaxItemID () + 1);
 		pPatternList = GetMaximalFrequentPatternList (pFrequentPatternList);
+
+		PatternList::STLPatternList_cit itEnd = pFrequentPatternList->GetEnd ();
+
+		for (PatternList::STLPatternList_cit it = pFrequentPatternList->GetBegin (); it != itEnd; ++it)
+		{
+			Pattern *pPattern = static_cast<Pattern *>(*it);
+
+			if (! pPatternList->FindByPtr (pPattern))
+				delete pPattern;
+		}
+
 		pFrequentPatternList->RemoveAll ();
 		delete pFrequentPatternList;
 	}
@@ -154,6 +133,12 @@ PatternList* Transaction::GetPatternList (
 				break;
 		}
 	}
+
+	Pattern::ResetSeqPatternID ();
+	PatternList::STLPatternList_cit itEnd = pPatternList->GetEnd ();
+
+	for (PatternList::STLPatternList_cit it = pPatternList->GetBegin (); it != itEnd; ++it)
+		static_cast<Pattern *>(*it)->SetPatternID ();
 
 	return pPatternList;
 }

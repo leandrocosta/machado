@@ -31,11 +31,14 @@ class DataBase : private IOManager, private Tokenizer
 		} RunMode;
 
 	private:
+		void	LoadData		(const bool &train_data)		;
 		void	ClassifyTransaction	(
 				Transaction *pTransaction,
 				const RunMode &rRunMode,
 				const PatternList::OrtMode &rOrtMode,
+				const PatternList::OrtMethod &rOrtMethod,
 				const PatternList::OrtMetric &rOrtMetric,
+				const PatternList::OrtOrdering &rOrtOrdering,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const bool &rUseMaximalPatterns)			;
@@ -53,7 +56,9 @@ class DataBase : private IOManager, private Tokenizer
 		void	ClassifyTestData	(
 				const RunMode &rRunMode,
 				const PatternList::OrtMode &rOrtMode,
+				const PatternList::OrtMethod &rOrtMethod,
 				const PatternList::OrtMetric &rOrtMetric,
+				const PatternList::OrtOrdering &rOrtOrdering,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const bool &rUseMaximalPatterns)			;
