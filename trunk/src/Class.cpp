@@ -29,6 +29,11 @@ const uint32 Class::GetMaxClassID ()
 	return msSeqClassID - 1;
 }
 
+const uint32 Class::GetNumClasses ()
+{
+	return msSeqClassID;
+}
+
 const uint32& Class::GetClassID () const
 {
 	return mClassID;

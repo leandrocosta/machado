@@ -20,6 +20,7 @@ class Class : public Object
 
 	public:
 		static	const	uint32	GetMaxClassID	()	;
+		static	const	uint32	GetNumClasses	()	;
 
 	public:
 		const	uint32&	GetClassID	()	const	;

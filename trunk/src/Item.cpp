@@ -6,7 +6,7 @@
 uint32 Item::msSeqItemID	= 0	;
 
 
-Item::Item (const string &value, const uint32 &count) : Object (), mItemID (GetSeqItemID ()), mValue (value), mCount (count)
+Item::Item (const string &value) : Object (), mItemID (GetSeqItemID ()), mValue (value)
 {
 	mpTransactionList		= new TransactionList ();
 	mpProjectionTransactionList	= new TransactionList ();
@@ -21,34 +21,34 @@ Item::~Item ()
 	delete mpProjectionTransactionList;
 }
 
-const bool Item::operator< (const Object &rObject) const
+const bool Item::operator< (const Object &rRight) const
 {
-	return GetItemID () < static_cast<const Item &>(rObject).GetItemID ();
+	return mItemID < static_cast<const Item &>(rRight).GetItemID ();
 }
 
-const bool Item::operator> (const Object &rObject) const
+const bool Item::operator> (const Object &rRight) const
 {
-	return GetItemID () > static_cast<const Item &>(rObject).GetItemID ();
+	return mItemID > static_cast<const Item &>(rRight).GetItemID ();
 }
 
-const bool Item::operator<= (const Object &rObject) const
+const bool Item::operator<= (const Object &rRight) const
 {
-	return GetItemID () <= static_cast<const Item &>(rObject).GetItemID ();
+	return mItemID <= static_cast<const Item &>(rRight).GetItemID ();
 }
 
-const bool Item::operator>= (const Object &rObject) const
+const bool Item::operator>= (const Object &rRight) const
 {
-	return GetItemID () >= static_cast<const Item &>(rObject).GetItemID ();
+	return mItemID >= static_cast<const Item &>(rRight).GetItemID ();
 }
 
-const bool Item::operator== (const Object &rObject) const
+const bool Item::operator== (const Object &rRight) const
 {
-	return GetItemID () == static_cast<const Item &>(rObject).GetItemID ();
+	return GetItemID () == static_cast<const Item &>(rRight).GetItemID ();
 }
 
-const bool Item::operator!= (const Object &rObject) const
+const bool Item::operator!= (const Object &rRight) const
 {
-	return GetItemID () != static_cast<const Item &>(rObject).GetItemID ();
+	return GetItemID () != static_cast<const Item &>(rRight).GetItemID ();
 }
 
 const uint32 Item::GetSeqItemID ()
@@ -63,6 +63,11 @@ const uint32 Item::GetMaxItemID ()
 	return msSeqItemID - 1;
 }
 
+const uint32 Item::GetNumItems ()
+{
+	return msSeqItemID;
+}
+
 const uint32& Item::GetItemID () const
 {
 	return mItemID;
@@ -71,23 +76,6 @@ const uint32& Item::GetItemID () const
 const string& Item::GetValue () const
 {
 	return mValue;
-}
-
-void Item::SetCount (const uint32 &count)
-{
-	mCount = count;
-}
-
-void Item::IncCount ()
-{
-//	LOGMSG (HIGH_LEVEL, "Item::IncCount () - p [%p]\n", this);
-
-	mCount++;
-}
-
-const uint32& Item::GetCount () const
-{
-	return mCount;
 }
 
 void Item::AddTransaction (Transaction *pTransaction)

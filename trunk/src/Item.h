@@ -14,30 +14,27 @@ class	TransactionList	;
 class Item : public Object
 {
 	public:
-			Item	(const string &value, const uint32 &count = 1)	;
-		virtual	~Item 	()						;
+			Item	(const string &value)	;
+		virtual	~Item 	()			;
 
 	public:
-		virtual	const	bool	operator<	(const Object& rObject)	const	;
-		virtual	const	bool	operator>	(const Object& rObject)	const	;
-		virtual	const	bool	operator<=	(const Object& rObject)	const	;
-		virtual	const	bool	operator>=	(const Object& rObject)	const	;
-		virtual	const	bool	operator==	(const Object& rObject)	const	;
-		virtual	const	bool	operator!=	(const Object& rObject)	const	;
+		virtual	const	bool	operator<	(const Object& rRight)	const	;
+		virtual	const	bool	operator>	(const Object& rRight)	const	;
+		virtual	const	bool	operator<=	(const Object& rRight)	const	;
+		virtual	const	bool	operator>=	(const Object& rRight)	const	;
+		virtual	const	bool	operator==	(const Object& rRight)	const	;
+		virtual	const	bool	operator!=	(const Object& rRight)	const	;
 
 	private:
 		static	const	uint32	GetSeqItemID	()	;
 
 	public:
 		static	const	uint32	GetMaxItemID	()	;
+		static	const	uint32	GetNumItems	()	;
 
 	public:
 		const	uint32&			GetItemID			()				const	;
 		const	string&			GetValue			()				const	;
-
-			void			IncCount			()					;
-			void			SetCount			(const uint32 &count)			;
-		const	uint32&			GetCount			()				const	;
 
 			void			AddTransaction			(Transaction *pTransaction)		;
 			void			AddProjectionTransaction	(Transaction *pTransaction)		;
@@ -57,7 +54,6 @@ class Item : public Object
 		const	uint32			mItemID				;
 		const	string			mValue				;
 
-			uint32			mCount				;
 			TransactionList*	mpTransactionList		;
 			TransactionList*	mpProjectionTransactionList	;
 };
