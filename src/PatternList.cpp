@@ -710,8 +710,8 @@ const float32 PatternList::GetPairAverageSimilarityRate () const
 		{
 			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
 			{
-				uint32 num_coverages		= 0;
-				uint32 num_single_coverages	= 0;
+				uint32 num = 0;
+				uint32 den = 0;
 
 				for (uint32 itemID = 0; itemID < Item::GetMaxItemID () + 1; itemID++)
 				{
@@ -720,14 +720,14 @@ const float32 PatternList::GetPairAverageSimilarityRate () const
 
 					if (leftCoverage || rightCoverage)
 					{
-						num_coverages++;
+						den++;
 
 						if (! leftCoverage || ! rightCoverage)
-							num_single_coverages++;
+							num++;
 					}
 				}
 
-				rate += (float32) num_single_coverages / num_coverages;
+				rate += (float32) num / den;
 			}
 		}
 
@@ -754,8 +754,8 @@ const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pT
 		{
 			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
 			{
-				uint32 num_coverages		= 0;
-				uint32 num_single_coverages	= 0;
+				uint32 num = 0;
+				uint32 den = 0;
 
 				for (uint32 transactionID = 0; transactionID < Transaction::GetMaxTransactionID () + 1; transactionID++)
 				{
@@ -764,14 +764,14 @@ const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pT
 
 					if (leftCoverage || rightCoverage)
 					{
-						num_coverages++;
+						den++;
 
 						if (! leftCoverage || ! rightCoverage)
-							num_single_coverages++;
+							num++;
 					}
 				}
 
-				rate += (float32) num_single_coverages / num_coverages;
+				rate += (float32) num / den;
 			}
 		}
 

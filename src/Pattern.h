@@ -4,8 +4,6 @@
 
 #include "ItemSet.h"
 #include "TransactionList.h"
-#include "base/StringUInt32Hash.h"
-#include "base/UInt32Float32Hash.h"
 
 
 class PatternList;
@@ -46,6 +44,7 @@ class Pattern : public ItemSet
 			void			AddChildPattern			(Pattern *pPattern)			;
 			PatternList*		GetMaximalPatternList		()					;
 		const	bool			IsSuperPatternOf		(const Pattern *pPattern)	const	;
+		const	bool*			GetItemArray			()				const	;
 
 	public:
 		void	SetSimilarityHsh	(const uint32 &rPatternID, const float32 &similarity)	;
@@ -64,6 +63,7 @@ class Pattern : public ItemSet
 		float32		mSupport		;
 		TransactionList	mTransactionList	;
 		PatternList*	mpChildPatternList	;
+		bool*		mItemArray		;
 		uint32*		mClassCoverageArray	;
 };
 

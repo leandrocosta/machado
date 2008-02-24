@@ -8,7 +8,7 @@ using std::cout;
 using std::endl;
 
 
-uint32 Pattern::msSeqPatternID	= 0	;
+uint32 Pattern::msSeqPatternID = 0;
 
 
 Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
@@ -18,9 +18,14 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 	STLItemList_cit itPatternEnd = pPattern->GetEnd ();
 
 	for (STLItemList_cit it = pPattern->GetBegin (); it != itPatternEnd; ++it)
-		PushBack (*it);
+	{
+		Item *pPatternItem = static_cast<Item *>(*it);
+		PushBack (pPatternItem);
+		mItemArray [pPatternItem->GetItemID ()] = true;
+	}
 
 	PushBack (pItem);
+	mItemArray [pItem->GetItemID ()] = true;
 
 	const uint32 &rItemID = pItem->GetItemID ();
 
@@ -48,6 +53,7 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 	InitFields ();
 
 	PushBack (pItem);
+	mItemArray [pItem->GetItemID ()] = true;
 
 	const TransactionList *pItemTransactionList = pItem->GetProjectionTransactionList ();
 
@@ -69,11 +75,31 @@ Pattern::~Pattern ()
 	mpChildPatternList->RemoveAll ();
 	delete mpChildPatternList;
 
+	delete[] mItemArray;
 	delete[] mClassCoverageArray;
 
 	mTransactionList.RemoveAll ();
 
 	RemoveAll ();
+}
+
+void Pattern::InitFields ()
+{
+	mPatternID	= 0	;
+	mFrequence	= 0	;
+	mSupport	= 0.0	;
+
+	mpChildPatternList = new PatternList ();
+
+	const uint32 num_items = Item::GetNumItems ();
+	mItemArray = new bool [num_items];
+	for (uint32 itemID = 0; itemID < num_items; itemID++)
+		mItemArray [itemID] = false;
+
+	const uint32 num_classes = Class::GetNumClasses ();
+	mClassCoverageArray = new uint32 [num_classes];
+	for (uint32 classID = 0; classID < num_classes; classID++)
+		mClassCoverageArray [classID] = 0;
 }
 
 const uint32 Pattern::GetSeqPatternID ()
@@ -103,22 +129,6 @@ const uint32& Pattern::GetPatternID () const
 	return mPatternID;
 }
 
-void Pattern::InitFields ()
-{
-	mPatternID	= 0	;
-	mFrequence	= 0	;
-	mSupport	= 0.0	;
-
-	mpChildPatternList = new PatternList ();
-
-	const uint32 num_classes = Class::GetMaxClassID () + 1;
-
-	mClassCoverageArray = new uint32 [num_classes];
-
-	for (uint32 classID = 0; classID < num_classes; classID++)
-		mClassCoverageArray [classID] = 0;
-}
-
 const uint32 Pattern::GetFrequence () const
 {
 	return mFrequence;
@@ -126,10 +136,11 @@ const uint32 Pattern::GetFrequence () const
 
 const float32 Pattern::GetAmbiguity () const
 {
-	const uint32 num_classes = Class::GetMaxClassID () + 1;
 	uint32 my_classes	= 0;
 	uint32 my_classes_total = 0;
 	uint32 my_classes_max	= 0;
+
+	const uint32 num_classes = Class::GetNumClasses ();
 
 	for (uint32 classID = 0; classID < num_classes; classID++)
 	{
@@ -177,50 +188,26 @@ const uint32 Pattern::GetNumTransactionsOfClass (const uint32 &classID) const
 
 const float32 Pattern::GetSimilarity (Pattern *pPattern)
 {
-	float32 similarity = -1;
+	float32 similarity = 0;
 
-	ItemList	totalItemList		;
-	STLItemList_cit itEnd = GetEnd ()	;
+	const bool *itemArrayLeft	= mItemArray;
+	const bool *itemArrayRight	= pPattern->GetItemArray ();
 
-	for (STLItemList_cit it = GetBegin (); it != itEnd; ++it)
+	uint32 num = 0;
+	uint32 den = 0;
+
+	const uint32 num_items = Item::GetNumItems ();
+
+	for (uint32 i = 0; i < num_items; i++)
 	{
-		Item *pItem = static_cast<Item *>(*it);
-
-		pItem->SetCount (1);
-		totalItemList.PushBack (pItem);
-	}
-
-	itEnd = pPattern->GetEnd ();
-
-	for (STLItemList_cit it = pPattern->GetBegin (); it != itEnd; ++it)
-	{
-		Item *pItem = static_cast<Item *>(*it);
-
-		if (totalItemList.FindByPtr (pItem))
-			pItem->IncCount ();
-		else
+		if (itemArrayLeft [i] || itemArrayRight [i])
 		{
-			pItem->SetCount (1);
-			totalItemList.PushBack (pItem);
+			den++;
+
+			if (! itemArrayLeft [i] || ! itemArrayRight [i])
+				num++;
 		}
 	}
-
-	uint32 num	= 0	;
-	uint32 den	= 0	;
-
-	itEnd = totalItemList.GetEnd ();
-
-	for (STLItemList_cit it = totalItemList.GetBegin (); it != itEnd; ++it)
-	{
-		const Item *pItem = static_cast<const Item *>(*it);
-
-		den += pItem->GetCount ();
-
-		if (pItem->GetCount () > 1)
-			num += pItem->GetCount ();
-	}
-
-	totalItemList.RemoveAll ();
 
 	similarity = (float32) num / den;
 
@@ -305,6 +292,11 @@ const bool Pattern::IsSuperPatternOf (const Pattern *pPattern) const
 		bRet = true;
 
 	return bRet;
+}
+
+const bool* Pattern::GetItemArray () const
+{
+	return mItemArray;
 }
 
 void Pattern::Print () const
