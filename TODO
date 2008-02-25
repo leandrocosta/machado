@@ -141,7 +141,7 @@ while (bKeepRunning)
 	item = getRandomItem ();
 
 	maximal.push (item);
-	maximal[pattern.getID ()] = true;
+	maximal[item.getID ()] = true;
 
 	bTryMoreRandomItems = true;
 
