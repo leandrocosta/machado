@@ -25,17 +25,9 @@ class PatternList : public ObjectList
 		typedef enum e_orthogonality_mode
 		{
 			ORTH_HEURISTICAL	= 'h',
-			ORTH_POLYNOMIAL		= 'p'
+			ORTH_POLYNOMIAL		= 'p',
+			ORTH_ORIGAMI		= 'o'
 		} OrtMode;
-
-		typedef enum e_orthogonality_metric
-		{
-			METRIC_SIMILARITY	= 's',
-			METRIC_TRANS_COVERAGE	= 'c',
-			METRIC_CLASS_COVERAGE	= 'l',
-			METRIC_ALL		= 'a',
-			METRIC_UNKNOWN		= 0
-		} OrtMetric;
 
 		typedef enum e_orthogonality_method
 		{
@@ -70,35 +62,52 @@ class PatternList : public ObjectList
 		static	void	DestroyClassPatternCoverageMatrix	()	;
 
 	private:
-		const	uint32*	GetPatternIDArray	()				const	;
-			void	MakeOrdering		(const OrtOrdering &ordering)		;
+		const	uint32*		GetPatternIDArray	()					const	;
+			void		MakeOrdering		(const OrtOrdering &ordering)			;
+			Pattern*	GetRandomPattern	()					const	;
+		const	uint32		GetResidue		(
+							const PatternList *pPatternList,
+							const Pattern::OrtMetric &rMetric,
+							const float32 &beta)				const	;
 
 	public:
 		PatternList*	GetOrthogonalPatternList			(
 					const TransactionList *pTransactionList,
 					const OrtMode &mode,
 					const OrtMethod &method,
-					const OrtMetric &metric,
-					const OrtOrdering &ordering)			;
+					const Pattern::OrtMetric &rMetric,
+					const OrtOrdering &ordering,
+					const float32 &rAlpha,
+					const float32 &rBeta)				;
 		PatternList*	GetOrthogonalPatternListHeuristical		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
-					const OrtMetric &metric,
+					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering)			;
 		PatternList*	GetOrthogonalPatternListClassHeuristical	(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
-					const OrtMetric &metric,
+					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering)			;
 		PatternList*	GetOrthogonalPatternListPolynomial		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
-					const OrtMetric &metric)			;
+					const Pattern::OrtMetric &rMetric)		;
 		PatternList*	GetOrthogonalPatternListPolynomial		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
-					const OrtMetric &metric,
+					const Pattern::OrtMetric &rMetric,
 					const uint32 &num_patterns)			;
+		PatternList*	GetOrthogonalPatternListORIGAMI			(
+					const TransactionList *pTransactionList,
+					const Pattern::OrtMetric &rMetric,
+					const float32 &rAlpha,
+					const float32 &rBeta)				;
+		PatternList*	GetOrthogonalPatternListORIGAMIRandomCandidate	(
+					const TransactionList *pTransactionList,
+					const Pattern::OrtMetric &rMetric,
+					const float32 &alpha,
+					const float32 &beta)				;
 
 	public:
 		RankingRuleList*	GetRuleList	(
@@ -108,7 +117,9 @@ class PatternList : public ObjectList
 					const uint32 &min_num_rules)		const	;
 
 	public:
-			Pattern*	GetMoreSimilar			(Pattern *pPattern)		const	;
+			Pattern*	GetMoreSimilar			(
+							const Pattern *pPattern,
+							const Pattern::OrtMetric &rMetric)		const	;
 		const	float32		GetSetSimilarityRate		()				const	;
 		const	float32		GetSetCoverageRate		(
 							const TransactionList *pTransactionList)	const	;
@@ -122,14 +133,15 @@ class PatternList : public ObjectList
 		const	float32		GetRate				(
 							const TransactionList *pTransactionList,
 							const OrtMethod &method,
-							const OrtMetric &metric)			const	;
+							const Pattern::OrtMetric &rMetric)			const	;
 		const	float32		GetSetRate			(
 							const TransactionList *pTransactionList,
-							const OrtMetric &metric)			const	;
+							const Pattern::OrtMetric &rMetric)			const	;
 		const	float32		GetPairAverageRate		(
 							const TransactionList *pTransactionList,
-							const OrtMetric &metric)			const	;
+							const Pattern::OrtMetric &rMetric)			const	;
 		const	bool		FindSuperPatternOf		(const Pattern *pPattern)	const	;
+			void		RemoveSubPatternsOf		(const Pattern *pPattern)		;
 
 	private:
 		static	bool**		mItemPatternCoverageMatrix		;

@@ -1,6 +1,7 @@
 #include "Pattern.h"
 #include "PatternList.h"
 #include "Class.h"
+#include "DataBaseException.h"
 #include "base/Logger.h"
 
 #include <iostream>
@@ -39,8 +40,9 @@ Pattern::Pattern (const Pattern *pPattern, Item *pItem) : ItemSet ()
 
 		if (pTransaction->IsCoveredByItem (rItemID))
 		{
-			mClassCoverageArray [pTransaction->GetClassID ()]++;
 			mTransactionList.PushBack (pTransaction);
+			mTransactionCoverageArray [pTransaction->GetTransactionID ()] = true;
+			mClassCoverageArray [pTransaction->GetClassID ()]++;
 		}
 	}
 
@@ -63,8 +65,9 @@ Pattern::Pattern (Item *pItem) : ItemSet ()
 	{
 		Transaction *pTransaction = static_cast<Transaction *>(*it);
 
-		mClassCoverageArray [pTransaction->GetClassID ()]++;
 		mTransactionList.PushBack (pTransaction);
+		mTransactionCoverageArray [pTransaction->GetTransactionID ()] = true;
+		mClassCoverageArray [pTransaction->GetClassID ()]++;
 	}
 
 	mFrequence = mTransactionList.GetSize ();
@@ -76,6 +79,7 @@ Pattern::~Pattern ()
 	delete mpChildPatternList;
 
 	delete[] mItemArray;
+	delete[] mTransactionCoverageArray;
 	delete[] mClassCoverageArray;
 
 	mTransactionList.RemoveAll ();
@@ -96,6 +100,11 @@ void Pattern::InitFields ()
 	for (uint32 itemID = 0; itemID < num_items; itemID++)
 		mItemArray [itemID] = false;
 
+	const uint32 num_transactions = Transaction::GetNumTransactions ();
+	mTransactionCoverageArray = new bool [num_transactions];
+	for (uint32 transactionID = 0; transactionID < num_transactions; transactionID++)
+		mTransactionCoverageArray [transactionID] = false;
+
 	const uint32 num_classes = Class::GetNumClasses ();
 	mClassCoverageArray = new uint32 [num_classes];
 	for (uint32 classID = 0; classID < num_classes; classID++)
@@ -109,14 +118,19 @@ const uint32 Pattern::GetSeqPatternID ()
 	return patternID;
 }
 
+void Pattern::ResetSeqPatternID ()
+{
+	msSeqPatternID = 0;
+}
+
 const uint32 Pattern::GetMaxPatternID ()
 {
 	return msSeqPatternID - 1;
 }
 
-void Pattern::ResetSeqPatternID ()
+const uint32 Pattern::GetNumPatterns ()
 {
-	msSeqPatternID = 0;
+	return msSeqPatternID;
 }
 
 void Pattern::SetPatternID ()
@@ -186,7 +200,35 @@ const uint32 Pattern::GetNumTransactionsOfClass (const uint32 &classID) const
 	return mClassCoverageArray [classID];
 }
 
-const float32 Pattern::GetSimilarity (Pattern *pPattern)
+const float32 Pattern::GetSimilarity (const Pattern *pPattern, const OrtMetric &rMetric) const
+{
+	float32 similarity = 0;
+
+	switch (rMetric)
+	{
+		case METRIC_SIMILARITY:
+			similarity = GetSimilarity (pPattern);
+			break;
+		case METRIC_TRANS_COVERAGE:
+			similarity = GetTransCovSimilarity (pPattern);
+			break;
+		case METRIC_CLASS_COVERAGE:
+			similarity = GetClassCovSimilarity (pPattern);
+			break;
+		case METRIC_ALL:
+			similarity = GetSimilarity (pPattern) * GetTransCovSimilarity (pPattern) * GetClassCovSimilarity (pPattern);
+			break;
+		case METRIC_UNKNOWN:
+		default:
+			LOGMSG (NO_DEBUG, "Pattern::GetSimilarity () - unknown orthogonality metric\n");
+			throw DataBaseException ("Unknown orthogonality metric");
+			break;
+	}
+
+	return similarity;
+}
+
+const float32 Pattern::GetSimilarity (const Pattern *pPattern) const
 {
 	float32 similarity = 0;
 
@@ -209,7 +251,67 @@ const float32 Pattern::GetSimilarity (Pattern *pPattern)
 		}
 	}
 
-	similarity = (float32) num / den;
+	if (den != 0)
+		similarity = (float32) num / den;
+
+	return similarity;
+}
+
+const float32 Pattern::GetTransCovSimilarity (const Pattern *pPattern) const
+{
+	float32 similarity = 0;
+
+	const bool *transactionCoverageArrayLeft	= mTransactionCoverageArray;
+	const bool *transactionCoverageArrayRight	= pPattern->GetTransactionCoverageArray ();
+
+	uint32 num = 0;
+	uint32 den = 0;
+
+	const uint32 num_transactions = Transaction::GetNumTransactions ();
+
+	for (uint32 i = 0; i < num_transactions; i++)
+	{
+		if (transactionCoverageArrayLeft [i] || transactionCoverageArrayRight [i])
+		{
+			den++;
+
+			if (! transactionCoverageArrayLeft [i] || ! transactionCoverageArrayRight [i])
+				num++;
+		}
+	}
+
+	if (den != 0)
+		similarity = (float32) num / den;
+
+	return similarity;
+}
+
+const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
+{
+	float32 similarity = 0;
+
+	const uint32 *classCoverageArrayLeft	= mClassCoverageArray;
+	const uint32 *classCoverageArrayRight	= pPattern->GetClassCoverageArray ();
+
+	uint32	num_cov_classes	= 0;
+
+	const uint32 num_classes = Class::GetNumClasses ();
+
+	for (uint32 i = 0; i < num_classes; i++)
+	{
+		if (classCoverageArrayLeft [i] || classCoverageArrayRight [i])
+		{
+			num_cov_classes++;
+
+			if (classCoverageArrayLeft [i] > classCoverageArrayRight [i])
+				similarity += (float32) (classCoverageArrayLeft [i] - classCoverageArrayRight [i]) / classCoverageArrayLeft [i];
+			if (classCoverageArrayRight [i] > classCoverageArrayLeft [i])
+				similarity += (float32) (classCoverageArrayRight [i] - classCoverageArrayLeft [i]) / classCoverageArrayRight [i];
+		}
+	}
+
+	if (num_cov_classes != 0)
+		similarity /= num_cov_classes;
 
 	return similarity;
 }
@@ -272,23 +374,23 @@ const bool Pattern::IsSuperPatternOf (const Pattern *pPattern) const
 {
 	bool bRet = false;
 
-	ItemList::STLItemList_cit itMyItem	= GetBegin ();
-	ItemList::STLItemList_cit itMyItemEnd	= GetEnd ();
+	ItemList::STLItemList_cit itLeftItem	= GetBegin ();
+	ItemList::STLItemList_cit itLeftItemEnd	= GetEnd ();
 
-	ItemList::STLItemList_cit itPatternItem		= pPattern->GetBegin ();
-	ItemList::STLItemList_cit itPatternItemEnd	= pPattern->GetEnd ();
+	ItemList::STLItemList_cit itRightItem		= pPattern->GetBegin ();
+	ItemList::STLItemList_cit itRightItemEnd	= pPattern->GetEnd ();
 
-	while (itMyItem != itMyItemEnd && itPatternItem != itPatternItemEnd)
+	while (itLeftItem != itLeftItemEnd && itRightItem != itRightItemEnd)
 	{
-		if (*itMyItem == *itPatternItem)
-			++itPatternItem;
-		else if (*itMyItem > *itPatternItem)
+		if (*itLeftItem == *itRightItem)
+			++itRightItem;
+		else if (*itLeftItem > *itRightItem)
 			break;
 
-		++itMyItem;
+		++itLeftItem;
 	}
 
-	if (itPatternItem == itPatternItemEnd)
+	if (itRightItem == itRightItemEnd)
 		bRet = true;
 
 	return bRet;
@@ -297,6 +399,16 @@ const bool Pattern::IsSuperPatternOf (const Pattern *pPattern) const
 const bool* Pattern::GetItemArray () const
 {
 	return mItemArray;
+}
+
+const bool* Pattern::GetTransactionCoverageArray () const
+{
+	return mTransactionCoverageArray;
+}
+
+const uint32* Pattern::GetClassCoverageArray () const
+{
+	return mClassCoverageArray;
 }
 
 void Pattern::Print () const

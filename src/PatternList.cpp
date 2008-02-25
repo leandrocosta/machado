@@ -5,6 +5,7 @@
 #include "RankingRule.h"
 #include "ClassList.h"
 #include "DataBaseException.h"
+#include "base/Rand.h"
 #include "base/Logger.h"
 
 
@@ -49,22 +50,53 @@ void PatternList::MakeOrdering (const OrtOrdering &ordering)
 	}
 }
 
-PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMethod &method, const OrtMetric &metric, const OrtOrdering &ordering)
+Pattern* PatternList::GetRandomPattern () const
+{
+	uint32 patternIndex = Rand::GetRandomNumber (0, GetSize ());
+
+	return static_cast<Pattern *>(GetAt (patternIndex));
+}
+
+const uint32 PatternList::GetResidue (const PatternList *pPatternList, const Pattern::OrtMetric &rMetric, const float32 &rBeta) const
+{
+	uint32 residue = 0;
+
+	STLPatternList_cit itEnd = GetEnd ();
+
+	for (STLPatternList_cit it = GetBegin (); it != itEnd; ++it)
+	{
+		const Pattern *pPattern = static_cast<const Pattern *>(*it);
+
+		if (! pPatternList->FindByPtr (pPattern))
+		{
+			const Pattern *pMoreSimilarPattern = pPatternList->GetMoreSimilar (pPattern, rMetric);
+
+			const float32 similarity = pMoreSimilarPattern->GetSimilarity (pPattern, rMetric);
+
+			if (similarity < rBeta)
+				residue ++;
+		}
+	}
+
+	return residue;
+}
+
+PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, const float32 &rAlpha, const float32 &rBeta)
 {
 	PatternList *pOrthogonalPatternList = NULL;
 
-	switch (metric)
+	switch (rMetric)
 	{
-		case METRIC_SIMILARITY:
+		case Pattern::METRIC_SIMILARITY:
 			MakeItemPatternCoverageMatrix (this);
 			break;
-		case METRIC_TRANS_COVERAGE:
+		case Pattern::METRIC_TRANS_COVERAGE:
 			MakeTransactionPatternCoverageMatrix (pTransactionList, this);
 			break;
-		case METRIC_CLASS_COVERAGE:
+		case Pattern::METRIC_CLASS_COVERAGE:
 			MakeClassPatternCoverageMatrix (pTransactionList, this);
 			break;
-		case METRIC_ALL:
+		case Pattern::METRIC_ALL:
 			MakeItemPatternCoverageMatrix (this);
 			MakeTransactionPatternCoverageMatrix (pTransactionList, this);
 			MakeClassPatternCoverageMatrix (pTransactionList, this);
@@ -78,13 +110,16 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 	switch (mode)
 	{
 		case ORTH_HEURISTICAL:
-//			if (metric == METRIC_CLASS_COVERAGE)
-//				pOrthogonalPatternList = GetOrthogonalPatternListClassHeuristical (pTransactionList, method, metric, ordering);
+//			if (rMetric == Pattern::METRIC_CLASS_COVERAGE)
+//				pOrthogonalPatternList = GetOrthogonalPatternListClassHeuristical (pTransactionList, method, rMetric, ordering);
 //			else
-				pOrthogonalPatternList = GetOrthogonalPatternListHeuristical (pTransactionList, method, metric, ordering);
+				pOrthogonalPatternList = GetOrthogonalPatternListHeuristical (pTransactionList, method, rMetric, ordering);
 			break;
 		case ORTH_POLYNOMIAL:
-			pOrthogonalPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, metric);
+			pOrthogonalPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric);
+			break;
+		case ORTH_ORIGAMI:
+			pOrthogonalPatternList = GetOrthogonalPatternListORIGAMI (pTransactionList, rMetric, rAlpha, rBeta);
 			break;
 		default:
 			LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternList () - unknown orthogonality mode\n");
@@ -92,18 +127,18 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 			break;
 	}
 
-	switch (metric)
+	switch (rMetric)
 	{
-		case METRIC_SIMILARITY:
+		case Pattern::METRIC_SIMILARITY:
 			DestroyItemPatternCoverageMatrix ();
 			break;
-		case METRIC_TRANS_COVERAGE:
+		case Pattern::METRIC_TRANS_COVERAGE:
 			DestroyTransactionPatternCoverageMatrix ();
 			break;
-		case METRIC_CLASS_COVERAGE:
+		case Pattern::METRIC_CLASS_COVERAGE:
 			DestroyClassPatternCoverageMatrix ();
 			break;
-		case METRIC_ALL:
+		case Pattern::METRIC_ALL:
 			DestroyItemPatternCoverageMatrix ();
 			DestroyTransactionPatternCoverageMatrix ();
 			DestroyClassPatternCoverageMatrix ();
@@ -117,11 +152,11 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const OrtMetric &metric, const OrtOrdering &ordering)
+PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering)
 {
 	uint32 num_patterns = GetSize ();
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - num_patterns [%u], metric [%c]\n", num_patterns, metric);
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - num_patterns [%u], rMetric [%c]\n", num_patterns, rMetric);
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
@@ -174,7 +209,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 					pTryPatternList->PushBack (pPattern);
 					orthogonalPatternMatrix [pPattern->GetPatternID ()] = true;
 					bGot = true;
-					rate_new = pTryPatternList->GetRate (pTransactionList, method, metric);
+					rate_new = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
 					break;
 				}
@@ -188,12 +223,12 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 					if (! orthogonalPatternMatrix [pCandToGetInPattern->GetPatternID ()])
 					{
-						Pattern *pCandToGetOutPattern = pTryPatternList->GetMoreSimilar (pCandToGetInPattern);
+						Pattern *pCandToGetOutPattern = pTryPatternList->GetMoreSimilar (pCandToGetInPattern, rMetric);
 
 						pTryPatternList->Remove (pCandToGetOutPattern);
 						pTryPatternList->PushBack (pCandToGetInPattern);
 
-						float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, metric);
+						float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
 						if (rate_try > rate_new)	// 1 best for iris and lymph
 //						if (rate_try >= rate_new)	// 2
@@ -230,11 +265,11 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const OrtMetric &metric, const OrtOrdering &ordering)
+PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering)
 {
 	uint32 num_patterns = GetSize ();
 
-	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListClassHeuristical () - num_patterns [%u], metric [%c]\n", num_patterns, metric);
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListClassHeuristical () - num_patterns [%u], rMetric [%c]\n", num_patterns, rMetric);
 
 	PatternList *pOrthogonalPatternList = new PatternList ();
 
@@ -304,7 +339,7 @@ PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const Transa
 					pTryPatternList->PushBack (pPattern);
 					orthogonalPatternMatrix [pPattern->GetPatternID ()] = true;
 					bGot = true;
-					rate_new = pTryPatternList->GetRate (pTransactionList, method, metric);
+					rate_new = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
 					break;
 				}
@@ -318,12 +353,12 @@ PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const Transa
 
 					if (! orthogonalPatternMatrix [pCandToGetInPattern->GetPatternID ()])
 					{
-						Pattern *pCandToGetOutPattern = pTryPatternList->GetMoreSimilar (pCandToGetInPattern);
+						Pattern *pCandToGetOutPattern = pTryPatternList->GetMoreSimilar (pCandToGetInPattern, rMetric);
 
 						pTryPatternList->Remove (pCandToGetOutPattern);
 						pTryPatternList->PushBack (pCandToGetInPattern);
 
-						float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, metric);
+						float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
 						if (rate_try > rate_new)	// 1 best for iris and lymph
 //						if (rate_try >= rate_new)	// 2
@@ -376,7 +411,7 @@ PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const Transa
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const OrtMetric &metric)
+PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric)
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - begin\n");
 
@@ -399,8 +434,8 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 
 			if (num_patterns <= GetSize ())
 			{
-				pTryPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, metric, num_patterns++);
-				rate_try = pTryPatternList->GetRate (pTransactionList, method, metric);
+				pTryPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric, num_patterns++);
+				rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 			}
 			else
 				rate_try = 0;
@@ -414,7 +449,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const OrtMetric &metric, const uint32 &num_patterns)
+PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const uint32 &num_patterns)
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - num_patterns [%u]\n", num_patterns);
 
@@ -441,7 +476,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 			for (uint32 i = 0; i < num_patterns; i++)
 				pTryPatternList->PushBack (GetAt (iArray [i]));
 
-			float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, metric);
+			float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
 			if (rate_try > rate)
 			{
@@ -485,6 +520,110 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 		LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - rate [%f]\n", rate);
 	}
 
+	return pOrthogonalPatternList;
+}
+
+PatternList* PatternList::GetOrthogonalPatternListORIGAMI (const TransactionList *pTransactionList, const Pattern::OrtMetric &rMetric, const float32 &rAlpha, const float32 &rBeta)
+{
+	uint32 size = GetSize ();
+
+	PatternList *pOrthogonalPatternList = GetOrthogonalPatternListORIGAMIRandomCandidate (pTransactionList, rMetric, rAlpha, rBeta);
+
+	uint32 residue = GetResidue (pOrthogonalPatternList, rMetric, rBeta);
+
+	uint32 tries = 0;
+
+	while (tries < size)
+	{
+		PatternList *pOrthogonalPatternListTry = GetOrthogonalPatternListORIGAMIRandomCandidate (pTransactionList, rMetric, rAlpha, rBeta);
+		uint32 residue_try = GetResidue (pOrthogonalPatternListTry, rMetric, rBeta);
+
+		if (residue_try < residue)
+		{
+			pOrthogonalPatternList->RemoveAll ();
+			delete pOrthogonalPatternList;
+			pOrthogonalPatternList= pOrthogonalPatternListTry;
+//			tries = 0;
+		}
+		else
+		{
+			pOrthogonalPatternListTry->RemoveAll ();
+			delete pOrthogonalPatternListTry;
+			tries++;
+		}
+	}
+
+	return pOrthogonalPatternList;
+}
+
+PatternList* PatternList::GetOrthogonalPatternListORIGAMIRandomCandidate (const TransactionList *pTransactionList, const Pattern::OrtMetric &rMetric, const float32 &rAlpha, const float32 &rBeta)
+{
+	uint32 size = GetSize ();
+
+//	LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListORIGAMIRandomCandidate () - size [%u], rAlpha [%f], rBeta [%f]\n", size, rAlpha, rBeta);
+
+	PatternList *pOrthogonalPatternList = new PatternList ();
+
+	const uint32 num_patterns = Pattern::GetNumPatterns ();
+	bool *triedPatternArray = new bool [num_patterns];
+	for (uint32 patternID = 0; patternID < num_patterns; patternID++)
+		triedPatternArray [patternID] = false;
+
+	Pattern *pPattern = GetRandomPattern ();
+
+	pOrthogonalPatternList->PushBack (pPattern);
+	triedPatternArray [pPattern->GetPatternID ()] = true;
+
+	uint32 tries = 0;
+
+	while (tries < size) 
+	{
+		Pattern *pPattern = NULL;
+		
+		for (uint32 i = 0; i < size; i++)
+		{
+			pPattern = GetRandomPattern ();
+
+			if (triedPatternArray [pPattern->GetPatternID ()])
+				pPattern = NULL;
+			else
+				break;
+		}
+
+		if (pPattern)
+		{
+			triedPatternArray [pPattern->GetPatternID ()] = true;
+
+			bool bOrtho = true;
+
+			PatternList::STLPatternList_cit itEnd = pOrthogonalPatternList->GetEnd ();
+
+			for (PatternList::STLPatternList_cit it = pOrthogonalPatternList->GetBegin (); it != itEnd; ++it)
+			{
+				if (static_cast<const Pattern *>(*it)->GetSimilarity (pPattern, rMetric) > rAlpha)
+				{
+					bOrtho = false;
+					break;
+				}
+			}
+
+			if (bOrtho)
+			{
+				pOrthogonalPatternList->PushBack (pPattern);
+//				tries = 0;
+			}
+			else
+				tries++;
+		}
+		else
+			tries++;
+	}
+
+	delete[] triedPatternArray;
+
+	size = pOrthogonalPatternList->GetSize ();
+
+//	LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListORIGAMIRandomCandidate () - orthogonal patterns [%u]\n", size);
 
 	return pOrthogonalPatternList;
 }
@@ -552,22 +691,22 @@ RankingRuleList* PatternList::GetRuleList (const ClassList *pClassList, const fl
 	return pRuleList;
 }
 
-Pattern* PatternList::GetMoreSimilar (Pattern *pPattern) const
+Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern, const Pattern::OrtMetric &rMetric) const
 {
 	STLPatternList_cit it		= GetBegin ();
 	STLPatternList_cit itEnd	= GetEnd ();
 
 	Pattern *pRetPattern = static_cast<Pattern *>(*(it++));
 
-	float32 similarity = pRetPattern->GetSimilarity (pPattern);
+	float32 similarity = pRetPattern->GetSimilarity (pPattern, rMetric);
 
-	do
+	while (it != itEnd)
 	{
 		Pattern *pTryPattern = static_cast<Pattern *>(*(it++));
 
-		if (pTryPattern->GetSimilarity (pPattern) > similarity)
+		if (pTryPattern->GetSimilarity (pPattern, rMetric) > similarity)
 			pRetPattern = pTryPattern;
-	} while (it != itEnd);
+	}
 
 	return pRetPattern;
 }
@@ -644,8 +783,6 @@ const float32 PatternList::GetSetCoverageRate (const TransactionList *pTransacti
 
 const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTransactionList) const
 {
-//	LOGMSG (MAX_LEVEL, "PatternList::GetSetClassCoverageRate () - begin\n");
-
 	float32 rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
@@ -697,8 +834,6 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 
 const float32 PatternList::GetPairAverageSimilarityRate () const
 {
-//	LOGMSG (MAX_LEVEL, "PatternList::GetPairAverageSimilarityRate () - begin\n");
-
 	float32	rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
@@ -741,8 +876,6 @@ const float32 PatternList::GetPairAverageSimilarityRate () const
 
 const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pTransactionList) const
 {
-//	LOGMSG (MAX_LEVEL, "PatternList::GetPairAverageCoverageRate () - begin\n");
-
 	float32	rate		= 0		;
 	uint32	num_patterns	= GetSize ()	;
 
@@ -785,10 +918,9 @@ const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pT
 
 const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionList *pTransactionList) const
 {
-//	LOGMSG (MAX_LEVEL, "PatternList::GetPairAverageClassCoverageRate () - begin\n");
-
-	float32	rate		= 0		;
-	uint32	num_patterns	= GetSize ()	;
+		float32	rate		= 0				;
+	const	uint32	num_patterns	= GetSize ()			;
+	const	uint32	num_classes	= Class::GetNumClasses ()	;
 
 	if (num_patterns > 1)
 	{
@@ -798,17 +930,17 @@ const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionLis
 		{
 			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
 			{
-				uint32	num_classes	= 0;
+				uint32	num_cov_classes	= 0;
 				float32	pattern_rate	= 0;
 
-				for (uint32 classID = 0; classID < Class::GetMaxClassID () + 1; classID++)
+				for (uint32 classID = 0; classID < num_classes; classID++)
 				{
 					uint32	leftCoverage	= mClassPatternCoverageMatrix [classID][patternIDArray [leftPatternIndex]];
 					uint32	rightCoverage	= mClassPatternCoverageMatrix [classID][patternIDArray [rightPatternIndex]];
 
 					if (leftCoverage || rightCoverage)
 					{
-						num_classes++;
+						num_cov_classes++;
 
 						if (leftCoverage > rightCoverage)
 							pattern_rate += (float32) (leftCoverage - rightCoverage) / leftCoverage;
@@ -817,7 +949,7 @@ const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionLis
 					}
 				}
 
-				pattern_rate /= num_classes;
+				pattern_rate /= num_cov_classes;
 
 				rate += pattern_rate;
 			}
@@ -831,20 +963,20 @@ const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionLis
 	return rate;
 }
 
-const float32 PatternList::GetRate (const TransactionList *pTransactionList, const OrtMethod &method, const OrtMetric &metric) const
+const float32 PatternList::GetRate (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric) const
 {
 	float32 rate = -1;
 
 	switch (method)
 	{
 		case METHOD_SET:
-			rate = GetSetRate (pTransactionList, metric);
+			rate = GetSetRate (pTransactionList, rMetric);
 			break;
 		case METHOD_PAIR_AVERAGE:
-			rate = GetPairAverageRate (pTransactionList, metric);
+			rate = GetPairAverageRate (pTransactionList, rMetric);
 			break;
 		case METHOD_ALL:
-			rate = GetSetRate (pTransactionList, metric) * GetPairAverageRate (pTransactionList, metric);
+			rate = GetSetRate (pTransactionList, rMetric) * GetPairAverageRate (pTransactionList, rMetric);
 			break;
 		case METHOD_UNKNOWN:
 		default:
@@ -856,25 +988,25 @@ const float32 PatternList::GetRate (const TransactionList *pTransactionList, con
 	return rate;
 }
 
-const float32 PatternList::GetSetRate (const TransactionList *pTransactionList, const OrtMetric &metric) const
+const float32 PatternList::GetSetRate (const TransactionList *pTransactionList, const Pattern::OrtMetric &rMetric) const
 {
 	float32 rate = -1;
 
-	switch (metric)
+	switch (rMetric)
 	{
-		case METRIC_SIMILARITY:
+		case Pattern::METRIC_SIMILARITY:
 			rate = GetSetSimilarityRate ();
 			break;
-		case METRIC_TRANS_COVERAGE:
+		case Pattern::METRIC_TRANS_COVERAGE:
 			rate = GetSetCoverageRate (pTransactionList);
 			break;
-		case METRIC_CLASS_COVERAGE:
+		case Pattern::METRIC_CLASS_COVERAGE:
 			rate = GetSetClassCoverageRate (pTransactionList);
 			break;
-		case METRIC_ALL:
+		case Pattern::METRIC_ALL:
 			rate = GetSetSimilarityRate () * GetSetCoverageRate (pTransactionList) * GetSetClassCoverageRate (pTransactionList);
 			break;
-		case METRIC_UNKNOWN:
+		case Pattern::METRIC_UNKNOWN:
 		default:
 			LOGMSG (NO_DEBUG, "PatternList::GetSetRate () - unknown orthogonality metric\n");
 			throw DataBaseException ("Unknown orthogonality metric");
@@ -884,25 +1016,25 @@ const float32 PatternList::GetSetRate (const TransactionList *pTransactionList, 
 	return rate;
 }
 
-const float32 PatternList::GetPairAverageRate (const TransactionList *pTransactionList, const OrtMetric &metric) const
+const float32 PatternList::GetPairAverageRate (const TransactionList *pTransactionList, const Pattern::OrtMetric &rMetric) const
 {
 	float32 rate = -1;
 
-	switch (metric)
+	switch (rMetric)
 	{
-		case METRIC_SIMILARITY:
+		case Pattern::METRIC_SIMILARITY:
 			rate = GetPairAverageSimilarityRate ();
 			break;
-		case METRIC_TRANS_COVERAGE:
+		case Pattern::METRIC_TRANS_COVERAGE:
 			rate = GetPairAverageCoverageRate (pTransactionList);
 			break;
-		case METRIC_CLASS_COVERAGE:
+		case Pattern::METRIC_CLASS_COVERAGE:
 			rate = GetPairAverageClassCoverageRate (pTransactionList);
 			break;
-		case METRIC_ALL:
+		case Pattern::METRIC_ALL:
 			rate = GetPairAverageSimilarityRate () * GetPairAverageCoverageRate (pTransactionList) * GetPairAverageClassCoverageRate (pTransactionList);
 			break;
-		case METRIC_UNKNOWN:
+		case Pattern::METRIC_UNKNOWN:
 		default:
 			LOGMSG (NO_DEBUG, "PatternList::GetPairAverageRate () - unknown orthogonality metric\n");
 			throw DataBaseException ("Unknown orthogonality metric");
@@ -1077,4 +1209,26 @@ const bool PatternList::FindSuperPatternOf (const Pattern *pPattern) const
 	}
 
 	return bRet;
+}
+
+void PatternList::RemoveSubPatternsOf (const Pattern *pPattern)
+{
+//	LOGMSG (NO_DEBUG, "PatternList::RemoveSubPatternsOf () - begin\n");
+
+	STLPatternList_it it	= GetBegin ()	;
+	STLPatternList_it itEnd	= GetEnd ()	;
+
+	while (it != itEnd)
+	{
+		if (pPattern->IsSuperPatternOf (static_cast<const Pattern *>(*it)))
+		{
+			delete *it;
+			it = Erase (it);
+			itEnd = GetEnd ();
+		}
+		else
+			++it;
+	}
+
+//	LOGMSG (NO_DEBUG, "PatternList::RemoveSubPatternsOf () - end\n");
 }
