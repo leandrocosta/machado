@@ -125,7 +125,7 @@ void DataBase::LoadData (const bool &train_data)
 
 void DataBase::MakeItemCoverageArrays ()
 {
-	mTrainTransactionList.MakeItemCoverageArrays (mItemList.GetSize ());
+	mTrainTransactionList.MakeItemCoverageArrays ();
 }
 
 void DataBase::SortTransactions ()
@@ -143,7 +143,7 @@ void DataBase::SortTransactions ()
  * (maximum size of rank)
  */
 
-void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const PatternList::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
+void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
@@ -152,7 +152,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	try
 	{
 		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
-			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rMinNumRules, rMaxNumRankRules, rUseMaximalPatterns);
+			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rMinNumRules, rMaxNumRankRules, rPatternSet, rAlpha, rBeta);
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mTotalGuesses - mCorrectGuesses);
 
@@ -168,7 +168,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	}
 }
 
-void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const PatternList::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const bool &rUseMaximalPatterns)
+void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - pTransaction\n");
 
@@ -177,7 +177,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	MakeProjection (pTransaction);
 	Pattern::ResetSeqPatternID ();
 
-	PatternList *pPatternList = pTransaction->GetPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen, rUseMaximalPatterns);
+	PatternList *pPatternList = pTransaction->GetPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen, rPatternSet);
 
 	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - patterns:\n");
 	pPatternList->Print ();
@@ -206,7 +206,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering);
+		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rAlpha, rBeta);
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 

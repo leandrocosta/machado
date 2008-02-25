@@ -19,11 +19,20 @@ class Transaction : public ItemSet
 			Transaction	(Class *pClass)	;
 		virtual	~Transaction	()		;
 
+	public:
+		typedef enum e_pattern_set
+		{
+			PATTERN_FREQUENT	= 'f',
+			PATTERN_MAXIMAL		= 'm',
+			PATTERN_RAND_MAXIMAL	= 'r'
+		} PatternSet;
+
 	private:
 		static	const	uint32	GetSeqTransactionID	()	;
 
 	public:
 		static	const	uint32	GetMaxTransactionID	()	;
+		static	const	uint32	GetNumTransactions	()	;
 
 	public:
 		const	uint32&		GetTransactionID		()					const	;
@@ -33,21 +42,28 @@ class Transaction : public ItemSet
 		const	bool		IsCoveredBy			(const Pattern *pPattern)		const	;
 		const	bool		IsCoveredBy			(const Item *pItem)			const	;
 		const	bool		IsCoveredByItem			(const uint32 &rItemID)			const	;
+			Item*		GetRandomItem			()					const	;
 			PatternList*	GetPatternList			(
 										const float32 &support,
 										const uint32 &projection_size,
 										const uint32 &min_rule_len,
 										const uint32 &max_rule_len,
-										const bool &rUseMaximalPatterns)const	;
+										const PatternSet &rPatternSet)	const	;
 			PatternList*	GetFrequentPatternList		(
 										const float32 &support,
 										const uint32 &projection_size,
 										const uint32 &rMaxPatternSize)	const	;
 			PatternList*	GetMaximalFrequentPatternList	(const PatternList *pFrequentPatternList)	const	;
+			Pattern*	GetRandomMaximalFrequentPattern		(
+											const float32 &support,
+											const uint32 &projection_size)	const	;
+			PatternList*	GetRandomMaximalFrequentPatternList	(
+											const float32 &support,
+											const uint32 &projection_size)	const	;
 
 	public:
-			void	MakeItemCoverageArray				(const uint32 &num_items)	;
-			void	AddTransactionToItemsProjectionTransactionLists ()				;
+			void	MakeItemCoverageArray				()	;
+			void	AddTransactionToItemsProjectionTransactionLists ()	;
 
 	public:
 		void	Print	()	const	;
@@ -55,8 +71,7 @@ class Transaction : public ItemSet
 	private:
 		const	uint32			mTransactionID		;
 			Class*			mpClass			;
-			bool*			mItemCoverageArray	;
-			hash_map<uint32, bool>	mPatternCoverageHsh	;
+			bool*			mItemArray		;
 
 	private:
 		static	uint32	msSeqTransactionID	;

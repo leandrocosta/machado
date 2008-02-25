@@ -30,17 +30,19 @@ class AppOptions
 	public:
 		const	string&		GetTrainingFile		()	const	;
 		const	string&		GetTestingFile		()	const	;
-		const	bool&		GetUseMaximalPatterns	()	const	;
 		const	float32&	GetSupport		()	const	;
 		const	float32&	GetConfidence		()	const	;
 		const	uint32&		GetMinNumRules		()	const	;
 		const	uint32&		GetMaxNumRankRules	()	const	;
 		const	uint32&		GetMinRuleLen		()	const	;
 		const	uint32&		GetMaxRuleLen		()	const	;
+		const	float32&	GetAlpha		()	const	;
+		const	float32&	GetBeta			()	const	;
 
+		const	Transaction::PatternSet&	GetPatternSet	()	const	;
 		const	DataBase::RunMode&		GetRunMode	()	const	;
 		const	PatternList::OrtMode&		GetOrtMode	()	const	;
-		const	PatternList::OrtMetric&		GetOrtMetric	()	const	;
+		const	Pattern::OrtMetric&		GetOrtMetric	()	const	;
 		const	PatternList::OrtMethod&		GetOrtMethod	()	const	;
 		const	PatternList::OrtOrdering&	GetOrtOrdering	()	const	;
 
@@ -55,17 +57,19 @@ class AppOptions
 		string		mAppName		;
 		string		mTrainingFile		;
 		string		mTestingFile		;
-		bool		mUseMaximalPatterns	;
 		float32		mSupport		;
 		float32		mConfidence		;
 		uint32		mMinNumRules		;
 		uint32		mMaxNumRankRules	;
 		uint32		mMinRuleLen		;
 		uint32		mMaxRuleLen		;
+		float32		mAlpha			;
+		float32		mBeta			;
 
+		Transaction::PatternSet		mPatternSet	;
 		DataBase::RunMode		mRunMode	;
 		PatternList::OrtMode		mOrtMode	;
-		PatternList::OrtMetric		mOrtMetric	;
+		Pattern::OrtMetric		mOrtMetric	;
 		PatternList::OrtMethod		mOrtMethod	;
 		PatternList::OrtOrdering	mOrtOrdering	;
 
@@ -78,7 +82,6 @@ class AppOptions
 		static	const	string	DEFAULT_TRAINING_FILE	;
 		static	const	string	DEFAULT_TESTING_FILE	;
 
-		static	const	bool	DEFAULT_USE_MAXIMAL_PATTERNS	= false	;
 		static	const	float32	DEFAULT_SUPPORT			= 0.001	;
 		static	const	float32	DEFAULT_CONFIDENCE		= 0.9	;
 		static	const	uint32	DEFAULT_MAX_NUM_RANK_RULES	= 100	;
@@ -86,9 +89,13 @@ class AppOptions
 		static	const	uint32	DEFAULT_MIN_RULE_LEN		= 1	;
 		static	const	uint32	DEFAULT_MAX_RULE_LEN		= 10	;
 
+		static	const	float32	DEFAULT_ORIGAMI_ALPHA		= 0.1	;
+		static	const	float32	DEFAULT_ORIGAMI_BETA		= 0.9	;
+
+		static	const	Transaction::PatternSet		DEFAULT_PATTERN_SET	= Transaction::PATTERN_FREQUENT		;
 		static	const	DataBase::RunMode		DEFAULT_RUN_MODE	= DataBase::MODE_ORTHOGONAL		;
 		static	const	PatternList::OrtMode		DEFAULT_ORT_MODE	= PatternList::ORTH_HEURISTICAL		;
-		static	const	PatternList::OrtMetric		DEFAULT_ORT_METRIC	= PatternList::METRIC_CLASS_COVERAGE	;
+		static	const	Pattern::OrtMetric		DEFAULT_ORT_METRIC	= Pattern::METRIC_CLASS_COVERAGE	;
 		static	const	PatternList::OrtMethod		DEFAULT_ORT_METHOD	= PatternList::METHOD_SET		;
 		static	const	PatternList::OrtOrdering	DEFAULT_ORT_ORDERING	= PatternList::ORDERING_NONE		;
 

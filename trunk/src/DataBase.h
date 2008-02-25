@@ -4,6 +4,7 @@
 
 #include "ClassList.h"
 #include "ItemList.h"
+#include "Transaction.h"
 #include "TransactionList.h"
 #include "PatternList.h"
 #include "base/IOManager.h"
@@ -37,11 +38,13 @@ class DataBase : private IOManager, private Tokenizer
 				const RunMode &rRunMode,
 				const PatternList::OrtMode &rOrtMode,
 				const PatternList::OrtMethod &rOrtMethod,
-				const PatternList::OrtMetric &rOrtMetric,
+				const Pattern::OrtMetric &rOrtMetric,
 				const PatternList::OrtOrdering &rOrtOrdering,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
-				const bool &rUseMaximalPatterns)			;
+				const Transaction::PatternSet &rPatternSet,
+				const float32 &rAlpha,
+				const float32 &rBeta)					;
 		void	MakeProjection		(Transaction *pTransaction)		;
 
 	public:
@@ -57,11 +60,13 @@ class DataBase : private IOManager, private Tokenizer
 				const RunMode &rRunMode,
 				const PatternList::OrtMode &rOrtMode,
 				const PatternList::OrtMethod &rOrtMethod,
-				const PatternList::OrtMetric &rOrtMetric,
+				const Pattern::OrtMetric &rOrtMetric,
 				const PatternList::OrtOrdering &rOrtOrdering,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
-				const bool &rUseMaximalPatterns)			;
+				const Transaction::PatternSet &rPatternSet,
+				const float32 &rAlpha,
+				const float32 &rBeta)					;
 		void	PrintDataInfo		()				const	;
 
 	public:

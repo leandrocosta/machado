@@ -5,20 +5,20 @@
 
 TransactionList::TransactionList (const uint64 &max_size) : ObjectList (max_size)
 {
-//	LOGMSG (MAX_LEVEL, "TransactionList::TransactionList () - p [%p]\n", this);
+
 }
 
 TransactionList::~TransactionList ()
 {
-//	LOGMSG (MAX_LEVEL, "TransactionList::~TransactionList () - p [%p]\n", this);
+
 }
 
-void TransactionList::MakeItemCoverageArrays (const uint32 &num_items)
+void TransactionList::MakeItemCoverageArrays ()
 {
 	STLTransactionList_cit itEnd = GetEnd ();
 
 	for (STLTransactionList_cit it = GetBegin (); it != itEnd; ++it)
-		static_cast<Transaction *>(*it)->MakeItemCoverageArray (num_items);
+		static_cast<Transaction *>(*it)->MakeItemCoverageArray ();
 }
 
 void TransactionList::SortTransactions ()

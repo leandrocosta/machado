@@ -100,7 +100,9 @@ int main(int argc, char* argv[])
 				pAppOptions->GetOrtOrdering (),
 				pAppOptions->GetMinNumRules (),
 				pAppOptions->GetMaxNumRankRules (),
-				pAppOptions->GetUseMaximalPatterns ());
+				pAppOptions->GetPatternSet (),
+				pAppOptions->GetAlpha (),
+				pAppOptions->GetBeta ());
 	}
 
 	/*
