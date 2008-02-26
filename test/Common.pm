@@ -10,6 +10,7 @@ $OutputDir		= 'output';
 $OutputDirLazy		= "$OutputDir/lazy";
 $OutputDirClassifierC	= "$OutputDir/classifier_c";
 $OutputDirClassifierO	= "$OutputDir/classifier_o";
+$OutputDirClassifierOR	= "$OutputDir/classifier_or";
 $OutputDirGraphs	= "$OutputDir/graphs";
 $OutputDirTables	= "$OutputDir/tables";
 
@@ -45,7 +46,8 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @Confidences = (
-		0.001,
+		0.0001,
+#		0.001,
 #		0.01,
 #		0.1,
 #		0.2,
@@ -55,7 +57,7 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 #		0.6,
 #		0.7,
 #		0.8,
-#		0.9,
+		0.9,
 #		0.95,
 #		0.99,
 #		1
@@ -98,10 +100,16 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 #	0.6,
 #	0.7,
 #	0.8,
-#	0.9,
+	0.9,
 #	0.95,
 #	0.99,
 #	1
+);
+
+@ClassifierPatternSets = (
+	'f',
+#	'm',
+	'r'
 );
 
 @ClassifierMinRuleLens = (
@@ -122,16 +130,16 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierOMetrics = (
-#	's',
-#	'c',
-#	'l',
-	'a'
+	's',
+	'c',
+	'l',
+#	'a'
 );
 
 @ClassifierOMethods = (
 	's',
 	'p',
-	'a'
+#	'a'
 );
 
 @ClassifierOOrderings = (
@@ -140,6 +148,30 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 	'i',
 	'z',
 	'n'
+);
+
+@ORIGAMIAlphas = (
+	0.1,
+	0.2,
+	0.3,
+	0.4,
+	0.5,
+	0.6,
+	0.7,
+	0.8,
+	0.9
+);
+
+@ORIGAMIBetas = (
+	0.1,
+	0.2,
+	0.3,
+	0.4,
+	0.5,
+	0.6,
+	0.7,
+	0.8,
+	0.9
 );
 
 $NumFolds = 2; #10;
@@ -312,8 +344,8 @@ sub MakeAppHistogramGraph ($$$$$)
 	my ($db);
 
 format OUTPUT_APP =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
-$db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'}
+@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
+$db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$accuracy_hash{$db}{'classifier_or'}
 .
 
 	my $gnu_file = "$OutputDirGraphs/$graph.gnu";
@@ -322,7 +354,7 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 
 	open OUTPUT_APP, ">$dat_file";
 
-	print OUTPUT_APP "data_file           lazy                classifier_c        classifier_o        \n";
+	print OUTPUT_APP "data_file           lazy                classifier_c        classifier_o        classifier_or       \n";
 
 	foreach $data_base (@DataBases)
 	{
@@ -362,7 +394,7 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 	print OUTPUT "set xlabel \"$xlabel\"\n";
 	print OUTPUT "set ylabel \"$ylabel\"\n";
 #	print OUTPUT "set yrange [0:1] noreverse nowriteback\n";
-	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col";
+	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col";
 	close OUTPUT;
 
 	system "$GnuPlotApp $gnu_file";

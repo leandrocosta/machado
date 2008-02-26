@@ -59,6 +59,7 @@ sub get_best_runs_for_data_base ($)
 	get_best_run_for_application ('lazy', $_[0]);
 	get_best_run_for_application ('classifier_c', $_[0]);
 	get_best_run_for_application ('classifier_o', $_[0]);
+	get_best_run_for_application ('classifier_or', $_[0]);
 }
 
 sub get_ometric_runs_for_classifier_o ($$$$$$$$)
@@ -102,14 +103,17 @@ sub make_app_histogram_graphs ()
 	$accuracy_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$accuracy_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$accuracy_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
+	$accuracy_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
 	$avg_patterns_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$avg_patterns_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$avg_patterns_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
+	$avg_patterns_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
 	$avg_rules_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$avg_rules_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$avg_rules_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
+	$avg_rules_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
 	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_acc', \%accuracy_hsh);
 	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_pat', \%avg_patterns_hsh);
