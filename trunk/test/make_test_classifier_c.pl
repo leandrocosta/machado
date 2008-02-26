@@ -14,7 +14,7 @@ foreach $data_base (@Common::DataBases)
 }
 
 
-my ($s, $c, $n, $l, $m, $a, $o, $e);
+my ($s, $c, $n, $l, $m, $x, $o, $e);
 
 for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 {
@@ -26,11 +26,11 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 			{
 				for ($m = 0; $m < scalar @Common::ClassifierMinRuleLens; $m++)
 				{
-					for ($a = 0; $a < scalar @Common::ClassifierMaxRuleLens; $a++)
+					for ($x = 0; $x < scalar @Common::ClassifierMaxRuleLens; $x++)
 					{
 						foreach $data_base (@Common::DataBases)
 						{
-							make_test_classifier_c ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierMinRuleLens[$m], $Common::ClassifierMaxRuleLens[$a]);
+							make_test_classifier_c ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierMinRuleLens[$m], $Common::ClassifierMaxRuleLens[$x]);
 						}
 					}
 				}
@@ -50,7 +50,7 @@ sub make_test_classifier_c ($$$$$$$)
 
 	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 	{
-		my $log_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_a".$max_rule_len.".".$fold.".log";
+		my $log_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len.".".$fold.".log";
 
 		my ($acc, $pat, $rul);
 
@@ -69,7 +69,7 @@ sub make_test_classifier_c ($$$$$$$)
 
 	system "mkdir -p $Common::OutputDirClassifierC/$data_base/";
 
-	my $out_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_a".$max_rule_len.".out";
+	my $out_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len.".out";
 
 	open OUTPUT, ">$out_file";
 	print OUTPUT "support [$support], confidence [$confidence], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
@@ -83,7 +83,7 @@ sub make_test_classifier_c ($$$$$$$)
 
 		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 		{
-			my $log_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_a".$max_rule_len.".".$fold.".log";
+			my $log_file = "$Common::OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len.".".$fold.".log";
 			my $best_log_file = "$Common::OutputDirClassifierC/$data_base/best.$fold.log";
 			system "cp $log_file $best_log_file";
 		}
@@ -97,8 +97,8 @@ sub run_classifier_c ($$$$$$$$$$$$)
 	my $training_file = Common::GetTrainingFile ($data_base, $fold);
 	my $testing_file = Common::GetTestingFile ($data_base, $fold);
 
-	print "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r c -d -1 2&>$log_file\n";
-	system "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -a $max_rule_len -r c -d -1 2&>$log_file";
+	print "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -r c -d -1 2&>$log_file\n";
+	system "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -r c -d -1 2&>$log_file";
 
 	Common::GetRunResultFromLogFile ($log_file, $accuracy, $avg_patterns, $avg_rules);
 }
