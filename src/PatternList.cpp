@@ -52,9 +52,14 @@ void PatternList::MakeOrdering (const OrtOrdering &ordering)
 
 Pattern* PatternList::GetRandomPattern () const
 {
-	uint32 patternIndex = Rand::GetRandomNumber (0, GetSize ());
+	Pattern *pPattern = NULL;
 
-	return static_cast<Pattern *>(GetAt (patternIndex));
+	uint32 size = GetSize ();
+
+	if (size)
+		pPattern = static_cast<Pattern *>(GetAt (Rand::GetRandomNumber (0, size)));
+
+	return pPattern;
 }
 
 const uint32 PatternList::GetResidue (const PatternList *pPatternList, const Pattern::OrtMetric &rMetric, const float32 &rBeta) const
