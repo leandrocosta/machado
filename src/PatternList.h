@@ -64,7 +64,6 @@ class PatternList : public ObjectList
 	private:
 		const	uint32*		GetPatternIDArray	()					const	;
 			void		MakeOrdering		(const OrtOrdering &ordering)			;
-			Pattern*	GetRandomPattern	()					const	;
 		const	uint32		GetResidue		(
 							const PatternList *pPatternList,
 							const Pattern::OrtMetric &rMetric,
@@ -110,11 +109,12 @@ class PatternList : public ObjectList
 					const float32 &beta)				;
 
 	public:
-		RankingRuleList*	GetRuleList	(
-					const ClassList *pClassList,
-					const float32 &confidence,
-					const uint32 &projection_size,
-					const uint32 &min_num_rules)		const	;
+		RankingRuleList*	GetRuleList		(
+						const ClassList *pClassList,
+						const float32 &confidence,
+						const uint32 &projection_size,
+						const uint32 &min_num_rules)	const	;
+		Pattern*		GetRandomPattern	()		const	;
 
 	public:
 			Pattern*	GetMoreSimilar			(
