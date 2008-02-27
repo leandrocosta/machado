@@ -536,9 +536,9 @@ PatternList* PatternList::GetOrthogonalPatternListORIGAMI (const TransactionList
 
 	uint32 residue = GetResidue (pOrthogonalPatternList, rMetric, rBeta);
 
-	uint32 tries = 0;
+	uint32 runs = 0;
 
-	while (tries < size && pOrthogonalPatternList->GetSize () < size)
+	while (runs < size && pOrthogonalPatternList->GetSize () < size)
 	{
 		PatternList *pOrthogonalPatternListTry = GetOrthogonalPatternListORIGAMIRandomCandidate (pTransactionList, rMetric, rAlpha, rBeta);
 		uint32 residue_try = GetResidue (pOrthogonalPatternListTry, rMetric, rBeta);
@@ -553,8 +553,9 @@ PatternList* PatternList::GetOrthogonalPatternListORIGAMI (const TransactionList
 		{
 			pOrthogonalPatternListTry->RemoveAll ();
 			delete pOrthogonalPatternListTry;
-			tries++;
 		}
+
+		runs++;
 	}
 
 	return pOrthogonalPatternList;
