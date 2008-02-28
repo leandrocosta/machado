@@ -29,8 +29,9 @@ class Item : public Object
 		static	const	uint32	GetSeqItemID	()	;
 
 	public:
-		static	const	uint32	GetMaxItemID	()	;
-		static	const	uint32	GetNumItems	()	;
+		static		void	SetNumTrainItems	()	;
+//		static	const	uint32	GetMaxItemID		()	;
+		static	const	uint32	GetNumTrainItems	()	;
 
 	public:
 		const	uint32&			GetItemID			()				const	;
@@ -49,6 +50,7 @@ class Item : public Object
 
 	private:
 		static	uint32	msSeqItemID	;
+		static	uint32	msNumTrainItems	;
 
 	private:
 		const	uint32			mItemID				;

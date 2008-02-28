@@ -42,6 +42,9 @@ void DataBase::LoadTrainData (const string &file)
 	SetFile (file);
 
 	LoadData (true);
+	Transaction::SetNumTrainTransactions ();
+	Item::SetNumTrainItems ();
+	Class::SetNumTrainClasses ();
 }
 
 void DataBase::LoadTestData (const string &file)

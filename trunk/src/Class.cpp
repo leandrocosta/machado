@@ -3,6 +3,7 @@
 
 
 uint32 Class::msSeqClassID	= 0	;
+uint32 Class::msNumTrainClasses	= 0	;
 
 
 Class::Class (const string &value) : Object (), mClassID (GetSeqClassID ()), mValue (value)
@@ -23,15 +24,21 @@ const uint32 Class::GetSeqClassID ()
 	return itemID;
 }
 
+void Class::SetNumTrainClasses ()
+{
+	msNumTrainClasses = msSeqClassID;
+}
 
+/*
 const uint32 Class::GetMaxClassID ()
 {
 	return msSeqClassID - 1;
 }
+*/
 
-const uint32 Class::GetNumClasses ()
+const uint32 Class::GetNumTrainClasses ()
 {
-	return msSeqClassID;
+	return msNumTrainClasses;
 }
 
 const uint32& Class::GetClassID () const

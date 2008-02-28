@@ -31,8 +31,9 @@ class Transaction : public ItemSet
 		static	const	uint32	GetSeqTransactionID	()	;
 
 	public:
-		static	const	uint32	GetMaxTransactionID	()	;
-		static	const	uint32	GetNumTransactions	()	;
+		static		void	SetNumTrainTransactions	()	;
+//		static	const	uint32	GetMaxTransactionID	()	;
+		static	const	uint32	GetNumTrainTransactions	()	;
 
 	public:
 		const	uint32&		GetTransactionID		()					const	;
@@ -75,6 +76,7 @@ class Transaction : public ItemSet
 
 	private:
 		static	uint32	msSeqTransactionID	;
+		static	uint32	msNumTrainTransactions	;
 };
 
 

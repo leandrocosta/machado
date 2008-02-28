@@ -19,8 +19,9 @@ class Class : public Object
 		static	const	uint32	GetSeqClassID	()	;
 
 	public:
-		static	const	uint32	GetMaxClassID	()	;
-		static	const	uint32	GetNumClasses	()	;
+		static		void	SetNumTrainClasses	()	;
+//		static	const	uint32	GetMaxClassID		()	;
+		static	const	uint32	GetNumTrainClasses	()	;
 
 	public:
 		const	uint32&	GetClassID	()	const	;
@@ -36,7 +37,8 @@ class Class : public Object
 		void	Print	()	const	;
 
 	private:
-		static	uint32	msSeqClassID	;
+		static	uint32	msSeqClassID		;
+		static	uint32	msNumTrainClasses	;
 
 	private:
 		const	uint32	mClassID	;

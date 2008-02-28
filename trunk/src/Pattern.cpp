@@ -95,17 +95,17 @@ void Pattern::InitFields ()
 
 	mpChildPatternList = new PatternList ();
 
-	const uint32 num_items = Item::GetNumItems ();
+	const uint32 num_items = Item::GetNumTrainItems ();
 	mItemArray = new bool [num_items];
 	for (uint32 itemID = 0; itemID < num_items; itemID++)
 		mItemArray [itemID] = false;
 
-	const uint32 num_transactions = Transaction::GetNumTransactions ();
+	const uint32 num_transactions = Transaction::GetNumTrainTransactions ();
 	mTransactionCoverageArray = new bool [num_transactions];
 	for (uint32 transactionID = 0; transactionID < num_transactions; transactionID++)
 		mTransactionCoverageArray [transactionID] = false;
 
-	const uint32 num_classes = Class::GetNumClasses ();
+	const uint32 num_classes = Class::GetNumTrainClasses ();
 	mClassCoverageArray = new uint32 [num_classes];
 	for (uint32 classID = 0; classID < num_classes; classID++)
 		mClassCoverageArray [classID] = 0;
@@ -123,10 +123,12 @@ void Pattern::ResetSeqPatternID ()
 	msSeqPatternID = 0;
 }
 
+/*
 const uint32 Pattern::GetMaxPatternID ()
 {
 	return msSeqPatternID - 1;
 }
+*/
 
 const uint32 Pattern::GetNumPatterns ()
 {
@@ -154,7 +156,7 @@ const float32 Pattern::GetAmbiguity () const
 	uint32 my_classes_total = 0;
 	uint32 my_classes_max	= 0;
 
-	const uint32 num_classes = Class::GetNumClasses ();
+	const uint32 num_classes = Class::GetNumTrainClasses ();
 
 	for (uint32 classID = 0; classID < num_classes; classID++)
 	{
@@ -238,7 +240,7 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern) const
 	uint32 num = 0;
 	uint32 den = 0;
 
-	const uint32 num_items = Item::GetNumItems ();
+	const uint32 num_items = Item::GetNumTrainItems ();
 
 	for (uint32 i = 0; i < num_items; i++)
 	{
@@ -267,7 +269,7 @@ const float32 Pattern::GetTransCovSimilarity (const Pattern *pPattern) const
 	uint32 num = 0;
 	uint32 den = 0;
 
-	const uint32 num_transactions = Transaction::GetNumTransactions ();
+	const uint32 num_transactions = Transaction::GetNumTrainTransactions ();
 
 	for (uint32 i = 0; i < num_transactions; i++)
 	{
@@ -295,7 +297,7 @@ const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
 
 	uint32	num_cov_classes	= 0;
 
-	const uint32 num_classes = Class::GetNumClasses ();
+	const uint32 num_classes = Class::GetNumTrainClasses ();
 
 	for (uint32 i = 0; i < num_classes; i++)
 	{
