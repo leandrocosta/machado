@@ -22,6 +22,8 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 	{
 		for ($p = 0; $p < scalar @Common::ClassifierPatternSets; $p++)
 		{
+			next if $Common::ClassifierPatternSets [$p] eq 'r';
+
 			for ($n = 0; $n < scalar @Common::MinNumRules; $n++)
 			{
 				for ($l = 0; $l < scalar @Common::MaxNumRankRules; $l++)
