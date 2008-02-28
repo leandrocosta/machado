@@ -4,6 +4,7 @@
 
 
 uint32 Item::msSeqItemID	= 0	;
+uint32 Item::msNumTrainItems	= 0	;
 
 
 Item::Item (const string &value) : Object (), mItemID (GetSeqItemID ()), mValue (value)
@@ -58,14 +59,21 @@ const uint32 Item::GetSeqItemID ()
 	return itemID;
 }
 
+void Item::SetNumTrainItems ()
+{
+	msNumTrainItems = msSeqItemID;
+}
+
+/*
 const uint32 Item::GetMaxItemID ()
 {
 	return msSeqItemID - 1;
 }
+*/
 
-const uint32 Item::GetNumItems ()
+const uint32 Item::GetNumTrainItems ()
 {
-	return msSeqItemID;
+	return msNumTrainItems;
 }
 
 const uint32& Item::GetItemID () const

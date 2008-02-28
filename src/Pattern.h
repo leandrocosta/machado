@@ -31,7 +31,7 @@ class Pattern : public ItemSet
 
 	public:
 		static		void	ResetSeqPatternID	()	;
-		static	const	uint32	GetMaxPatternID		()	;
+//		static	const	uint32	GetMaxPatternID		()	;
 		static	const	uint32	GetNumPatterns		()	;
 
 	private:

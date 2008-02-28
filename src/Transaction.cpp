@@ -12,7 +12,8 @@ using std::cout;
 using std::endl;
 
 
-uint32 Transaction::msSeqTransactionID	= 0	;
+uint32 Transaction::msSeqTransactionID		= 0	;
+uint32 Transaction::msNumTrainTransactions	= 0	;
 
 
 Transaction::Transaction (Class *pClass) : ItemSet (), mTransactionID (GetSeqTransactionID ()), mpClass (pClass)
@@ -35,14 +36,21 @@ const uint32 Transaction::GetSeqTransactionID ()
 	return transactionID;
 }
 
+void Transaction::SetNumTrainTransactions ()
+{
+	msNumTrainTransactions = msSeqTransactionID;
+}
+
+/*
 const uint32 Transaction::GetMaxTransactionID ()
 {
 	return msSeqTransactionID - 1;
 }
+*/
 
-const uint32 Transaction::GetNumTransactions ()
+const uint32 Transaction::GetNumTrainTransactions ()
 {
-	return msSeqTransactionID;
+	return msNumTrainTransactions;
 }
 
 const uint32& Transaction::GetTransactionID () const
@@ -135,7 +143,7 @@ PatternList* Transaction::GetPatternList (
 			break;
 		case PATTERN_MAXIMAL:
 			{
-				PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, Item::GetMaxItemID () + 1);
+				PatternList *pFrequentPatternList = GetFrequentPatternList (support, projection_size, Item::GetNumTrainItems ());
 				pPatternList = GetMaximalFrequentPatternList (pFrequentPatternList);
 
 				PatternList::STLPatternList_cit itEnd = pFrequentPatternList->GetEnd ();
@@ -328,7 +336,7 @@ Pattern* Transaction::GetRandomMaximalFrequentPattern (
 {
 	const uint32 size = GetSize ();
 
-	const uint32 num_items = Item::GetNumItems ();
+	const uint32 num_items = Item::GetNumTrainItems ();
 	bool *triedItemArray = new bool [num_items];
 	for (uint32 i = 0; i < num_items; i++)
 		triedItemArray [i] = false;
@@ -444,7 +452,7 @@ PatternList* Transaction::GetRandomMaximalFrequentPatternList (
 
 void Transaction::MakeItemCoverageArray ()
 {
-	const uint32 num_items = Item::GetNumItems ();
+	const uint32 num_items = Item::GetNumTrainItems ();
 	mItemArray = new bool [num_items];
 	for (uint32 i = 0; i < num_items; i++)
 		mItemArray [i] = false;
