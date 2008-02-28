@@ -367,7 +367,7 @@ Pattern* Transaction::GetRandomMaximalFrequentPattern (
 			{
 				pItem = GetRandomItem ();
 
-				if (triedItemArray [pItem->GetItemID ()])
+				if (! pItem->GetItemID () < num_items || triedItemArray [pItem->GetItemID ()])
 					pItem = NULL;
 				else
 					break;
