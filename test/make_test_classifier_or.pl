@@ -30,8 +30,17 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 				{
 					for ($a = 0; $a < scalar @Common::ORIGAMIAlphas; $a++)
 					{
+						next if $Common::ORIGAMIAlphas [$a] == 0.2;
+						next if $Common::ORIGAMIAlphas [$a] == 0.4;
+						next if $Common::ORIGAMIAlphas [$a] == 0.6;
+						next if $Common::ORIGAMIAlphas [$a] > 0.7;
+
 						for ($b = $a+2; $b < scalar @Common::ORIGAMIBetas; $b++)
 						{
+							next if $Common::ORIGAMIBetas [$b] == 0.4;
+							next if $Common::ORIGAMIBetas [$b] == 0.6;
+							next if $Common::ORIGAMIBetas [$b] == 0.8;
+
 							foreach $data_base (@Common::DataBases)
 							{
 								make_test_classifier_or ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierOMetrics[$e], $Common::ORIGAMIAlphas[$a], $Common::ORIGAMIBetas[$b]);
