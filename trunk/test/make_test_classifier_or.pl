@@ -30,7 +30,7 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 				{
 					for ($a = 0; $a < scalar @Common::ORIGAMIAlphas; $a++)
 					{
-						for ($b = $a+1; $b < scalar @Common::ORIGAMIBetas; $b++)
+						for ($b = $a+2; $b < scalar @Common::ORIGAMIBetas; $b++)
 						{
 							foreach $data_base (@Common::DataBases)
 							{
