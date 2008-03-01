@@ -86,7 +86,7 @@ const uint32 PatternList::GetResidue (const PatternList *pPatternList, const Pat
 	return residue;
 }
 
-PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, const float32 &rAlpha, const float32 &rBeta)
+PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, const float32 &rAlpha, const float32 &rBeta, float32 &rRate)
 {
 	PatternList *pOrthogonalPatternList = NULL;
 
@@ -116,15 +116,16 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 	{
 		case ORTH_HEURISTICAL:
 //			if (rMetric == Pattern::METRIC_CLASS_COVERAGE)
-//				pOrthogonalPatternList = GetOrthogonalPatternListClassHeuristical (pTransactionList, method, rMetric, ordering);
+//				pOrthogonalPatternList = GetOrthogonalPatternListClassHeuristical (pTransactionList, method, rMetric, ordering, rRate);
 //			else
-				pOrthogonalPatternList = GetOrthogonalPatternListHeuristical (pTransactionList, method, rMetric, ordering);
+				pOrthogonalPatternList = GetOrthogonalPatternListHeuristical (pTransactionList, method, rMetric, ordering, rRate);
 			break;
 		case ORTH_POLYNOMIAL:
-			pOrthogonalPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric);
+			pOrthogonalPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric, rRate);
 			break;
 		case ORTH_ORIGAMI:
 			pOrthogonalPatternList = GetOrthogonalPatternListORIGAMI (pTransactionList, rMetric, rAlpha, rBeta);
+			rRate = (float32) 1 - rAlpha;
 			break;
 		default:
 			LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternList () - unknown orthogonality mode\n");
@@ -157,7 +158,7 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering)
+PatternList* PatternList::GetOrthogonalPatternListHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, float32 &rRate)
 {
 	uint32 num_patterns = GetSize ();
 
@@ -167,7 +168,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 	if (num_patterns > 0)
 	{
-		float32	rate_prv	= 0;
+		float32	rate		= 0;
 		float32	rate_new	= 0;
 
 		PatternList *pTryPatternList = new PatternList ();
@@ -193,11 +194,11 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 			for (STLPatternList_cit it = pTryPatternList->GetBegin (); it != itEnd; ++it)
 				pOrthogonalPatternList->PushBack (*it);
 
-			rate_prv = rate_new;
+			rate = rate_new;
 
 			uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
 
-			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - elements [%u], rate [%f]\n", orthogonal_size, rate_prv);
+			LOGMSG (MEDIUM_LEVEL, "PatternList::GetOrthogonalPatternListHeuristical () - elements [%u], rate [%f]\n", orthogonal_size, rate);
 
 			itEnd = GetEnd ();
 
@@ -233,8 +234,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 
 						float32 rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 
-						if (rate_try > rate_new)	// 1 best for iris and lymph
-//						if (rate_try >= rate_new)	// 2
+						if (rate_try > rate_new)
 						{
 							orthogonalPatternMatrix [pCandToGetInPattern->GetPatternID ()] = true;
 							orthogonalPatternMatrix [pCandToGetOutPattern->GetPatternID ()] = false;
@@ -251,14 +251,15 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 			}
 			else
 				break;
-		} while (rate_new >= rate_prv);
+		} while (rate_new >= rate);
 
 		pTryPatternList->RemoveAll ();
 		delete pTryPatternList;
 	
 		delete[] orthogonalPatternMatrix;
 
-		LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListHeuristical () - rate [%f]\n", rate_prv);
+		LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListHeuristical () - rate [%f]\n", rate);
+		rRate = rate;
 	}
 
 	uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
@@ -268,7 +269,7 @@ PatternList* PatternList::GetOrthogonalPatternListHeuristical (const Transaction
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering)
+PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, float32 &rRate)
 {
 	uint32 num_patterns = GetSize ();
 
@@ -403,6 +404,7 @@ PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const Transa
 		delete[] orthogonalPatternMatrix;
 
 		LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListClassHeuristical () - rate [%f]\n", rate);
+		rRate = rate;
 	}
 
 	uint32 orthogonal_size = pOrthogonalPatternList->GetSize ();
@@ -412,7 +414,7 @@ PatternList* PatternList::GetOrthogonalPatternListClassHeuristical (const Transa
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric)
+PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, float32 &rRate)
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - begin\n");
 
@@ -435,14 +437,17 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 
 			if (num_patterns <= GetSize ())
 			{
-				pTryPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric, num_patterns++);
-				rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
+				pTryPatternList = GetOrthogonalPatternListPolynomial (pTransactionList, method, rMetric, num_patterns++, rate_try);
+//				rate_try = pTryPatternList->GetRate (pTransactionList, method, rMetric);
 			}
 			else
 				rate_try = 0;
 
 			LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - rate [%f], rate_try [%f]\n", rate, rate_try);
 		} while (rate_try >= rate);
+
+		LOGMSG (NO_DEBUG, "PatternList::GetOrthogonalPatternListPolynomial () - rate [%f]\n", rate);
+		rRate = rate;
 	}
 
 	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - num_patterns [%u]\n", pOrthogonalPatternList->GetSize ());
@@ -450,7 +455,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 	return pOrthogonalPatternList;
 }
 
-PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const uint32 &num_patterns)
+PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionList *pTransactionList, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const uint32 &num_patterns, float32 &rRate)
 {
 	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - num_patterns [%u]\n", num_patterns);
 
@@ -519,6 +524,7 @@ PatternList* PatternList::GetOrthogonalPatternListPolynomial (const TransactionL
 		}
 	
 		LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternListPolynomial () - rate [%f]\n", rate);
+		rRate = rate;
 	}
 
 	return pOrthogonalPatternList;

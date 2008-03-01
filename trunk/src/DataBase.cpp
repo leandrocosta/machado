@@ -188,6 +188,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	string	class_guess	= "";
 	uint32	patterns	= 0;
 	uint32	rules		= 0;
+	float32	orth_rate	= -1;
 
 	if (rRunMode == MODE_CLASSICAL)
 	{
@@ -209,7 +210,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 	{
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - [MODE_ORTHOGONAL]\n");
 
-		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rAlpha, rBeta);
+		PatternList *pOrthogonalFrequentPatternList = pPatternList->GetOrthogonalPatternList (mpProjectionTransactionList, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rAlpha, rBeta, orth_rate);
 		LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - orthogonal patterns:\n");
 		pOrthogonalFrequentPatternList->Print ();
 
@@ -270,9 +271,9 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	mAccuracy = (mTotalGuesses > 0 ? (float32) mCorrectGuesses / (mTotalGuesses) : 0);
 
-	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules);
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u], orth_rate [%f])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules, orth_rate);
 
-	cout << "transaction [" << (pTransaction->GetTransactionID () - train_size + 1) << "/" << test_size << "], class [" << pTransaction->GetClass ()->GetValue () << "], guess [" << class_guess << "], correct [" << (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no") << "], patterns [" << patterns << "], rules [" << rules << "], accuracy [" << mAccuracy << "]" << endl;
+	cout << "transaction [" << (pTransaction->GetTransactionID () - train_size + 1) << "/" << test_size << "], class [" << pTransaction->GetClass ()->GetValue () << "], guess [" << class_guess << "], correct [" << (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no") << "], patterns [" << patterns << "], rules [" << rules << "], orth_rate [" << orth_rate << "], accuracy [" << mAccuracy << "]" << endl;
 
 	mPatterns	+= patterns	;
 	mRules		+= rules	;
