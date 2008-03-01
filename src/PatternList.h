@@ -26,7 +26,8 @@ class PatternList : public ObjectList
 		{
 			ORTH_HEURISTICAL	= 'h',
 			ORTH_POLYNOMIAL		= 'p',
-			ORTH_ORIGAMI		= 'o'
+			ORTH_ORIGAMI		= 'o',
+			ORTH_UNKNOWN		= 0
 		} OrtMode;
 
 		typedef enum e_orthogonality_method
@@ -77,26 +78,31 @@ class PatternList : public ObjectList
 					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering,
 					const float32 &rAlpha,
-					const float32 &rBeta)				;
+					const float32 &rBeta,
+					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListHeuristical		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
-					const OrtOrdering &ordering)			;
+					const OrtOrdering &ordering,
+					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListClassHeuristical	(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
-					const OrtOrdering &ordering)			;
-		PatternList*	GetOrthogonalPatternListPolynomial		(
-					const TransactionList *pTransactionList,
-					const OrtMethod &method,
-					const Pattern::OrtMetric &rMetric)		;
+					const OrtOrdering &ordering,
+					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListPolynomial		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
-					const uint32 &num_patterns)			;
+					float32 &rRate)					;
+		PatternList*	GetOrthogonalPatternListPolynomial		(
+					const TransactionList *pTransactionList,
+					const OrtMethod &method,
+					const Pattern::OrtMetric &rMetric,
+					const uint32 &num_patterns,
+					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListORIGAMI			(
 					const TransactionList *pTransactionList,
 					const Pattern::OrtMetric &rMetric,
@@ -133,13 +139,13 @@ class PatternList : public ObjectList
 		const	float32		GetRate				(
 							const TransactionList *pTransactionList,
 							const OrtMethod &method,
-							const Pattern::OrtMetric &rMetric)			const	;
+							const Pattern::OrtMetric &rMetric)		const	;
 		const	float32		GetSetRate			(
 							const TransactionList *pTransactionList,
-							const Pattern::OrtMetric &rMetric)			const	;
+							const Pattern::OrtMetric &rMetric)		const	;
 		const	float32		GetPairAverageRate		(
 							const TransactionList *pTransactionList,
-							const Pattern::OrtMetric &rMetric)			const	;
+							const Pattern::OrtMetric &rMetric)		const	;
 		const	bool		FindSuperPatternOf		(const Pattern *pPattern)	const	;
 			void		RemoveSubPatternsOf		(const Pattern *pPattern)		;
 
