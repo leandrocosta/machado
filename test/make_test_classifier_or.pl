@@ -30,16 +30,18 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 				{
 					for ($a = 0; $a < scalar @Common::ORIGAMIAlphas; $a++)
 					{
-						next if $Common::ORIGAMIAlphas [$a] == 0.2;
-						next if $Common::ORIGAMIAlphas [$a] == 0.4;
-						next if $Common::ORIGAMIAlphas [$a] == 0.6;
-						next if $Common::ORIGAMIAlphas [$a] > 0.7;
+#						next if $Common::ORIGAMIAlphas [$a] == 0.2;
+#						next if $Common::ORIGAMIAlphas [$a] == 0.4;
+#						next if $Common::ORIGAMIAlphas [$a] == 0.6;
+#						next if $Common::ORIGAMIAlphas [$a] > 0.7;
 
-						for ($b = $a+2; $b < scalar @Common::ORIGAMIBetas; $b++)
+#						for ($b = $a+1; $b < scalar @Common::ORIGAMIBetas; $b++)
+						for ($b = 0; $b < scalar @Common::ORIGAMIBetas; $b++)
 						{
-							next if $Common::ORIGAMIBetas [$b] == 0.4;
-							next if $Common::ORIGAMIBetas [$b] == 0.6;
-							next if $Common::ORIGAMIBetas [$b] == 0.8;
+							next if $Common::ORIGAMIBetas [$b] <= $Common::ORIGAMIAlphas [$a];
+#							next if $Common::ORIGAMIBetas [$b] == 0.4;
+#							next if $Common::ORIGAMIBetas [$b] == 0.6;
+#							next if $Common::ORIGAMIBetas [$b] == 0.8;
 
 							foreach $data_base (@Common::DataBases)
 							{
