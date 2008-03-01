@@ -1,12 +1,13 @@
 #!/bin/bash
 
 NUM_FOLDS=10;
+FOLD=fold.c4.5
 
 mkdir -p c4.5.input
 mkdir -p c4.5.output
 mkdir -p rand
 mkdir -p class
-mkdir -p fold
+mkdir -p $FOLD
 
 for file in `ls -1 orig/ | grep ac`;
 do
@@ -32,15 +33,15 @@ do
 
 	echo "size: $size, testing: $testing, onemore: $onemore";
 
-	mkdir -p fold/$file
+	mkdir -p $FOLD/$file
 
 	echo "making $file.0.training and $file.0.testing with $testing elements";
 
 	# split data in training and testing
 	cat class/$file | split -`expr $size - $testing`;
 
-	mv xaa fold/$file/$file.0.training;
-	mv xab fold/$file/$file.0.testing;
+	mv xaa $FOLD/$file/$file.0.training;
+	mv xab $FOLD/$file/$file.0.testing;
 
 	for ((i=1; $i<10; i=$i+1))
 	do
@@ -52,9 +53,9 @@ do
 		echo "making $file.$i.training and $file.$i.testing with $testing elements";
 
 		# split data in training and testing
-		cat fold/$file/$file.$(($i-1)).testing fold/$file/$file.$(($i-1)).training | split -`expr $size - $testing`;
+		cat $FOLD/$file/$file.$(($i-1)).testing $FOLD/$file/$file.$(($i-1)).training | split -`expr $size - $testing`;
 
-		mv xaa fold/$file/$file.$i.training
-		mv xab fold/$file/$file.$i.testing
+		mv xaa $FOLD/$file/$file.$i.training
+		mv xab $FOLD/$file/$file.$i.testing
 	done;
 done;
