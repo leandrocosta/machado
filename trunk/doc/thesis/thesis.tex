@@ -1,0 +1,86 @@
+\documentclass[a4paper,11pt,oneside,openright,final,msc,project]{ufmgthesis}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{type1ec}
+\usepackage{graphicx}
+\usepackage[
+	a4paper,
+	portuguese,
+	bookmarks=true,
+	bookmarksnumbered=true,
+	linktocpage,
+	colorlinks
+]{hyperref}
+\usepackage{natbib}
+
+\begin{document}
+
+\ufmgthesis{
+	title={Ortogonalidade Aplicada a Regras de Associação},
+	author={Leandro Souza Costa},
+	university={Universidade Federal de Minas Gerais},
+	course={Ciência da Computação},
+	address={Belo Horizonte},
+	date={2008-04-16},
+	logo={img/brasao.eps},
+	advisor={Wagner Meira Jr.}
+	member={Marcos André Gonçalves}{-}{Universidade Federal de Minas Gerais},
+	member={Sandra de Amo}{-}{Universidade Federal de Uberlândia},
+	abstract={Resumo}{resumo.tex},
+%	dedication={dedicatoria.tex},
+	ack={agradecimentos.tex}
+}
+
+\chapter{Introdução}
+
+\section{Mineração de Dados}
+\subsection{Padrões Frequentes}
+\subsection{Regras de Associação}
+\section{Ortogonalidade}
+\section{Organização do Documento}
+
+\chapter{Algoritmos de Classificação}
+
+\section{Fundamentos Teóricos e Definições}
+\section{Estratégias eager e lazy}
+\section{Métricas de Regras de Associação}
+
+Falar sobre similaridade, cobertura, lift, leverage, etc.
+
+\section{Trabalhos Relacionados}
+
+Falar sobre o lazy
+
+\chapter{Ortogonalidade}
+
+\section{Métricas de Ortogonalidade}
+\subsection{Similaridade entre Padrões}
+\subsection{Cobertura de Transações}
+\subsection{Cobertura de Classes}
+\section{Estratégias de Ortogonalidade}
+\subsection{Ortogonalidade por conjunto}
+\subsection{Ortogonalidade Par-a-par}
+\section{Classificação e Ortogonalidade}
+\subsection{Utilização de Ortogonalidade no Lazy}
+\subsection{Heurística de Obtenção de Conjuntos Ortogonais}
+\section{Trabalhos Relacionados (ORIGAMI) (???)}
+\subsection{Definição de alfa-ortogonalidade}
+\subsection{Estratégia de Ortogonalidade (algoritmo)}
+\subsection{Adaptação do algoritmo}
+
+\chapter{Experimentos e Resultados}
+
+\section{O Aplicativo machado}
+\section{Comparação Ortogonal x Não Ortogonal}
+\section{Comparação Ortogonal x Lazy}
+\section{Comparação Ortogonal x ORIGAMI}
+
+\chapter{Resumo e Trabalhos Futuros}
+
+\section{Resumo}
+\section{Trabalhos Futuros}
+
+\ufmgbibliography{thesis}
+
+\end{document}
