@@ -1,5 +1,6 @@
 %\documentclass[a4paper,11pt,oneside,openright,final,msc,project]{ufmgthesis}
-\documentclass[a4paper,11pt,oneside,openright,msc,project]{ufmgthesis}
+%\documentclass[a4paper,11pt,oneside,openright,msc,project]{ufmgthesis}
+\documentclass[a4paper,11pt,oneside,openright,msc,project,hideall]{ufmgthesis}
 \usepackage[brazil]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
@@ -11,8 +12,7 @@
 	bookmarks=true,
 	bookmarksnumbered=true,
 	linktocpage,
-	colorlinks
-]{hyperref}
+	colorlinks]{hyperref}
 \usepackage{natbib}
 
 \begin{document}
@@ -32,65 +32,11 @@
 	ack={agradecimentos.tex}
 }
 
-\chapter{Introdução}
-
-Falar da necessidade da mineração de dados - da quantidade de informações acumuladas, da dificuldade de se obter as informações necessárias, da incapacidade dos sistemas de gerenciamento de bancos de dados em extrair tais informações, etc.
-
-\section{Mineração de Dados}
-
-Falar das soluções encontradas na mineração de dados para resolver o problema citado, (agrupamento, regras associativas, etc). "Mineração de dados é uma tecnologia usada para revelar informação estratégica escondida em grandes massas de dados". \\
-fonte: http://br.geocities.com/dugimenes/mineracao.htm \\
-fonte: http://pt.wikipedia.org/wiki/Minera\%C3\%A7\%C3\%A3o\_de\_dados \\
-citar \cite{Kumar06}.
-
-\subsection{Padrões Frequentes}
-\subsection{Regras de Associação}
-\section{Ortogonalidade}
-\section{Organização do Documento}
-
-\chapter{Algoritmos de Classificação}
-
-\section{Fundamentos Teóricos e Definições}
-\section{Estratégias eager e lazy}
-\section{Métricas de Regras de Associação}
-
-Falar sobre similaridade, cobertura, lift, leverage, etc.
-
-\section{Trabalhos Relacionados}
-
-Falar sobre o lazy
-
-\chapter{Ortogonalidade}
-
-\section{Métricas de Ortogonalidade}
-\subsection{Similaridade entre Padrões}
-\subsection{Cobertura de Transações}
-\subsection{Cobertura de Classes}
-\section{Estratégias de Ortogonalidade}
-\subsection{Ortogonalidade por conjunto}
-\subsection{Ortogonalidade Par-a-par}
-\section{Classificação e Ortogonalidade}
-\subsection{Utilização de Ortogonalidade no Lazy}
-\subsection{Heurística de Obtenção de Conjuntos Ortogonais}
-\section{Trabalhos Relacionados}
-
-Falar sobre o ORIGAMI.
-
-\subsection{Definição de alfa-ortogonalidade}
-\subsection{Estratégia de Ortogonalidade (algoritmo)}
-\subsection{Adaptação do algoritmo}
-
-\chapter{Experimentos e Resultados}
-
-\section{O Aplicativo machado}
-\section{Comparação Ortogonal x Não Ortogonal}
-\section{Comparação Ortogonal x Lazy}
-\section{Comparação Ortogonal x ORIGAMI}
-
-\chapter{Resumo e Trabalhos Futuros}
-
-\section{Resumo}
-\section{Trabalhos Futuros}
+\include{introducao}
+\include{classificacao}
+\include{ortogonalidade}
+\include{resultados}
+\include{conclusao}
 
 \ufmgbibliography{thesis}
 
