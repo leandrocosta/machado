@@ -3,15 +3,21 @@
 use strict;
 use Common;
 
-sub make_test_classifier_o ($$$$$$$$$$$$);
+sub make_test_classifier_o ($$$$$$$$$$$$$$$);
 sub run_classifier_o ($$$$$$$$$$$$$$$$$);
+
+sub save_output_file ($$$$$$$$$$$$$$$);
+
+my $output_dir = $Common::OutputDirClassifierO;
 
 my $data_base;
 
 foreach $data_base (@Common::DataBases)
 {
-	system "mkdir -p $Common::OutputDirClassifierO/$data_base";
+	system "mkdir -p $output_dir/$data_base";
 }
+
+system "mkdir -p $output_dir/average";
 
 
 my ($s, $c, $p, $n, $l, $m, $x, $o, $e, $w, $g);
@@ -40,10 +46,26 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 									{
 										for ($g = 0; $g < scalar @Common::ClassifierOOrderings; $g++)
 										{
+											my $accuracy_avg = 0;
+											my $patterns_avg = 0;
+											my $rules_avg = 0;
+
 											foreach $data_base (@Common::DataBases)
 											{
-												make_test_classifier_o ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::ClassifierPatternSets[$p], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierMinRuleLens[$m], $Common::ClassifierMaxRuleLens[$x], $Common::ClassifierOModes[$o], $Common::ClassifierOMetrics[$e], $Common::ClassifierOMethods[$w], $Common::ClassifierOOrderings[$g]);
+												my ($acc, $pat, $rul);
+
+												make_test_classifier_o ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::ClassifierPatternSets[$p], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierMinRuleLens[$m], $Common::ClassifierMaxRuleLens[$x], $Common::ClassifierOModes[$o], $Common::ClassifierOMetrics[$e], $Common::ClassifierOMethods[$w], $Common::ClassifierOOrderings[$g], \$pat, \$rul, \$acc);
+
+												$accuracy_avg += $acc;
+												$patterns_avg += $pat;
+												$rules_avg += $rul;
 											}
+
+											$accuracy_avg /= scalar @Common::DataBases;
+											$patterns_avg /= scalar @Common::DataBases;
+											$rules_avg /= scalar @Common::DataBases;
+
+											save_output_file ('average', $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::ClassifierPatternSets[$p], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierMinRuleLens[$m], $Common::ClassifierMaxRuleLens[$x], $Common::ClassifierOModes[$o], $Common::ClassifierOMetrics[$e], $Common::ClassifierOMethods[$w], $Common::ClassifierOOrderings[$g], $patterns_avg, $rules_avg, $accuracy_avg);
 										}
 									}
 								}
@@ -56,43 +78,55 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 	}
 }
 
-sub make_test_classifier_o ($$$$$$$$$$$$)
+sub make_test_classifier_o ($$$$$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $avg_patterns, $avg_rules, $accuracy) = @_;
 
-	my $accuracy		= 0;
-	my $avg_patterns	= 0;
-	my $avg_rules		= 0;
+	$$avg_patterns	= 0;
+	$$avg_rules	= 0;
+	$$accuracy	= 0;
+
 	my $fold;
 
 	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 	{
-		my $log_file = "$Common::OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
+		my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
 
 		my ($acc, $pat, $rul);
 
 		run_classifier_o ($data_base, $fold, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $log_file, \$acc, \$pat, \$rul);
 
-		$accuracy	+= $acc;
-		$avg_patterns	+= $pat;
-		$avg_rules	+= $rul;
+		$$avg_patterns	+= $pat;
+		$$avg_rules	+= $rul;
+		$$accuracy	+= $acc;
 	}
 
-	$accuracy	/= $Common::NumFolds;
-	$avg_patterns	/= $Common::NumFolds;
-	$avg_rules	/= $Common::NumFolds;
+	$$avg_patterns	/= $Common::NumFolds;
+	$$avg_rules	/= $Common::NumFolds;
+	$$accuracy	/= $Common::NumFolds;
 
-	print "accuracy [$accuracy], avg_patterns [$avg_patterns], avg_rules [$avg_rules]\n";
+	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules]\n";
 
-	system "mkdir -p $Common::OutputDirClassifierO/$data_base/";
+	save_output_file ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $$avg_patterns, $$avg_rules, $$accuracy);
 
-	my $out_file = "$Common::OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
+	if ($$accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
+	{
+		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+		{
+			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
+			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
+			system "cp $log_file $best_log_file";
+		}
+	}
+
+=comment
+	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
 
 	open OUTPUT, ">$out_file";
-	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], accuracy [$$accuracy]\n";
 	close OUTPUT;
 
-	if ($accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
+	if ($$accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
 	{
 		my $best_out_file = Common::GetBestOutputFile ('classifier_o', $data_base);
 
@@ -101,11 +135,12 @@ sub make_test_classifier_o ($$$$$$$$$$$$)
 
 		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 		{
-			my $log_file = "$Common::OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
-			my $best_log_file = "$Common::OutputDirClassifierO/$data_base/best.$fold.log";
+			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
+			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
 			system "cp $log_file $best_log_file";
 		}
 	}
+=cut
 }
 
 sub run_classifier_o ($$$$$$$$$$$$$$$$$)
@@ -119,4 +154,23 @@ sub run_classifier_o ($$$$$$$$$$$$$$$$$)
 	system "nice -n 10 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -p $pattern_set -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -r o -o $omode -e $ometric -w $omethod -g $oordering -d -1 2&>$log_file";
 
 	Common::GetRunResultFromLogFile ($log_file, $accuracy, $avg_patterns, $avg_rules);
+}
+
+sub save_output_file ($$$$$$$$$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $avg_patterns, $avg_rules, $accuracy) = @_;
+
+	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
+
+	open OUTPUT, ">$out_file";
+	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	close OUTPUT;
+
+	if ($accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
+	{
+		my $best_out_file = Common::GetBestOutputFile ('classifier_o', $data_base);
+
+		print "cp $out_file $best_out_file\n";
+		system "cp $out_file $best_out_file";
+	}
 }
