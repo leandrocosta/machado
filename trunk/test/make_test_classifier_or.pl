@@ -3,8 +3,10 @@
 use strict;
 use Common;
 
-sub make_test_classifier_or ($$$$$$$$);
+sub make_test_classifier_or ($$$$$$$$$$$);
 sub run_classifier_or ($$$$$$$$$$$$$);
+
+sub save_output_file ($$$$$$$$$$$);
 
 my $output_dir = $Common::OutputDirClassifierOR;
 
@@ -14,6 +16,8 @@ foreach $data_base (@Common::DataBases)
 {
 	system "mkdir -p $output_dir/$data_base";
 }
+
+system "mkdir -p $output_dir/average";
 
 
 my ($s, $c, $n, $l, $e, $a, $b);
@@ -43,10 +47,26 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 #							next if $Common::ORIGAMIBetas [$b] == 0.6;
 #							next if $Common::ORIGAMIBetas [$b] == 0.8;
 
+							my $accuracy_avg = 0;
+							my $patterns_avg = 0;
+							my $rules_avg = 0;
+
 							foreach $data_base (@Common::DataBases)
 							{
-								make_test_classifier_or ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierOMetrics[$e], $Common::ORIGAMIAlphas[$a], $Common::ORIGAMIBetas[$b]);
+								my ($acc, $pat, $rul);
+
+								make_test_classifier_or ($data_base, $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierOMetrics[$e], $Common::ORIGAMIAlphas[$a], $Common::ORIGAMIBetas[$b], \$pat, \$rul, \$acc);
+
+								$accuracy_avg += $acc;
+								$patterns_avg += $pat;
+								$rules_avg += $rul;
 							}
+
+							$accuracy_avg /= scalar @Common::DataBases;
+							$patterns_avg /= scalar @Common::DataBases;
+							$rules_avg /= scalar @Common::DataBases;
+
+							save_output_file ('average', $Common::ClassifierSupports[$s], $Common::Confidences[$c], $Common::MinNumRules[$n], $Common::MaxNumRankRules[$l], $Common::ClassifierOMetrics[$e], $Common::ORIGAMIAlphas[$a], $Common::ORIGAMIBetas[$b], $patterns_avg, $rules_avg, $accuracy_avg);
 						}
 					}
 				}
@@ -55,13 +75,14 @@ for ($s = 0; $s < scalar @Common::ClassifierSupports; $s++)
 	}
 }
 
-sub make_test_classifier_or ($$$$$$$$)
+sub make_test_classifier_or ($$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta) = @_;
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $avg_patterns, $avg_rules, $accuracy) = @_;
 
-	my $accuracy		= 0;
-	my $avg_patterns	= 0;
-	my $avg_rules		= 0;
+	$$avg_patterns	= 0;
+	$$avg_rules	= 0;
+	$$accuracy	= 0;
+
 	my $fold;
 
 	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
@@ -72,26 +93,37 @@ sub make_test_classifier_or ($$$$$$$$)
 
 		run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $log_file, \$acc, \$pat, \$rul);
 
-		$accuracy	+= $acc;
-		$avg_patterns	+= $pat;
-		$avg_rules	+= $rul;
+		$$avg_patterns	+= $pat;
+		$$avg_rules	+= $rul;
+		$$accuracy	+= $acc;
 	}
 
-	$accuracy	/= $Common::NumFolds;
-	$avg_patterns	/= $Common::NumFolds;
-	$avg_rules	/= $Common::NumFolds;
+	$$avg_patterns	/= $Common::NumFolds;
+	$$avg_rules	/= $Common::NumFolds;
+	$$accuracy	/= $Common::NumFolds;
 
-	print "accuracy [$accuracy], avg_patterns [$avg_patterns], avg_rules [$avg_rules]\n";
+	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules]\n";
 
-	system "mkdir -p $output_dir/$data_base/";
+	save_output_file ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $$avg_patterns, $$avg_rules, $$accuracy);
 
+	if ($$accuracy > Common::GetBestAccuracy ('classifier_or', $data_base))
+	{
+		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+		{
+			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".".$fold.".log";
+			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
+			system "cp $log_file $best_log_file";
+		}
+	}
+
+=comment
 	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".out";
 
 	open OUTPUT, ">$out_file";
-	print OUTPUT "support [$support], confidence [$confidence], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], ometric [$ometric], alpha [$alpha], beta [$beta], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	print OUTPUT "support [$support], confidence [$confidence], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], ometric [$ometric], alpha [$alpha], beta [$beta], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], accuracy [$$accuracy]\n";
 	close OUTPUT;
 
-	if ($accuracy > Common::GetBestAccuracy ('classifier_or', $data_base))
+	if ($$accuracy > Common::GetBestAccuracy ('classifier_or', $data_base))
 	{
 		my $best_out_file = Common::GetBestOutputFile ('classifier_or', $data_base);
 
@@ -105,6 +137,7 @@ sub make_test_classifier_or ($$$$$$$$)
 			system "cp $log_file $best_log_file";
 		}
 	}
+=cut
 }
 
 sub run_classifier_or ($$$$$$$$$$$$$)
@@ -118,4 +151,23 @@ sub run_classifier_or ($$$$$$$$$$$$$)
 	system "nice -n 10 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -p r -n $min_num_rules -l $max_num_rank_rules -r o -o o -e $ometric -a $alpha -b $beta -d -1 2&>$log_file";
 
 	Common::GetRunResultFromLogFile ($log_file, $accuracy, $avg_patterns, $avg_rules);
+}
+
+sub save_output_file ($$$$$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $avg_patterns, $avg_rules, $accuracy) = @_;
+
+	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".out";
+
+	open OUTPUT, ">$out_file";
+	print OUTPUT "support [$support], confidence [$confidence], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], ometric [$ometric], alpha [$alpha], beta [$beta], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	close OUTPUT;
+
+	if ($accuracy > Common::GetBestAccuracy ('classifier_or', $data_base))
+	{
+		my $best_out_file = Common::GetBestOutputFile ('classifier_or', $data_base);
+
+		print "cp $out_file $best_out_file\n";
+		system "cp $out_file $best_out_file";
+	}
 }
