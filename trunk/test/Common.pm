@@ -244,6 +244,7 @@ sub GetLazyOutputFile ($$$$$$)
 {
 	my ($data_base, $support, $confidence, $min_rules, $max_size, $ranking_size) = @_;
 
+	# s1_c0.0001_n1_m2_l10.0.log
 	my $out_file = "$OutputDirLazy/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".out";
 
 	return $out_file;
@@ -253,16 +254,18 @@ sub GetClassifierCOutputFile ($$$$$$$)
 {
 	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len) = @_;
 
-	my $out_file = "$OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_a".$max_rule_len.".out";
+	# s0.0001_c0.0001_n1_l10_m1_x1.0.log
+	my $out_file = "$OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len.".out";
 
 	return $out_file;
 }
 
-sub GetClassifierOOutputFile ($$$$$$$$$)
+sub GetClassifierOOutputFile ($$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering) = @_;
 
-	my $out_file = "$OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_a".$max_rule_len."_o".$omode."_e".$ometric.".out";
+	# s0.0001_c0.0001_pf_n1_l10_m1_x1_oh_es_wp_gs.0.log
+	my $out_file = "$OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
 
 	return $out_file;
 }
@@ -335,9 +338,9 @@ sub GetClassifierCRunResult ($$$$$$$)
 	return GetRunResultFromOutputFile (GetClassifierCOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6]));
 }
 
-sub GetClassifierORunResult ($$$$$$$$$)
+sub GetClassifierORunResult ($$$$$$$$$$$$)
 {
-	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]));
+	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11]));
 }
 
 sub MakeAppHistogramGraph ($$$$$)
