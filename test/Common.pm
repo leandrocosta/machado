@@ -133,24 +133,24 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierOMetrics = (
-	's',
-	'c',
+#	's',
+#	'c',
 	'l',
 #	'a'
 );
 
 @ClassifierOMethods = (
 	's',
-	'p',
+#	'p',
 #	'a'
 );
 
 @ClassifierOOrderings = (
 	's',
-	'r',
-	'i',
-	'z',
-	'n'
+#	'r',
+#	'i',
+#	'z',
+#	'n'
 );
 
 @ORIGAMIAlphas = (
