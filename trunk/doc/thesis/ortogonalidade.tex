@@ -1,19 +1,78 @@
 \chapter{Ortogonalidade}
 
 \section{Métricas de Ortogonalidade}
+
+Breve introdução.
+
 \subsection{Similaridade entre Padrões}
+
+Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo. \\
+
 \subsection{Cobertura de Transações}
+
+Dois padrões são ortogonais se são encontrados em transações distintas na base de dados. Fazer figura com exemplo.
+
 \subsection{Cobertura de Classes}
+
+Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, além de encontrados em transações distintas, as transações devem possuir classes distintas também. Pensar em exemplo com figura.
+
 \section{Estratégias de Ortogonalidade}
+
+Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
+
 \subsection{Ortogonalidade por conjunto}
+
+Apresentar e discutir as expressões: \\
+Similaridade: Expressão que dá um peso para cada item encontrado nos padrões do conjunto; \\
+Cobertura de Transações: Expressão que dá um peso para cada transação coberta pelo conjunto de padrões; \\
+Cobertura de Classes: Expressão que dá um peso para cada classe encontrada nas transações cobertas pelos padrões.
+
 \subsection{Ortogonalidade Par-a-par}
+
+Discutir as expressões par a par (similaridade pode ser dada por interseção sobre união de elementos, ortogonalidade pode ser dada por 1 - similaridade): \\
+Ortogonalidade por itens: Quantidade de itens que aparecem em apenas um dos padrões / quantidade de itens que aparecem nos dois padrões. \\
+Ortogonalidade por cobertura de transações: Quantidade de transações cobertas por apenas um dos padrões / quantidade de transações cobertas pelos dois padrões. \\
+Ortogonalidade por cobertura de classes: Mais complicado: Ortogonalidade é a média das razões entre a diferença das coberturas e a maior cobertura de cada classe. 
+
 \section{Classificação e Ortogonalidade}
+
+Falar sobre como utilizar o conceito de ortogonalidade em algoritmos de regras de associação: \\
+Ortogonalidade por itens: Motivação: Encontrar um conjunto de padrões ortogonais que representem bem todo o conjunto de padrões frequentes, e que gere regras não redundantes; \\
+Ortogonalidade por cobertura de transações: Encontrar um conjunto de padrões que cubram áres ortogonais, e dessa forma, distintas da base de dados, diminuindo a redundância de informações durante a geração das regras, e mais que isso, diminuindo a possibilidade de encontrar regras redundantes; \\
+Ortogonalidade por cobertura de classes: Encontrar um conjunto de padrões que aparecem em transações de classes distintas, ou seja, padrões que apontam para classes distintas. A idéia é gerar regras não redundantes, e obter a classificação das regras de maior peso no ranking.
+
 \subsection{Utilização de Ortogonalidade no Lazy}
+
+O lazy cria uma projeção da base a partir dos itens encontrados na transação a ser classificada, e obtém padrões frequentes formados por estes itens. \\
+A ortogonalidade pode entrar de várias maneiras no lazy, por exemplo, é possível obter, apriori, o cojunto de itens ortogonais da base de dados, e, para cada transação a ser classificada, obter a projeção apenas dos items ortogonais. \\
+A forma escolhida neste trabalho foi continuar utilizando todos os itens para gerar a projeção, obter o conjunto de padrões frequentes e, deste conjunto, obter um conjunto de padrões ortogonais, com o qual serão geradas as regras de associação.
+
 \subsection{Heurística de Obtenção de Conjuntos Ortogonais}
+
+Falar da heurística:
+
+\begin{enumerate}
+	\item O conjunto de padrões é ordenado de forma decrescente quanto ao tamanho dos padrões;
+	\item O primeiro padrão é adicionado ao conjunto solução;
+	\item Um novo padrão é adicionado ao conjunto;
+	\item Todo o conjunto de padrões que ainda não fazem parte do conjunto solução é percorrido, na tentativa de se melhorar a solução;
+	\item Ao final da lista, se a solução não piorou, o conjunto se mantém, e o algoritmo tenta obter um conjunto maior. Se a solução piorou, o algoritmo para, e a solução anterior é retornada.
+\end{enumerate}
+
+Falar das formas de ordenar o conjunto, falar do comportamento do algoritmo para cada caso (similaridade, transações e classes).
+
 \section{Estratégia ORIGAMI}
 
 Falar sobre o ORIGAMI \cite{zaki07origami}.
 
 \subsection{Definição de alfa-ortogonalidade}
+
+Falar das vantagens de alfa e beta.
+
 \subsection{Estratégia de Ortogonalidade (algoritmo)}
+
+Falar da estratégia aleátória, das métricas, mostrar o algoritmo.
+
 \subsection{Adaptação do algoritmo}
+
+Falar da adaptação do ORIGAMI ao problema de classificação, da utilização das 3 métricas.
