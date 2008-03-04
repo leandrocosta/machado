@@ -3,12 +3,13 @@
 use strict;
 use Common;
 
-sub make_app_histogram_graphs ();
+sub make_best_app_histogram_graphs ();
+sub make_avg_app_histogram_graphs ();
 sub make_ometric_histogram_graphs ($$$$$$$);
 
 sub get_best_runs_for_data_base ($);
 sub get_ometric_runs_for_classifier_o ($$$$$$$$);
-sub get_ometric_run_for_classifier_o ($$$$$$$$$);
+sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$);
 
 my %accuracy_hsh;
 my %avg_patterns_hsh;
@@ -31,7 +32,8 @@ my $omode		= 'h';
 
 system "mkdir -p $Common::OutputDirGraphs/";
 
-make_app_histogram_graphs ();
+make_best_app_histogram_graphs ();
+#make_avg_app_histogram_graphs ();
 make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
 
 
@@ -66,17 +68,17 @@ sub get_ometric_runs_for_classifier_o ($$$$$$$$)
 {
 	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode) = @_;
 
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 's');
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'c');
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'l');
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'm');
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 's', 's', 'n');
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'c', 's', 'n');
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'l', 's', 'n');
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'm', 's', 'n');
 }
 
-sub get_ometric_run_for_classifier_o ($$$$$$$$$)
+sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering) = @_;
 
-	my $RunResult = Common::GetClassifierORunResult ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]);
+	my $RunResult = Common::GetClassifierORunResult ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11]);
 
 	$ometric_acc_hsh{$data_base}{$ometric} = $RunResult->{ACCURACY};
 	$ometric_pat_hsh{$data_base}{$ometric} = $RunResult->{AVG_PATTERNS};
@@ -87,9 +89,9 @@ sub get_ometric_run_for_classifier_o ($$$$$$$$$)
 	$ometric_rul_hsh{'average'}{$ometric}	+= $RunResult->{AVG_RULES};
 }
 
-sub make_app_histogram_graphs ()
+sub make_best_app_histogram_graphs ()
 {
-	print "make_app_histogram_graphs ()\n";
+	print "make_best_app_histogram_graphs ()\n";
 
 	my $data_base;
 
@@ -118,6 +120,11 @@ sub make_app_histogram_graphs ()
 	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_acc', \%accuracy_hsh);
 	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_pat', \%avg_patterns_hsh);
 	Common::MakeAppHistogramGraph ('Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_rul', \%avg_rules_hsh);
+}
+
+sub make_avg_app_histogram_graphs ()
+{
+	print "make_avg_app_histogram_graphs ()\n";
 }
 
 sub make_ometric_histogram_graphs ($$$$$$$)
