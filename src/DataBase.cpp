@@ -3,6 +3,7 @@
 #include "RankingRuleList.h"
 #include "DataBaseException.h"
 #include "base/Logger.h"
+#include <sys/time.h>
 
 #include <iostream>
 using std::cout;
@@ -24,6 +25,7 @@ DataBase::DataBase (
 	mTotalGuesses			= 0		;
 	mPatterns			= 0		;
 	mRules				= 0		;
+	mTime				= 0		;
 }
 
 DataBase::~DataBase ()
@@ -159,7 +161,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mTotalGuesses - mCorrectGuesses);
 
-		cout << "accuracy [" << mAccuracy << "], average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "]" << endl;
+		cout << "accuracy [" << mAccuracy << "], average patterns [" << (float32) mPatterns / mTestTransactionList.GetSize () << "], average rules [" << (float32) mRules / mTestTransactionList.GetSize () << "], average time [" << mTime / mTestTransactionList.GetSize () << "]" << endl;
 	}
 	catch (DataBaseException &e)
 	{
@@ -173,6 +175,9 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 
 void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
 {
+	struct timeval start;
+	gettimeofday (&start, NULL);
+
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTransaction () - pTransaction\n");
 
 	pTransaction->Print ();
@@ -271,12 +276,18 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	mAccuracy = (mTotalGuesses > 0 ? (float32) mCorrectGuesses / (mTotalGuesses) : 0);
 
-	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u], orth_rate [%f])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules, orth_rate);
+	struct timeval end;
+	gettimeofday (&end, NULL);
 
-	cout << "transaction [" << (pTransaction->GetTransactionID () - train_size + 1) << "/" << test_size << "], class [" << pTransaction->GetClass ()->GetValue () << "], guess [" << class_guess << "], correct [" << (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no") << "], patterns [" << patterns << "], rules [" << rules << "], orth_rate [" << orth_rate << "], accuracy [" << mAccuracy << "]" << endl;
+	float32 time = (end.tv_sec - start.tv_sec) + (float32) (end.tv_usec - start.tv_usec) / 1000000;
+
+	LOGMSG (NO_DEBUG, "DataBase::ClassifyTransaction () - transaction [%u/%u], class [%s], guess [%s], correct [%s], accuracy [%f] (patterns [%u], rules [%u], orth_rate [%f], time [%f])\n", pTransaction->GetTransactionID () - train_size + 1, test_size, pTransaction->GetClass ()->GetValue ().c_str (), class_guess.c_str (), (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no"), mAccuracy, patterns, rules, orth_rate, time);
+
+	cout << "transaction [" << (pTransaction->GetTransactionID () - train_size + 1) << "/" << test_size << "], class [" << pTransaction->GetClass ()->GetValue () << "], guess [" << class_guess << "], correct [" << (class_guess == pTransaction->GetClass ()->GetValue () ? "yes":"no") << "], patterns [" << patterns << "], rules [" << rules << "], orth_rate [" << orth_rate << "], accuracy [" << mAccuracy << "], time [" << time << "]" << endl;
 
 	mPatterns	+= patterns	;
 	mRules		+= rules	;
+	mTime		+= time		;
 
 //	cout << class_guess << endl;
 }
