@@ -91,6 +91,7 @@ class DataBase : private IOManager, private Tokenizer
 		uint32			mPatterns			;
 		uint32			mRules				;
 		float32			mAccuracy			;
+		float32			mTime				;
 };
 
 
