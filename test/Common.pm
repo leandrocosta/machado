@@ -280,21 +280,23 @@ sub GetClassifierOROutputFile ($$$$$$$$)
 	return $out_file;
 }
 
-sub GetRunResultFromLogFile ($$$$)
+sub GetRunResultFromLogFile ($$$$$)
 {
-	my ($log_file, $accuracy, $avg_patterns, $avg_rules) = @_;
+	my ($log_file, $accuracy, $avg_patterns, $avg_rules, $avg_time) = @_;
 
 	$$accuracy = `tail -1 $log_file`;
 	chomp $$accuracy;
 
 	$$avg_patterns = $$accuracy;
 	$$avg_rules = $$accuracy;
+	$$avg_time = $$accuracy;
 
 	$$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 	$$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 	$$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
+	$$avg_time	=~ s/.*average time \[([^\]]*)\].*/$1/;
 
-	print "accuracy: $$accuracy, average patterns: $$avg_patterns, average rules: $$avg_rules\n";
+	print "accuracy: $$accuracy, average patterns: $$avg_patterns, average rules: $$avg_rules, average time: $$avg_time\n";
 }
 
 sub GetRunResultFromOutputFile ($)
@@ -304,6 +306,7 @@ sub GetRunResultFromOutputFile ($)
 	my $accuracy = 0;
 	my $avg_patterns = 0;
 	my $avg_rules = 0;
+	my $avg_time = 0;
 
 	if (-e $out_file)
 	{
@@ -312,14 +315,17 @@ sub GetRunResultFromOutputFile ($)
 		$accuracy = <INPUT>;
 		$avg_patterns = $accuracy;
 		$avg_rules = $accuracy;
+		$avg_time = $accuracy;
 
 		chomp $accuracy;
 		chomp $avg_patterns;
 		chomp $avg_rules;
+		chomp $avg_time;
 
 		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
 		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+		$avg_time	=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 
 		close INPUT;
 	}
@@ -327,7 +333,8 @@ sub GetRunResultFromOutputFile ($)
 	my $RunResult = {
 		ACCURACY	=> $accuracy,
 		AVG_PATTERNS	=> $avg_patterns,
-		AVG_RULES	=> $avg_rules
+		AVG_RULES	=> $avg_rules,
+		AVG_TIME	=> $avg_time
 	};
 
 	return $RunResult;
