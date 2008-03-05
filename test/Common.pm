@@ -270,6 +270,16 @@ sub GetClassifierOOutputFile ($$$$$$$$$$$$)
 	return $out_file;
 }
 
+sub GetClassifierOROutputFile ($$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta) = @_;
+
+	# s0.0001_c0.9_n1_l1000_es_a0.2_b0.8.0.log
+	my $out_file = "$OutputDirClassifierOR/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".out";
+
+	return $out_file;
+}
+
 sub GetRunResultFromLogFile ($$$$)
 {
 	my ($log_file, $accuracy, $avg_patterns, $avg_rules) = @_;
@@ -341,6 +351,11 @@ sub GetClassifierCRunResult ($$$$$$$)
 sub GetClassifierORunResult ($$$$$$$$$$$$)
 {
 	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11]));
+}
+
+sub GetClassifierORRunResult ($$$$$$$$)
+{
+	return GetRunResultFromOutputFile (GetClassifierOROutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]));
 }
 
 sub MakeAppHistogramGraph ($$$$$)
@@ -467,4 +482,247 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 	close OUTPUT;
 
 	system "$GnuPlotApp $gnu_file";
+}
+
+sub GetLazyParmsFromOutputFile ($)
+{
+	my $out_file = $_[0];
+
+	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $accuracy, $avg_patterns, $avg_rules);
+
+	if (-e $out_file)
+	{
+		open INPUT, "<$out_file";
+		$_ = <INPUT>;
+		close INPUT;
+
+		chomp;
+
+		$support	= $_;
+		$confidence	= $_;
+		$min_rules	= $_;
+		$max_size	= $_;
+		$ranking_size	= $_;
+		$accuracy	= $_;
+		$avg_patterns	= $_;
+		$avg_rules	= $_;
+
+		$support	=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence	=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_rules	=~ s/.*min_rules \[([^\]]*)\].*/$1/;
+		$max_size	=~ s/.*max_size \[([^\]]*)\].*/$1/;
+		$ranking_size	=~ s/.*ranking_size \[([^\]]*)\].*/$1/;
+		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+		$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
+	}
+
+	my $Parms = {
+		SUPPORT		=> $support,
+		CONFIDENCE	=> $confidence,
+		MIN_RULES	=> $min_rules,
+		MAX_SIZE	=> $max_size,
+		RANKING_SIZE	=> $ranking_size,
+		ACCURACY	=> $accuracy,
+		AVG_PATTERNS	=> $avg_patterns,
+		AVG_RULES	=> $avg_rules
+	};
+
+	return $Parms;
+}
+
+sub GetClassifierCParmsFromOutputFile ($)
+{
+	my $out_file = $_[0];
+
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $accuracy, $avg_patterns, $avg_rules);
+
+	if (-e $out_file)
+	{
+		open INPUT, "<$out_file";
+		$_ = <INPUT>;
+		close INPUT;
+
+		chomp;
+
+		$support		= $_;
+		$confidence		= $_;
+		$min_num_rules		= $_;
+		$max_num_rank_rules	= $_;
+		$min_rule_len		= $_;
+		$max_rule_len		= $_;
+		$accuracy		= $_;
+		$avg_patterns		= $_;
+		$avg_rules		= $_;
+
+		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
+		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+	}
+
+	my $Parms = {
+		SUPPORT			=> $support,
+		CONFIDENCE		=> $confidence,
+		MIN_NUM_RULES		=> $min_num_rules,
+		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
+		MIN_RULE_LEN		=> $min_rule_len,
+		MAX_RULE_LEN		=> $max_rule_len,
+		ACCURACY		=> $accuracy,
+		AVG_PATTERNS		=> $avg_patterns,
+		AVG_RULES		=> $avg_rules
+	};
+
+	return $Parms;
+}
+
+sub GetClassifierOParmsFromOutputFile ($)
+{
+	my $out_file = $_[0];
+
+	my ($support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $accuracy, $avg_patterns, $avg_rules);
+
+	if (-e $out_file)
+	{
+		open INPUT, "<$out_file";
+		$_ = <INPUT>;
+		close INPUT;
+
+		chomp;
+
+		$support		= $_;
+		$confidence		= $_;
+		$pattern_set		= $_;
+		$min_num_rules		= $_;
+		$max_num_rank_rules	= $_;
+		$min_rule_len		= $_;
+		$max_rule_len		= $_;
+		$omode			= $_;
+		$ometric		= $_;
+		$omethod		= $_;
+		$oordering		= $_;
+		$accuracy		= $_;
+		$avg_patterns		= $_;
+		$avg_rules		= $_;
+
+		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$pattern_set		=~ s/.*pattern_set \[([^\]]*)\].*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
+		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$omode			=~ s/.*omode \[([^\]]*)\].*/$1/;
+		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
+		$omethod		=~ s/.*omethod \[([^\]]*)\].*/$1/;
+		$oordering		=~ s/.*oordering \[([^\]]*)\].*/$1/;
+		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+	}
+
+	my $Parms = {
+		SUPPORT			=> $support,
+		CONFIDENCE		=> $confidence,
+		PATTERN_SET		=> $pattern_set,
+		MIN_NUM_RULES		=> $min_num_rules,
+		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
+		MIN_RULE_LEN		=> $min_rule_len,
+		MAX_RULE_LEN		=> $max_rule_len,
+		OMODE			=> $omode,
+		OMETRIC			=> $ometric,
+		OMETHOD			=> $omethod,
+		OORDERING		=> $oordering,
+		ACCURACY		=> $accuracy,
+		AVG_PATTERNS		=> $avg_patterns,
+		AVG_RULES		=> $avg_rules
+	};
+
+	return $Parms;
+}
+
+sub GetClassifierORParmsFromOutputFile ($)
+{
+	my $out_file = $_[0];
+
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $accuracy, $avg_patterns, $avg_rules);
+
+	if (-e $out_file)
+	{
+		open INPUT, "<$out_file";
+		$_ = <INPUT>;
+		close INPUT;
+
+		chomp;
+
+		$support		= $_;
+		$confidence		= $_;
+		$min_num_rules		= $_;
+		$max_num_rank_rules	= $_;
+		$ometric		= $_;
+		$alpha			= $_;
+		$beta			= $_;
+		$accuracy		= $_;
+		$avg_patterns		= $_;
+		$avg_rules		= $_;
+
+		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
+		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
+		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
+		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
+		$alpha			=~ s/.*alpha \[([^\]]*)\].*/$1/;
+		$beta			=~ s/.*beta \[([^\]]*)\].*/$1/;
+		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+	}
+
+	my $Parms = {
+		SUPPORT			=> $support,
+		CONFIDENCE		=> $confidence,
+		MIN_NUM_RULES		=> $min_num_rules,
+		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
+		OMETRIC			=> $ometric,
+		ALPHA			=> $alpha,
+		BETA			=> $beta,
+		ACCURACY		=> $accuracy,
+		AVG_PATTERNS		=> $avg_patterns,
+		AVG_RULES		=> $avg_rules
+	};
+
+	return $Parms;
+}
+
+sub GetBestAverageAccParms ($)
+{
+	$application = $_[0];
+
+	my $out_file = GetBestOutputFile ($application, 'average');
+
+	my $Parms;
+
+	if ($application eq 'lazy')
+	{
+		$Parms = GetLazyParmsFromOutputFile ($out_file);
+	}
+	elsif ($application eq 'classifier_c')
+	{
+		$Parms = GetClassifierCParmsFromOutputFile ($out_file);
+	}
+	elsif ($application eq 'classifier_o')
+	{
+		$Parms = GetClassifierOParmsFromOutputFile ($out_file);
+	}
+	elsif ($application eq 'classifier_or')
+	{
+		$Parms = GetClassifierORParmsFromOutputFile ($out_file);
+	}
+
+	return $Parms;
 }
