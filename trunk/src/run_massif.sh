@@ -10,4 +10,6 @@ valgrind \
   --alloc-fn='std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)' \
   --alloc-fn='ObjectList::ObjectList(unsigned long long const&)'  \
   --alloc-fn='ObjectList::PushBack(Object*)' \
-  ./classifier -i ../data/adrianov/anneal.ac.training -t ../data/adrianov/anneal.ac.testing.5 -s .99 -c .99 -a 3
+  ./classifier -i ../data/adrianov/anneal.ac.training -t ../data/adrianov/anneal.ac.testing -s .99 -c .99 -r o -p r -a .2 -b .8 -e l -w p
+
+#  ./classifier -i ../data/adrianov/anneal.ac.training -t ../data/adrianov/anneal.ac.testing.5 -s .99 -c .99 -a 3
