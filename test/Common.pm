@@ -93,9 +93,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 
 @ClassifierSupports = (
 #	0.0001,
-	0.001,
+#	0.001,
 #	0.01,
-#	0.1,
+	0.1,
 #	0.2,
 #	0.3,
 #	0.4,
