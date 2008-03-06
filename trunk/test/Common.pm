@@ -57,7 +57,7 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 #	0.6,
 #	0.7,
 #	0.8,
-	0.9,
+#	0.9,
 #	0.95,
 #	0.99,
 #	1
@@ -92,8 +92,8 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierSupports = (
-	0.0001,
-#	0.001,
+#	0.0001,
+	0.001,
 #	0.01,
 #	0.1,
 #	0.2,
@@ -121,7 +121,7 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 
 @ClassifierMaxRuleLens = (
 	1,
-#	2,
+	2,
 #	3,
 #	4,
 #	5
