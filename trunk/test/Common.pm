@@ -14,7 +14,8 @@ $OutputDirClassifierOR	= "$OutputDir/classifier_or";
 $OutputDirGraphs	= "$OutputDir/graphs";
 $OutputDirTables	= "$OutputDir/tables";
 
-$GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
+#$GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
+$GnuPlotApp		= '/usr/bin/gnuplot';
 
 @DataBases = (
 	'anneal.ac',
@@ -365,9 +366,9 @@ sub GetClassifierORRunResult ($$$$$$$$)
 	return GetRunResultFromOutputFile (GetClassifierOROutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]));
 }
 
-sub MakeAppHistogramGraph ($$$$$)
+sub MakeAppHistogramGraph ($$$$$$)
 {
-	my ($title, $xlabel, $ylabel, $graph, $accuracy_hash) = @_;
+	my ($title, $xlabel, $ylabel, $graph, $accuracy_hash, $logscale) = @_;
 
 	my ($db);
 
@@ -382,7 +383,8 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 
 	open OUTPUT_APP, ">$dat_file";
 
-	print OUTPUT_APP "data_file           lazy                classifier_c        classifier_o        classifier_or       \n";
+#	print OUTPUT_APP "data_file           lazy                classifier_c        classifier_o        classifier_or       \n";
+	print OUTPUT_APP "data_file           LAC                 non-orthogonal      orthogonal          ORIGAMI             \n";
 
 	foreach $data_base (@DataBases)
 	{
@@ -421,6 +423,8 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 	print OUTPUT "set title \"$title\"\n";
 	print OUTPUT "set xlabel \"$xlabel\"\n";
 	print OUTPUT "set ylabel \"$ylabel\"\n";
+
+	print OUTPUT "set logscale y\n" if $logscale;
 #	print OUTPUT "set yrange [0:1] noreverse nowriteback\n";
 	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col";
 	close OUTPUT;
