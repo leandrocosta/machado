@@ -121,9 +121,9 @@ sub make_best_app_histogram_graphs ()
 	$avg_rules_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$avg_rules_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_acc', \%accuracy_hsh);
-	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_pat', \%avg_patterns_hsh);
-	Common::MakeAppHistogramGraph ('Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_rul', \%avg_rules_hsh);
+	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_acc', \%accuracy_hsh, 0);
+	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_pat', \%avg_patterns_hsh, 1);
+	Common::MakeAppHistogramGraph ('Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_rul', \%avg_rules_hsh, 1);
 }
 
 sub make_avg_app_histogram_graphs ()
@@ -192,9 +192,9 @@ sub make_avg_app_histogram_graphs ()
 	$avg_pat_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_PATTERNS};
 	$avg_rul_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_RULES};
 
-	Common::MakeAppHistogramGraph ('Best Parameters Accuracy Histogram', 'Data Sets', 'Accuracy', 'bst_histogram_acc', \%avg_acc_hsh);
-	Common::MakeAppHistogramGraph ('Best Parameters Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'bst_histogram_pat', \%avg_pat_hsh);
-	Common::MakeAppHistogramGraph ('Best Parameters Rules Average Histogram', 'Data Sets', 'Rules Average', 'bst_histogram_rul', \%avg_rul_hsh);
+	Common::MakeAppHistogramGraph ('Best Parameters Accuracy Histogram', 'Data Sets', 'Accuracy', 'bst_histogram_acc', \%avg_acc_hsh, 0);
+	Common::MakeAppHistogramGraph ('Best Parameters Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'bst_histogram_pat', \%avg_pat_hsh, 1);
+	Common::MakeAppHistogramGraph ('Best Parameters Rules Average Histogram', 'Data Sets', 'Rules Average', 'bst_histogram_rul', \%avg_rul_hsh, 1);
 }
 
 sub make_ometric_histogram_graphs ($$$$$$$)
