@@ -114,39 +114,6 @@ sub make_test_classifier_o ($$$$$$$$$$$$$$$$)
 	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], time [$$avg_time]\n";
 
 	save_output_file ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $$avg_time, $$avg_patterns, $$avg_rules, $$accuracy);
-
-	if ($$accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
-	{
-		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
-		{
-			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
-			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
-			system "cp $log_file $best_log_file";
-		}
-	}
-
-=comment
-	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
-
-	open OUTPUT, ">$out_file";
-	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], accuracy [$$accuracy]\n";
-	close OUTPUT;
-
-	if ($$accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
-	{
-		my $best_out_file = Common::GetBestOutputFile ('classifier_o', $data_base);
-
-		print "cp $out_file $best_out_file\n";
-		system "cp $out_file $best_out_file";
-
-		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
-		{
-			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
-			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
-			system "cp $log_file $best_log_file";
-		}
-	}
-=cut
 }
 
 sub run_classifier_o ($$$$$$$$$$$$$$$$$$)
@@ -178,5 +145,17 @@ sub save_output_file ($$$$$$$$$$$$$$$$)
 
 		print "cp $out_file $best_out_file\n";
 		system "cp $out_file $best_out_file";
+
+		if ($data_base ne 'average')
+		{
+			my $fold;
+
+			for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+			{
+				my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".".$fold.".log";
+				my $best_log_file = "$output_dir/$data_base/best.$fold.log";
+				system "cp $log_file $best_log_file";
+			}
+		}
 	}
 }
