@@ -51,13 +51,13 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 #	0.01,
 #	0.1,
 #	0.2,
-#	0.3,
+	0.3,
 #	0.4,
-#	0.5,
+	0.5,
 #	0.6,
 #	0.7,
 #	0.8,
-	0.9,
+#	0.9,
 #	0.95,
 #	0.99,
 #	1
@@ -71,9 +71,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @MaxNumRankRules = (
-	1,
+#	1,
 #	10,
-#	100,
+	100,
 #	1000,
 #	10000,
 #	100000,
@@ -94,9 +94,9 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 @ClassifierSupports = (
 #	0.0001,
 #	0.001,
-#	0.01,
+	0.01,
 #	0.1,
-	0.2,
+#	0.2,
 #	0.3,
 #	0.4,
 #	0.5,
@@ -133,10 +133,10 @@ $GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 );
 
 @ClassifierOMetrics = (
-	's',
-	'c',
+#	's',
+#	'c',
 	'l',
-	'a'
+#	'a'
 );
 
 @ClassifierOMethods = (
