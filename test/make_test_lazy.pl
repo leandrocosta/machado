@@ -95,16 +95,6 @@ sub make_test_lazy ($$$$$$$$$$)
 
 	save_output_file ($data_base, $support, $confidence, $min_rules, $max_size, $ranking_size, $$avg_time, $$avg_patterns, $$avg_rules, $$accuracy);
 
-	if ($$accuracy > Common::GetBestAccuracy ('lazy', $data_base))
-        {
-		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
-		{
-			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".".$fold.".log";
-			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
-			system "cp $log_file $best_log_file";
-		}
-        }
-
 =comment
 	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".out";
 
@@ -158,5 +148,17 @@ sub save_output_file ($$$$$$$$$$)
 
 		print "cp $out_file $best_out_file\n";
 		system "cp $out_file $best_out_file";
-        }
+
+		if ($data_base ne 'average')
+		{
+			my $fold;
+
+			for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+			{
+				my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_rules."_m".$max_size."_l".$ranking_size.".".$fold.".log";
+				my $best_log_file = "$output_dir/$data_base/best.$fold.log";
+				system "cp $log_file $best_log_file";
+			}
+		}
+	}
 }

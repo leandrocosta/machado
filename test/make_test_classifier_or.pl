@@ -112,16 +112,6 @@ sub make_test_classifier_or ($$$$$$$$$$$$)
 
 	save_output_file ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $$avg_time, $$avg_patterns, $$avg_rules, $$accuracy);
 
-	if ($$accuracy > Common::GetBestAccuracy ('classifier_or', $data_base))
-	{
-		for ($fold = 0; $fold < $Common::NumFolds; $fold++)
-		{
-			my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".".$fold.".log";
-			my $best_log_file = "$output_dir/$data_base/best.$fold.log";
-			system "cp $log_file $best_log_file";
-		}
-	}
-
 =comment
 	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".out";
 
@@ -175,5 +165,17 @@ sub save_output_file ($$$$$$$$$$$$)
 
 		print "cp $out_file $best_out_file\n";
 		system "cp $out_file $best_out_file";
+
+		if ($data_base ne 'average')
+		{
+			my $fold;
+
+			for ($fold = 0; $fold < $Common::NumFolds; $fold++)
+			{
+				my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".".$fold.".log";
+				my $best_log_file = "$output_dir/$data_base/best.$fold.log";
+				system "cp $log_file $best_log_file";
+			}
+		}
 	}
 }
