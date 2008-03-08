@@ -1,16 +1,25 @@
 \chapter{Experimentos e Resultados}
 
-\section{O Aplicativo machado}
+\section{O Projeto \textbf{machado}}
 
+%\par
+%Algumas informações sobre o aplicativo (linguagem, número de linhas, opções de execução (--help), %\par
+%Mostrar gráfico de ortogonalidade? (métrica x acurácia)
+%\par
+%Mostrar tabela de acertos?
+%\par
+%O algoritmo não ortogonal está quase igual ao lazy - talvez ele nem precise ser citado
+%\par
+
+The project \textbf{machado} contains the implementation of an association rules based classifier with three different approaches.
 \par
-Algumas informações sobre o aplicativo (linguagem, número de linhas, opções de execução (--help), etc.
+The first one, called \textbf{non-orthogonal} just obtains the frequent patterns set and generates rules with it. After that, it chooses the more indicated class according to the rules contained in a rank considering confidence.
 \par
-Mostrar gráfico de ortogonalidade? (métrica x acurácia)
+The second one, called \textbf{orthogonal} obtains an orthogonal set of patterns from the frequent patterns set, and generates rules from that patterns set. After that, it chooses the more indiated class the same way it is done with the non-orthogonal approach.
 \par
-Mostrar tabela de acertos?
+the third one, called \textbf{ORIGAMI} is an implementation of ORIGAMI, as it was proposed in \cite{zaki07origami}.
 \par
-O algoritmo não ortogonal está quase igual ao lazy - talvez ele nem precise ser citado
-\par
+The execution options are shown below:
 
 \begin{verbatim}
 Usage: ./classifier [options]
@@ -43,7 +52,9 @@ Options:
   -h, --help                 Display this information
 \end{verbatim}
 
-The figure \ref{fig:histogram_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_pat} shows a histogram with the average number of patterns used for each classification, and the figure \ref{fig:histogram_rul} shows the average number of rules generated for each classification. For those three results it was used the best set of parameters for each dataset, for example, for anneal.ac we used support equals to 0.0001, but for waveform.ac we used support equals to  0.01, since the best results were obtained with this value.
+Now, we will show some graphics comparing the executions of the three approaches implemented in machado and LAC, the lazy associative classifier impelemted in \cite{Veloso06Lazy}.
+\par
+The figure \ref{fig:histogram_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_pat} shows a histogram with the average number of patterns used for each classification, and the figure \ref{fig:histogram_rul} shows the average number of rules generated for each classification. For these three results it was used the best sets of parameters for each application and dataset, for example, considering the orthogonal classifier, for anneal.ac we used support equals to 0.0001, but for waveform.ac we used support equals to 0.01, since the best results were obtained with this value.
 
 \begin{figure}[htbp]
 	\centering
@@ -56,22 +67,77 @@ The figure \ref{fig:histogram_acc} shows a histogram with the best accuracies fo
 	\centering
 	\includegraphics{graphs/histogram_pat.eps}
 	\caption{Patterns Histogram (best results for each dataset)}
-	\label{fig:histogram_acc}
+	\label{fig:histogram_pat}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics{graphs/histogram_rul.eps}
 	\caption{Rules Histogram (best results for each dataset)}
-	\label{fig:histogram_acc}
+	\label{fig:histogram_rul}
 \end{figure}
+
+\clearpage
+
+The figure \ref{fig:bst_histogram_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:bst_histogram_pat} shows a histogram with the average number of patterns used for each classification, and the figure \ref{fig:bst_histogram_rul} shows the average number of rules generated for each classification. For those three results it was used, for each application, the set of parameters that produced the best average accuracy for the whole set of data. The values for each parameter are shown in table \ref{tab:parms}.
+\par
+Some observations about the parameters - the support used by LAC is the absolute value 1 (one transaction), and not a relative value as in the other applications. Some parameters are not applicable to all approaches.
+
+\begin{table}[htbp]
+	\centering
+		\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		& \textbf{LAC}	& \textbf{non-orthogonal}	& \textbf{orthogonal} &	\textbf{ORIGAMI}	\\
+		\hline
+		support		& 1	& 0.0001		& 0.01		& 0.001		\\
+		\hline
+		confidence	& 0.95	& 0.0001		& 0.001		& 0.1		\\
+		\hline
+		min-num-rules	& 1	& 1			& 1		& 1		\\
+		\hline
+	max-num-rank-rules	& 10	& 1000			& 100		& 100		\\
+		\hline
+		min-rule-len	& 1	& 1			& 1		& -		\\
+		\hline
+		max-rule-len	& 1	& 1			& 2		& -		\\
+		\hline
+		metric		& -	& -			& similarity	& similarity	\\
+		\hline
+		method		& -	& -			& set		& -		\\
+		\hline
+		pat-ordering	& -	& -			& sorted	& -		\\
+		\hline
+		alpha		& -	& -			& -		& 0.2		\\
+		\hline
+		beta		& -	& -			& -		& 0.8		\\
+		\hline
+		\end{tabular}
+	\caption{Set of parameters for each run}
+	\label{tab:parms}
+\end{table}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics{graphs/bst_histogram_acc.eps}
 	\caption{Accuracy Histogram (best average results for all datasets)}
-	\label{fig:histogram_acc}
+	\label{fig:bst_histogram_acc}
 \end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics{graphs/bst_histogram_pat.eps}
+	\caption{Patterns Histogram (best average results for all datasets)}
+	\label{fig:bst_histogram_pat}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics{graphs/bst_histogram_rul.eps}
+	\caption{Rules Histogram (best average results for all datasets)}
+	\label{fig:bst_histogram_rul}
+\end{figure}
+
+\clearpage
 
 \section{Comparação Ortogonal x Não Ortogonal}
 
