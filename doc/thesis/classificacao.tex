@@ -1,17 +1,38 @@
 \chapter{Classificação Associativa}
 
-O artigo \cite{DBLP:conf/icde/ChengYHH07} possui uma seção dizendo por quê padrões frequentes são bons para classificação.
+Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por uma tupla $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
+\par
+O processo pode ser definido da seguinte forma: O conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes existentes. Um segundo conjunto de dados, chamado de base de instâncias de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento. O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. O que se espera é que as classes designadas pelo modelo coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
+
+%O artigo \cite{DBLP:conf/icde/ChengYHH07} possui uma seção dizendo por quê padrões frequentes são bons para classificação.
 
 \section{Fundamentos Teóricos e Definições}
 
-Procurar livros de mineração de dados e artigos antigos. \\
-Falar sobre regras de associação. \\
-Falar de árvores de decisão.
+Classificação já é um problema muito bem explorado na ciência da computação, e vários modelos têm sido propostos ao longo dos anos, que incluem modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos, como baseados em funções discriminantes \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos teste modelos, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
+\par
+Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{dong99caep, li01cmar, liu98integrating}. Testes métodos, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
+\par
+De acordo com \cite{Veloso06Lazy}, árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regas selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de descrição e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. Esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras importantes.
+\par
+Classificação associativa, por outro lado, executa uma pesquisa global por regras que satisfazem determinadas questões de qualidade, o que faz com que nenhuma regra de importância seja desconsiderada pelo algoritmo.
+%Procurar livros de mineração de dados e artigos antigos. \\
+%Falar sobre regras de associação. \\
+%Falar de árvores de decisão.
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
-Em \cite{Veloso06Lazy} O Adriano discute bem as duas estratégias, procurar mais artigos relacionados. \\
-Descrever as duas estratégias, e apresentar as vantagens do lazy.
+De acordo com \cite{Veloso06Lazy}, classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+\par
+Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra seja aplicada a uma instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
+\par
+Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas inutilizáveis durante a classificação, por serem desnecessárias para todas as instâncias de teste.
+\par
+Diferente das estratégias \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regas específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
+\par
+Em \cite{Veloso06Lazy}, encontramos a demonstração de que abordagens \textit{lazy} de classificadores associativos produzem resultados iguais ou melhores aos classificadores que utilizam a abordagem \textit{eager}.
+
+%Em \cite{Veloso06Lazy} O Adriano discute bem as duas estratégias, procurar mais artigos relacionados. \\
+%Descrever as duas estratégias, e apresentar as vantagens do lazy.
 
 \section{Métricas de Regras de Associação}
 
