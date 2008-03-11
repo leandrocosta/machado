@@ -1,4 +1,5 @@
 \chapter{Introdução}
+\label{chapter:introducao}
 
 Há muito já não é mais novidade o fato de que vivemos, hoje, na chamada \textbf{Era da Informação} (termo cunhado por Daniel Bell, pelo professor emérito da Universidade de Harvard), que se define pelo rápido desenvolvimento da tecnologia de informação, característica marcante da \textbf{Sociedade Pós-Industrial}, onde nota-se que mais importante que possuir a informação, é saber onde e como encontrá-la.
 \par
@@ -130,7 +131,7 @@ De acordo com \cite{salton75vsm}, o modelo de espaço vetorial, ou simplesmente m
 \par
 Já a ortogonalidade, particularmente, tem sido explorada em áreas como visualização \citep{cui07}, reconhecimento facial \citep{nagao98}, taxonomia \citep{smith00}, dentre outras.
 \par
-Como exemplo, na mineração de dados, podemos citar \cite{DBLP:conf/kdd/XinCYH06}, que utiliza métricas de similaridade e ortogonalidade para extrair, de um grande conjunto de padrões freqüentes, um subconjunto (top-$k$) de padrões com um valor mínimo de redundância. O autor comenta que este estudo abriu uma nova direção na procura por diferentes e significantes top-$k$ respostas para atividades de mineração de dados, que podem resultar em estudos promissores.
+Como exemplo de aplicação do termo em mineração de dados, podemos citar \cite{DBLP:conf/kdd/XinCYH06}, que utiliza métricas de significância e redundância para extrair, de um grande conjunto de padrões freqüentes, um subconjunto (top-$k$) de padrões com um valor mínimo de redundância. O autor comenta que este estudo abriu uma nova direção na procura por diferentes e significantes top-$k$ respostas para atividades de mineração de dados, que podem resultar em estudos promissores.
 
 % como forma de se obter uma medida de dissimilaridade entre duas entidades quaisquer. Um exemplo é o caso do \textbf{Modelo de Espaço Vetorial}, aplicado à \textbf{Recuperação de Informação}.
 %\par
@@ -140,6 +141,24 @@ Como exemplo, na mineração de dados, podemos citar \cite{DBLP:conf/kdd/XinCYH06}
 %Citar poucos artigos que tratam de ortogonalidade, como ORIGAMI \citep{zaki07origami}, Redundancy-Aware Top-k Patterns \citep{DBLP:conf/kdd/XinCYH06} e Orthogonal Decision Trees \citep{dutta2004orthogonal}. \\
 %Procurar mais fontes.
 
+\section{Objetivo}
+
+O objetivo deste trabalho é explorar o problema de classificação associativa em mineração de dados considerando ortogonalidade entre padrões freqüentes com os seguintes objetivos:
+
+\begin{itemize}
+	\item Minimizar o número de padrões utilizados na geração das regras, extraindo, do conjunto de padrões freqüentes, um subconjunto de padrões ortogonais, para que, a partir destes, seja gerado o conjunto de regras associativas necessárias para se realizar a classificação;
+	\item Diminuir a redundância das regras geradas, como conseqüência da utilização de ortogonalidade aplicada à estrutura dos padrões;
+	\item Diminuir a ambigüidade das regras associativas, como conseqüência da utilização de ortogonalidade aplicada à cobertura de classes e transações;
+	\item Aumentar a efetividade das classificações, como conseqüência da diminuição da redundância e da ambigüidade das regras, de acordo com os itens acima.
+\end{itemize}
+
 \section{Organização do Documento}
 
-Último texto a ser escrito...
+Este documento é dividido em cinco capítulos. O restante dos capítulos está organizado da seguinte forma:
+
+\begin{itemize}
+	\item O capítulo \ref{chapter:classificacao} possui uma base de informações relacionadas à classificação associativa, como definição do problema, definição e comparação entre as estratégias \textit{eager} e \textit{lazy}, uma breve apresentação das métricas mais utilizadas para se comparar regras de associação, e informações sobre alguns trabalhos relacionados encontrados na literatura;
+	\item No capítulo \ref{chapter:ortogonalidade} será apresentada a nova estratégia de classificação baseada em ortogonalidade. O conteúdo inclui uma discussão sobre métricas e estratégias de ortogonalidade utilizadas, uma explicação detalhada da utilização de ortogonalidade e pelo classificador e das heurística de obtenção de conjuntos ortogonais, e ainda a adaptação da estratégia ORIGAMI (encontrada na literatura) para o problema de classificação;
+	\item No capítulo \ref{chapter:resultados} serão apresentados os experimentos executados e os resultados obtidos durante a realização do trabalho;
+	\item O capítulo \ref{chapter:conclusao} possui um breve resumo do trabalho, além de sugestões para futuros trabalhos relacionados ao tema.
+\end{itemize}
