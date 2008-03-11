@@ -24,7 +24,7 @@ Classificação associativa, por outro lado, executa uma pesquisa global por regra
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
-Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
 \par
 Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra seja aplicada a uma instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
 \par

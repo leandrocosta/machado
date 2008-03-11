@@ -163,7 +163,9 @@ Este trabalho visa explorar o problema de classificação associativa em mineração
 
 \section{Trabalhos Relacionados}
 
-Na área de mineração de dados existem diversos trabalhos relacionados tanto com classificação quanto com ortogonalidade. Em \cite{DBLP:conf/kdd/XinCYH06}, os autores introduzem o problema da extração dos top-$k$ padrões livres de redundância através de um modelo que integra duas métricas - significância e redundância - numa única função objetivo. A idéia é obter, como resultado, um conjunto de $k$ padrões de alta significância e baixa redundância entre seus elementos. O artigo apresenta duas funções objetivo, e descreve um algoritmo guloso que resolve o problema com ordem de complexidade de tempo $O(\log k)$.
+Na literatura encontramos diversos trabalhos relacionados tanto com classificação associativa quanto com a obtenção de top-$k$ padrões como forma de compactar o conjunto de padrões freqüentes obtidos de uma base de dados com o objetivo de simplificar a visualização dos resultados, sendo que alguns destes trabalhos também possuem alguma relação com o termo ortogonalidade.
+\par
+Em \cite{DBLP:conf/kdd/XinCYH06}, os autores introduzem o problema da extração dos top-$k$ padrões livres de redundância através de um modelo que integra duas métricas - significância e relevância - numa única função objetivo. A idéia é obter, como resultado, um conjunto de $k$ padrões de alta significância e baixa redundância entre seus elementos. O artigo apresenta duas funções objetivo, e descreve um algoritmo guloso que resolve o problema com ordem de complexidade de tempo $O(\log k)$.
 \par
 Em \cite{Veloso06Lazy}, como já mencionado, é introduzida uma nova abordagem de classificação associativa - a abordagem \textit{lazy}. Este artigo discute a nova solução, e a compara com a abordagem \textit{eager} bastante explorada anteriormente, e apresenta a demonstração de que classificadores associativos baseados na abordagem \textit{lazy} produzem resultados iguais ou melhores que os baseados na abordagem \textit{eager}.
 \par
