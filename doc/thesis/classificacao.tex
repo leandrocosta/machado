@@ -58,19 +58,3 @@ Neste trabalho, o famoso \textit{framework} suporte-confiança foi escolhido como
 %Falar sobre similaridade, cobertura, lift, leverage, etc. \\
 %fonte: http://www.daylight.com/meetings/emug01/Bradshaw/Similarity/YAMS.html \\
 %fonte: http://wwwai.wu-wien.ac.at/\%7Ehahsler/research/association\_rules/measures.html
-
-\section{Trabalhos Relacionados}
-
-Na área de mineração de dados existem diversos trabalhos relacionados tanto com classificação quanto com ortogonalidade. Em \cite{DBLP:conf/kdd/XinCYH06}, os autores introduzem o problema da extração dos top-$k$ padrões livres de redundância através de um modelo que integra duas métricas - significância e redundância - numa única função objetivo. A idéia é obter, como resultado, um conjunto de $k$ padrões de alta significância e baixa redundância entre seus elementos. O artigo apresenta duas funções objetivo, e descreve um algoritmo guloso que resolve o problema com ordem de complexidade de tempo $O(\log k)$.
-\par
-Em \cite{Veloso06Lazy}, como já mencionado, é introduzida uma nova abordagem de classificação associativa - a abordagem \textit{lazy}. Este artigo discute a nova solução, e a compara com a abordagem \textit{eager} bastante explorada anteriormente, e apresenta a demonstração de que classificadores associativos baseados na abordagem \textit{lazy} produzem resultados iguais ou melhores que os baseados na abordagem \textit{eager}.
-\par
-Em \cite{veloso06multi}, os autores utilizam a abordagem \textit{lazy} de classificação associativa direcionado para classificação de documentos. O artigo apresenta um algoritmo de classificação capaz de analisar tanto o conteúdo dos documentos quanto a presença de \textit{links} de saída e de entrada para outros documentos. Os resultados obtidos demonstram que as inovações introduzidas pelos autores produzem mais efetivos e de maior desempenho que abordagens do estado da arte nas coleções utilizadas.
-\par
-Em \cite{zaki07origami} encontramos um novo paradigma para obtenção de uma representação resumida do conjunto de padrões freqüentes. O artigo introduz uma abordagem randômica para obtenção de padrões maximais que possui, como principal característica, a possibilidade de cobrir uniformemente o espaço dos padrões, e apresenta a formulação da obtenção do conjunto $\alpha$-ortogonal e $\beta$-representativo como um problema de otimização NP-Hard. Esta abordagem será discutida com mais detalhes na seção \ref{sec:ortogonalidade_origami}.
-
-%Falar de \cite{DBLP:conf/kdd/KnobbeH06}, que obtém, de um conjunto de itens, um itemset que particione uma base de dados o mais uniformemente possível.
-%Falar de \cite{DBLP:conf/icde/LentSW97} ??? artigo que realiza agrupamento de regras de associação num espaço bi-dimensional.
-%Falar de \cite{DBLP:conf/kdd/XinCYH06}, que extrai top-k padrões minimizando a redundância de um conjunto de padrões frequentes.
-%Falar sobre o ORIGAMI \cite{zaki07origami}.
-%Falar sobre o lazy \cite{Veloso06Lazy}
