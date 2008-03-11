@@ -1,10 +1,18 @@
 DOCUMENT=thesis
 DOCUMENT_TEX=${DOCUMENT}.tex
 
+all: graphs_all thesis
+
+graphs_all:
+	make -C graphs/ all
+
+graphs_clean:
+	make -C graphs/ clean
+
 thesis: thesis.pdf
 
 %.pdf: %.tex %.bbl
-	latex $<
+	pdflatex $<
 
 %.bbl: %.bib %.aux
 	bibtex $*
@@ -18,5 +26,5 @@ thesis: thesis.pdf
 #bibtex:
 #	bibtex ${DOCUMENT}
 #
-clean:
+clean: graphs_clean
 	rm -rf *.dvi *.blg *.bbl *.toc *.pdf *.out *.lot *.log *.lof *.aux *~
