@@ -12,6 +12,7 @@ graphs_clean:
 thesis: thesis.pdf
 
 %.pdf: %.tex %.bbl
+	latex $<
 	pdflatex $<
 
 %.bbl: %.bib %.aux
