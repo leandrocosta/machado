@@ -6,6 +6,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{type1ec}
 \usepackage{graphicx}
+\ifpdf
+	\usepackage{epstopdf}
+\fi
 \usepackage[
 	a4paper,
 	portuguese,
@@ -15,17 +18,19 @@
 	colorlinks]{hyperref}
 \usepackage{natbib}
 
-%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{theorem}{Teorema}[section]
+\newtheorem{definition}{Definição}
+\newtheorem{problem}{Problema}
 %\newtheorem{lemma}[theorem]{Lemma}
 %\newtheorem{proposition}[theorem]{Proposition}
 %\newtheorem{corollary}[theorem]{Corollary}
 
 %\newenvironment{proof}[1][Proof]{\begin{trivlist}
 %\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-\newenvironment{definition}[1][Definição]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-\newenvironment{problem}[1][Problema]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{definition}[1][Definição]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{problem}[1][Problema]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 %\newenvironment{example}[1][Example]{\begin{trivlist}
 %\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 %\newenvironment{remark}[1][Remark]{\begin{trivlist}
