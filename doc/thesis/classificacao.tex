@@ -1,18 +1,21 @@
 \chapter{Classificação Associativa}
+\label{chapter:classificacao}
 
-Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por uma tupla $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
+Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
 \par
-O processo pode ser definido da seguinte forma: O conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes existentes. Um segundo conjunto de dados, chamado de base de instâncias de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento. O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. O que se espera é que as classes designadas pelo modelo coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
+Este processo pode ser definido da seguinte forma: Um primeiro conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes previamente conhecidas. Um segundo conjunto de dados, chamado de base de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento.
+\par
+O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. O que se espera é que as classes designadas pelo modelo coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
 
 %O artigo \cite{DBLP:conf/icde/ChengYHH07} possui uma seção dizendo por quê padrões frequentes são bons para classificação.
 
-\section{Fundamentos Teóricos e Definições}
+\section{Fundamentos Teóricos}
 
-Classificação já é um problema muito bem explorado na ciência da computação, e vários modelos têm sido propostos ao longo dos anos, que incluem modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos, como baseados em funções discriminantes \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos teste modelos, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
+Classificação já é um problema muito bem explorado na ciência da computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos, como baseados em funções discriminantes \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
 \par
-Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{dong99caep, li01cmar, liu98integrating}. Testes métodos, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
+Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{dong99caep, li01cmar, liu98integrating}. Estes métodos, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
 \par
-De acordo com \cite{Veloso06Lazy}, árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regas selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de descrição e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. Esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras importantes.
+De acordo com \cite{Veloso06Lazy}, árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regras selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de decisão e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. Esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras importantes.
 \par
 Classificação associativa, por outro lado, executa uma pesquisa global por regras que satisfazem determinadas questões de qualidade, o que faz com que nenhuma regra de importância seja desconsiderada pelo algoritmo.
 %Procurar livros de mineração de dados e artigos antigos. \\
@@ -21,13 +24,13 @@ Classificação associativa, por outro lado, executa uma pesquisa global por regra
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
-De acordo com \cite{Veloso06Lazy}, classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
 \par
 Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra seja aplicada a uma instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
 \par
 Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas inutilizáveis durante a classificação, por serem desnecessárias para todas as instâncias de teste.
 \par
-Diferente das estratégias \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regas específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
+Diferente das estratégias \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regras específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
 \par
 Em \cite{Veloso06Lazy}, encontramos a demonstração de que abordagens \textit{lazy} de classificadores associativos produzem resultados iguais ou melhores aos classificadores que utilizam a abordagem \textit{eager}.
 
@@ -36,14 +39,38 @@ Em \cite{Veloso06Lazy}, encontramos a demonstração de que abordagens \textit{laz
 
 \section{Métricas de Regras de Associação}
 
-Falar sobre similaridade, cobertura, lift, leverage, etc. \\
-fonte: http://www.daylight.com/meetings/emug01/Bradshaw/Similarity/YAMS.html \\
-fonte: http://wwwai.wu-wien.ac.at/\%7Ehahsler/research/association\_rules/measures.html
+Classificadores associativos, após produzirem um conjunto de regras de associação a partir de documentos que constituem a base de treinamento, organizam as regras em ordem decrescente, de acordo com uma determinada métrica, para então utilizá-las na classificação de determinada instância de teste. Encontramos, na literatura, diversas métricas para este propósito, desde as mais conhecidas suporte e confiança até outras mais sofisticadas, como coerência, convicção, interesse, correlação, dentre outras.
+\par
+Abaixo, podemos encontrar a definição de algumas das mais utilizadas na literatura. Utilizamos o termo $Z$ para designar uma regra associativa, que também pode ser descrita como $X \Rightarrow Y$. O termo $\mathcal{D}$ foi utilizado para designar a base de treinamento. Chamamos de $P(Z)$ a probabilidade de que uma transação qualquer de $\mathcal{D}$ seja coberta por $Z$: \[P(Z) = \frac{frequencia(Z)}{|\mathcal{D}|},\] onde $frequencia(Z)$ é o número de transações em $\mathcal{D}$ cobertas por $Z$.
+
+\begin{itemize}
+	\item{Suporte:} Introduzido por \cite{agrawal93mining}, e definido como $P(Z)$, o suporte dá a proporção de transações na base de dados cobertas pela regra. Esta métrica é utilizada como uma medida da significância (ou importância) de um \textit{itemset}. A principal característica do suporte é a anti-monotonicidade, que diz que se um \textit{itemset} é freqüente, todos os seus subconjuntos também serão. A desvantagem do suporte está relacionado com os itens raros. Itens que ocorrem com baixa freqüência na base de dados podem ser desprezados, embora talvez sejam importantes para a tarefa de classificação;
+	\item{Confiança:} Esta métrica, também introduzida por \cite{agrawal93mining}, e definida como $confianca(X \Rightarrow Y) = P(Y|X)$, representa a probabilidade de que uma transação coberta pelo antecedente de uma regra também seja coberta pelo termo conseqüente. Confiança está relacionada com a validação da hipótese representada pela regra. Em geral, o suporte é utilizado para se encontrar \textit{itemsets} significativos na base de dados, e a confiança é aplicada como um segundo passo para gerar regras precisas. A desvantagem da confiança é que ela está diretamente relacionada com a freqüência do termo conseqüente. Pela forma que a confiança é calculada, termos conseqüentes com altos suportes tendem a produzir altos valores para confiança, mesmo se não existir nenhuma associação entre os dois termos da regra;
+	\item{Convicção:} Introduzida por \cite{brin97dynamic}, e definida como $conviccao(X \Rightarrow Y) = \frac{P(X) \times P(\neg Y)}{P(X \wedge \neg Y)}$, convicção foi desenvolvida como uma alternativa para confiança, pelo fato desta não capturar adequadamente a direção das associações. Convicção compara a probabilidade de $X$ aparecer sem $Y$ com a freqüência real do aparecimento de $X$ sem $Y$;
+	\item{\textit{Leverage}:} Introduzida por \cite{DBLP:books/mit/PF91/Piatetsky91}, e definida como $leverage(X \Rightarrow Y) = P(X \wedge Y) - (P(X) \times P(Y))$, \textit{leverage} mede a diferença de $X$ e $Y$ aparecendo juntos na base de dados e o que seria esperado se $X$ e $Y$ fossem estatisticamente dependentes;
+	\item{\textit{Lift}:} Esta métrica, introduzida por \cite{brin97dynamic}, e definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser susceptível a ruídos em pequenas bases de dados. Raros \textit{itemsets} com baixa probabilidade, que ocorrem juntos algumas vezes podem produzir altos valores para \textit{lift}.
+\end{itemize}
+
+Muitas outras métricas tem sido utilizadas em modelos de classificação associativa, em \cite{tan02} encontramos um ótimo estudo comparativo entre várias métricas, com descrição de propriedades chave que podem ser examinadas para se descobrir qual a métrica mais indicada para o domínio de cada aplicação. Em \cite{Wu07Association}, encontramos um estudo de um outro conjunto de métricas sob a perspectiva da propriedade \textit{null-(transaction) invariance}, de crítica importância para métricas de interesse.
+\par
+Neste trabalho, o famoso \textit{framework} suporte-confiança foi escolhido como métrica de maior prioridade. Nos casos em que estes dois coeficientes não acrescentam informação discriminativa o suficiente, um segundo conjunto de métricas é analisado, incluindo coerência \cite{omiecinski03}, Cosseno, Jaccard, Laplace \citep{tan02}, Kulk \citep{bradshaw01}, dentre outras.
+
+%Falar sobre similaridade, cobertura, lift, leverage, etc. \\
+%fonte: http://www.daylight.com/meetings/emug01/Bradshaw/Similarity/YAMS.html \\
+%fonte: http://wwwai.wu-wien.ac.at/\%7Ehahsler/research/association\_rules/measures.html
 
 \section{Trabalhos Relacionados}
 
-Falar de \cite{DBLP:conf/kdd/KnobbeH06}, que obtém, de um conjunto de itens, um itemset que particione uma base de dados o mais uniformemente possível.
-Falar de \cite{DBLP:conf/icde/LentSW97} ??? artigo que realiza agrupamento de regras de associação num espaço bi-dimensional.
-Falar de \cite{DBLP:conf/kdd/XinCYH06}, que extrai top-k padrões minimizando a redundância de um conjunto de padrões frequentes.
-Falar sobre o ORIGAMI \cite{zaki07origami}.
-Falar sobre o lazy \cite{Veloso06Lazy}
+Na área de mineração de dados existem diversos trabalhos relacionados tanto com classificação quanto com ortogonalidade. Em \cite{DBLP:conf/kdd/XinCYH06}, os autores introduzem o problema da extração dos top-$k$ padrões livres de redundância através de um modelo que integra duas métricas - significância e redundância - numa única função objetivo. A idéia é obter, como resultado, um conjunto de $k$ padrões de alta significância e baixa redundância entre seus elementos. O artigo apresenta duas funções objetivo, e descreve um algoritmo guloso que resolve o problema com ordem de complexidade de tempo $O(\log k)$.
+\par
+Em \cite{Veloso06Lazy}, como já mencionado, é introduzida uma nova abordagem de classificação associativa - a abordagem \textit{lazy}. Este artigo discute a nova solução, e a compara com a abordagem \textit{eager} bastante explorada anteriormente, e apresenta a demonstração de que classificadores associativos baseados na abordagem \textit{lazy} produzem resultados iguais ou melhores que os baseados na abordagem \textit{eager}.
+\par
+Em \cite{veloso06multi}, os autores utilizam a abordagem \textit{lazy} de classificação associativa direcionado para classificação de documentos. O artigo apresenta um algoritmo de classificação capaz de analisar tanto o conteúdo dos documentos quanto a presença de \textit{links} de saída e de entrada para outros documentos. Os resultados obtidos demonstram que as inovações introduzidas pelos autores produzem mais efetivos e de maior desempenho que abordagens do estado da arte nas coleções utilizadas.
+\par
+Em \cite{zaki07origami} encontramos um novo paradigma para obtenção de uma representação resumida do conjunto de padrões freqüentes. O artigo introduz uma abordagem randômica para obtenção de padrões maximais que possui, como principal característica, a possibilidade de cobrir uniformemente o espaço dos padrões, e apresenta a formulação da obtenção do conjunto $\alpha$-ortogonal e $\beta$-representativo como um problema de otimização NP-Hard. Esta abordagem será discutida com mais detalhes na seção \ref{sec:ortogonalidade_origami}.
+
+%Falar de \cite{DBLP:conf/kdd/KnobbeH06}, que obtém, de um conjunto de itens, um itemset que particione uma base de dados o mais uniformemente possível.
+%Falar de \cite{DBLP:conf/icde/LentSW97} ??? artigo que realiza agrupamento de regras de associação num espaço bi-dimensional.
+%Falar de \cite{DBLP:conf/kdd/XinCYH06}, que extrai top-k padrões minimizando a redundância de um conjunto de padrões frequentes.
+%Falar sobre o ORIGAMI \cite{zaki07origami}.
+%Falar sobre o lazy \cite{Veloso06Lazy}
