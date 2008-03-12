@@ -576,10 +576,13 @@ PatternList* PatternList::GetOrthogonalPatternListORIGAMIRandomCandidate (const 
 	for (uint32 patternID = 0; patternID < num_patterns; patternID++)
 		triedPatternArray [patternID] = false;
 
-	Pattern *pPattern = GetRandomPattern ();
+	if (size)
+	{
+		Pattern *pPattern = GetRandomPattern ();
 
-	pOrthogonalPatternList->PushBack (pPattern);
-	triedPatternArray [pPattern->GetPatternID ()] = true;
+		pOrthogonalPatternList->PushBack (pPattern);
+		triedPatternArray [pPattern->GetPatternID ()] = true;
+	}
 
 	uint32 tries = 0;
 
