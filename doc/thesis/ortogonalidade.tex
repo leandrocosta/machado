@@ -25,12 +25,15 @@ Para se extrair um sub-conjunto de padrões de alta significância e baixa redundâ
 %A aplicação da ortogonalidade no modelo de classificação associativa tem como principal objetivo a diminuição de redundância no conjunto de regras geradas durante a fase de treinamento. Para tanto, podem ser  naO objetivo da ortogonalidade é diminuir o número de padrões utilizados para gerar as regras de associação. Logo, a sua utilização ....
 
 \subsection{Similaridade entre Padrões}
+\label{sec:ortogonalidade_metricas_similaridade}
 
-Dizemos que dois padrões são ortogonais se eles não possuem itens em comum. Dessa forma, pode-se dizer que os padrões \textit{ABC} e \textit{DEF} são ortogonais, mas \textit{ABC} e \textit{CDE} não são, já que o item \textit{C} está presente nos dois padrões. O mesmo pode ser aplicado para conjuntos maiores de padrões, por exemplo, os padrões \textit{AB}, \textit{CD} e \textit{EF} são ortogonais, mas os padrões \textit{AB}, \textit{BC} e \textit{CD} não são. Entretanto, a simples informação de um determinado conjunto de padrões é ortogonal ou não é insuficiente para que a possível solução seja avaliada. É preciso desenvolver uma métrica que forneça uma medida contínua de ortogonalidade.
+Considerando a estrutura dos padrões, dizemos que dois padrões são ortogonais se eles não possuem itens em comum. Dessa forma, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado para conjuntos maiores de padrões, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não são.
+\par
+Entretanto, a simples informação de um determinado conjunto de padrões é ortogonal ou não é insuficiente para que a possível solução seja avaliada. É preciso desenvolver uma métrica que forneça uma medida contínua de ortogonalidade.
 \par
 Uma forma de se obter esta medida, é analisar os itens dos padrões. Sabemos que dois padrões são ortogonais se eles não compartilham itens, ou seja, a presença de um mesmo item em mais de um padrão do conjunto deve diminuir a medida de ortogonalidade do mesmo.
 \par
-Assim, para cada item $i$, pertencente a, pelo menos, um dos padrões do conjunto, é dado um peso \[w_i = \frac{p-k}{p-1},\] onde $k$ é o número de padrões do conjunto que contém o item $i$. De acordo com esta expressão, se o conjunto possui quatro padrões, e um item $i$ está presente em apenas um deles, o peso $w_i$ seria $1$. Se o item está presente em $3$ padrões do conjunto, o peso $w_i$ seria $1/3$. Os itens compartilhados por todos os padrões teriam peso igual a $0$.
+Assim, para cada item $i$, pertencente a, pelo menos, um dos padrões do conjunto, é dado um peso \[w_i = \frac{p-k}{p-1},\] onde $k$ é o número de padrões do conjunto que contém o item $i$. De acordo com esta expressão, se o conjunto possui quatro padrões, e um item $i$ está presente em apenas um deles, o seu peso $w_i$ é $1$. Se o item está presente em $3$ padrões do conjunto, o peso $w_i$ é $\frac{1}{3}$. Itens compartilhados por todos os padrões têm peso igual a $0$.
 \par
 Considerando que existam $I$ itens distintos em todo o conjunto de padrões, a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i w_i}{I}.\]
 \par
@@ -38,16 +41,38 @@ obs.: inserir um exemplo aqui...
 %Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo.
 
 \subsection{Cobertura de Transações}
+\label{sec:ortogonalidade_metricas_transacoes}
 
-Dois padrões são ortogonais se são encontrados em transações distintas na base de dados. Fazer figura com exemplo.
+Considerando o espaço de transações, dizemos que dois padrões são ortogonais se eles cobrem áreas diferentes da base de dados, ou seja, se não existem sobreposições nas coberturas de cada padrão do conjunto.
+\par
+Na figura \ref{fig:covex1} temos uma representação de uma base de dados, e os conjuntos de transações cobertas por três padrões ($X$, $Y$ e  $Z$). As transações que fazem parte das áreas $T_X$, $T_Y$ e $T_Z$ são cobertas por apenas um dos padrões ($X$, $Y$ e $Z$ respectviamente). As transações de $T_{XY}$ são cobertas por $X$ e $Y$, e as transações de $T_{XYZ}$ são cobertas pelos três padrões do exemplo. Se precisamos de padrões que cobrem diferentes áreas da base de dados, então nós estamos interessados em maximizar $T_X$, $T_Y$ e $T_Z$, neste caso.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{img/coverage}
+\caption{Orthogonality by Coverage}
+\label{fig:covex1}
+\end{figure}
+
+Consideramos que cada transação $t$, coberta por, pelo menos, um dos $p$ padrões do conjunto, possui um peso, e este peso é dado por: \[w_t = \frac{p - k}{p - 1},\] onde $k$ é o número de padrões que cobrem a transação $t$. De acordo com esta expressão, se nós temos 4 padrões, e uma transação $t$ é coberta por apenas um deles, então o seu peso $w_t$ será $1$. Se esta transação é coberta por dois padrões do conjunto, o valor de $w_t$ será $\frac{1}{2}$. As transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
+\par
+Dada esta expressão para se calcular o peso de cada transação, podemos, agora, calcular a medida de ortogonalidade do conjunto de padrões. Considerando que temos $T$ transações distintas e cobertas pelos padrões, a medida de ortogonalidade do conjunto é dada por: \[\frac{\sum_t w_t}{T}.\]
+
+\par
+obs.: inserir um exemplo aqui...
 
 \subsection{Cobertura de Classes}
+\label{sec:ortogonalidade_metricas_classes}
 
+As duas métricas de ortogonalidade apresentadas nas seções \ref{sec:ortogonalidade_metricas_similaridade} e \ref{sec:ortogonalidade_metricas_transacoes} estão relacionadas apenas aos padrões e às transações da base, e podem ser utilizadas em qualquer tipo de aplicação que utilize mineração de padrões freqüentes. Já a métrica apresentada nesta seção é voltada diretamente para o problema da classificação, pois está diretamente relacionada às classes das transações cobertas pelos padrões do conjunto.
+\par
 Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, além de encontrados em transações distintas, as transações devem possuir classes distintas também. Pensar em exemplo com figura.
 
 \section{Estratégias de Ortogonalidade}
 \label{sec:ortogonalidade_estrategias}
 
+Após a definição das métricas de ortogonalidade, é necessário definir como elas serão utilizadas para se obter a medida de ortogonalidade do conjunto.
+\par
 Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
 
 \subsection{Ortogonalidade por conjunto}
