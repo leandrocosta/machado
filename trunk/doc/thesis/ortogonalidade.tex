@@ -1,16 +1,41 @@
-\chapter{Ortogonalidade}
+\chapter{Padrões Freqüentes e Ortogonais}
 \label{chapter:ortogonalidade}
 
-Neste capítulo serão apresentadas as contribuições do trabalho, estratégias de ortogonalidade, bla bla bla...
-
+Como já foi mencionado na seção \ref{sec:introducao_padroes}, padrões freqüentes são largamente utilizados em diversas aplicações da mineração de dados, incluindo regras de associação, classificação , agrupamento, indexação, dentre outras. Encontra-se, na literatura, uma grande quantidade de algoritmos de mineração de padrões freqüentes que, para muitas aplicações, produzem resultados satisfatórios (como os apresentados na seção \ref{sec:introducao_trabalhos}). Entretanto, este problema ainda não foi totalmente resolvido.
+\par
+Uma das razões que contribuem para este fato é que, de acordo com a definição, qualquer sub-conjunto de um padrão freqüente também é freqüente, o que faz com que o tamanho do conjunto-solução do algoritmo cresça de maneira explosiva. A introdução de conceitos como padrões fechados ou padrões maximais ajudou a resolver este problema, porém, as abordagens existentes minimizam o conjunto-solução apenas sob a perspectiva do suporte, não considerando a semântica dos dados, o que pode fazer com que padrões interessantes ao usuário sejam retirados da solução durante o processo de minimização do resultado.
+\par
+Outro desafio que ainda persiste na mineração de padrões freqüentes é a eliminação de redundância nos resultados obtidos. Em muitas aplicações encontramos a necessidade de extrair um pequeno conjunto de padrões freqüentes que tenham, não só alta significância, mas também baixa redundância. A significância é, em geral, definida pelo contexto da aplicação. De acordo com \cite{DBLP:conf/kdd/XinCYH06}, alguns estudos recentes têm se concentrado em como extrair top-$k$ padrões com alta significância, e outros em como remover redundância entre padrões.
+\par
+O objetivo da aplicação de ortogonalidade na mineração de padrões freqüentes é desenvolver uma técnica capaz de extrair um sub-conjunto de padrões com alta significância e baixa redundância entre seus elementos.
+\par
+%Como já foi mencionado no capítulo \ref{chapter:classificacao}, encontra-se, na literatura, diversos trabalhos relacionados com classificação, explorando o problema das mais variadas maneiras, e apresentando modelos diferentes, capazes de se adaptar aos diversos tipos de aplicações existentes.
+%\par
+%Paralelamente, a ortogonalidade tem aparecido, em alguns dos últimos trabalhos de mineração de dados, como uma forma de se resolver problemas de redundância em conjuntos de padrões freqüentes extraídos de determinada base de dados.
+%\par
+%A utilização de ortogonalidade para se diminuir a redundância dos conjuntos de padrões utilizados na geração de regras associativas aparece como uma possível forma de se melhorar a eficácia de tais classificadores. Assim, surge a motivação para a aplicação de métricas de ortogonalidade entre padrões no modelo de classificação associativa.
+%\par
+%Este capítulo apresenta as informações relacionadas à nova abordagem de classificação associativa proposta. Na seção \ref{sec:ortogonalidade_metricas} serão apresentadas as métricas de ortogonalidade exploradas, na seção \ref{sec:ortogonalidade_estrategias} serão discutidas as estratégias de aplicação das métricas. A seção \ref{sec:ortogonalidade_classificacao} possui uma discussão sobre as formas como a ortogonalidade foi utilizada dentro do modelo de classificação, e a seção \ref{sec:ortogonalidade_origami} apresenta a estratégia ORIGAMI e adaptação desenvolvida para o problema de classificação.
+ 
 \section{Métricas de Ortogonalidade}
 \label{sec:ortogonalidade_metricas}
 
-Breve introdução.
+Para se extrair um sub-conjunto de padrões de alta significância e baixa redundância do conjunto original de padrões freqüentes, é preciso definir métricas que possibilitem a avaliação dos vários conjuntos-solução possíveis. Nas próximas sub-seções apresentaremos três métricas de ortogonalidade propostas e indicadas para o problema da classificação associativa.
+
+%A aplicação da ortogonalidade no modelo de classificação associativa tem como principal objetivo a diminuição de redundância no conjunto de regras geradas durante a fase de treinamento. Para tanto, podem ser  naO objetivo da ortogonalidade é diminuir o número de padrões utilizados para gerar as regras de associação. Logo, a sua utilização ....
 
 \subsection{Similaridade entre Padrões}
 
-Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo.
+Dizemos que dois padrões são ortogonais se eles não possuem itens em comum. Dessa forma, pode-se dizer que os padrões \textit{ABC} e \textit{DEF} são ortogonais, mas \textit{ABC} e \textit{CDE} não são, já que o item \textit{C} está presente nos dois padrões. O mesmo pode ser aplicado para conjuntos maiores de padrões, por exemplo, os padrões \textit{AB}, \textit{CD} e \textit{EF} são ortogonais, mas os padrões \textit{AB}, \textit{BC} e \textit{CD} não são. Entretanto, a simples informação de um determinado conjunto de padrões é ortogonal ou não é insuficiente para que a possível solução seja avaliada. É preciso desenvolver uma métrica que forneça uma medida contínua de ortogonalidade.
+\par
+Uma forma de se obter esta medida, é analisar os itens dos padrões. Sabemos que dois padrões são ortogonais se eles não compartilham itens, ou seja, a presença de um mesmo item em mais de um padrão do conjunto deve diminuir a medida de ortogonalidade do mesmo.
+\par
+Assim, para cada item $i$, pertencente a, pelo menos, um dos padrões do conjunto, é dado um peso \[w_i = \frac{p-k}{p-1},\] onde $k$ é o número de padrões do conjunto que contém o item $i$. De acordo com esta expressão, se o conjunto possui quatro padrões, e um item $i$ está presente em apenas um deles, o peso $w_i$ seria $1$. Se o item está presente em $3$ padrões do conjunto, o peso $w_i$ seria $1/3$. Os itens compartilhados por todos os padrões teriam peso igual a $0$.
+\par
+Considerando que existam $I$ itens distintos em todo o conjunto de padrões, a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i w_i}{I}.\]
+\par
+obs.: inserir um exemplo aqui...
+%Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo.
 
 \subsection{Cobertura de Transações}
 
@@ -21,6 +46,7 @@ Dois padrões são ortogonais se são encontrados em transações distintas na base d
 Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, além de encontrados em transações distintas, as transações devem possuir classes distintas também. Pensar em exemplo com figura.
 
 \section{Estratégias de Ortogonalidade}
+\label{sec:ortogonalidade_estrategias}
 
 Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
 
@@ -39,6 +65,7 @@ Ortogonalidade por cobertura de transações: Quantidade de transações cobertas po
 Ortogonalidade por cobertura de classes: Mais complicado: Ortogonalidade é a média das razões entre a diferença das coberturas e a maior cobertura de cada classe. 
 
 \section{Classificação e Ortogonalidade}
+\label{sec:ortogonalidade_classificacao}
 
 Falar sobre como utilizar o conceito de ortogonalidade em algoritmos de regras de associação: \\
 Ortogonalidade por itens: Motivação: Encontrar um conjunto de padrões ortogonais que representem bem todo o conjunto de padrões frequentes, e que gere regras não redundantes; \\
