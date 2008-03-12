@@ -350,6 +350,7 @@ Pattern* Transaction::GetRandomMaximalFrequentPattern (
 		if ((float32) pItem->GetProjectionFrequence () / projection_size >= support)
 		{
 			pPattern = new Pattern (pItem);
+			pPattern->SetSupport ((float32) pPattern->GetFrequence () / projection_size);
 			triedItemArray [pItem->GetItemID ()] = true;
 			break;
 		}
@@ -367,7 +368,7 @@ Pattern* Transaction::GetRandomMaximalFrequentPattern (
 			{
 				pItem = GetRandomItem ();
 
-				if (! pItem->GetItemID () < num_items || triedItemArray [pItem->GetItemID ()])
+				if (pItem->GetItemID () >= num_items || triedItemArray [pItem->GetItemID ()])
 					pItem = NULL;
 				else
 					break;
@@ -419,8 +420,6 @@ PatternList* Transaction::GetRandomMaximalFrequentPatternList (
 
 	while (tries < size)
 	{
-//		LOGMSG (LOW_LEVEL, "Transaction::GetRandomMaximalFrequentPatternList () - tries [%u]\n", tries);
-
 		Pattern *pPattern = GetRandomMaximalFrequentPattern (support, projection_size);
 
 		if (pPattern)
