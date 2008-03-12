@@ -28,8 +28,6 @@ O processo de descoberta de conhecimento em bases de dados consiste na seguinte 
 \end{enumerate}
 
 De acordo com \cite{Fayyad96}, mineração de dados é um passo do processo KDD que consiste na enumeração de padrões sobre os dados, sujeito a aceitáveis limitações de eficiência computacional. Considerando que padrões enumeráveis sobre uma base finita de dados são potencialmente infinitos, e que tal enumeração envolve alguma forma de pesquisa num espaço amplo, limitações computacionais adicionam severos limites sobre o sub-espaço que pode ser explorado por um algoritmo de mineração de dados. Por este motivo, a constante busca por novas metodologias e algoritmos de enumeração de padrões em grandes bases de dados têm sido foco de inúmeras frentes de pesquisa em mineração de dados.
-\par
-Nas próximas sub-seções apresentaremos definições e fundamentos teóricos necessários para entendimento do restante do documento.
 
 %\par
 %A princípio, mineração de dados é uma técnica que pode ser aplicada a quaisquer tipos de dados, incluindo dados de transações, \textit{multimedia}, dados espaciais, informações temporais, e até mesmo a \textbf{WWW} (\textit{World Wide Web}). Os tipos de padrões que podem se descobertos dependem das funcionalidades aplicadas. As funcionalidades de mineração de dados e a variedade de conhecimento que elas podem descobrir são apresentadas na seguinte lista:
@@ -57,33 +55,11 @@ Nas próximas sub-seções apresentaremos definições e fundamentos teóricos necessá
 
 \subsection{Padrões Freqüentes}
 
-De acordo com \cite{goethals03survey}, padrões freqüentes assumem um papel essencial em muitas tarefas de mineração de dados que têm, como objetivo, encontrar padrões de interesse numa base, tais como regras de associação, correlações, seqüências, episódios, classificadores, agrupamentos e muitos outros dos quais a mineração de regras de associação é um dos problemas mais populares. Desde a introdução deste termo, em 1993, por \citeauthor{agrawal93mining}, a mineração de padrões freqüentes e regras de associação têm recebido grande atenção. Nas últimas décadas, centenas de artigos científicos foram publicados apresentando novos algoritmos (ou melhorias para os anteriormente desenvolvidos) para resolver estes problemas de forma mais eficiente. O problema da mineração de padrões freqüentes pode ser descrito da seguinte forma:
+De acordo com \cite{Han00}, padrões freqüentes são padrões que aparecem freqüentemente num conjunto de dados. Por exemplo, um conjunto de itens, como ``café'' e ``leite'', que aparecem juntos com freqüência em transações de uma base de dados, é considerado um padrão freqüente. Uma seqüência, como comprar uma câmera fotográfica, e logo depois um cartão de memória, se ocorre freqüentemente na base de dados de um estabelecimento comercial, também é considerada um padrão freqüente.
 \par
-Seja $\mathcal{I}$ um conjunto de itens. Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset}, ou \textit{k-itemset} se ele contém $k$ itens.
+Padrões freqüentes assumem um papel essencial em muitas tarefas de mineração de dados que possuem, como objetivo, encontrar padrões de determinado interesse numa base, tais como regras de associação, correlações, seqüências, episódios, classificadores, agrupamentos e muitas outras das quais a mineração de regras de associação é uma das mais populares \citep{goethals03survey}. Desde a introdução deste termo, em 1993, por \citeauthor{agrawal93mining}, a mineração de padrões freqüentes e regras de associação têm recebido grande atenção. Nas últimas décadas, centenas de artigos científicos foram publicados apresentando algoritmos, abordagens e melhorias para resolver os problemas de mineração de padrões freqüentes e regras de associação de forma mais eficiente.
 \par
-Uma transação sobre $\mathcal{I}$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset}. Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \mathcal{I}$, se $X \subseteq I$.
-\par
-Uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$ é um conjunto de transações sobre $\mathcal{I}$. Omitiremos $\mathcal{I}$ sempre que a sua dedução for trivial, de acordo com o contexto.
-\par
-A cobertura de um \textit{itemset} $X$ em $\mathcal{D}$ consiste no conjunto de identificadores de transações das transações em $\mathcal{D}$ cobertas por $X$: \[cobertura(X,\mathcal{D}) := \left\{ tid |(tid,I) \in \mathcal{D}, X \subseteq I \right\}.\]
-
-O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é o número de transações cobertas por $X$ em $\mathcal{D}$: \[suporte(X,\mathcal{D}) := |cobertura(X,\mathcal{D})|.\]
-
-A freqüência de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$: \[frequencia(X,\mathcal{D}) := P(X) = \frac{suporte(X,\mathcal{D})}{|\mathcal{D}|}.\]
-
-Note que $|\mathcal{D}| = suporte(\left\{\right\},\mathcal{D})$. Omitiremos $\mathcal{D}$ sempre que a sua dedução for trivial, de acordo com o contexto.
-\par
-Um \textit{itemset} é freqüente se o seu suporte é maior ou igual a um dado valor absoluto mínimo $\sigma_{abs}$, com $0 \leq \sigma_{abs} \leq |\mathcal{D}|$. Quando se considera freqüências de \textit{itemsets} ao invés de suportes, é utilizado um valor relativo $\sigma_{rel}$, com $0 \leq \sigma_{rel} \leq 1$. Obviamente, $\sigma_{abs} = \left\lceil \sigma_{rel} \cdot |\mathcal{D}| \right\rceil$. No restante deste texto, sempre que não especificarmos a natureza de $\sigma$, $\sigma_{rel}$ deve ser considerado.
-
-\begin{definition}
-Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\mathcal{D}$ em relação a $\sigma$ é dado por: \[\mathcal{F}(\mathcal{D},\sigma):=\left\{X \subseteq \mathcal{I} | suporte (X,\mathcal{D}) \geq \sigma \right\}.\]
-\end{definition}
-
-\begin{problem}[Mineração de Padrões Freqüentes]
-Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, e um suporte mínimo $\sigma$, encontre $\mathcal{F}(\mathcal{D},\sigma)$.
-\end{problem}
-
-Na prática, não estamos interessados apenas no conjunto de \textit{itemsets} $\mathcal{F}$, mas também nos respectivos suportes desses \textit{itemsets}. Na próxima seção apresentaremos definições e fundamentos teóricos relacionados à mineração de regras de associação.
+Dentre as características mais importantes dos padrões freqüentes, podemos citar o suporte, que representa a medida de popularidade do padrão em relação à base. Um padrão é considerado freqüente se possui suporte maior que um dado limite inferior. Na prática, não estamos interessados apenas no conjunto de padrões freqüentes, mas também nos respectivos suportes destes padrões.
 
 %Ótimo Survey sobre mineração de padrões freqüentes (possui descrição do problema, mineração de itemsets, espaço de busca, regras de associação, algoritmo apriori fp-growth, etc...): \cite{goethals03survey}.
 
@@ -100,25 +76,8 @@ Considerando uma base de dados de transações em que cada transação represente um
 	\item Encontre todas as regras relacionando itens localizados nas prateleiras A e B do estabelecimento. Estas regras poderiam auxiliar no planejamento das prateleiras, e na localização dos produtos;
 	\item Encontre as $k$ ``melhores'' regras que possuem ``café'' como conseqüente. As ``melhores'' regras podem ser obtidas com o auxílio de métricas associadas a cada regra, como suporte e confiança.
 \end{itemize}
-	
-\par
-Uma regra de associação é uma aplicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$. A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$ \citep{agrawal93mining}.
-\par
-O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup Y$ em $\mathcal{D}$, e a freqüência da regra é a freqüência de $X \cup Y$. Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma_{abs}$ (ou $\sigma_{rel}$).
-\par
-A confiança de uma regra de associação $X \Rightarrow Y$ em $\mathcal{D}$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$: \[confianca(X \Rightarrow Y,\mathcal{D}):=P(Y|X) = \frac{suporte(X \cup Y,\mathcal{D})}{suporte(X,\mathcal{D})}.\]
 
-Dizemos que a regra é de confiança se $P(X|Y)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
-
-\begin{definition}
-Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por: \[\mathcal{R}(\mathcal{D},\sigma,\gamma):=\left\{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma),confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\right\}.\]
-\end{definition}
-
-\begin{problem}[Mineração de Regras de Associação]
-Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, um valor mínimo para suporte $\sigma$ e um valor mínimo para confiança $\gamma$, encontre $\mathcal{R}(\mathcal{D},\sigma,\gamma)$.
-\end{problem}
-
-Além do conjunto de regras de associação, estamos interessados também no suporte e na confiança de cada regra. Na próxima seção, apresentaremos definição e exemplos de utilização do termo ortogonalidade (também explorado pelo restante do documento) na ciência da computação.
+Uma das características mais conhecidas das regras de associação é a confiança. A confiança de uma regra representa a probabilidade de que uma transação da base de dados coberta pelo antecedente da regra também seja coberta pelo termo conseqüente. Em geral, além do conjunto de regras de associação, estamos interessados também no suporte dos termos antecedentes, e na confiança de cada regra.
 
 %\par
 %Artigo que fala de classificação e Regras de Associação: \cite{liu98integrating} (CBA)
@@ -177,7 +136,7 @@ O problema de compactação do conjunto de padrões freqüentes é explorado de diver
 \par
 Também encontramos muitos outros trabalhos relacionados com o problema da classificação: Em \cite{liu98integrating} encontramos a proposta de integração entre as áreas mineração de regras de associação e classificação baseada em regras. \cite{zaki99charm} demonstra que é possível gerar regras de associação utilizando apenas padrões fechados, sem perda de informação, e apresenta um eficiente algoritmo para mineração de padrões fechados. Em \cite{DBLP:conf/sdm/WangK05}, encontramos um algoritmo de geração de regras com o objetivo de incluir, no conjunto-resultado, apenas as regras de alta confiança encontradas para cada instância da base de teste. Em \cite{li01cmar} os autores apresentam um novo método de classificação associativa baseada em regras de múltipla associação. O algoritmo realiza a classificação de uma instância de teste com o auxílio de um sub-conjunto de regras que casam com a instância. Em \cite{DBLP:conf/sdm/YinH03}, encontramos um algoritmo guloso que gera as regras de associação diretamente da base de treinamento. \cite{kuok98mining} introduz regras de associação baseadas em \textit{fuzzy sets}. Em \cite{DBLP:conf/icde/ChengYHH07} os autores realizam um estudo do problema de classificação e apresentam um \textit{framework} que relaciona padrões freqüentes com métricas discriminativas tais como ganho de informação. E finalmente, \cite{DBLP:conf/icde/LentSW97} apresenta um algoritmo de classificação \textit{multi-label} com a intenção de reduzir a redundância de informações durante o processo de aprendizado existente nas propostas anteriores.
 \par
-E ainda, abordagem \textit{lazy} proposta por \cite{Veloso06Lazy}, e utilizada em \cite{veloso06multi}, também obteve resultados satisfatórios em outras aplicações: \citep{veloso06, Veloso2007}.
+E ainda, a abordagem \textit{lazy} proposta por \cite{Veloso06Lazy}, e utilizada em \cite{veloso06multi}, também obteve resultados satisfatórios em outras aplicações: \citep{veloso06, Veloso2007}.
 
 \section{Organização do Documento}
 
