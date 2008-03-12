@@ -1,16 +1,6 @@
 \chapter{Classificação Associativa}
 \label{chapter:classificacao}
 
-Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
-\par
-Este processo pode ser definido da seguinte forma: Um primeiro conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes previamente conhecidas. Um segundo conjunto de dados, chamado de base de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento.
-\par
-O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. O que se espera é que as classes designadas pelo modelo coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
-
-%O artigo \cite{DBLP:conf/icde/ChengYHH07} possui uma seção dizendo por quê padrões frequentes são bons para classificação.
-
-\section{Fundamentos Teóricos}
-
 Classificação já é um problema muito bem explorado na ciência da computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos, como baseados em funções discriminantes \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
 \par
 Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{dong99caep, li01cmar, liu98integrating}. Estes métodos, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
@@ -18,9 +8,66 @@ Como uma alternativa para árvores de decisão, a classificação associativa foi pr
 De acordo com \cite{Veloso06Lazy}, árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regras selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de decisão e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. Esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras importantes.
 \par
 Classificação associativa, por outro lado, executa uma pesquisa global por regras que satisfazem determinadas questões de qualidade, o que faz com que nenhuma regra de importância seja desconsiderada pelo algoritmo.
-%Procurar livros de mineração de dados e artigos antigos. \\
-%Falar sobre regras de associação. \\
-%Falar de árvores de decisão.
+
+\section{Fundamentos Teóricos}
+
+Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
+\par
+Este processo pode ser definido da seguinte forma: Um primeiro conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes previamente conhecidas. Um segundo conjunto de dados, chamado de base de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento.
+\par
+O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. O que se espera é que as classes designadas pelo modelo coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
+\par
+A função de mapeamento de um classificador associativo é representada por um conjunto de regras de associação. Tais regras são geradas a partir de um conjunto de padrões freqüentes extraído da base de treinamento. Nas seções \ref{sec:classificacao_padroes} e \ref{sec:classificacao_regras} serão apresentados os fundamentos teóricos que estão por trás dos padrões freqüentes e das regras de associação de um classificador associativo.
+
+\subsection{Padrões Freqüentes}
+\label{sec:classificacao_padroes}
+
+O problema da mineração de padrões freqüentes pode ser descrito da seguinte forma:
+\par
+Seja $\mathcal{I}$ um conjunto de itens. Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset}, ou \textit{k-itemset} se ele contém $k$ itens.
+\par
+Uma transação sobre $\mathcal{I}$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset}. Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \mathcal{I}$, se $X \subseteq I$.
+\par
+Uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$ é um conjunto de transações sobre $\mathcal{I}$. Omitiremos $\mathcal{I}$ sempre que a sua dedução for trivial, de acordo com o contexto.
+\par
+A cobertura de um \textit{itemset} $X$ em $\mathcal{D}$ consiste no conjunto de identificadores de transações das transações em $\mathcal{D}$ cobertas por $X$: \[cobertura(X,\mathcal{D}) := \left\{ tid |(tid,I) \in \mathcal{D}, X \subseteq I \right\}.\]
+
+O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é o número de transações cobertas por $X$ em $\mathcal{D}$: \[suporte(X,\mathcal{D}) := |cobertura(X,\mathcal{D})|.\]
+
+A freqüência de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$: \[frequencia(X,\mathcal{D}) := P(X) = \frac{suporte(X,\mathcal{D})}{|\mathcal{D}|}.\]
+
+Note que $|\mathcal{D}| = suporte(\left\{\right\},\mathcal{D})$. Omitiremos $\mathcal{D}$ sempre que a sua dedução for trivial, de acordo com o contexto.
+\par
+Um \textit{itemset} é freqüente se o seu suporte é maior ou igual a um dado valor absoluto mínimo $\sigma_{abs}$, com $0 \leq \sigma_{abs} \leq |\mathcal{D}|$. Quando se considera freqüências de \textit{itemsets} ao invés de suportes, é utilizado um valor relativo $\sigma_{rel}$, com $0 \leq \sigma_{rel} \leq 1$. Obviamente, $\sigma_{abs} = \left\lceil \sigma_{rel} \cdot |\mathcal{D}| \right\rceil$. No restante deste texto, sempre que não especificarmos a natureza de $\sigma$, $\sigma_{rel}$ deve ser considerado.
+
+\begin{definition}
+Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\mathcal{D}$ em relação a $\sigma$ é dado por: \[\mathcal{F}(\mathcal{D},\sigma):=\left\{X \subseteq \mathcal{I} | suporte (X,\mathcal{D}) \geq \sigma \right\}.\]
+\end{definition}
+
+\begin{problem}[Mineração de Padrões Freqüentes]
+Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, e um suporte mínimo $\sigma$, encontre $\mathcal{F}(\mathcal{D},\sigma)$.
+\end{problem}
+
+\subsection{Regras de Associação}
+\label{sec:classificacao_regras}
+
+Uma regra de associação é uma aplicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$. A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$ \citep{agrawal93mining}.
+\par
+O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup Y$ em $\mathcal{D}$, e a freqüência da regra é a freqüência de $X \cup Y$. Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma_{abs}$ (ou $\sigma_{rel}$).
+\par
+A confiança de uma regra de associação $X \Rightarrow Y$ em $\mathcal{D}$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$: \[confianca(X \Rightarrow Y,\mathcal{D}):=P(Y|X) = \frac{suporte(X \cup Y,\mathcal{D})}{suporte(X,\mathcal{D})}.\]
+
+Dizemos que a regra é de confiança se $P(X|Y)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
+
+\begin{definition}
+Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por: \[\mathcal{R}(\mathcal{D},\sigma,\gamma):=\left\{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma),confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\right\}.\]
+\end{definition}
+
+\begin{problem}[Mineração de Regras de Associação]
+Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, um valor mínimo para suporte $\sigma$ e um valor mínimo para confiança $\gamma$, encontre $\mathcal{R}(\mathcal{D},\sigma,\gamma)$.
+\end{problem}
+
+%O artigo \cite{DBLP:conf/icde/ChengYHH07} possui uma seção dizendo por quê padrões frequentes são bons para classificação.
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
