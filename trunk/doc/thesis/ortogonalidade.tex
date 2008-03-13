@@ -54,6 +54,8 @@ Na figura \ref{fig:covex1} temos uma representação de uma base de dados, e os co
 \label{fig:covex1}
 \end{figure}
 
+A métrica de cobertura de transações pode ser calculada de maneira análoga à relacionada métrica de similaridade entre padrões, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as transações cobertas pelos padões, e não os seus itens.
+\par
 Consideramos que cada transação $t$, coberta por, pelo menos, um dos $p$ padrões do conjunto, possui um peso, e este peso é dado por: \[w_t = \frac{p - k}{p - 1},\] onde $k$ é o número de padrões que cobrem a transação $t$. De acordo com esta expressão, se nós temos 4 padrões, e uma transação $t$ é coberta por apenas um deles, então o seu peso $w_t$ será $1$. Se esta transação é coberta por dois padrões do conjunto, o valor de $w_t$ será $\frac{1}{2}$. As transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
 Dada esta expressão para se calcular o peso de cada transação, podemos, agora, calcular a medida de ortogonalidade do conjunto de padrões. Considerando que temos $T$ transações distintas e cobertas pelos padrões, a medida de ortogonalidade do conjunto é dada por: \[\frac{\sum_t w_t}{T}.\]
@@ -64,30 +66,46 @@ obs.: inserir um exemplo aqui...
 \subsection{Cobertura de Classes}
 \label{sec:ortogonalidade_metricas_classes}
 
-As duas métricas de ortogonalidade apresentadas nas seções \ref{sec:ortogonalidade_metricas_similaridade} e \ref{sec:ortogonalidade_metricas_transacoes} estão relacionadas apenas aos padrões e às transações da base, e podem ser utilizadas em qualquer tipo de aplicação que utilize mineração de padrões freqüentes. Já a métrica apresentada nesta seção é voltada diretamente para o problema da classificação, pois está diretamente relacionada às classes das transações cobertas pelos padrões do conjunto.
+As duas métricas de ortogonalidade apresentadas nas seções \ref{sec:ortogonalidade_metricas_similaridade} e \ref{sec:ortogonalidade_metricas_transacoes} estão relacionadas apenas com os padrões e as transações da base, e podem ser utilizadas em qualquer tipo de aplicação. Já a métrica apresentada nesta seção é voltada diretamente para o problema da classificação, pois está relacionada às classes das transações cobertas pelos padrões do conjunto.
 \par
-Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, além de encontrados em transações distintas, as transações devem possuir classes distintas também. Pensar em exemplo com figura.
+Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, o conjunto de transações cobertas por cada um dos padrões não devem possuir classes em comum.
+\par
+A métrica de cobertura de classes pode ser calculada de maneira análoga às relacionadas métricas de similaridade entre padrões e cobertura de transações, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as classes existentes nas transações cobertas pelos padrões.
+\par
+Consideramos que cada classe $c$, que aparece em transações cobertas por, pelo menos, um dos $p$ padrões do conjunto acima de $90\%$ da média esperada, possui um peso, e este peso é dado por: \[w_c = \frac{p - k}{p - 1},\] onde $k$ é o número de padrões que cobrem uma quantidade de transações da classe $c$ maior que o esperado. De acordo com esta expressão, se nós temos 4 padrões, e uma classe $c$ que aparece em transações cobertas por apenas um deles, então o seu peso $w_c$ será $1$. Se esta classe aparece em transações coberta por dois padrões do conjunto de maneira balanceada (por exemplo, se a classe aparece em $50\%$ das transações cobertas por cada padrão), o valor de $w_c$ será $\frac{1}{2}$. As classes que aparecem por igual em transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
+\par
+Dada esta expressão para se calcular o peso de cada classe, podemos, agora, calcular a medida de ortogonalidade do conjunto de padrões. Considerando que temos $C$ classes distintas que aparecem em transações cobertas pelos padrões, a medida de ortogonalidade do conjunto é dada por: \[\frac{\sum_c w_c}{C}.\]
+\par
+obs.:Pensar em exemplo com figura.
 
 \section{Estratégias de Ortogonalidade}
 \label{sec:ortogonalidade_estrategias}
 
-Após a definição das métricas de ortogonalidade, é necessário definir como elas serão utilizadas para se obter a medida de ortogonalidade do conjunto.
+Após a definição das métricas, é necessário definir como elas serão utilizadas para se obter a medida de ortogonalidade do conjunto. Na literatura, encontramos algumas estratégias interessantes.
 \par
-Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
+Em \cite{zaki07origami}, a métrica de ortogonalidade só é aplicada a pares de padrões, e os autores optaram por utilizar como medida de ortogonalidade do conjunto a medida da ortogonalidade entre os dois elementos mais similares deste conjunto.
+\par
+Em \cite{DBLP:conf/kdd/XinCYH06} os autores optaram por construir métricas de significância aplicáveis a padrões e métricas de redundância aplicáveis a pares de padrões. O valor da função que compreende as duas métricas é obtido pela soma das significâncias de cada padrão do conjunto menos a média das redundâncias existentes entre cada par de padrões.
+\par
+Neste trabalho, duas soluções foram implementadas. A primeira delas é a ortogonalidade por conjunto, onde aplicamos as métricas de ortogonalidade apresentadas na seção \ref{sec:ortogonalidade_metricas} considerando todo o conjunto solução.
+\par
+A segunda delas é baseada na solução proposta por \cite{DBLP:conf/kdd/XinCYH06}. As métricas apresentadas foram aplicadas somente a pares de padrões, e a ortogonalidade do conjunto foi obtida por meio da média das ortogonalidades de cada par.
 
-\subsection{Ortogonalidade por conjunto}
+%Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
 
-Apresentar e discutir as expressões: \\
-Similaridade: Expressão que dá um peso para cada item encontrado nos padrões do conjunto; \\
-Cobertura de Transações: Expressão que dá um peso para cada transação coberta pelo conjunto de padrões; \\
-Cobertura de Classes: Expressão que dá um peso para cada classe encontrada nas transações cobertas pelos padrões.
+%\subsection{Ortogonalidade por conjunto}
 
-\subsection{Ortogonalidade Par-a-par}
+%Apresentar e discutir as expressões: \\
+%Similaridade: Expressão que dá um peso para cada item encontrado nos padrões do conjunto; \\
+%Cobertura de Transações: Expressão que dá um peso para cada transação coberta pelo conjunto de padrões; \\
+%Cobertura de Classes: Expressão que dá um peso para cada classe encontrada nas transações cobertas pelos padrões.
 
-Discutir as expressões par a par (similaridade pode ser dada por interseção sobre união de elementos, ortogonalidade pode ser dada por 1 - similaridade): \\
-Ortogonalidade por itens: Quantidade de itens que aparecem em apenas um dos padrões / quantidade de itens que aparecem nos dois padrões. \\
-Ortogonalidade por cobertura de transações: Quantidade de transações cobertas por apenas um dos padrões / quantidade de transações cobertas pelos dois padrões. \\
-Ortogonalidade por cobertura de classes: Mais complicado: Ortogonalidade é a média das razões entre a diferença das coberturas e a maior cobertura de cada classe. 
+%\subsection{Ortogonalidade Par-a-par}
+
+%Discutir as expressões par a par (similaridade pode ser dada por interseção sobre união de elementos, ortogonalidade pode ser dada por 1 - similaridade): \\
+%Ortogonalidade por itens: Quantidade de itens que aparecem em apenas um dos padrões / quantidade de itens que aparecem nos dois padrões. \\
+%Ortogonalidade por cobertura de transações: Quantidade de transações cobertas por apenas um dos padrões / quantidade de transações cobertas pelos dois padrões. \\
+%Ortogonalidade por cobertura de classes: Mais complicado: Ortogonalidade é a média das razões entre a diferença das coberturas e a maior cobertura de cada classe. 
 
 \section{Classificação e Ortogonalidade}
 \label{sec:ortogonalidade_classificacao}
