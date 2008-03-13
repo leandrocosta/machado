@@ -187,7 +187,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 
 	PatternList *pPatternList = pTransaction->GetPatternList (mSupport, mpProjectionTransactionList->GetSize (), mMinRuleLen, mMaxRuleLen, rPatternSet);
 
-	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTranscation () - patterns:\n");
+	LOGMSG (HIGH_LEVEL, "DataBase::ClassifyTransaction () - patterns:\n");
 	pPatternList->Print ();
 
 	string	class_guess	= "";
