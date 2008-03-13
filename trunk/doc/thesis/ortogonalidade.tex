@@ -20,7 +20,11 @@ O objetivo da aplicação de ortogonalidade na mineração de padrões freqüentes é d
 \section{Métricas de Ortogonalidade}
 \label{sec:ortogonalidade_metricas}
 
-Para se extrair um sub-conjunto de padrões de alta significância e baixa redundância do conjunto original de padrões freqüentes, é preciso definir métricas que possibilitem a avaliação dos vários conjuntos-solução possíveis. Nas próximas sub-seções apresentaremos três métricas de ortogonalidade propostas e indicadas para o problema da classificação associativa.
+Para se extrair um sub-conjunto de padrões de alta significância e baixa redundância do conjunto original de padrões freqüentes, é preciso definir métricas que possibilitem a avaliação dos vários conjuntos-solução possíveis. Em \cite{DBLP:conf/kdd/XinCYH06} os autores utilizam, em seus experimentos, o coeficiente de \textbf{Jaccard} \citep{jain88} aplicado à cobertura da base de dados para se obter uma medida de distância entre dois padrões: \[D(p_1,p_2) = 1 - \frac{|TS(p_1) \cap TS(p_2)|}{|TS(p_1) \cup TS(p_2)|},\] onde $TS(p_1)$ é o conjunto de transações cobertas pelo padrão $p_1$.
+\par
+Em \cite{zaki07origami} os autores discutem diferentes métricas de similaridade entre grafos, incluindo, além do coeficiente de Jaccard: \[sim(G_a, G_b) = \frac{|t(G_a) \cap t(G_b)|}{|t(G_a) \cup t(G_b)|},\] uma métrica de distância para grafos baseada no máximo sub-grafo comum \citep{bunke98}: \[sim_{mc}(G_1, G_2) = \frac{|G_{mc}|}{max(|G_1|,|G_2|)},\] onde $G_{mc}$ é o maior sub-grafo comum entre $G_1$ e $G_2$.
+\par
+A principal características destas métricas é que elas foram desenvolvidas para pares de padrões, e não para conjuntos de padrões. No nosso caso, estamos interessados em métricas que definem a ortogonalidade de conjuntos. Nas próximas sub-seções apresentaremos três métricas de ortogonalidade propostas e indicadas para o problema da classificação associativa.
 
 %A aplicação da ortogonalidade no modelo de classificação associativa tem como principal objetivo a diminuição de redundância no conjunto de regras geradas durante a fase de treinamento. Para tanto, podem ser  naO objetivo da ortogonalidade é diminuir o número de padrões utilizados para gerar as regras de associação. Logo, a sua utilização ....
 
@@ -37,7 +41,7 @@ Assim, para cada item $i$, pertencente a, pelo menos, um dos padrões do conjunto
 \par
 Considerando que existam $I$ itens distintos em todo o conjunto de padrões, a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i w_i}{I}.\]
 \par
-obs.: inserir um exemplo aqui...
+TODO: inserir um exemplo aqui.
 %Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo.
 
 \subsection{Cobertura de Transações}
@@ -59,9 +63,8 @@ A métrica de cobertura de transações pode ser calculada de maneira análoga à rel
 Consideramos que cada transação $t$, coberta por, pelo menos, um dos $p$ padrões do conjunto, possui um peso, e este peso é dado por: \[w_t = \frac{p - k}{p - 1},\] onde $k$ é o número de padrões que cobrem a transação $t$. De acordo com esta expressão, se nós temos 4 padrões, e uma transação $t$ é coberta por apenas um deles, então o seu peso $w_t$ será $1$. Se esta transação é coberta por dois padrões do conjunto, o valor de $w_t$ será $\frac{1}{2}$. As transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
 Dada esta expressão para se calcular o peso de cada transação, podemos, agora, calcular a medida de ortogonalidade do conjunto de padrões. Considerando que temos $T$ transações distintas e cobertas pelos padrões, a medida de ortogonalidade do conjunto é dada por: \[\frac{\sum_t w_t}{T}.\]
-
 \par
-obs.: inserir um exemplo aqui...
+TODO: inserir um exemplo aqui.
 
 \subsection{Cobertura de Classes}
 \label{sec:ortogonalidade_metricas_classes}
@@ -76,20 +79,21 @@ Consideramos que cada classe $c$, que aparece em transações cobertas por, pelo m
 \par
 Dada esta expressão para se calcular o peso de cada classe, podemos, agora, calcular a medida de ortogonalidade do conjunto de padrões. Considerando que temos $C$ classes distintas que aparecem em transações cobertas pelos padrões, a medida de ortogonalidade do conjunto é dada por: \[\frac{\sum_c w_c}{C}.\]
 \par
-obs.:Pensar em exemplo com figura.
+TODO: pensar num exemplo com figura.
 
 \section{Estratégias de Ortogonalidade}
 \label{sec:ortogonalidade_estrategias}
 
-Após a definição das métricas, é necessário definir como elas serão utilizadas para se obter a medida de ortogonalidade do conjunto. Na literatura, encontramos algumas estratégias interessantes.
+Após a introdução das métricas, é necessário definir como elas serão utilizadas para se obter a medida de ortogonalidade do conjunto. Na literatura, encontramos algumas estratégias interessantes.
 \par
-Em \cite{zaki07origami}, a métrica de ortogonalidade só é aplicada a pares de padrões, e os autores optaram por utilizar como medida de ortogonalidade do conjunto a medida da ortogonalidade entre os dois elementos mais similares deste conjunto.
+Em \cite{zaki07origami}, a métrica de ortogonalidade só é aplicada a pares de padrões, e os autores optaram por utilizar como valor de ortogonalidade do conjunto a medida da ortogonalidade entre os dois elementos mais similares deste conjunto.
 \par
 Em \cite{DBLP:conf/kdd/XinCYH06} os autores optaram por construir métricas de significância aplicáveis a padrões e métricas de redundância aplicáveis a pares de padrões. O valor da função que compreende as duas métricas é obtido pela soma das significâncias de cada padrão do conjunto menos a média das redundâncias existentes entre cada par de padrões.
 \par
-Neste trabalho, duas soluções foram implementadas. A primeira delas é a ortogonalidade por conjunto, onde aplicamos as métricas de ortogonalidade apresentadas na seção \ref{sec:ortogonalidade_metricas} considerando todo o conjunto solução.
+Neste trabalho, duas soluções foram implementadas. A primeira delas é a ortogonalidade por conjunto, onde aplicamos as métricas de ortogonalidade apresentadas na seção \ref{sec:ortogonalidade_metricas} considerando todo o conjunto solução. A segunda é baseada na solução proposta por \cite{DBLP:conf/kdd/XinCYH06} - as métricas são aplicadas somente a pares de padrões, e a ortogonalidade do conjunto é obtida por meio da média das ortogonalidades de cada par.
 \par
-A segunda delas é baseada na solução proposta por \cite{DBLP:conf/kdd/XinCYH06}. As métricas apresentadas foram aplicadas somente a pares de padrões, e a ortogonalidade do conjunto foi obtida por meio da média das ortogonalidades de cada par.
+É fácil perceber que as três métricas propostas na seção \ref{sec:ortogonalidade_metricas} são equivalentes ao coeficiente de Jaccard quando aplicadas a conjuntos de dois padrões. Tomando, como exemplo, a métrica de similaridade entre padrões, temos que a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i(\frac{p-k}{p-1})}{I}.\]
+Nos casos em que os conjuntos possuem necessariamente dois padrões: \[\frac{\sum_i(2-k)}{I},\] onde $k$ é o número de padrões que possuem o item $i$. Analisando a expressão acima, temos que $I$ corresponde ao tamanho do conjunto de itens encontrados nos dois padrões, ou seja, \[I = |p_1| \cup |p_2|,\] onde $|p_1|$ é o tamanho do padrão $p_1$, e a parcela $(2-k)$ terá valor $1$ para itens que estão presentes em apenas um padrão, e $2$ para itens presentes nos dois padrões, ou seja, \[\sum_i(2-k) = |p_1| \cap |p_2|.\]
 
 %Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
 
