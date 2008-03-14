@@ -92,9 +92,13 @@ Em \cite{DBLP:conf/kdd/XinCYH06} os autores optaram por construir métricas de si
 \par
 Neste trabalho, duas soluções foram implementadas. A primeira delas é a ortogonalidade por conjunto, onde aplicamos as métricas de ortogonalidade apresentadas na seção \ref{sec:ortogonalidade_metricas} considerando todo o conjunto solução. A segunda é baseada na solução proposta por \cite{DBLP:conf/kdd/XinCYH06} - as métricas são aplicadas somente a pares de padrões, e a ortogonalidade do conjunto é obtida por meio da média das ortogonalidades de cada par.
 \par
-É fácil perceber que as três métricas propostas na seção \ref{sec:ortogonalidade_metricas} são equivalentes ao coeficiente de Jaccard quando aplicadas a conjuntos de dois padrões. Tomando, como exemplo, a métrica de similaridade entre padrões, temos que a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i(\frac{p-k}{p-1})}{I}.\]
-Nos casos em que os conjuntos possuem necessariamente dois padrões: \[\frac{\sum_i(2-k)}{I},\] onde $k$ é o número de padrões que possuem o item $i$. Analisando a expressão acima, temos que $I$ corresponde ao tamanho do conjunto de itens encontrados nos dois padrões, ou seja, \[I = |p_1| \cup |p_2|,\] onde $|p_1|$ é o tamanho do padrão $p_1$, e a parcela $(2-k)$ terá valor $1$ para itens que estão presentes em apenas um padrão, e $2$ para itens presentes nos dois padrões, ou seja, \[\sum_i(2-k) = |p_1| \cap |p_2|.\]
-
+É fácil perceber que as três métricas propostas na seção \ref{sec:ortogonalidade_metricas} são equivalentes ao coeficiente de Jaccard quando aplicadas a conjuntos de dois padrões. Tomando, como exemplo, a métrica de similaridade entre padrões, temos que a ortogonalidade do conjunto é dada pela expressão: \[\frac{\sum_i(\frac{p-k}{p-1})}{I}.\] Nos casos em que os conjuntos possuem necessariamente dois padrões: \[\frac{\sum_i(2-k)}{I},\] onde $k$ é o número de padrões que possuem o item $i$.
+\par
+Analisando a expressão acima, temos que $I$ corresponde ao tamanho do conjunto de itens encontrados nos dois padrões, ou seja, \[I = |p_1 \cup p_2|,\] onde $|p_1|$ é o tamanho do padrão $p_1$, e a parcela $(2-k)$ terá valor $1$ para itens que estão presentes em apenas um padrão, e $2$ para itens presentes nos dois padrões, ou seja, \[\sum_i(2-k) = |p_1 \cap p_2|,\] logo, a métrica de ortogonalidade baseada em similaridade entre padrões, quando aplicada par-a-par, é dada pela seguinte expressão: \[\frac{\sum_{i=1}^{N-1}{\sum_{j=i+1}^N{\frac{|p_i \cap p_j|}{|p_i \cup p_j|}}}}{\frac{N \times (N-1)}{2}},\] onde $N$ é o número de padrões do conjunto.
+\par
+A métrica de ortogonalidade baseada em cobertura de transações, quando aplicada par-a-par, é dada pela seguinte expressão: \[\frac{\sum_{i=1}^{N-1}{\sum_{j=i+1}^N{\frac{|TS(p_i) \cap TS(p_j)|}{|TS(p_i) \cup TS(p_j)|}}}}{\frac{N \times (N-1)}{2}},\] onde $N$ é o número de padrões do conjunto, e $TS(p_i)$ é o conjunto de transações cobertas pelo padrão $p_i$.
+\par
+A métrica de ortogonalidade baseada em cobertura de classes, quando aplicada par-a-par, é dada pela seguinte expressão: \[\frac{\sum_{i=1}^{{N_p}-1}{\sum_{j=i+1}^{N_p}{\left(\frac{\sum_{k=1}^{N_c}{\frac{|CS(p_i) - CS(p_j)|}{max(|CS(p_i)|, |CS(p_j)|)}}}{N_c}\right)}}}{\frac{N \times (N-1)}{2}},\] onde $N_p$ é o número de padrões do conjunto, $N_c$ é o número de classes cobertas pelos padrões e $CS(p_i)$ é o conjunto de classes cobertas pelo padrão $p_i$.
 %Breve introdução, falar sobre métricas utilizadas por \cite{DBLP:conf/kdd/XinCYH06} e \cite{zaki07origami}.
 
 %\subsection{Ortogonalidade por conjunto}
@@ -114,20 +118,48 @@ Nos casos em que os conjuntos possuem necessariamente dois padrões: \[\frac{\sum
 \section{Classificação e Ortogonalidade}
 \label{sec:ortogonalidade_classificacao}
 
-Falar sobre como utilizar o conceito de ortogonalidade em algoritmos de regras de associação: \\
-Ortogonalidade por itens: Motivação: Encontrar um conjunto de padrões ortogonais que representem bem todo o conjunto de padrões frequentes, e que gere regras não redundantes; \\
-Ortogonalidade por cobertura de transações: Encontrar um conjunto de padrões que cubram áres ortogonais, e dessa forma, distintas da base de dados, diminuindo a redundância de informações durante a geração das regras, e mais que isso, diminuindo a possibilidade de encontrar regras redundantes; \\
-Ortogonalidade por cobertura de classes: Encontrar um conjunto de padrões que aparecem em transações de classes distintas, ou seja, padrões que apontam para classes distintas. A idéia é gerar regras não redundantes, e obter a classificação das regras de maior peso no ranking.
+Como já foi dito na seção \ref{sec:introducao_objetivos}, a utilização da ortogonalidade no problema da classificação associativa tem como objetivo aumentar a efetividade das classificações, como conseqüência da diminuição da redundância e da ambigüidade das regras. Uma das formas de se fazer isso seria aplicar ortogonalidade no conjunto de regras geradas por classificadores associativos. Com isso, seria possível extrair, de todo o conjunto de regras obtidas, apenas um sub-conjunto representativo de regras com alta significância e baixa redundância, e a partir destas, realizar a classificação das instâncias de teste.
+\par
+Em \cite{DBLP:conf/kdd/XinCYH06} os autores apresentam uma proposta de utilização de ortogonalidade aplicada a \textit{prefetch} de blocos de acesso a disco. Os autores consideram a similaridade de duas regras igual a $0$ quando os termos conseqüentes são diferentes, e igual ao coeficiente de Jaccard aplicado aos termos antecedentes quando os conseqüentes são iguais.
+\par
+É possível aplicar este modelo no problema da classificação associativa, considerando a ortogonalidade entre duas regras é igual a $0$ se as classes para as quais elas apontam são diferentes, e inversamente proporcionais ao coeficiente de Jaccard (ou alguma outra métrica qualquer) aplicado aos termos antecedentes se as classes para as quais elas apontam são iguais. Dessa forma, estaríamos gerando todas as regras possíveis, a partir do conjunto de padrões freqüentes obtidos por meio de um determinado suporte, e extraindo um sub-conjunto que consiste apenas das mais representativas, para então realizar a classificação da instância de teste.
+\par
+Neste trabalho, porém, optamos por aplicar a ortogonalidade não ao conjunto de regras geradas, mas sim ao conjunto de padrões utilizados para gerar as regras. A idéia é gerar regras a partir de um sub-conjunto dos padrões freqüentes obtidos, que consiste apenas dos padrões ortogonais. A principal diferença desta abordagem, em relação à anterior, é que as métricas de ortogonalidade são aplicadas apenas aos termos antecedentes - os padrões, enquanto que, na abordagem anterior, também são considerados os termos conseqüentes das regras, ou seja, as classes.
+\par
+As três métricas descritas na seção \ref{sec:ortogonalidade_metricas} foram utilizadas, cada uma com uma intenção. A similaridade entre padrões foi utilizada com o objetivo de se encontrar um sub-conjunto de padrões represente bem todo o conjunto de padrões freqüentes. Por ser uma métrica que considera a representação estrutural dos padrões, ela é uma métrica que se aplica no espaço dos padrões, e não das transações da base. Neste caso, estamos interessados em diminuir, principalmente, a redundância das regras, ou seja, não gerar regras com um alto nível de similaridade entre os termos antecedentes.
+\par
+A cobertura de transações foi utilizada com o objetivo de se encontrar padrões ortogonais no espaço de transações. Com esta métrica, espera-se obter um conjunto de padrões cuja cobertura da base de dados seja ortogonal, ou seja, que as regras geradas por estes padrões apontem para transações diferentes na base de dados. A intenção, neste caso, é diminuir a ambigüidade das regras, além da redundância.
+\par
+A cobertura de classes é uma métrica definida especialmente para a classificação, já que ela considera as classes das transações da base de treinamento para definir o conjunto de padrões ortogonais. Esta métrica é uma adaptação da cobertura de transações, já que ela também está centrada na base de dados. A diferença é que, ao contrário da cobertura de transações, esta métrica analisa as classes, e não as transações cobertas pelos padrões. A motivação é que não basta extrair padrões que cobrem transações distintas da base de dados se estas transações classes coincidentes. Esta métrica tenta garantir que as regras geradas pelo conjunto-resultado de padrões apontem para classes distintas. A intenção, como na métrica anterior, é diminuir a ambigüidade das regras, além da redundância.
+
+%Falar sobre como utilizar o conceito de ortogonalidade em algoritmos de regras de associação:
+%Ortogonalidade por itens: Motivação: Encontrar um conjunto de padrões ortogonais que representem bem todo o conjunto de padrões freqüentes, e que gere regras não redundantes;
+%Ortogonalidade por cobertura de transações: Encontrar um conjunto de padrões que cubram áres ortogonais, e dessa forma, distintas da base de dados, diminuindo a redundância de informações durante a geração das regras, e mais que isso, diminuindo a possibilidade de encontrar regras redundantes;
+%Ortogonalidade por cobertura de classes: Encontrar um conjunto de padrões que aparecem em transações de classes distintas, ou seja, padrões que apontam para classes distintas. A idéia é gerar regras não redundantes, e obter a classificação das regras de maior peso no ranking.
 
 \subsection{Utilização de Ortogonalidade no LAC}
 
-O lazy cria uma projeção da base a partir dos itens encontrados na transação a ser classificada, e obtém padrões frequentes formados por estes itens. \\
-A ortogonalidade pode entrar de várias maneiras no lazy, por exemplo, é possível obter, apriori, o cojunto de itens ortogonais da base de dados, e, para cada transação a ser classificada, obter a projeção apenas dos items ortogonais. \\
-A forma escolhida neste trabalho foi continuar utilizando todos os itens para gerar a projeção, obter o conjunto de padrões frequentes e, deste conjunto, obter um conjunto de padrões ortogonais, com o qual serão geradas as regras de associação.
+O \textbf{LAC} (\textit{Lazy Associative Classifier}) é uma implementação da abordagem \textit{lazy} proposta em \cite{Veloso06Lazy}. A abordagem de classificação associativa \textit{lazy} obtém o conjunto de regras de associação relacionadas a cada instância de teste separadamente. Para tanto, ela cria uma projeção da base de treinamento apenas com as transações que possuem itens em comum com a instância de teste. A partir desta projeção, a abordagem obtém um conjunto de padrões freqüentes, de acordo com determinado suporte fornecido pelo usuário, e com estes padrões, gera as regras de associação utilizadas durante a tarefa de classificação.
+\par
+A ortogonalidade pode ser utilizada de várias maneiras no \textit{lazy}, por exemplo, é possível extrair, \textit{apriori}, o conjunto de itens ortogonais da base de treinamento, considerando cobertura de transações, ou cobertura de classes, e, para cada instância de testes, obter a projeção da base de treinamento considerando apenas os itens ortogonais encontrados na instância de teste. Esta seria uma boa opção para diminuir o espaço de busca durante a obtenção do conjunto de padrões freqüentes nos casos em que as bases de dados são muito densas.
+\par
+Uma outra forma de aplicar a ortogonalidade seria extrair o conjunto de itens ortogonais, não de toda a base de treinamento, mas sim da instância no momento do teste. Entretanto, com estas duas escolhas ainda seria possível gerar conjuntos de regras redundantes, já que o conjunto de itens extraídos, mesmo que mantendo a característica de ortogonalidade entre si, poderiam gerar padrões similares.
+\par
+Sendo assim, a forma escolhida neste trabalho foi continuar utilizando todos os itens para gerar a projeção, obter o conjunto de padrões freqüentes e, deste conjunto, obter o sub-conjunto de padrões ortogonais, com o qual são geradas as regras de associação.
 
 \subsection{Heurística de Obtenção de Conjuntos Ortogonais}
 
-Falar da heurística:
+O problema de se encontrar o sub-conjunto de padrões com maior métrica de ortogonalidade, dado o conjunto de padrões freqüentes, é \textbf{NP}, visto que todas as combinações de todos os tamanhos possíveis devem ser testadas para se chegar ao resultado final. Portanto, foi desenvolvida uma heurística gulosa que obtém um conjunto ortogonal de dois elementos, e iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando um novo padrão e realizando modificações par que a métrica de ortogonalidade seja maximizada.
+\par
+Esta abordagem é semelhante ao que foi proposto em \cite{zaki07origami}. Este artigo apresenta um algoritmo que considera o conjunto de padrões freqüentes como um grafo em que cada vértice representa um padrão, uma aresta entre dois padrões representa a similaridade entre eles. No entanto, só são representadas as arestas que possuem similaridade menor que $\alpha$. O objetivo do algoritmo é encontrar um clique de tamanho máximo neste grafo. Para tanto, o algoritmo escolhe um vértice aleatoriamente e o adiciona no conjunto-solução. Depois disso, o algoritmo passa a visitar os vizinhos dos vértices que já fazem parte da solução, escolhendo sempre a melhor opção para adicionar ao conjunto, até que não haja mais vértices para se adicionar.
+\par
+No nosso caso, todos os padrões são candidatos ao conjunto-resultado, portanto, a modelagem em grafo é inadequada. A obtenção do conjunto ortogonal de padrões é realizada de forma iterativa, onde no início da execução, o algoritmo inicializa o conjunto-solução com apenas um elemento, e a métrica de ortogonalidade do conjunto com o valor $0$ (zero), e então começa o ciclo de iterações em que, a cada etapa:
+
+\begin{enumerate}
+	\item Um novo elemento é incluído ao conjunto;
+	\item É realizada uma busca por todo o conjunto de padrões que não fazem parte do conjunto-solução. Durante esta busca, cada padrão verificado é incluído na solução substituindo o padrão deste conjunto mais semelhante àquele. Se a métrica de ortogonalidade do conjunto melhorou, o algoritmo mantém a troca. Se não, a troca é desfeita, e o próximo padrão da seqüência é verificado;
+	\item Ao final do processo, o algoritmo compara a métrica de ortogonalidade obtida com a métrica do conjunto anterior (que possuía um elemento a menos). Se a métrica se manteve, ou melhorou, o algoritmo volta ao início do ciclo. Se não, o algoritmo termina o ciclo, e o conjunto anterior é tido como resultado.
+\end{enumerate}
 
 \begin{enumerate}
 	\item O conjunto de padrões é ordenado de forma decrescente quanto ao tamanho dos padrões;
@@ -137,21 +169,82 @@ Falar da heurística:
 	\item Ao final da lista, se a solução não piorou, o conjunto se mantém, e o algoritmo tenta obter um conjunto maior. Se a solução piorou, o algoritmo para, e a solução anterior é retornada.
 \end{enumerate}
 
-Falar das formas de ordenar o conjunto, falar do comportamento do algoritmo para cada caso (similaridade, transações e classes).
+A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui uma grande influência no algoritmo, pois um novo padrão verificado só fará parte do conjunto solução se a ortogonalidade do novo conjunto for maior que a do antigo, logo, em caso de empate, os primeiros padrões terão preferência sobre os últimos. Cinco formas diferentes de ordenação do conjunto de padrões freqüentes foram implementadas:
+
+\begin{enumerate}
+	\item Ordem lexicográfica crescente;
+	\item Ordem lexicográfica descrescente;
+	\item Ordem de tamanho crescente;
+	\item Ordem de tamanho decrescente;
+	\item Nenhuma ordenação.
+\end{enumerate}
 
 \section{Estratégia ORIGAMI}
 \label{sec:ortogonalidade_origami}
 
-Falar sobre o ORIGAMI \cite{zaki07origami}.
+O \textbf{ORIGAMI} é um algoritmo para mineração de grafos apresentado em \cite{zaki07origami}. Neste artigo, os autores introduzem a definição de conjuntos $\alpha$-ortogonais e $\beta$-representativos, e apresentam o novo paradigma de mineração de conjuntos de grafos ortogonais com foco nos padrões, e não nas transações.
 
 \subsection{Definição de alfa-ortogonalidade}
+\label{sec:ortogonalidade_origami_definicao}
 
-Falar das vantagens de alfa e beta.
+Seja $\mathcal{F}$ o conjunto de todos os sub-grafos freqüentes de uma coleção. Seja $sim : \mathcal{F} \times \mathcal{F} \rightarrow \left[0, 1\right]$ uma função binária e simétrica que retorna a \textit{similaridade} entre dois grafos, por exemplo, a similaridade entre dois grafos $G_a$ e $G_b$ baseada no máximo sub-grafo comum \citep{bunke98} é dada por \[sim(G_a, G_b) = \frac{|G_c|}{max(|G_a|, |G_b|)},\] onde $G_c$ é o máximo sub-grafo comum entre $G_a$ e $G_b$.
+\par
+Dada uma coleção de grafos $\mathcal{G}$, e um limite superior para similaridade $\alpha \in \left[0, 1\right]$, dizemos que o sub-conjunto de grafos $\mathcal{R} \subseteq \mathcal{G}$ é \textbf{$\alpha$-ortogonal} em relação a $\mathcal{G}$ se, e somente se, para quaisquer $G_a, G_b \in \mathcal{R}, sim(G_a, G_b) \leq \alpha$ e para qualquer $G_a \in \mathcal{R}$ e qualquer $G_b \in \mathcal{G} \backslash \mathcal{R}, sim(G_a, G_b) > \alpha$.
+\par
+Dada uma coleção de grafos $\mathcal{G}$,um conjunto $\alpha$-ortogonal $\mathcal{R} \subseteq \mathcal{G}$ e um dado limite inferior para similaridade $\beta \in \left[0, 1\right]$, dizemos que $\mathcal{R}$ \textbf{representa} um grafo $G \in \mathcal{G}$ se existe algum $G_a \in \mathcal{R}$ tal que $sim(G_a, G) \geq \beta$. Seja $\Upsilon(\mathcal{R},\mathcal{G}) = \left\{G \in \mathcal{G} : \exists G_a \in \mathcal{R}, sim(G, G_a) \geq \beta\right\}$, dizemos que $\mathcal{R}$ é um conjunto $\beta$-representativo para $\Upsilon(\mathcal{R}, \mathcal{G})$.
+\par
+Dada uma coleção de grafos $\mathcal{G}$ e o seu conjunto $\alpha$-ortogonal e $\beta$-representativo $\mathcal{R}$, chamamos de \textbf{conjunto resíduo} de $\mathcal{R}$ o conjunto de padrões não representados em $\mathcal{G}$, dado como $\Delta(\mathcal{R}, \mathcal{G}) = \mathcal{G} \backslash \left\{ \mathcal{R} \cup \Upsilon(\mathcal{R}, \mathcal{G}) \right\}$, o \textit{resíduo} de $\mathcal{R}$ é definido como a cardinalidade do seu conjunto resíduo $|\Delta(\mathcal{R}, \mathcal{G})|$. Finalmente, definimos a média de similaridade do resíduo de $\mathcal{R}$ como $ars(\mathcal{R}, \mathcal{G}) = \frac{\sum_{G_b \in \Delta(\mathcal{R}, \mathcal{G})} {max_{G_a \in \mathcal{R}} \left\{sim(G_a, G_b)\right\}}}{|\Delta(\mathcal{R}, \mathcal{G})|}$.
+\par
+Note que, por definição, $\alpha < ars(\mathcal{R}, \mathcal{G}) < \beta$, já que para quaisquer $G_a \in \mathcal{R}$ e $G_b \in \Delta(\mathcal{R}, \mathcal{G}), sim(G_a, G_b) \in \left(\alpha, \beta \right)$.
+\par
+O objetivo dos autores é encontrar conjuntos de grafos $\alpha$-ortogonais e $\beta$-representativos em relação ao conjunto de sub-grafos maximais $\mathcal{M}$. Como o conjunto de padrões maximais provê uma síntese de todos os padrões freqüentes, e com uma quantidade bem menor de padrões, parece razoável tentar um conjunto representativo ortogonal em relação àquele. Entretanto, como encontrar todos os sub-grafos maximais em aplicações reais pode se tornar um problema intratável, os autores optaram por utilizar um sub-conjunto do conjunto de sub-grafos maximais $\widehat{\mathcal{M}} \subseteq \mathcal{M}$. Logo, o problema pode ser definido da seguinte forma:
 
-\subsection{Estratégia de Ortogonalidade (algoritmo)}
+\begin{problem}[Mineração de grafos $\alpha$-ortogonais e $\beta$-representativos]
+Dado um sub-conjunto $\mathcal{\widehat{\mathcal{M}}}$ do conjunto de grafos maximais $\mathcal{\mathcal{M}}$ de uma coleção de grafos $\mathcal{G}$, um limite superior para similaridade $\alpha$ e um limite inferior para similaridade $\beta$, encontre o melhor sub-conjunto $\mathcal{R}$ que minimize o resíduo $|\Delta(\mathcal{R}, \mathcal{\widehat{\mathcal{M}}})|$.
+\end{problem}
 
-Falar da estratégia aleátória, das métricas, mostrar o algoritmo.
+\subsection{Estratégia de Ortogonalidade}
 
-\subsection{Adaptação do algoritmo}
+A utilização dos parâmetros adicionais $\alpha$ e $\beta$ pelo ORIGAMI enriquece o modelo de conjuntos ortogonais. O parâmetro $\alpha$ permite que a medida da ortogonalidade seja controlada, fazendo com que o conjunto-solução se aproxime ou se distancie do conjunto de padrões freqüentes de acordo com o valor escolhido para $\alpha$. Já o parâmetro $\beta$ permite medir a representatividade do conjunto em relação ao restante dos elementos que não fazem parte da solução.
+\par
+Dependendo dos valores escolhidos para os dois parâmetros duas variantes do problema são identificadas:
 
-Falar da adaptação do ORIGAMI ao problema de classificação, da utilização das 3 métricas.
+\begin{itemize}
+	\item{Caso I ($\beta \leq \alpha$):} Pela definição de conjunto $\alpha$-ortogonal, $G_a \in \mathcal{R}$ e $G_b \in \widehat{\mathcal{M}} \backslash \mathcal{R}$ implica em $sim(G_a, G_b) > \alpha \geq \beta$. Logo, temos que $\Upsilon(\mathcal{R}, \mathcal{\widehat{M}}) = \widehat{\mathcal{M}} \backslash \mathcal{R}$, de onde temos que $\Delta(\mathcal{R}, \mathcal{\widehat{M}}) = 0$. Então, quando $\beta \leq \alpha$, o resíduo de qualquer conjunto $\alpha$-ortogonal $\mathcal{R}$ é $0$, o que implica que qualquer conjunto $\alpha$-ortogonal é ótimo, considerando o resíduo;
+	\item{Caso II ($\beta > \alpha$):} Este é o caso geral, onde um conjunto $\alpha$-ortogonal $\mathcal{R}$ pode não ser um conjunto $\beta$-representativo para alguns grafos em $\widehat{\mathcal{M}}$. Em outras palavras, quando $\beta > \alpha$, o resíduo $|\Delta(\mathcal{R}, \widehat{\mathcal{M}})| \geq 0$; logo, a solução ótima é o conjunto de padrões ortogonais que minimiza o resíduo. Um caso especial de $\beta > \alpha$ ocorre quando $\beta = 1$. Neste caso, cada elemento do conjunto $\alpha$-ortogonal representa somente a si mesmo, e o resíduo é dado por $|\Delta(\mathcal{R}, \widehat{\mathcal{M}})| = |\widehat{\mathcal{M}} \backslash \mathcal{R}|$.
+\end{itemize}
+
+O algoritmo ORIGAMI realiza a mineração de padrões ortogonais em dois passos distintos. O primeiro passo consiste em encontrar, utilizando uma heurística randômica, um sub-conjunto dos padrões maximais da base de dados. O segundo consiste em obter, novamente com o auxílio de uma heurística randômica, um conjunto ortogonal e representativo que minimize o resíduo. O pseudo-código do ORIGAMI pode ser visto no algoritmo \ref{alg:origami}.
+
+\begin{algorithm}
+\caption{ORIGAMI}
+\label{alg:origami}
+\begin{algorithmic}[1]
+\REQUIRE $\mathcal{D}, \sigma, \alpha, \beta$
+\STATE $EM \leftarrow EdgeMap (\mathcal{D})$
+\STATE $\mathcal{F}_1 \leftarrow FindFrequentEdges (\mathcal{D}, \sigma)$
+\STATE $\widehat{\mathcal{M}} \leftarrow 0$
+\WHILE {$\neg StopCondition ()$}
+	\STATE $M \leftarrow RandomMaximalGraph (\mathcal{D}, \mathcal{F}_1, EM, \sigma)$
+	\STATE $\widehat{\mathcal{M}} \leftarrow \widehat{\mathcal{M}} \cup M$
+\ENDWHILE
+\STATE $\mathcal{R} \leftarrow OrthogonalRepresentativeSets (\widehat{\mathcal{M}}, \alpha, \beta)$
+
+\end{algorithmic}
+\end{algorithm}
+
+%  , permitindo que a característica do conjunto ortogonal seja controlada. O parâmetr $\alpha$ permite
+%Falar das vantagens de alfa e beta.
+%Falar da estratégia aleátória, das métricas, mostrar o algoritmo.
+
+\subsection{Implementação}
+
+Foi realizada a implementação do algoritmo ORIGAMI adaptado ao problema de classificação associativa utilizando as métricas apresentadas na seção \ref{sec:ortogonalidade_metricas}.
+\par
+Como heurística de obtenção do conjunto de padrões maximais, o algoritmo inicia a execução com o conjunto-resultado vazio e, a cada iteração, tenta obter o maior padrão freqüente possível adicionando a ele, aleatoriamente, itens que fazem parte da instância de teste, até que não seja mais possível adicionar nenhum novo item, ou a condição de parada local seja atingida. Se, durante a obtenção aleatória dos itens, o item selecionado já ter sido utilizado, ou não gerar um novo padrão freqüente, o algoritmo decrementa um contador de tentativas. A condição de parada local para a geração de novos padrões maximais é que, durante este processo, o número máximo de escolhas erradas dos itens é igual ao tamanho da instância de teste.
+\par
+Ao obter um novo padrão maximal, o algoritmo tenta inseri-lo no conjunto-solução. Esta operação consiste em remover do conjunto todos os sub-padrões do novo candidato, e inserir o candidato caso nenhum dos padrões que ainda existem na solução seja super-padrão dele. A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de padrões candidatos não maximais, ou já inseridos no conjunto-solução gerados é igual ao tamanho da instância de teste.
+\par
+Como heurística para obtenção do conjunto ortogonal, o algoritmo inicia a execução com o valor de resíduo igual a $0$ (zero) e, a cada iteração, tenta obter um conjunto ortogonal adicionando a ele, aleatoriamente, padrões maximais obtidos no primeiro passo do algoritmo, até que não seja mais possível acrescentar novos padrões, ou a condição de parada local seja atingida. Se, durante a obtenção dos padrões, o padrão selecionado já ter sido utilizado, ou não possuir similaridade menor que $\alpha$ para com todos os outros padrões do conjunto-solução, o algoritmo decrementa um contador de tentativas. A condição de parada local para a geração de conjuntos ortogonais é que, durante este processo, o número máximo de escolhas erradas de padrões não pode ser maior que a quantidade de padrões maximais total.
+\par
+Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo. Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passar a ser o conjunto ortogonal recém-encontrado. A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de conjuntos ortogonais candidatos que não melhoram o resultado não pode ser maior que a quantidade de padrões maximais total.
