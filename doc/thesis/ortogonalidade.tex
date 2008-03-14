@@ -179,6 +179,37 @@ A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui 
 
 As ordenações lexicográficas foram utilizas para se diminuir a distância entre dois padrões da seqüência, fazendo com que a modificação do conjunto-solução seja realizada de forma suave. Espera-se que, neste caso, a diferença estrutural entre dois padrões consecutivos do conjunto seja a menor possível durante as buscas das iterações. As ordenações por tamanho foram utilizas para dar prioridade, hora aos maiores padrões (ordenação decrescente), hora aos menores padrões (ordenação crescente).
 
+O pseudo-código do algoritmo de classificação associativa baseada em ortogonalidade \textbf{OLAC} (\textit{Orthogonal Lazy Assiciative Classifier} pode ser visto no algoritmo \ref{alg:olac}.\
+
+\begin{algorithm}
+\caption{OLAC}
+\label{alg:olac}
+\begin{algorithmic}[1]
+
+\REQUIRE $\D, \sigma$
+\STATE $\F \leftarrow FindFrequentPatterns (\D, \sigma)$
+\STATE $Sort (\F)$
+\STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
+\STATE $rate \leftarrow 0$
+\REPEAT
+	\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+	\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
+	\FOR {$p \in \F, p \notin \Or_{try}$}
+		\STATE $s \leftarrow GetMoreSimilar (\Or, p)$
+		\STATE $\Or_{try} \leftarrow \Or_{try} \cup p \backslash s$
+		\STATE $rate_{tmp} = GetRate (\Or)$
+		\IF {$rate_{tmp} \leq rate_{try}$}
+			\STATE $\Or_{try} \leftarrow \Or_{try} \cup s \backslash p$
+		\ELSE
+			\STATE $rate_{try} \leftarrow rate_{tmp}$
+		\ENDIF
+	\ENDFOR
+\UNTIL {$rate_{try} < rate$}
+\STATE $\R \leftarrow \Or$
+
+\end{algorithmic}
+\end{algorithm}
+
 \section{Estratégia ORIGAMI}
 \label{sec:ortogonalidade_origami}
 
@@ -220,6 +251,7 @@ O algoritmo ORIGAMI realiza a mineração de padrões ortogonais em dois passos dis
 \caption{ORIGAMI}
 \label{alg:origami}
 \begin{algorithmic}[1]
+
 \REQUIRE $\D, \sigma, \alpha, \beta$
 \STATE $EM \leftarrow EdgeMap (\D)$
 \STATE $\F_1 \leftarrow FindFrequentEdges (\D, \sigma)$
