@@ -318,20 +318,23 @@ O pseudo-código do algoritmo de classificação associativa baseada em ortogonalid
 \STATE $\F \leftarrow FindFrequentPatterns (\D, \sigma)$
 \STATE $Sort (\F)$
 \STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
-\STATE $rate \leftarrow 0$
 \REPEAT
+	\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
 	\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
 	\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
 	\FOR {$P \in \F, P \notin \Or_{try}$}
 		\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
-		\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \backslash S$
+		\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
 		\STATE $rate_{tmp} = GetRate (\Or)$
 		\IF {$rate_{tmp} \leq rate_{try}$}
-			\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \backslash P$
+			\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
 		\ELSE
 			\STATE $rate_{try} \leftarrow rate_{tmp}$
 		\ENDIF
 	\ENDFOR
+	\IF {$rate_{try} \geq rate$}
+		\STATE $\Or \leftarrow \Or_{try}$
+	\ENDIF
 \UNTIL {$rate_{try} < rate$}
 \STATE $\R \leftarrow \Or$
 
