@@ -1,7 +1,7 @@
 DOCUMENT=thesis
 DOCUMENT_TEX=${DOCUMENT}.tex
 
-#all: thesis
+all: pdf
 
 graphs_all:
 	make -C graphs/ all
@@ -13,7 +13,6 @@ img_all:
 img_clean:
 	make -C img/ clean
 
-#thesis: pdf ps
 pdf: graphs_all img_all thesis.pdf
 #ps: thesis.ps
 #dvi: thesis.dvi
