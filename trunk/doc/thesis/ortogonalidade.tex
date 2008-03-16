@@ -20,7 +20,7 @@ O objetivo da aplicação de ortogonalidade no problema da mineração de padrões fr
 \section{Métricas de Ortogonalidade}
 \label{sec:ortogonalidade_metricas}
 
-Para se extrair um sub-conjunto de padrões de alta significância e baixa redundância em relação ao conjunto original de padrões freqüentes, é necessário definir métricas que possibilitem a avaliação dos vários conjuntos-solução possíveis. Na literatura, encontramos alguns exemplos de tais métricas. Em \cite{DBLP:conf/kdd/XinCYH06} os autores utilizam, em seus experimentos, o coeficiente de \textbf{Jaccard} \citep{jain88} aplicado à cobertura da base de dados para se obter uma medida de distância entre dois padrões: \[D(p_1,p_2) = 1 - \frac{|TS(p_1) \cap TS(p_2)|}{|TS(p_1) \cup TS(p_2)|},\] onde $TS(p_1)$ é o conjunto de transações cobertas pelo padrão $p_1$.
+Para se extrair um sub-conjunto de padrões de alta significância e baixa redundância em relação ao conjunto original de padrões freqüentes, é necessário definir métricas que possibilitem a avaliação dos vários conjuntos-solução possíveis. Na literatura, encontramos alguns exemplos de tais métricas. Em \cite{DBLP:conf/kdd/XinCYH06} os autores utilizam, em seus experimentos, o complemento do coeficiente de \textbf{Jaccard} \citep{jain88} aplicado à cobertura da base de dados para se obter uma medida de distância entre dois padrões: \[D(p_1,p_2) = 1 - \frac{|TS(p_1) \cap TS(p_2)|}{|TS(p_1) \cup TS(p_2)|},\] onde $TS(p)$ é o conjunto de transações cobertas pelo padrão $p$.
 \par
 Em \cite{zaki07origami} os autores discutem diferentes métricas de similaridade entre grafos, incluindo, além do coeficiente de \textbf{Jaccard}: \[sim(G_a, G_b) = \frac{|t(G_a) \cap t(G_b)|}{|t(G_a) \cup t(G_b)|},\] uma métrica de distância para grafos baseada no máximo sub-grafo comum \citep{bunke98}: \[sim_{mc}(G_1, G_2) = \frac{|G_{mc}|}{max(|G_1|,|G_2|)},\] onde $G_{mc}$ é o maior sub-grafo comum entre $G_1$ e $G_2$.
 \par
@@ -33,9 +33,9 @@ A principal características destas métricas é que elas foram desenvolvidas para 
 
 Considerando a estrutura dos padrões, ou seja, a seqüência de itens pelos quais são definidos, dizemos que dois padrões são ortogonais se eles não possuem itens em comum, ou seja, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não o são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado a conjuntos maiores, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não o são.
 \par
-Entretanto, a simples informação de que um determinado conjunto de padrões é ortogonal ou não é insuficiente para que um possível conjunto-solução seja avaliado. Pra tanto, preciso desenvolver uma métrica dada por uma função $\F \rightarrow \left[0, 1\right]$ que forneça a medida de ortogonalidade do conjunto.
+Entretanto, a simples informação de que um determinado conjunto de padrões é ortogonal ou não é insuficiente para que um possível conjunto-solução seja avaliado. Para tanto, é preciso desenvolver uma métrica dada por uma função $\F \rightarrow \left[0, 1\right]$ que forneça a medida de ortogonalidade do conjunto.
 \par
-Uma forma de se obter esta medida, é analisar os itens dos padrões. Sabemos que dois padrões são ortogonais se eles não compartilham itens, ou seja, a presença de um mesmo item em mais de um padrão do conjunto, intuitivamente, deve contribuir de maneira negativa para a medida de ortogonalidade do mesmo. A métrica de ortogonalidade baseada na estrutura dos padrões associa pesos aos itens, de forma que quanto maior a sua popularidade, menor será o seu peso. O resultado é dado pela média dos pesos de todos os itens que fazem parte dos padrões do conjunto.
+Uma forma de se obter esta medida, é analisar os itens dos padrões. Sabemos que dois padrões são ortogonais se eles não compartilham itens, ou seja, a presença de um mesmo item em mais de um padrão do conjunto, intuitivamente, deve contribuir de maneira negativa para a medida de ortogonalidade do mesmo. A métrica de ortogonalidade baseada na estrutura dos padrões associa pesos aos itens, de modo que quanto maior a sua popularidade, menor será o seu peso. O resultado é dado pela média dos pesos de todos os itens que fazem parte dos padrões do conjunto.
 \par
 Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Il \subseteq \I$ o sub-conjunto itens que aparecem em, pelo menos, um dos padrões de $\Fl$. Para cada item $i \subseteq \Il$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$.
 \par
@@ -66,7 +66,7 @@ Como exemplo, suponha um conjunto de itens $\I = \left\{A, B, C, D, E \right\}$ 
 	\label{tab:item_w1}
 \end{table}
 
-Como podemos ver, o item $C$ é o único que só faz parte de apenas um padrão, portanto, é associado o peso $1$ para este item. Os outros dois itens ($A$ e $B$) são encontrados nos dois padrões, e por isso, possuem peso $0$. De acordo com a expressão de ortogonalidade, média destes valores nos dá a medida de ortogonalidade do conjunto: $O_e = 0,33$. Agora, suponha que seja inserido o novo padrão $BCD$ ao conjunto ($\F = \left\{ AB, ABC, BCD \right\}$). A tabela \ref{tab:item_w2} possui os novos pesos para cada item.
+Como podemos ver, o item $C$ é o único que faz parte de apenas um padrão, portanto, é associado o peso $1$ para este item. Os outros dois itens ($A$ e $B$) são encontrados nos dois padrões, e por isso, possuem peso $0$. De acordo com a expressão de ortogonalidade, média destes valores nos dá a medida de ortogonalidade do conjunto: $O_e = 0,33$. Agora, suponha que seja inserido o novo padrão $BCD$ ao conjunto ($\F = \left\{ AB, ABC, BCD \right\}$). A tabela \ref{tab:item_w2} possui os novos pesos para cada item.
 
 \begin{table}[htbp]
 	\centering
@@ -102,14 +102,31 @@ Na figura \ref{fig:covex1} temos uma representação de uma base de dados, e os co
 
 \begin{figure}
 \centering
-\includegraphics[width=0.4\textwidth]{img/coverage}
+\includegraphics[width=0.5\textwidth]{img/coverage}
 \caption{Visualização de Cobertura de Transações na Base de Dados}
 \label{fig:covex1}
 \end{figure}
 
+%\begin{figure}
+%\centering
+%\begin{picture}(180,180)
+%\linethickness{0.075mm}
+%\thicklines
+%external frame
+%\multiput(0, 0)(180, 0){2}{\line(0, 1){180}}
+%\multiput(0, 0)(0, 180){2}{\line(1, 0){180}}
+
+%circle X
+%\put(90,90){\circle{170}}
+%\framebox[100, 100]{teste}
+%\put(-50,50){\frame{\circle{100}}
+%\end{picture}
+%\caption{Visualização de Cobertura de Transações na Base de Dados}
+%\end{figure}
+
 A métrica de ortogonalidade baseada em cobertura de transações pode ser calculada de maneira análoga à relacionada com a estrutura, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as transações cobertas pelos padrões, e não os seus itens.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Para cada transação $t \subseteq \Dl$ é dada um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Para cada transação $t \subseteq \Dl$ é dado um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$.
 \par
 De acordo com esta expressão, se nós tivermos $4$ padrões, e uma transação $t$ coberta por apenas um deles, então o seu peso $w_t$ será $1$. Se esta transação for coberta por dois padrões do conjunto, o valor de $w_t$ será $\frac{1}{2}$. As transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
@@ -147,7 +164,7 @@ A motivação para esta métrica está calcada na seguinte consideração: Dois padrõe
 \par
 A métrica de cobertura de classes pode ser calculada de maneira análoga às relacionadas métricas de similaridade entre padrões e cobertura de transações, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as classes existentes nas transações cobertas pelos padrões.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Seja $\C$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$. Para cada classe $c \subseteq \Cl$ é dada um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada \footnote{Dado um conjunto de transações $\Dlc$ onde todas as transações possuem a classe $c$ e um conjunto de padrões $\Fl$ em $\Dlc$, a cobertura esperada de cada padrão para a classe $c$ é $\frac{|\Dlc|}{|\Fl|}$ (considerando que todos os padrões são independentes, ou seja, ortogonais).}.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Seja $\C$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$. Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada \footnote{Dado um conjunto de transações $\Dlc$ onde todas as transações possuem a classe $c$ e um conjunto de padrões $\Fl$ em $\Dlc$, a cobertura esperada de cada padrão para a classe $c$ é $\frac{|\Dlc|}{|\Fl|}$ (considerando que todos os padrões são independentes, ou seja, ortogonais).}.
 \par
 De acordo com esta expressão, se nós temos 4 padrões, e uma classe $c$ que aparece em transações cobertas por apenas um deles, então o seu peso $w_c$ será $1$. Se esta classe aparece em transações cobertas por dois padrões do conjunto de maneira balanceada (por exemplo, $50\%$ das  transações da classe aparece em um dos padrões, e o $50\%$ restantes no outro), o valor de $w_c$ será $\frac{1}{2}$. As classes que aparecem por igual em transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
@@ -210,7 +227,7 @@ Em \cite{DBLP:conf/kdd/XinCYH06} os autores utilizaram métricas de significância
 \par
 Neste trabalho, duas soluções foram implementadas. A primeira delas é baseada na medida de ortogonalidade do conjunto, onde aplicamos as métricas apresentadas na seção \ref{sec:ortogonalidade_metricas} considerando todo o conjunto-solução. A segunda é baseada na solução proposta por \cite{DBLP:conf/kdd/XinCYH06} - as métricas são aplicadas somente a pares de padrões, e a ortogonalidade do conjunto é obtida por meio da média das ortogonalidades entre todos os pares possíveis.
 \par
-É fácil perceber que as métricas propostas nas seções \ref{sec:ortogonalidade_metricas_estrutura} e \ref{sec:ortogonalidade_metricas_transacoes} são equivalentes ao complemento do coeficiente de Jaccard quando aplicadas a conjuntos de dois padrões. Tomando, como exemplo, a métrica baseada na estrutura dos padrões como exemplo, temos que a ortogonalidade do conjunto é dada pela expressão: \[O_e = \frac{\sum_{i \subseteq \Il} \left( \frac{|\Fl| - |\Fli|}{|\Fl| - 1} \right)}{|\Il|}.\] Nos casos em que o conjunto de possui necessariamente dois padrões: \[ O_e = \frac{\sum_{i \subseteq \Il} (2 - |\Fli|)}{|\Il|}.\] Analisando a expressão acima, temos que $|\Il|$ corresponde ao tamanho do conjunto de itens encontrados nos dois padrões, ou seja, \[|\Il| = |p_1 \cup p_2|,\] onde $\Fl = \left\{p1, p2 \right\}$, e a parcela $(2 - |\Fli|)$ terá valor $1$ para itens que estão presentes em apenas um dos padrões, e $0$ para itens presentes nos dois padrões, ou seja, \[\sum_{i \subseteq \Il} (2 - |\Fli|) = |p_1 \cup p_2| - |p_1 \cap p_2|.\] Logo, a métrica de ortogonalidade baseada na estrutura dos padrões, quando aplicada par-a-par, é dada pela seguinte expressão: \[O_e = 1 - \frac{\sum_{p_1, p_2 \subseteq \Fl, p_1 \neq p_2} \frac{|p_1 \cap p_2|}{|p_1 \cup p_2|}}{\frac{|\Fl| \times (|\Fl|-1)}{2}}.\]
+É fácil perceber que as métricas propostas nas seções \ref{sec:ortogonalidade_metricas_estrutura} e \ref{sec:ortogonalidade_metricas_transacoes} e \ref{sec:ortogonalidade_metricas_classes} são equivalentes ao complemento do coeficiente de Jaccard quando aplicadas a conjuntos de dois padrões. Tomando, como exemplo, a métrica baseada na estrutura dos padrões como exemplo, temos que a ortogonalidade do conjunto é dada pela expressão: \[O_e = \frac{\sum_{i \subseteq \Il} \left( \frac{|\Fl| - |\Fli|}{|\Fl| - 1} \right)}{|\Il|}.\] Nos casos em que o conjunto de possui necessariamente dois padrões: \[ O_e = \frac{\sum_{i \subseteq \Il} (2 - |\Fli|)}{|\Il|}.\] Analisando a expressão acima, temos que $|\Il|$ corresponde ao tamanho do conjunto de itens encontrados nos dois padrões, ou seja, \[|\Il| = |p_1 \cup p_2|,\] onde $\Fl = \left\{p1, p2 \right\}$, e a parcela $(2 - |\Fli|)$ terá valor $1$ para itens que estão presentes em apenas um dos padrões, e $0$ para itens presentes nos dois padrões, ou seja, \[\sum_{i \subseteq \Il} (2 - |\Fli|) = |p_1 \cup p_2| - |p_1 \cap p_2|.\] Logo, a métrica de ortogonalidade baseada na estrutura dos padrões, quando aplicada par-a-par, é dada pela seguinte expressão: \[O_e = 1 - \frac{\sum_{p_1, p_2 \subseteq \Fl, p_1 \neq p_2} \frac{|p_1 \cap p_2|}{|p_1 \cup p_2|}}{\frac{|\Fl| \times (|\Fl|-1)}{2}}.\]
 \par
 A métrica de ortogonalidade baseada em cobertura de transações, quando aplicada par-a-par, é dada pela seguinte expressão: \[O_t = 1 - \frac{\sum_{p_1, p_2 \subseteq \Fl, p_1 \neq p_2} \frac{|\Dl_{p1} \cap \Dl_{p2}|}{|\Dl_{p1} \cup \Dl_{p2}|}}{\frac{|\Fl| \times (|\Fl|-1)}{2}},\] onde $\Dl_p$ é o sub-conjunto de transações cobertas pelo padrão $p$.
 \par
@@ -305,12 +322,12 @@ O pseudo-código do algoritmo de classificação associativa baseada em ortogonalid
 \REPEAT
 	\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
 	\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
-	\FOR {$p \in \F, p \notin \Or_{try}$}
-		\STATE $s \leftarrow GetMoreSimilar (\Or, p)$
-		\STATE $\Or_{try} \leftarrow \Or_{try} \cup p \backslash s$
+	\FOR {$P \in \F, P \notin \Or_{try}$}
+		\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
+		\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \backslash S$
 		\STATE $rate_{tmp} = GetRate (\Or)$
 		\IF {$rate_{tmp} \leq rate_{try}$}
-			\STATE $\Or_{try} \leftarrow \Or_{try} \cup s \backslash p$
+			\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \backslash P$
 		\ELSE
 			\STATE $rate_{try} \leftarrow rate_{tmp}$
 		\ENDIF
