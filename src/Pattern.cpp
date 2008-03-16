@@ -248,7 +248,7 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern) const
 		{
 			den++;
 
-			if (! itemArrayLeft [i] || ! itemArrayRight [i])
+			if (itemArrayLeft [i] && itemArrayRight [i])
 				num++;
 		}
 	}
@@ -277,7 +277,7 @@ const float32 Pattern::GetTransCovSimilarity (const Pattern *pPattern) const
 		{
 			den++;
 
-			if (! transactionCoverageArrayLeft [i] || ! transactionCoverageArrayRight [i])
+			if (transactionCoverageArrayLeft [i] && transactionCoverageArrayRight [i])
 				num++;
 		}
 	}
@@ -295,7 +295,8 @@ const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
 	const uint32 *classCoverageArrayLeft	= mClassCoverageArray;
 	const uint32 *classCoverageArrayRight	= pPattern->GetClassCoverageArray ();
 
-	uint32	num_cov_classes	= 0;
+	uint32	num = 0;
+	uint32	den = 0;
 
 	const uint32 num_classes = Class::GetNumTrainClasses ();
 
@@ -303,17 +304,20 @@ const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
 	{
 		if (classCoverageArrayLeft [i] || classCoverageArrayRight [i])
 		{
-			num_cov_classes++;
+			den++;
 
-			if (classCoverageArrayLeft [i] > classCoverageArrayRight [i])
-				similarity += (float32) (classCoverageArrayLeft [i] - classCoverageArrayRight [i]) / classCoverageArrayLeft [i];
-			if (classCoverageArrayRight [i] > classCoverageArrayLeft [i])
-				similarity += (float32) (classCoverageArrayRight [i] - classCoverageArrayLeft [i]) / classCoverageArrayRight [i];
+			if (
+				(classCoverageArrayLeft [i] <= classCoverageArrayRight [i] &&
+				 classCoverageArrayLeft [i] > 0.9 * classCoverageArrayRight [i]) ||
+				(classCoverageArrayRight [i] <= classCoverageArrayLeft [i] &&
+				 classCoverageArrayRight [i] > 0.9 * classCoverageArrayLeft [i])
+				)
+				num++;
 		}
 	}
 
-	if (num_cov_classes != 0)
-		similarity /= num_cov_classes;
+	if (den != 0)
+		similarity = (float32) num / den;
 
 	return similarity;
 }
