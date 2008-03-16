@@ -306,12 +306,9 @@ const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
 		{
 			den++;
 
-			if (
-				(classCoverageArrayLeft [i] <= classCoverageArrayRight [i] &&
-				 classCoverageArrayLeft [i] > 0.9 * classCoverageArrayRight [i]) ||
-				(classCoverageArrayRight [i] <= classCoverageArrayLeft [i] &&
-				 classCoverageArrayRight [i] > 0.9 * classCoverageArrayLeft [i])
-				)
+			float32 mean = (float32) (classCoverageArrayLeft [i] + classCoverageArrayRight [i]) / 2;
+
+			if (classCoverageArrayLeft [i] >= 0.9 * mean && classCoverageArrayRight [i] >= 0.9 * mean)
 				num++;
 		}
 	}

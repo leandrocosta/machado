@@ -848,8 +848,9 @@ const float32 PatternList::GetSetClassCoverageRate (const TransactionList *pTran
 
 const float32 PatternList::GetPairAverageSimilarityRate () const
 {
-	float32	rate		= 0		;
-	uint32	num_patterns	= GetSize ()	;
+		float32	rate		= 0				;
+	const	uint32	num_patterns	= GetSize ()			;
+	const	uint32	num_items	= Item::GetNumTrainItems ()	;
 
 	if (num_patterns > 1)
 	{
@@ -861,7 +862,6 @@ const float32 PatternList::GetPairAverageSimilarityRate () const
 			{
 				uint32 num = 0;
 				uint32 den = 0;
-				uint32 num_items = Item::GetNumTrainItems ();
 
 				for (uint32 itemID = 0; itemID < num_items; itemID++)
 				{
@@ -891,8 +891,9 @@ const float32 PatternList::GetPairAverageSimilarityRate () const
 
 const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pTransactionList) const
 {
-	float32	rate		= 0		;
-	uint32	num_patterns	= GetSize ()	;
+		float32	rate			= 0						;
+	const	uint32	num_patterns		= GetSize ()					;
+	const	uint32	num_transactions	= Transaction::GetNumTrainTransactions ()	;
 
 	if (num_patterns > 1)
 	{
@@ -904,7 +905,6 @@ const float32 PatternList::GetPairAverageCoverageRate (const TransactionList *pT
 			{
 				uint32 num = 0;
 				uint32 den = 0;
-				uint32 num_transactions = Transaction::GetNumTrainTransactions ();
 
 				for (uint32 transactionID = 0; transactionID < num_transactions; transactionID++)
 				{
@@ -946,8 +946,8 @@ const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionLis
 		{
 			for (uint32 rightPatternIndex = leftPatternIndex + 1; rightPatternIndex < num_patterns; rightPatternIndex++)
 			{
-				uint32	num_cov_classes	= 0;
-				float32	pattern_rate	= 0;
+				uint32 num = 0;
+				uint32 den = 0;
 
 				for (uint32 classID = 0; classID < num_classes; classID++)
 				{
@@ -956,18 +956,16 @@ const float32 PatternList::GetPairAverageClassCoverageRate (const TransactionLis
 
 					if (leftCoverage || rightCoverage)
 					{
-						num_cov_classes++;
+						den++;
 
-						if (leftCoverage > rightCoverage)
-							pattern_rate += (float32) (leftCoverage - rightCoverage) / leftCoverage;
-						else if (rightCoverage > leftCoverage)
-							pattern_rate += (float32) (rightCoverage - leftCoverage) / rightCoverage;
+						float32	mean = (float32) (leftCoverage + rightCoverage) / 2;
+
+						if (leftCoverage < 0.9 * mean || rightCoverage < 0.9 * mean)
+							num++;
 					}
 				}
 
-				pattern_rate /= num_cov_classes;
-
-				rate += pattern_rate;
+				rate += (float32) num / den;
 			}
 		}
 
