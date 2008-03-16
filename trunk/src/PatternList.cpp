@@ -79,7 +79,7 @@ const uint32 PatternList::GetResidue (const PatternList *pPatternList, const Pat
 			const float32 similarity = pMoreSimilarPattern->GetSimilarity (pPattern, rMetric);
 
 			if (similarity < rBeta)
-				residue ++;
+				residue++;
 		}
 	}
 
@@ -711,8 +711,13 @@ Pattern* PatternList::GetMoreSimilar (const Pattern *pPattern, const Pattern::Or
 	{
 		Pattern *pTryPattern = static_cast<Pattern *>(*(it++));
 
-		if (pTryPattern->GetSimilarity (pPattern, rMetric) > similarity)
+		const float32 similarity_try = pTryPattern->GetSimilarity (pPattern, rMetric);
+
+		if (similarity_try > similarity)
+		{
 			pRetPattern = pTryPattern;
+			similarity = similarity_try;
+		}
 	}
 
 	return pRetPattern;
