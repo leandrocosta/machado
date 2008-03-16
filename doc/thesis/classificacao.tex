@@ -3,7 +3,7 @@
 
 Classificação já é um problema muito bem explorado na ciência da computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos, como baseados em funções discriminantes \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
 \par
-Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{dong99caep, li01cmar, liu98integrating}. Estes métodos, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
+Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{liu98integrating, li01cmar, dong99caep}. Esta abordagem, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constroem um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
 \par
 De acordo com \cite{Veloso06Lazy}, árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regras selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de decisão e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. O problema das árvores de decisão é que esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras de importância para o modelo.
 \par
@@ -24,7 +24,7 @@ A função de mapeamento de um classificador associativo é representada por um con
 
 O problema da mineração de padrões freqüentes pode ser descrito da seguinte forma:
 \par
-Seja $\mathcal{I}$ um conjunto de itens. Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset}, ou \textit{k-itemset} se ele contém $k$ itens.
+Seja $\mathcal{I}$ um conjunto de itens. Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset} (ou padrão), ou \textit{k-itemset} se ele contém $k$ itens.
 \par
 Uma transação sobre $\mathcal{I}$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset}. Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \mathcal{I}$, se $X \subseteq I$.
 \par
@@ -34,9 +34,7 @@ A cobertura de um \textit{itemset} $X$ em $\mathcal{D}$ consiste no conjunto de 
 
 A freqüência de um \textit{itemset} $X$ em $\mathcal{D}$ é o número de transações cobertas por $X$ em $\mathcal{D}$: \[frequencia(X,\mathcal{D}) := |cobertura(X,\mathcal{D})|.\]
 
-Note que $|\mathcal{D}| = frequencia(\left\{\right\},\mathcal{D})$. O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$: \[suporte(X,\mathcal{D}) := P(X) = \frac{frequencia(X,\mathcal{D})}{|\mathcal{D}|}.\]
-
-Omitiremos $\mathcal{D}$ sempre que a sua dedução for trivial, de acordo com o contexto.
+Note que $|\mathcal{D}| = frequencia(\left\{\right\},\mathcal{D})$. O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$: \[suporte(X,\mathcal{D}) := P(X) = \frac{frequencia(X,\mathcal{D})}{|\mathcal{D}|}.\] Omitiremos $\mathcal{D}$ sempre que a sua dedução for trivial, de acordo com o contexto.
 \par
 Um \textit{itemset} é freqüente se o seu suporte é maior ou igual a um dado valor relativo mínimo $\sigma_{rel}$, com $0 \leq \sigma_{rel} \leq 1$. Quando se considera freqüências de \textit{itemsets} ao invés de suportes, é utilizado um valor absoluto $\sigma_{abs}$, com $0 \leq \sigma_{abs} \leq |\mathcal{D}|$. Obviamente, $\sigma_{abs} = \left\lceil \sigma_{rel} \cdot |\mathcal{D}| \right\rceil$. No restante deste texto, sempre que não especificarmos a natureza de $\sigma$, $\sigma_{rel}$ deve ser considerado.
 
@@ -77,7 +75,7 @@ Intuitivamente, classificadores associativos possuem comportamento melhor que ár
 \par
 Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas inutilizáveis durante a classificação, por serem desnecessárias para todas as instâncias de teste.
 \par
-Diferente das abordagens \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regras específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada para a classificação. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
+Diferente da abordagem \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regras específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada para a classificação. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
 \par
 Em \cite{Veloso06Lazy}, encontramos a demonstração de que abordagens \textit{lazy} de classificadores associativos produzem resultados iguais ou melhores aos classificadores que utilizam a abordagem \textit{eager}.
 

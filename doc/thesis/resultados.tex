@@ -2,8 +2,8 @@
 \chapter{Experiments and Results}
 \label{chapter:resultados}
 
-%\section{O Projeto \textbf{machado}}
-\section{The Project \textbf{machado}}
+%\section{O Aplicativo \textbf{OLAC}}
+\section{The Applicative \textbf{OLAC}}
 
 %\par
 %Algumas informações sobre o aplicativo (linguagem, número de linhas, opções de execução (--help), %\par
@@ -14,7 +14,7 @@
 %O algoritmo não ortogonal está quase igual ao lazy - talvez ele nem precise ser citado
 %\par
 
-The project \textbf{machado} contains the implementation of an association rules based classifier with three different approaches.
+The applicative \textbf{OLAC} contains the implementation of an association rules based classifier with three different approaches.
 \par
 The first one, called \textbf{non-orthogonal} just obtains the frequent patterns set and generates rules with it. After that, it chooses the more indicated class according to the rules contained in a rank considering confidence.
 \par
@@ -25,7 +25,7 @@ the third one, called \textbf{ORIGAMI} is an implementation of ORIGAMI, as it wa
 The execution options are shown below:
 
 \begin{verbatim}
-Usage: ./classifier [options]
+Usage: ./olac [options]
 Options:
   -i, --training-file       Set the training file
   -t, --testing-file        Set the testing file
@@ -55,7 +55,7 @@ Options:
   -h, --help                Display this information
 \end{verbatim}
 
-Now, we will show some graphics comparing the executions of the three approaches implemented in machado and LAC, the lazy associative classifier impelemted in \cite{Veloso06Lazy}, but first we will do some observations about these test instances:
+Now, we will show some graphics comparing the executions of the three approaches implemented in OLAC and LAC, the lazy associative classifier impelemted in \cite{Veloso06Lazy}, but first we will do some observations about these test instances:
 \par
 \begin{itemize}
 	\item LAC was run with support 1, just because this is the objective of LAC (the Adriano Veloso implementation) - to get better results with the minimum support value;
