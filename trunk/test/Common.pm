@@ -527,9 +527,12 @@ sub GetLazyParmsFromOutputFile ($)
 		$max_size	=~ s/.*max_size \[([^\]]*)\].*/$1/;
 		$ranking_size	=~ s/.*ranking_size \[([^\]]*)\].*/$1/;
 		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-		$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
-		$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
-		$avg_time	=~ s/.*average time \[([^\]]*)\].*/$1/;
+#		$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+#		$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+#		$avg_time	=~ s/.*average time \[([^\]]*)\].*/$1/;
+		$avg_time	=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -579,9 +582,12 @@ sub GetClassifierCParmsFromOutputFile ($)
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
-		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
-		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+#		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+#		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+#		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -642,9 +648,12 @@ sub GetClassifierOParmsFromOutputFile ($)
 		$omethod		=~ s/.*omethod \[([^\]]*)\].*/$1/;
 		$oordering		=~ s/.*oordering \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
-		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
-		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+#		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+#		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+#		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -702,9 +711,12 @@ sub GetClassifierORParmsFromOutputFile ($)
 		$alpha			=~ s/.*alpha \[([^\]]*)\].*/$1/;
 		$beta			=~ s/.*beta \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
-		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
-		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+#		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
+		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
+#		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
+#		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
