@@ -57,15 +57,15 @@ sub get_best_run_for_application ($$)
 
 	my $RunResult = Common::GetBestRunResult ($application, $data_base);
 
-	$best_run_for_each_db_acc_hsh{$data_base}{$application}		= $RunResult->{ACCURACY};
+	$best_run_for_each_db_acc_hsh{$data_base}{$application}	= $RunResult->{ACCURACY};
 	$best_run_for_each_db_pat_hsh{$data_base}{$application}	= $RunResult->{AVG_PATTERNS};
 	$best_run_for_each_db_rul_hsh{$data_base}{$application}	= $RunResult->{AVG_RULES};
-	$best_run_for_each_db_tim_hsh{$data_base}{$application}		= $RunResult->{AVG_TIME};
+	$best_run_for_each_db_tim_hsh{$data_base}{$application}	= $RunResult->{AVG_TIME};
 
-	$best_run_for_each_db_acc_hsh{'average'}{$application}		+= $RunResult->{ACCURACY};
+	$best_run_for_each_db_acc_hsh{'average'}{$application}	+= $RunResult->{ACCURACY};
 	$best_run_for_each_db_pat_hsh{'average'}{$application}	+= $RunResult->{AVG_PATTERNS};
-	$best_run_for_each_db_rul_hsh{'average'}{$application}		+= $RunResult->{AVG_RULES};
-	$best_run_for_each_db_tim_hsh{'average'}{$application}		+= $RunResult->{AVG_TIME};
+	$best_run_for_each_db_rul_hsh{'average'}{$application}	+= $RunResult->{AVG_RULES};
+	$best_run_for_each_db_tim_hsh{'average'}{$application}	+= $RunResult->{AVG_TIME};
 }
 
 sub get_best_runs_for_data_base ($)
