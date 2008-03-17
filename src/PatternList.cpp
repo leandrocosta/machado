@@ -88,6 +88,8 @@ const uint32 PatternList::GetResidue (const PatternList *pPatternList, const Pat
 
 PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTransactionList, const OrtMode &mode, const OrtMethod &method, const Pattern::OrtMetric &rMetric, const OrtOrdering &ordering, const float32 &rAlpha, const float32 &rBeta, float32 &rRate)
 {
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternList () - mode [%c], method [%c], metric [%c], ordering [%c], alpha [%f], beta [%f]\n", mode, method, rMetric, ordering, rAlpha, rBeta);
+
 	PatternList *pOrthogonalPatternList = NULL;
 
 	switch (rMetric)
@@ -154,6 +156,8 @@ PatternList* PatternList::GetOrthogonalPatternList (const TransactionList *pTran
 			throw DataBaseException ("Unknown orthogonality metric");
 			break;
 	}
+
+	LOGMSG (LOW_LEVEL, "PatternList::GetOrthogonalPatternList () - patterns [%u]\n", pOrthogonalPatternList->GetSize ());
 
 	return pOrthogonalPatternList;
 }
