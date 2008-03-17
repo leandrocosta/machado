@@ -440,7 +440,7 @@ sub MakeOMetricHistogramGraph ($$$$$)
 
 format OUTPUT_OMETRIC =
 @<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
-$db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'},$$accuracy_hash{$db}{'m'}
+$db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'},$$accuracy_hash{$db}{'a'}
 .
 
 	my $gnu_file = "$OutputDirGraphs/$graph.gnu";
