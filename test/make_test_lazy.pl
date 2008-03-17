@@ -91,7 +91,7 @@ sub make_test_lazy ($$$$$$$$$$)
 	$$avg_rules	/= $Common::NumFolds;
 	$$accuracy	/= $Common::NumFolds;
 
-	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], avg_time [$avg_time]\n";
+	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], avg_time [$$avg_time]\n";
 
 	save_output_file ($data_base, $support, $confidence, $min_rules, $max_size, $ranking_size, $$avg_time, $$avg_patterns, $$avg_rules, $$accuracy);
 
