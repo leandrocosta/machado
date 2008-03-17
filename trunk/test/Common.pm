@@ -47,21 +47,21 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @Confidences = (
-	0.0001,
-	0.001,
-	0.01,
-	0.1,
-	0.2,
-	0.3,
-	0.4,
-	0.5,
-	0.6,
-	0.7,
-	0.8,
-	0.9,
-	0.95,
-	0.99,
-	1
+#	0.0001,
+#	0.001,
+#	0.01,
+#	0.1,
+#	0.2,
+#	0.3,
+#	0.4,
+#	0.5,
+#	0.6,
+#	0.7,
+#	0.8,
+#	0.9,
+#	0.95,
+#	0.99,
+#	1
 );
 
 @MinNumRules = (
@@ -73,9 +73,9 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 
 @MaxNumRankRules = (
 #	1,
-	10,
-	100,
-	1000,
+#	10,
+#	100,
+#	1000,
 #	10000,
 #	100000,
 #	1000000
@@ -93,27 +93,27 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierSupports = (
-	0.0001,
-	0.001,
-	0.01,
-	0.1,
-	0.2,
-	0.3,
-	0.4,
-	0.5,
-	0.6,
-	0.7,
-	0.8,
-	0.9,
-	0.95,
-	0.99,
-	1
+#	0.0001,
+#	0.001,
+#	0.01,
+#	0.1,
+#	0.2,
+#	0.3,
+#	0.4,
+#	0.5,
+#	0.6,
+#	0.7,
+#	0.8,
+#	0.9,
+#	0.95,
+#	0.99,
+#	1
 );
 
 @ClassifierPatternSets = (
-	'f',
+#	'f',
 #	'm',
-	'r'
+#	'r'
 );
 
 @ClassifierMinRuleLens = (
@@ -121,44 +121,44 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierMaxRuleLens = (
-	1,
-	2,
+#	1,
+#	2,
 #	3,
 #	4,
 #	5
 );
 
 @ClassifierOModes = (
-	'h',
+#	'h',
 #	'p'
 );
 
 @ClassifierOMetrics = (
-	's',
-	'c',
-	'l',
+#	's',
+#	'c',
+#	'l',
 #	'a'
 );
 
 @ClassifierOMethods = (
-	's',
+#	's',
 #	'p',
 #	'a'
 );
 
 @ClassifierOOrderings = (
-	's',
-	'r',
-	'i',
-	'z',
-	'n'
+#	's',
+#	'r',
+#	'i',
+#	'z',
+#	'n'
 );
 
 @ORIGAMIAlphas = (
-	0.1,
-	0.2,
-	0.3,
-	0.4,
+#	0.1,
+#	0.2,
+#	0.3,
+#	0.4,
 #	0.5,
 #	0.6,
 #	0.7,
@@ -174,7 +174,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	0.5,
 #	0.6,
 #	0.7,
-	0.8,
+#	0.8,
 #	0.9
 );
 
@@ -308,6 +308,8 @@ sub GetRunResultFromOutputFile ($)
 	my $avg_patterns = 0;
 	my $avg_rules = 0;
 	my $avg_time = 0;
+
+#	print "file: $out_file\n";
 
 	if (-e $out_file)
 	{
@@ -449,7 +451,7 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 
 	open OUTPUT_OMETRIC, ">$dat_file";
 
-	print OUTPUT_OMETRIC "data_file           similarity          coverage            class_coverage      pair_class_coverage \n";
+	print OUTPUT_OMETRIC "data_file           similarity          coverage            class_coverage      all                 \n";
 
 	foreach $data_base (@DataBases)
 	{
@@ -499,7 +501,7 @@ sub GetLazyParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $accuracy, $avg_patterns, $avg_rules);
+	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -517,6 +519,7 @@ sub GetLazyParmsFromOutputFile ($)
 		$accuracy	= $_;
 		$avg_patterns	= $_;
 		$avg_rules	= $_;
+		$avg_time	= $_;
 
 		$support	=~ s/.*support \[([^\]]*)\].*/$1/;
 		$confidence	=~ s/.*confidence \[([^\]]*)\].*/$1/;
@@ -526,6 +529,7 @@ sub GetLazyParmsFromOutputFile ($)
 		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 		$avg_patterns	=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 		$avg_rules	=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_time	=~ s/.*average time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -536,7 +540,8 @@ sub GetLazyParmsFromOutputFile ($)
 		RANKING_SIZE	=> $ranking_size,
 		ACCURACY	=> $accuracy,
 		AVG_PATTERNS	=> $avg_patterns,
-		AVG_RULES	=> $avg_rules
+		AVG_RULES	=> $avg_rules,
+		AVG_TIME	=> $avg_time
 	};
 
 	return $Parms;
@@ -546,7 +551,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $accuracy, $avg_patterns, $avg_rules);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -565,6 +570,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 		$accuracy		= $_;
 		$avg_patterns		= $_;
 		$avg_rules		= $_;
+		$avg_time		= $_;
 
 		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
@@ -575,6 +581,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -586,7 +593,8 @@ sub GetClassifierCParmsFromOutputFile ($)
 		MAX_RULE_LEN		=> $max_rule_len,
 		ACCURACY		=> $accuracy,
 		AVG_PATTERNS		=> $avg_patterns,
-		AVG_RULES		=> $avg_rules
+		AVG_RULES		=> $avg_rules,
+		AVG_TIME		=> $avg_time
 	};
 
 	return $Parms;
@@ -596,7 +604,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $accuracy, $avg_patterns, $avg_rules);
+	my ($support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -620,6 +628,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 		$accuracy		= $_;
 		$avg_patterns		= $_;
 		$avg_rules		= $_;
+		$avg_time		= $_;
 
 		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
@@ -635,6 +644,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -651,7 +661,8 @@ sub GetClassifierOParmsFromOutputFile ($)
 		OORDERING		=> $oordering,
 		ACCURACY		=> $accuracy,
 		AVG_PATTERNS		=> $avg_patterns,
-		AVG_RULES		=> $avg_rules
+		AVG_RULES		=> $avg_rules,
+		AVG_TIME		=> $avg_time
 	};
 
 	return $Parms;
@@ -661,7 +672,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $accuracy, $avg_patterns, $avg_rules);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -681,6 +692,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 		$accuracy		= $_;
 		$avg_patterns		= $_;
 		$avg_rules		= $_;
+		$avg_time		= $_;
 
 		$support		=~ s/.*support \[([^\]]*)\].*/$1/;
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
@@ -692,6 +704,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*average rules \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*average time \[([^\]]*)\].*/$1/;
 	}
 
 	my $Parms = {
@@ -704,7 +717,8 @@ sub GetClassifierORParmsFromOutputFile ($)
 		BETA			=> $beta,
 		ACCURACY		=> $accuracy,
 		AVG_PATTERNS		=> $avg_patterns,
-		AVG_RULES		=> $avg_rules
+		AVG_RULES		=> $avg_rules,
+		AVG_TIME		=> $avg_time
 	};
 
 	return $Parms;
