@@ -94,7 +94,7 @@ sub make_test_classifier_c ($$$$$$$$$$$)
 	$$avg_rules	/= $Common::NumFolds;
 	$$accuracy	/= $Common::NumFolds;
 
-	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], time [$$avg_time]\n";
+	print "accuracy [$$accuracy], avg_patterns [$$avg_patterns], avg_rules [$$avg_rules], avg_time [$$avg_time]\n";
 
         save_output_file ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $$avg_time, $$avg_patterns, $$avg_rules, $$accuracy);
 
