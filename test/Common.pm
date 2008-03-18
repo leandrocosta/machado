@@ -374,9 +374,13 @@ sub MakeAppHistogramGraph ($$$$$$)
 
 	my ($db);
 
+#format OUTPUT_APP =
+#@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
+#$db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$accuracy_hash{$db}{'classifier_or'}
+#.
 format OUTPUT_APP =
-@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
-$db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$accuracy_hash{$db}{'classifier_or'}
+@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<<
+$db,$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$accuracy_hash{$db}{'classifier_or'}
 .
 
 	my $gnu_file = "$OutputDirGraphs/$graph.gnu";
@@ -386,7 +390,8 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 	open OUTPUT_APP, ">$dat_file";
 
 #	print OUTPUT_APP "data_file           lazy                classifier_c        classifier_o        classifier_or       \n";
-	print OUTPUT_APP "data_file           LAC                 non-orthogonal      orthogonal          ORIGAMI             \n";
+#	print OUTPUT_APP "data_file           LAC                 non-orthogonal      orthogonal          ORIGAMI             \n";
+	print OUTPUT_APP "data_file           LAC                 OLAC                ORIGAMI             \n";
 
 	foreach $data_base (@DataBases)
 	{
@@ -428,7 +433,8 @@ $db,$$accuracy_hash{$db}{'lazy'},$$accuracy_hash{$db}{'classifier_c'},$$accuracy
 
 	print OUTPUT "set logscale y\n" if $logscale;
 #	print OUTPUT "set yrange [0:1] noreverse nowriteback\n";
-	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col";
+#	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col";
+	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col";
 	close OUTPUT;
 
 	system "$GnuPlotApp $gnu_file";
