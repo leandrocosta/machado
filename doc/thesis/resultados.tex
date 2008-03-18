@@ -55,6 +55,81 @@ Options:
   -h, --help                Display this information
 \end{verbatim}
 
+An example to demonstrate the OLAC execution:
+
+The training data set of table \ref{tab:db} was created over the set of items $\I = \left\{ A, B, C, D, E \right\}$
+
+\begin{table}[htbp]
+	\centering
+		\begin{tabular}{|c|c|c|}
+		\hline
+		ID	&	Class	& Itemset	\\
+		\hline
+		$0$	& $CLASS=1$	& $ABDE$	\\
+		\hline
+		\end{tabular}
+	\caption{Training Data Set for Example}
+	\label{tab:db}
+\end{table}
+
+%itens:
+%A B C D E
+%
+%treinamento:
+%0 CLASS=1 A B D E
+%1 CLASS=1 A B
+%2 CLASS=2 A B C
+%3 CLASS=3 D E
+%4 CLASS=2 B C D
+%5 CLASS=3 A D E
+%6 CLASS=1 A B D
+%7 CLASS=2 B C
+%8 CLASS=2 B C E
+%9 CLASS=1 A B E
+%
+%teste:
+%0 CLASS=1 A B E
+%
+%execução:
+%
+%suporte: 0.1
+%confiança: 0.1
+%pattern-set: f
+%min-num-rules: 1
+%max-num-rank-rules: 1000
+%min-rule-len: 1
+%max-rule-len: 1000
+%
+%não-ortogonal: 
+%accuracy [1], average patterns [7], average rules [15], average time [0.000428]
+%padrões:
+%A
+%B
+%E
+%A B
+%A E
+%B E
+%A B E
+%
+%ortogonal - similarity (reverse sorted by side):
+%accuracy [1], average patterns [2], average rules [4], average time [0.001799]
+%padrões:
+%A E
+%B
+%
+%ortogonal - coverage (sorted):
+%accuracy [1], average patterns [2], average rules [5], average time [0.003535]
+%padrões:
+%A B
+%E
+%
+%
+%ortogonal - class coverage (sorted by side):
+%accuracy [1], average patterns [2], average rules [5], average time [0.003621]
+%padrões:
+%B
+%E
+
 \section{Experiments}
 
 Now, we will show some graphics comparing the executions of the three approaches implemented: LAC, OLAC and ORIGAMI. %, but first we will do some observations about these test instances:
