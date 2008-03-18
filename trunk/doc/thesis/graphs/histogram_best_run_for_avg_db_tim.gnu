@@ -11,4 +11,4 @@ set title "Best Parameters Classification Time Average Histogram"
 set xlabel "Data Sets"
 set ylabel "Classification Time Average"
 set logscale y
-plot 'output/graphs/histogram_best_run_for_avg_db_tim.dat' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col
+plot 'output/graphs/histogram_best_run_for_avg_db_tim.dat' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col

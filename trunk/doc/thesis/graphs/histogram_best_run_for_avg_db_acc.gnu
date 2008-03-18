@@ -10,4 +10,4 @@ set xtics ("anneal.ac" 0, "austra.ac" 1, "auto.ac" 2, "breast.ac" 3, "cleve.ac" 
 set title "Best Parameters Accuracy Histogram"
 set xlabel "Data Sets"
 set ylabel "Accuracy"
-plot 'output/graphs/histogram_best_run_for_avg_db_acc.dat' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col
+plot 'output/graphs/histogram_best_run_for_avg_db_acc.dat' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col
