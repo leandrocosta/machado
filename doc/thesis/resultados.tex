@@ -16,11 +16,11 @@
 
 The applicative \textbf{OLAC} contains the implementation of an association rules based classifier with three different approaches.
 \par
-The first one, called \textbf{non-orthogonal} just obtains the frequent patterns set and generates rules with it. After that, it chooses the more indicated class according to the rules contained in a rank considering confidence.
+The first one, called \textbf{LAC}, is the classical (or non-orthogonal) \textit{lazy} associative approach  as it was proposed in \cite{Veloso06Lazy}, that just obtains the frequent patterns set and generates rules with it. After that, it chooses the more indicated class according to the rules contained in a rank considering confidence.
 \par
-The second one, called \textbf{orthogonal} obtains an orthogonal set of patterns from the frequent patterns set, and generates rules from that patterns set. After that, it chooses the more indiated class the same way it is done with the non-orthogonal approach.
+The second one, called \textbf{OLAC} is  the orthogonal \textit{lazy} associative aproach that obtains an orthogonal set of patterns from the frequent patterns set, and generates rules from that patterns set. After that, it chooses the more indiated class the same way it is done with the non-orthogonal approach.
 \par
-the third one, called \textbf{ORIGAMI} is an implementation of ORIGAMI, as it was proposed in \cite{zaki07origami}.
+The third one, called \textbf{ORIGAMI} is an implementation of ORIGAMI, as it was proposed in \cite{zaki07origami}.
 \par
 The execution options are shown below:
 
@@ -55,46 +55,55 @@ Options:
   -h, --help                Display this information
 \end{verbatim}
 
-Now, we will show some graphics comparing the executions of the three approaches implemented in OLAC and LAC, the lazy associative classifier impelemted in \cite{Veloso06Lazy}, but first we will do some observations about these test instances:
+\section{Experiments}
+
+Now, we will show some graphics comparing the executions of the three approaches implemented: LAC, OLAC and ORIGAMI. %, but first we will do some observations about these test instances:
+%\par
+%\begin{itemize}
+%	\item LAC was run with support 1, just because this is the objective of LAC (the Adriano Veloso implementation) - to get better results with the minimum support value;
+%	\item ORIGAMI was run with $\alpha = 0.2$, and $\beta = 0.8$, we need to make more tests with another values for $\alpha$ and $\beta$ in order to get better results;
+%	\item We are still running these experiments with anoter parameters, and trying to get some better results for all approaches.
+%\end{itemize}
 \par
-\begin{itemize}
-	\item LAC was run with support 1, just because this is the objective of LAC (the Adriano Veloso implementation) - to get better results with the minimum support value;
-	\item ORIGAMI was run with $\alpha = 0.2$, and $\beta = 0.8$, we need to make more tests with another values for $\alpha$ and $\beta$ in order to get better results;
-	\item We are still running these experiments with anoter parameters, and trying to get some better results for all approaches.
-\end{itemize}
-\par
-The figure \ref{fig:histogram_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_pat} shows a histogram with the average number of patterns used for each classification, and the figure \ref{fig:histogram_rul} shows the average number of rules generated for each classification. For these three results it was used the best sets of parameters for each application and dataset, for example, considering the orthogonal classifier, for anneal.ac we used support equals to 0.0001, but for waveform.ac we used support equals to 0.01, since the best results were obtained with this value.
+The figure \ref{fig:histogram_best_run_for_each_db_acc} shows a histogram with the best accuracies for each dataset obtained with the three approaches. The figure \ref{fig:histogram_best_run_for_each_db_pat} shows a histogram with the average number of patterns used for each classification, the figure \ref{fig:histogram_best_run_for_each_db_rul} shows the average number of rules generated for each classification, and the figure \ref{fig:histogram_best_run_for_each_db_tim} shows the average time spent for each classification. For these four results it was used the best sets of parameters for each application and dataset, for example, considering the orthogonal classifier OLAC, for anneal.ac we used support equals to 0.001, but for waveform.ac we used support equals to 0.0001, since the best results were obtained with this value.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/histogram_acc}
+	\includegraphics{graphs/histogram_best_run_for_each_db_acc}
 	\caption{Accuracy Histogram (best results for each dataset)}
-	\label{fig:histogram_acc}
+	\label{fig:histogram_best_run_for_each_db_acc}
 \end{figure}
 
-As we can see in the figure \ref{fig:histogram_acc}, the results for accuracy orthogonal and non-orthogonal versions of our classifier are very close. the average accuracy obtained for them were $0.8085$ and $0.8088$ respectively, and they are both better than LAC.
+As we can see in the figure \ref{fig:histogram_best_run_for_each_db_acc}, the accuracies for orthogonal and non-orthogonal versions of our classifier are very close. the average accuracy obtained for them were $0.8085$ and $0.8088$ respectively, and they are both better than LAC.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/histogram_pat}
+	\includegraphics{graphs/histogram_best_run_for_each_db_pat}
 	\caption{Patterns Histogram (best results for each dataset)}
-	\label{fig:histogram_pat}
+	\label{fig:histogram_best_run_for_each_db_pat}
 \end{figure}
 
-The number of patterns generated by orthogonal version of our classifier (shown by figure \ref{fig:histogram_pat}) is lower than the LAC ones. The difference would be still greater (as it was comparing our orthogonal and non-orthogonal versions) if we used lower values for confidence in LAC (the value for this parameter that produced better results in average was $0.95$.
+The number of patterns generated by orthogonal version of our classifier (shown by figure \ref{fig:histogram_best_run_for_each_db_pat}) is lower than the LAC ones. The difference would be still greater (as it was comparing our orthogonal and non-orthogonal versions) if we used lower values for confidence in LAC (the value for this parameter that produced better results in average was $0.95$.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/histogram_rul}
+	\includegraphics{graphs/histogram_best_run_for_each_db_rul}
 	\caption{Rules Histogram (best results for each dataset)}
-	\label{fig:histogram_rul}
+	\label{fig:histogram_best_run_for_each_db_rul}
 \end{figure}
 
-The number of patterns generated by orthogonal version of our classifier (shown by figure \ref{fig:histogram_rul}) is higher than the LAC ones. This happened because the same - the values for confidence used for LAC were very high. We believe that if we run LAC with lower values for confidence, this number will be much higher.
+The number of patterns generated by orthogonal version of our classifier (shown by figure \ref{fig:histogram_best_run_for_each_db_rul}) is higher than the LAC ones. This happened because the same - the values for confidence used for LAC were very high. We believe that if we run LAC with lower values for confidence, this number will be much higher.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics{graphs/histogram_best_run_for_each_db_tim}
+	\caption{Classification Time Histogram (best results for each dataset)}
+	\label{fig:histogram_best_run_for_each_db_tim}
+\end{figure}
 
 \clearpage
 
-The figure \ref{fig:bst_histogram_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:bst_histogram_pat} shows a histogram with the average number of patterns used for each classification, and the figure \ref{fig:bst_histogram_rul} shows the average number of rules generated for each classification. For those three results it was used, for each application, the set of parameters that produced the best average accuracy for the whole set of data. The values for each parameter are shown in table \ref{tab:parms}.
+The figure \ref{fig:histogram_best_run_for_avg_db_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_best_run_for_avg_db_pat} shows a histogram with the average number of patterns used for each classification, the figure \ref{fig:histogram_best_run_for_avg_db_rul} shows the average number of rules generated for each classification and the figure \ref{fig:histogram_best_run_for_avg_db_tim} shows the average spent for each classification. For those three results it was used, for each application, the set of parameters that produced the best average accuracy for the whole set of data. The values for each parameter are shown in table \ref{tab:parms}.
 \par
 Some observations about the parameters - the support used by LAC is the absolute value 1 (one transaction), and not a relative value as in the other applications. Some parameters are not applicable to all approaches.
 
@@ -133,40 +142,47 @@ Some observations about the parameters - the support used by LAC is the absolute
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/bst_histogram_acc}
+	\includegraphics{graphs/histogram_best_run_for_avg_db_acc}
 	\caption{Accuracy Histogram (best average results for all datasets)}
-	\label{fig:bst_histogram_acc}
+	\label{fig:histogram_best_run_for_avg_db_acc}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/bst_histogram_pat}
+	\includegraphics{graphs/histogram_best_run_for_avg_db_pat}
 	\caption{Patterns Histogram (best average results for all datasets)}
-	\label{fig:bst_histogram_pat}
+	\label{fig:histogram_best_run_for_avg_db_pat}
 \end{figure}
 
-The number of patterns generated with ORIGAMI approach in figure \ref{fig:bst_histogram_pat} was $1$ (one) for all datasets. This happened because the best combined values for support and confidence found was $0.001$ and $0.1$, and this, possibly, didn't generate any valid rule, since the low support generates big maximal patterns, and $0.1$ is a sufficient value for confidence to turn all rules invalid. Since the applicative tries to generate, at least, one rule for each test instance, just one of the rules is added to the result. As it was told before, we are running the experiment with more parameter combinations, searching for better results.
+The number of patterns generated with ORIGAMI approach in figure \ref{fig:histogram_best_run_for_avg_db_pat} was $1$ (one) for all datasets. This happened because the best combined values for support and confidence found was $0.001$ and $0.1$, and this, possibly, didn't generate any valid rule, since the low support generates big maximal patterns, and $0.1$ is a sufficient value for confidence to turn all rules invalid. Since the applicative tries to generate, at least, one rule for each test instance, just one of the rules is added to the result. As it was told before, we are running the experiment with more parameter combinations, searching for better results.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics{graphs/bst_histogram_rul}
+	\includegraphics{graphs/histogram_best_run_for_avg_db_rul}
 	\caption{Rules Histogram (best average results for all datasets)}
-	\label{fig:bst_histogram_rul}
+	\label{fig:histogram_best_run_for_avg_db_rul}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics{graphs/histogram_best_run_for_avg_db_tim}
+	\caption{Classification Time Histogram (best average results for all datasets)}
+	\label{fig:histogram_best_run_for_avg_db_tim}
 \end{figure}
 
 \clearpage
 
-\section{Comparação Ortogonal x Não Ortogonal}
-
-Histogramas de acurácia, número de padrões e número de regras. \\
-Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
-
-\section{Comparação Ortogonal x LAC}
-
-Histogramas de acurácia, número de padrões e número de regras. \\
-Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
-
-\section{Comparação Ortogonal x ORIGAMI}
-
-Histogramas de acurácia, número de padrões e número de regras. \\
-Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
+%\section{Comparação Ortogonal x Não Ortogonal}
+%
+%Histogramas de acurácia, número de padrões e número de regras. \\
+%Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
+%
+%\section{Comparação Ortogonal x LAC}
+%
+%Histogramas de acurácia, número de padrões e número de regras. \\
+%Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
+%
+%\section{Comparação Ortogonal x ORIGAMI}
+%
+%Histogramas de acurácia, número de padrões e número de regras. \\
+%Comparar melhor conjunto de parâmetros para cada arquivo e melhor conjunto de parâmetros para todos os arquivos juntos.
