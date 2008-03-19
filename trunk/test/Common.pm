@@ -46,7 +46,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 	'zoo.ac'
 );
 
-@Confidences = (
+@ClassifierSupports = (
 #	0.0001,
 #	0.001,
 #	0.01,
@@ -64,35 +64,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	1
 );
 
-@MinNumRules = (
-	1,
-#	10,
-#	100,
-#	1000
-);
-
-@MaxNumRankRules = (
-#	1,
-#	10,
-#	100,
-#	1000,
-#	10000,
-#	100000,
-#	1000000
-);
-
-@LazySupports = (
-	1
-);
-
-@LazyMaxSizes = (
-	2,
-#	3,
-#	4,
-#	5
-);
-
-@ClassifierSupports = (
+@Confidences = (
 #	0.0001,
 #	0.001,
 #	0.01,
@@ -114,6 +86,23 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	'f',
 #	'm',
 #	'r'
+);
+
+@MinNumRules = (
+	1,
+#	10,
+#	100,
+#	1000
+);
+
+@MaxNumRankRules = (
+#	1,
+#	10,
+#	100,
+#	1000,
+#	10000,
+#	100000,
+#	1000000
 );
 
 @ClassifierMinRuleLens = (
@@ -177,6 +166,17 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	0.8,
 #	0.9
 );
+
+#@LazySupports = (
+#	1
+#);
+
+#@LazyMaxSizes = (
+#	2,
+#	3,
+#	4,
+#	5
+#);
 
 $NumFolds = 10;
 
