@@ -41,8 +41,9 @@ Options:
   -x, --max-rule-len        Set the maximum length of the rules
   -o, --orth-mode           Set the orthogonality mode [h,p,o] [HEURISTICAL,
                               POLYNOMIAL, ORIGAMI]
-  -e, --orth-metric         Set the orthogonality metric [s,c,l,a] [SIMILARITY,
-                              TRANSACTION COVERAGE, CLASS COVERAGE, ALL]
+  -e, --orth-metric         Set the orthogonality metric [s,c,l,a]
+                              [SIMILARITY, TRANSACTION COVERAGE, CLASS
+                              COVERAGE, ALL]
   -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR
                               AVERAGE, ALL]
   -g, --orth-pat-ordering   Set the way patterns are ordered for heuristic
@@ -61,86 +62,13 @@ The options \textbf{-i} and \textbf{-t} are used to give training and testing fi
 
 An example to demonstrate the OLAC execution:
 
-%itens:
-%A B C D E
-The training data set of table \ref{tab:db} was created over the set of items $\I = \left\{ A, B, C, D, E \right\}$
+The training data set of table \ref{tab:example_training_db} was created over the set of items $\I = \left\{ A, B, C, D, E \right\}$
 
-%treinamento:
-%0 CLASS=1 A B D E
-%1 CLASS=1 A B
-%2 CLASS=2 A B C
-%3 CLASS=3 D E
-%4 CLASS=2 B C D
-%5 CLASS=3 A D E
-%6 CLASS=1 A B D
-%7 CLASS=2 B C
-%8 CLASS=2 B C E
-%9 CLASS=1 A B E
-\begin{table}[htbp]
-	\centering
-		\begin{tabular}{|c|c|l|}
-		\hline
-		\textbf{TID}	& \textbf{Class}	& \textbf{Itemset}	\\
-		\hline
-		$1$		& $CLASS=1$		& $AB$			\\
-		\hline
-		$2$		& $CLASS=2$		& $ABC$			\\
-		\hline
-		$3$		& $CLASS=1$		& $ABD$			\\
-		\hline
-		$4$		& $CLASS=1$		& $ABDE$		\\
-		\hline
-		$5$		& $CLASS=1$		& $ABE$			\\
-		\hline
-		$6$		& $CLASS=3$		& $ADE$			\\
-		\hline
-		$7$		& $CLASS=2$		& $BC$			\\
-		\hline
-		$8$		& $CLASS=2$		& $BCD$			\\
-		\hline
-		$9$		& $CLASS=2$		& $BCE$			\\
-		\hline
-		$10$		& $CLASS=3$		& $DE$			\\
-		\hline
-		\end{tabular}
-	\caption{Training Data Set for Example}
-	\label{tab:db}
-\end{table}
+\input{tables/table_example_training_db.tex}
 
-%teste:
-%0 CLASS=1 A B E
-And a testing data set with the transaction $ABE$ and class $CLASS=1$ was used in the test. The applicative \textbf{olac} was first executed with \textbf{LAC} (or non-orthogonal) mode using the parameters found in table \ref{tab:parms}.
+And a testing data set with the transaction $ABE$ and class $CLASS=1$ was used in the test. The applicative \textbf{olac} was first executed with \textbf{LAC} (or non-orthogonal) mode using the parameters found in table \ref{tab:example_run_parms}.
 
-%parâmetros:
-%suporte: 0.1
-%confiança: 0.1
-%pattern-set: f
-%min-num-rules: 1
-%max-num-rank-rules: 1000
-%min-rule-len: 1
-%max-rule-len: 1000
-\begin{table}[htbp]
-	\centering
-		\begin{tabular}{|l|c|}
-		\hline
-		\textbf{Parameter}	& \textbf{Value}	\\
-		\hline
-		support			& 0.1			\\
-		\hline
-		confidence		& 0.1			\\
-		\hline
-		min-num-rules		& 1			\\
-		\hline
-		max-num-rank-rules	& 1000			\\
-		\hline
-		min-rule-len		& 1			\\
-		\hline
-		max-rule-len		& 1000			\\
-		\hline
-		\end{tabular}
-	\caption{Parameters for non-ortogonal Running Example}
-	\label{tab:parms}
-\end{table}
+\input{tables/table_example_run_parms.tex}
 
 \clearpage
 
@@ -154,7 +82,7 @@ And a testing data set with the transaction $ABE$ and class $CLASS=1$ was used i
 %A E
 %B E
 %A B E
-This execution generated the frequent pattern set $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ and classified correctly the instance. After that, the applicative was executed in \textbf{OLAC} (or orthogonal) mode using the same parameters found in table \ref{tab:parms}, and similarity as the orthogonality metric. This approach extracted the orthogonal pattern set $\Or = \left\{ AE, B \right\}$ from the frequent pattern set and still classified correctly the instance. As we can see, the set of patterns used by orthogonal mode is much smaller than the original set of frequent patterns. And more, the orthogonal set doesn't have redundancy. It is expected that the redundancy of orthogonal pattern sets are lower than the redundancy of original frequent pattern sets.
+This execution generated the frequent pattern set $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ and classified correctly the instance. After that, the applicative was executed in \textbf{OLAC} (or orthogonal) mode using the same parameters found in table \ref{tab:example_run_parms}, and similarity as the orthogonality metric. This approach extracted the orthogonal pattern set $\Or = \left\{ AE, B \right\}$ from the frequent pattern set and still classified correctly the instance. As we can see, the set of patterns used by orthogonal mode is much smaller than the original set of frequent patterns. And more, the orthogonal set doesn't have redundancy. It is expected that the redundancy of orthogonal pattern sets are lower than the redundancy of original frequent pattern sets.
 \par
 %ortogonal - similarity (reverse sorted by side):
 %accuracy [1], average patterns [2], average rules [4], average time [0.001799]
@@ -223,42 +151,27 @@ The number of patterns generated by orthogonal version of our classifier (shown 
 
 \clearpage
 
-The figure \ref{fig:histogram_best_run_for_avg_db_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_best_run_for_avg_db_pat} shows a histogram with the average number of patterns used for each classification, the figure \ref{fig:histogram_best_run_for_avg_db_rul} shows the average number of rules generated for each classification and the figure \ref{fig:histogram_best_run_for_avg_db_tim} shows the average spent for each classification. For those three results it was used, for each application, the set of parameters that produced the best average accuracy for the whole set of data. The values for each parameter are shown in table \ref{tab:parms}. Some parameters are not applicable to all approaches.
+The table \ref{tab:best_runs_for_each_db_lac} shows the parameters used LAC and the best results for each dataset.
+
+\input{tables/table_best_runs_lac.tex}
+
+\clearpage
+
+The table \ref{tab:best_runs_for_each_db_olac} shows the parameters used OLAC and the best results for each dataset.
+
+\input{tables/table_best_runs_olac.tex}
+
+\clearpage
+
+The table \ref{tab:best_runs_for_each_db_origami} shows the parameters used ORIGAMI and the best results for each dataset.
+
+\input{tables/table_best_runs_origami.tex}
+
+\clearpage
+
+The figure \ref{fig:histogram_best_run_for_avg_db_acc} shows a histogram with the best accuracies for each dataset obtained with LAC, ORIGAMI, orthogonal classifier and non-orthogonal classifier. The figure \ref{fig:histogram_best_run_for_avg_db_pat} shows a histogram with the average number of patterns used for each classification, the figure \ref{fig:histogram_best_run_for_avg_db_rul} shows the average number of rules generated for each classification and the figure \ref{fig:histogram_best_run_for_avg_db_tim} shows the average spent for each classification. For those three results it was used, for each application, the set of parameters that produced the best average accuracy for the whole set of data. The values for each parameter are shown in table \ref{tab:best_parms_for_avg_db}. Some parameters are not applicable to all approaches.
 
 \input{tables/table_best_parms_for_avg_db.tex}
-
-%\begin{table}[htbp]
-%	\centering
-%		\begin{tabular}{|l|l|l|l|}
-%		\hline
-%					& \textbf{LAC}	& \textbf{OLAC} & \textbf{ORIGAMI}	\\
-%		\hline
-%		support			& 0.0001	& 0.01		& 0.001			\\
-%		\hline
-%		confidence		& 0.0001	& 0.001		& 0.1			\\
-%		\hline
-%		min-num-rules		& 1		& 1		& 1			\\
-%		\hline
-%		max-num-rank-rules	& 1000		& 100		& 100			\\
-%		\hline
-%		min-rule-len		& 1		& 1		& -			\\
-%		\hline
-%		max-rule-len		& 1		& 2		& -			\\
-%		\hline
-%		metric			& -		& similarity	& similarity		\\
-%		\hline
-%		method			& -		& set		& -			\\
-%		\hline
-%		pat-ordering		& -		& sorted	& -			\\
-%		\hline
-%		alpha			& -		& -		& 0.2			\\
-%		\hline
-%		beta			& -		& -		& 0.8			\\		
-%		\hline
-%		\end{tabular}
-%	\caption{Set of parameters for each run}
-%	\label{tab:parms}
-%\end{table}
 
 \begin{figure}[htbp]
 	\centering
@@ -294,20 +207,20 @@ The number of patterns generated with ORIGAMI approach in figure \ref{fig:histog
 
 In table \ref{tab:comparison_lac_olac} we have a comparison between the execution of LAC and OLAC approaches. This table shows the number of hits of both (second column), the number of hits of OLAC that LAC didn't get (third column), the number of hits of LAC that OLAC didn't get (fourth column) and the number of instances that both missed.
 
-\input{tables/comparison_lac_olac.tex}
+\input{tables/table_comparison_lac_olac.tex}
 
 \clearpage
 
 In table \ref{tab:comparison_lac_origami} we have a comparison between the execution of LAC and ORIGAMI approaches. This table shows the number of hits of both (second column), the number of hits of ORIGAMI that LAC didn't get (third column), the number of hits of LAC that ORIGAMI didn't get (fourth column) and the number of instances that both missed.
 
-\input{tables/comparison_lac_origami.tex}
+\input{tables/table_comparison_lac_origami.tex}
 
 \clearpage
 
 In table \ref{tab:comparison_olac_origami} we have a comparison between the execution of OLAC and ORIGAMI approaches. This table shows the number of hits of both (second column), the number of hits of OLAC that ORIGAMI didn't get (third column), the number of hits of ORIGAMI that OLAC didn't get (fourth column) and the number of instances that 
 both missed.
 
-\input{tables/comparison_olac_origami.tex}
+\input{tables/table_comparison_olac_origami.tex}
 
 %\section{Comparação Ortogonal x Não Ortogonal}
 %
