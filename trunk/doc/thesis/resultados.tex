@@ -62,45 +62,14 @@ The options \textbf{-i} and \textbf{-t} are used to give training and testing fi
 
 An example to demonstrate the OLAC execution:
 
-The training data set of table \ref{tab:example_training_db} was created over the set of items $\I = \left\{ A, B, C, D, E \right\}$
+The training data set of table \ref{tab:example_training_db} was created over the set of items $\I = \left\{ A, B, C, D, E \right\}$, and a testing data set with the transaction $ABE$ and class $CLASS=1$ was used in the test. The applicative \textbf{olac} was first executed with \textbf{LAC} (or non-orthogonal) mode using the parameters found in table \ref{tab:example_run_parms}.
 
 \input{tables/table_example_training_db.tex}
 
-And a testing data set with the transaction $ABE$ and class $CLASS=1$ was used in the test. The applicative \textbf{olac} was first executed with \textbf{LAC} (or non-orthogonal) mode using the parameters found in table \ref{tab:example_run_parms}.
-
 \input{tables/table_example_run_parms.tex}
 
-\clearpage
-
-%não-ortogonal: 
-%accuracy [1], average patterns [7], average rules [15], average time [0.000428]
-%padrões:
-%A
-%B
-%E
-%A B
-%A E
-%B E
-%A B E
 This execution generated the frequent pattern set $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ and classified correctly the instance. After that, the applicative was executed in \textbf{OLAC} (or orthogonal) mode using the same parameters found in table \ref{tab:example_run_parms}, and similarity as the orthogonality metric. This approach extracted the orthogonal pattern set $\Or = \left\{ AE, B \right\}$ from the frequent pattern set and still classified correctly the instance. As we can see, the set of patterns used by orthogonal mode is much smaller than the original set of frequent patterns. And more, the orthogonal set doesn't have redundancy. It is expected that the redundancy of orthogonal pattern sets are lower than the redundancy of original frequent pattern sets.
 \par
-%ortogonal - similarity (reverse sorted by side):
-%accuracy [1], average patterns [2], average rules [4], average time [0.001799]
-%padrões:
-%A E
-%B
-%
-%ortogonal - coverage (sorted):
-%accuracy [1], average patterns [2], average rules [5], average time [0.003535]
-%padrões:
-%A B
-%E
-%
-%ortogonal - class coverage (sorted by side):
-%accuracy [1], average patterns [2], average rules [5], average time [0.003621]
-%padrões:
-%B
-%E
 The applicative was executed with transaction coverage and class coverage as the orthogonality metrics too, extracting, respectively, $\Or = \left\{ AB, E \right\}$ and $\Or = \left\{ B, E \right\}$ as orthogonal pattern sets, and these executions classified the instance correctly too.
 
 \section{Experiments}
