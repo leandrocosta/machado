@@ -7,6 +7,7 @@
 #include "Transaction.h"
 #include "TransactionList.h"
 #include "PatternList.h"
+#include "RankingRule.h"
 #include "base/IOManager.h"
 #include "base/Tokenizer.h"
 
@@ -40,6 +41,7 @@ class DataBase : private IOManager, private Tokenizer
 				const PatternList::OrtMethod &rOrtMethod,
 				const Pattern::OrtMetric &rOrtMetric,
 				const PatternList::OrtOrdering &rOrtOrdering,
+				const RankingRule::RuleMeasure &rRuleMeasure,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const Transaction::PatternSet &rPatternSet,
@@ -62,6 +64,7 @@ class DataBase : private IOManager, private Tokenizer
 				const PatternList::OrtMethod &rOrtMethod,
 				const Pattern::OrtMetric &rOrtMetric,
 				const PatternList::OrtOrdering &rOrtOrdering,
+				const RankingRule::RuleMeasure &rRuleMeasure,
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const Transaction::PatternSet &rPatternSet,

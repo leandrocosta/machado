@@ -1,11 +1,13 @@
 #include "RankingRule.h"
 #include "Class.h"
 #include "Pattern.h"
+#include "DataBaseException.h"
 
 #include "base/Logger.h"
 
 #include <math.h>
 
+RankingRule::RuleMeasure RankingRule::msPrioritizedMeasure = RankingRule::MEASURE_CONFIDENCE;
 
 RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const uint32 &rProjectionSize, const uint32 &rNumClasses) : Rule (pClass, pPattern)
 {
@@ -15,15 +17,16 @@ RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const ui
 
 	mSupport	= (float32) correctTransactions / rProjectionSize;
 	mConfidence	= (float32) correctTransactions / patternFrequence;
-	mGain		= mSupport * (log2 (mConfidence) - log2 ((float32) classFrequence / rProjectionSize));
+	mGain		= (float32) mSupport * (log2 (mConfidence) - log2 ((float32) classFrequence / rProjectionSize));
 	mJaccard	= (float32) correctTransactions / (patternFrequence + classFrequence - correctTransactions);
-	mKulc		= (mSupport / 2) * ((float32) 1.0 / ((float32) patternFrequence / rProjectionSize) + (float32) 1.0 / ((float32) classFrequence / rProjectionSize));
-	mCosine		= mSupport / sqrt (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
-	mCoherence	= mSupport /((patternFrequence + classFrequence - (float32) correctTransactions) / rProjectionSize);
+	mKulc		= ((float32) mSupport / 2) * ((float32) 1.0 / ((float32) patternFrequence / rProjectionSize) + (float32) 1.0 / ((float32) classFrequence / rProjectionSize));
+	mCosine		= (float32) mSupport / sqrt (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
+	mCoherence	= (float32) mSupport /((patternFrequence + classFrequence - (float32) correctTransactions) / rProjectionSize);
 	mSensitivity	= (float32) correctTransactions / classFrequence;
 	mSpecificity	= (float32) (rProjectionSize - classFrequence - patternFrequence + correctTransactions) / (rProjectionSize - classFrequence);
 	mLaplace	= (float32) (correctTransactions + 1) / (patternFrequence + rNumClasses);
-	mCorrelation	= mSupport / ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
+	mLift		= (float32) mSupport / ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
+	mLeverage	= (float32) mSupport - ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
 }
 
 RankingRule::~RankingRule ()
@@ -37,7 +40,72 @@ const bool RankingRule::operator< (const Object &rRight) const
 
 	const RankingRule &rRule = static_cast<const RankingRule &>(rRight);
 
-	if (mConfidence < RANK_FACTOR_LOWER * rRule.GetConfidence ())
+	float32 measure_left	= 0.0;
+	float32 measure_right	= 0.0;
+
+	switch (msPrioritizedMeasure)
+	{
+		case RankingRule::MEASURE_SUPPORT:
+			measure_left	= mSupport;
+			measure_right	= rRule.GetSupport ();
+			break;
+		case RankingRule::MEASURE_CONFIDENCE:
+			measure_left	= mConfidence;
+			measure_right	= rRule.GetConfidence ();
+			break;
+		case RankingRule::MEASURE_GAIN:
+			measure_left	= mGain;
+			measure_right	= rRule.GetGain ();
+			break;
+		case RankingRule::MEASURE_JACCARD:
+			measure_left	= mJaccard;
+			measure_right	= rRule.GetJaccard ();
+			break;
+		case RankingRule::MEASURE_KULC:
+			measure_left	= mKulc;
+			measure_right	= rRule.GetKulc ();
+			break;
+		case RankingRule::MEASURE_COSINE:
+			measure_left	= mCosine;
+			measure_right	= rRule.GetCosine ();
+			break;
+		case RankingRule::MEASURE_COHERENCE:
+			measure_left	= mCoherence;
+			measure_right	= rRule.GetCoherence ();
+			break;
+		case RankingRule::MEASURE_SENSITIVITY:
+			measure_left	= mSensitivity;
+			measure_right	= rRule.GetSensitivity ();
+			break;
+		case RankingRule::MEASURE_SPECIFICITY:
+			measure_left	= mSpecificity;
+			measure_right	= rRule.GetSpecificity ();
+			break;
+		case RankingRule::MEASURE_LAPLACE:
+			measure_left	= mLaplace;
+			measure_right	= rRule.GetLaplace ();
+			break;
+		case RankingRule::MEASURE_LIFT:
+			measure_left	= mLift;
+			measure_right	= rRule.GetLift ();
+			break;
+		case RankingRule::MEASURE_LEVERAGE:
+			measure_left	= mLeverage;
+			measure_right	= rRule.GetLeverage ();
+			break;
+		case RankingRule::MEASURE_UNKNOWN:
+		default:
+			LOGMSG (NO_DEBUG, "RankingRule::operator<() - unknown rule measure\n");
+			throw DataBaseException ("Unknown rule measure");
+			break;
+	}
+
+	if (measure_left < RANK_FACTOR_LOWER * measure_right)
+		bRet = true;
+	else if (measure_right < RANK_FACTOR_LOWER * measure_left)
+		bRet = false;
+
+	else if (mConfidence < RANK_FACTOR_LOWER * rRule.GetConfidence ())
 		bRet = true;
 	else if (rRule.GetConfidence () < RANK_FACTOR_LOWER * mConfidence)
 		bRet = false;
@@ -82,9 +150,9 @@ const bool RankingRule::operator< (const Object &rRight) const
 	else if (rRule.GetLaplace () < RANK_FACTOR_LOWER * mLaplace)
 		bRet = false;
 
-	else if (mCorrelation < RANK_FACTOR_LOWER * rRule.GetCorrelation ())
+	else if (mLift < RANK_FACTOR_LOWER * rRule.GetLift ())
 		bRet = true;
-	else if (rRule.GetCorrelation () < RANK_FACTOR_LOWER * mCorrelation)
+	else if (rRule.GetLift () < RANK_FACTOR_LOWER * mLift)
 		bRet = false;
 
 	else if (mSupport < RANK_FACTOR_LOWER * rRule.GetSupport ())
@@ -112,7 +180,72 @@ const bool RankingRule::operator> (const Object &rRight) const
 
 	const RankingRule& rRule = static_cast<const RankingRule&>(rRight);
 
-	if (mConfidence > RANK_FACTOR_GREATER * rRule.GetConfidence ())
+	float32 measure_left	= 0.0;
+	float32 measure_right	= 0.0;
+
+	switch (msPrioritizedMeasure)
+	{
+		case RankingRule::MEASURE_SUPPORT:
+			measure_left	= mSupport;
+			measure_right	= rRule.GetSupport ();
+			break;
+		case RankingRule::MEASURE_CONFIDENCE:
+			measure_left	= mConfidence;
+			measure_right	= rRule.GetConfidence ();
+			break;
+		case RankingRule::MEASURE_GAIN:
+			measure_left	= mGain;
+			measure_right	= rRule.GetGain ();
+			break;
+		case RankingRule::MEASURE_JACCARD:
+			measure_left	= mJaccard;
+			measure_right	= rRule.GetJaccard ();
+			break;
+		case RankingRule::MEASURE_KULC:
+			measure_left	= mKulc;
+			measure_right	= rRule.GetKulc ();
+			break;
+		case RankingRule::MEASURE_COSINE:
+			measure_left	= mCosine;
+			measure_right	= rRule.GetCosine ();
+			break;
+		case RankingRule::MEASURE_COHERENCE:
+			measure_left	= mCoherence;
+			measure_right	= rRule.GetCoherence ();
+			break;
+		case RankingRule::MEASURE_SENSITIVITY:
+			measure_left	= mSensitivity;
+			measure_right	= rRule.GetSensitivity ();
+			break;
+		case RankingRule::MEASURE_SPECIFICITY:
+			measure_left	= mSpecificity;
+			measure_right	= rRule.GetSpecificity ();
+			break;
+		case RankingRule::MEASURE_LAPLACE:
+			measure_left	= mLaplace;
+			measure_right	= rRule.GetLaplace ();
+			break;
+		case RankingRule::MEASURE_LIFT:
+			measure_left	= mLift;
+			measure_right	= rRule.GetLift ();
+			break;
+		case RankingRule::MEASURE_LEVERAGE:
+			measure_left	= mLeverage;
+			measure_right	= rRule.GetLeverage ();
+			break;
+		case RankingRule::MEASURE_UNKNOWN:
+		default:
+			LOGMSG (NO_DEBUG, "RankingRule::operator<() - unknown rule measure\n");
+			throw DataBaseException ("Unknown rule measure");
+			break;
+	}
+
+	if (measure_left > RANK_FACTOR_GREATER * measure_right)
+		bRet = true;
+	else if (measure_right > RANK_FACTOR_GREATER * measure_left)
+		bRet = false;
+
+	else if (mConfidence > RANK_FACTOR_GREATER * rRule.GetConfidence ())
 		bRet = true;
 	else if (rRule.GetConfidence () > RANK_FACTOR_GREATER * mConfidence)
 		bRet = false;
@@ -157,9 +290,9 @@ const bool RankingRule::operator> (const Object &rRight) const
 	else if (rRule.GetLaplace () > RANK_FACTOR_GREATER * mLaplace)
 		bRet = false;
 
-	else if (mCorrelation > RANK_FACTOR_GREATER * rRule.GetCorrelation ())
+	else if (mLift > RANK_FACTOR_GREATER * rRule.GetLift ())
 		bRet = true;
-	else if (rRule.GetCorrelation () > RANK_FACTOR_GREATER * mCorrelation)
+	else if (rRule.GetLift () > RANK_FACTOR_GREATER * mLift)
 		bRet = false;
 
 	else if (mSupport > RANK_FACTOR_GREATER * rRule.GetSupport ())
@@ -178,6 +311,16 @@ const bool RankingRule::operator> (const Object &rRight) const
 	}
 
 	return bRet;
+}
+
+void RankingRule::SetPrioritizedMeasure (const RuleMeasure &measure)
+{
+	msPrioritizedMeasure = measure;
+}
+
+const RankingRule::RuleMeasure& RankingRule::GetPrioritizedMeasure ()
+{
+	return msPrioritizedMeasure;
 }
 
 const float32& RankingRule::GetSupport () const
@@ -230,12 +373,17 @@ const float32& RankingRule::GetLaplace () const
 	return mLaplace;
 }
 
-const float32& RankingRule::GetCorrelation () const
+const float32& RankingRule::GetLift () const
 {
-	return mCorrelation;
+	return mLift;
+}
+
+const float32& RankingRule::GetLeverage () const
+{
+	return mLeverage;
 }
 
 void RankingRule::Print () const
 {
-	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mCorrelation [%f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mCorrelation);
+	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mLift [%f], mLeverage [f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mLift, mLeverage);
 }
