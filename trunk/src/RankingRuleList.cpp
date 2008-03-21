@@ -30,7 +30,7 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 	hash_map<string, float32>	jaccardHash	;
 	hash_map<string, float32>	kulcHash	;
 	hash_map<string, float32>	cosineHash	;
-	hash_map<string, float32>	coherenceHash	;
+//	hash_map<string, float32>	coherenceHash	;
 	hash_map<string, float32>	sensitivityHash	;
 	hash_map<string, float32>	specificityHash	;
 	hash_map<string, float32>	laplaceHash	;
@@ -60,7 +60,7 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 		jaccardHash[pRule->GetClassValue ()]		+= pRule->GetJaccard ()		;
 		kulcHash[pRule->GetClassValue ()]		+= pRule->GetKulc ()		;
 		cosineHash[pRule->GetClassValue ()]		+= pRule->GetCosine ()		;
-		coherenceHash[pRule->GetClassValue ()]		+= pRule->GetCoherence ()	;
+//		coherenceHash[pRule->GetClassValue ()]		+= pRule->GetCoherence ()	;
 		sensitivityHash[pRule->GetClassValue ()]	+= pRule->GetSensitivity ()	;
 		specificityHash[pRule->GetClassValue ()]	+= pRule->GetSpecificity ()	;
 		laplaceHash[pRule->GetClassValue ()]		+= pRule->GetLaplace ()		;
@@ -105,9 +105,9 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 			case RankingRule::MEASURE_COSINE:
 				rankHash[pRule->GetClassValue ()] += pRule->GetCosine ();
 				break;
-			case RankingRule::MEASURE_COHERENCE:
-				rankHash[pRule->GetClassValue ()] += pRule->GetCoherence ();
-				break;
+//			case RankingRule::MEASURE_COHERENCE:
+//				rankHash[pRule->GetClassValue ()] += pRule->GetCoherence ();
+//				break;
 			case RankingRule::MEASURE_SENSITIVITY:
 				rankHash[pRule->GetClassValue ()] += pRule->GetSensitivity ();
 				break;
@@ -152,7 +152,7 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 		float32	jaccard		= jaccardHash [it->first]	;
 		float32	kulc		= kulcHash [it->first]		;
 		float32	cosine		= cosineHash [it->first]	;
-		float32	coherence	= coherenceHash [it->first]	;
+//		float32	coherence	= coherenceHash [it->first]	;
 		float32	sensitivity	= sensitivityHash [it->first]	;
 		float32	specificity	= specificityHash [it->first]	;
 		float32	laplace		= laplaceHash [it->first]	;
@@ -165,14 +165,15 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 		float32	jaccard_mean		= jaccard	/ rules	;
 		float32	kulc_mean		= kulc		/ rules	;
 		float32	cosine_mean		= cosine	/ rules	;
-		float32	coherence_mean		= coherence	/ rules	;
+//		float32	coherence_mean		= coherence	/ rules	;
 		float32	sensitivity_mean	= sensitivity	/ rules	;
 		float32	specificity_mean	= specificity	/ rules	;
 		float32	laplace_mean		= laplace	/ rules	;
 		float32	lift_mean		= lift		/ rules	;
 		float32	leverage_mean		= leverage	/ rules	;
 
-		LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f], gain abs/mean [%f/%f], jaccard abs/mean [%f/%f], kulc abs/mean [%f/%f], cosine abs/mean [%f/%f], coherence abs/mean [%f/%f], sensitivity abs/mean [%f/%f], specificity abs/mean [%f/%f], laplace abs/mean [%f/%f], lift abs/mean [%f/%f], leverage abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean, gain, gain_mean, jaccard, jaccard_mean, kulc, kulc_mean, cosine, cosine_mean, coherence, coherence_mean, sensitivity, sensitivity_mean, specificity, specificity_mean, laplace, laplace_mean, lift, lift_mean, leverage, leverage_mean);
+//		LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f], gain abs/mean [%f/%f], jaccard abs/mean [%f/%f], kulc abs/mean [%f/%f], cosine abs/mean [%f/%f], coherence abs/mean [%f/%f], sensitivity abs/mean [%f/%f], specificity abs/mean [%f/%f], laplace abs/mean [%f/%f], lift abs/mean [%f/%f], leverage abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean, gain, gain_mean, jaccard, jaccard_mean, kulc, kulc_mean, cosine, cosine_mean, coherence, coherence_mean, sensitivity, sensitivity_mean, specificity, specificity_mean, laplace, laplace_mean, lift, lift_mean, leverage, leverage_mean);
+		LOGMSG (MEDIUM_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s], rules [%u], support abs/mean [%f/%f], confidence abs/mean [%f/%f], gain abs/mean [%f/%f], jaccard abs/mean [%f/%f], kulc abs/mean [%f/%f], cosine abs/mean [%f/%f], sensitivity abs/mean [%f/%f], specificity abs/mean [%f/%f], laplace abs/mean [%f/%f], lift abs/mean [%f/%f], leverage abs/mean [%f/%f]\n", it->first.c_str (), rules, support, support_mean, confidence, confidence_mean, gain, gain_mean, jaccard, jaccard_mean, kulc, kulc_mean, cosine, cosine_mean, sensitivity, sensitivity_mean, specificity, specificity_mean, laplace, laplace_mean, lift, lift_mean, leverage, leverage_mean);
 
 //		rank_try = support_mean + confidence_mean;
 		rank_try = rankHash [it->first] / rules;
