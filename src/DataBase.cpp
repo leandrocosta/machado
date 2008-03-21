@@ -148,7 +148,7 @@ void DataBase::SortTransactions ()
  * (maximum size of rank)
  */
 
-void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
+void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const RankingRule::RuleMeasure &rRuleMeasure, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
 {
 	LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTestData ()\n");
 
@@ -157,7 +157,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	try
 	{
 		for (TransactionList::STLTransactionList_cit it = mTestTransactionList.GetBegin (); it != itEnd; ++it)
-			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rMinNumRules, rMaxNumRankRules, rPatternSet, rAlpha, rBeta);
+			ClassifyTransaction (static_cast<Transaction *>(*it), rRunMode, rOrtMode, rOrtMethod, rOrtMetric, rOrtOrdering, rRuleMeasure, rMinNumRules, rMaxNumRankRules, rPatternSet, rAlpha, rBeta);
 
 		LOGMSG (NO_DEBUG, "accuracy [%0.6f] (correct [%u], wrong [%u])\n", mAccuracy, mCorrectGuesses, mTotalGuesses - mCorrectGuesses);
 
@@ -173,7 +173,7 @@ void DataBase::ClassifyTestData (const RunMode &rRunMode, const PatternList::Ort
 	}
 }
 
-void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
+void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rRunMode, const PatternList::OrtMode &rOrtMode, const PatternList::OrtMethod &rOrtMethod, const Pattern::OrtMetric &rOrtMetric, const PatternList::OrtOrdering &rOrtOrdering, const RankingRule::RuleMeasure &rRuleMeasure, const uint32 &rMinNumRules, const uint32 &rMaxNumRankRules, const Transaction::PatternSet &rPatternSet, const float32 &rAlpha, const float32 &rBeta)
 {
 	struct timeval start;
 	gettimeofday (&start, NULL);
@@ -207,7 +207,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
 
-		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
+		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules, rRuleMeasure);
 
 		delete pRuleList;
 	}
@@ -227,7 +227,7 @@ void DataBase::ClassifyTransaction (Transaction *pTransaction, const RunMode &rR
 		LOGMSG (MEDIUM_LEVEL, "DataBase::ClassifyTranscation () - rule list:\n");
 		pRuleList->Print ();
 
-		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules);
+		class_guess = pRuleList->GetClassificationValue (rMaxNumRankRules, rRuleMeasure);
 
 		delete pRuleList;
 

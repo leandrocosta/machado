@@ -3,6 +3,7 @@
 
 
 #include "base/ObjectList.h"
+#include "RankingRule.h"
 
 #include <string>
 using std::string;
@@ -20,7 +21,9 @@ class RankingRuleList : public ObjectList
 		typedef STLRankingRuleList::const_iterator	STLRankingRuleList_cit		;
 
 	public:
-		const	string	GetClassificationValue	(const uint32 &rMaxNumRankRules)	const	;
+		const	string	GetClassificationValue	(
+				const uint32 &rMaxNumRankRules,
+				const RankingRule::RuleMeasure &measure)	const	;
 };
 
 
