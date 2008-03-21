@@ -89,7 +89,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @MinNumRules = (
-	1,
+#	1,
 #	10,
 #	100,
 #	1000
@@ -106,7 +106,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierMinRuleLens = (
-	1,
+#	1,
 );
 
 @ClassifierMaxRuleLens = (
@@ -141,6 +141,21 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	'i',
 #	'z',
 #	'n'
+);
+
+@ClassifierRMeasures = (
+#	's',	# SUPPORT
+#	'c',	# CONFIDENCE
+#	'g',	# GAIN
+#	'j',	# JACCARD
+#	'k',	# KULC
+#	'o',	# COSINE
+#	'n',	# CONVICTION
+#	'e',	# SENSITIVITY
+#	'p',	# SPECIFICITY
+#	'l',	# LAPLACE
+#	'i',	# LIFT
+#	'v'	# LEVERAGE
 );
 
 @ORIGAMIAlphas = (
