@@ -68,9 +68,9 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 .
 
 	my $out_file			= "$Common::OutputDirTables/comparison.out";
-	my $out_lac_olac_file		= "$Common::OutputDirTables/comparison_lac_olac.tex";
-	my $out_lac_origami_file	= "$Common::OutputDirTables/comparison_lac_origami.tex";
-	my $out_olac_origami_file	= "$Common::OutputDirTables/comparison_olac_origami.tex";
+	my $out_lac_olac_file		= "$Common::OutputDirTables/table_comparison_lac_olac.tex";
+	my $out_lac_origami_file	= "$Common::OutputDirTables/table_comparison_lac_origami.tex";
+	my $out_olac_origami_file	= "$Common::OutputDirTables/table_comparison_olac_origami.tex";
 
 	open OUTPUT, ">$out_file";
 	print OUTPUT "data set      y_classo_y_classc y_classo_n_classc n_classo_y_classc n_classo_n_classc y_classor_y_classc y_classor_n_classc n_classor_y_classc n_classor_n_classc y_classor_y_classo y_classor_n_classo n_classor_y_classo n_classor_n_classo\n";
@@ -291,17 +291,24 @@ sub make_best_runs_table_for_classifier_c ()
 {
 	my $db;
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $avg_patterns, $avg_rules, $accuracy);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSC =
-@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
-$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$avg_patterns,$avg_rules,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		\hline
 .
 
-	my $out_file = "$Common::OutputDirTables/table_best_runs_classc.out";
+	my $out_file = "$Common::OutputDirTables/table_best_runs_lac.tex";
 
 	open OUTPUT_BEST_RUNS_CLASSC, ">$out_file";
-	print OUTPUT_BEST_RUNS_CLASSC "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len avg_patterns  avg_rules     accuracy      \n";
+#	print OUTPUT_BEST_RUNS_CLASSC "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len avg_time      avg_patterns  avg_rules     accuracy      \n";
+	print OUTPUT_BEST_RUNS_CLASSC "\\begin{table}[htbp]
+	\\centering
+		\\begin{tabular}{|l|c|c|c|c|c|c||c|c|c|c|}
+		\\hline
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\hline\n";
 
 	my $data_base;
 
@@ -324,6 +331,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
 		$max_rule_len		= $support;
+		$avg_time		= $support;
 		$avg_patterns		= $support;
 		$avg_rules		= $support;
 		$accuracy		= $support;
@@ -334,12 +342,23 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\],*/$1/;
 
+		$avg_time	= sprintf ("%0.2f", $avg_time);
+		$avg_patterns	= sprintf ("%0.2f", $avg_patterns);
+		$avg_rules	= sprintf ("%0.2f", $avg_rules);
+		$accuracy	= sprintf ("%0.2f", $accuracy);
+
 		write OUTPUT_BEST_RUNS_CLASSC;
 	}
+
+	print OUTPUT_BEST_RUNS_CLASSC "		\\end{tabular}
+	\\caption{Best Parameters and Results for each Dataset (for LAC)}
+	\\label{tab:best_runs_for_each_db_lac}
+\\end{table}";
 
 	close OUTPUT_BEST_RUNS_CLASSC;
 }
@@ -348,17 +367,24 @@ sub make_best_runs_table_for_classifier_o ()
 {
 	my $db;
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $avg_patterns, $avg_rules, $accuracy);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $ometric, $omethod, $oordering, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSO =
-@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<@<<<<<@<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
-$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$omode,$ometric,$avg_patterns,$avg_rules,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<< & @<<<<<<< & @<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$ometric,$omethod,$oordering,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		\hline
 .
 
-	my $out_file = "$Common::OutputDirTables/table_best_runs_classo.out";
+	my $out_file = "$Common::OutputDirTables/table_best_runs_olac.tex";
 
 	open OUTPUT_BEST_RUNS_CLASSO, ">$out_file";
-	print OUTPUT_BEST_RUNS_CLASSO "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len omode ometric avg_patterns  avg_rules     accuracy      \n";
+#	print OUTPUT_BEST_RUNS_CLASSO "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len omode ometric avg_time      avg_patterns  avg_rules     accuracy      \n";
+	print OUTPUT_BEST_RUNS_CLASSO "\\begin{table}[htbp]
+	\\centering
+		\\begin{tabular}{|l|c|c|c|c|c|c|c|c|c||c|c|c|c|}
+		\\hline
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{e} & \\textbf{w} & \\textbf{g} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\hline\n";
 
 	my $data_base;
 
@@ -381,8 +407,10 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
 		$max_rule_len		= $support;
-		$omode			= $support;
 		$ometric		= $support;
+		$omethod		= $support;
+		$oordering		= $support;
+		$avg_time		= $support;
 		$avg_patterns		= $support;
 		$avg_rules		= $support;
 		$accuracy		= $support;
@@ -393,14 +421,26 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
-		$omode			=~ s/.*omode \[([^\]]*)\].*/$1/;
 		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
+		$omethod		=~ s/.*omethod \[([^\]]*)\].*/$1/;
+		$oordering		=~ s/.*oordering \[([^\]]*)\].*/$1/;
+		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 
+		$avg_time	= sprintf ("%0.2f", $avg_time);
+		$avg_patterns	= sprintf ("%0.2f", $avg_patterns);
+		$avg_rules	= sprintf ("%0.2f", $avg_rules);
+		$accuracy	= sprintf ("%0.2f", $accuracy);
+
 		write OUTPUT_BEST_RUNS_CLASSO;
 	}
+
+	print OUTPUT_BEST_RUNS_CLASSO "		\\end{tabular}
+	\\caption{Best Parameters and Results for each Dataset (for OLAC)}
+	\\label{tab:best_runs_for_each_db_olac}
+\\end{table}";
 
 	close OUTPUT_BEST_RUNS_CLASSO;
 }
@@ -412,14 +452,21 @@ sub make_best_runs_table_for_classifier_or ()
 	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSOR =
-@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<<<<<<@<<<<<<<@<<<<<@<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
-$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$alpha,$beta,$avg_time,$avg_patterns,$avg_rules,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<< & @<<<<< & @<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$alpha,$beta,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		\hline
 .
 
-	my $out_file = "$Common::OutputDirTables/table_best_runs_classor.out";
+	my $out_file = "$Common::OutputDirTables/table_best_runs_origami.tex";
 
 	open OUTPUT_BEST_RUNS_CLASSOR, ">$out_file";
-	print OUTPUT_BEST_RUNS_CLASSOR "data set      support confidence min_num_rules max_num_rank_rules ometric alpha beta avg_time      avg_patterns  avg_rules     accuracy      \n";
+#	print OUTPUT_BEST_RUNS_CLASSOR "data set      support confidence min_num_rules max_num_rank_rules ometric alpha beta avg_time      avg_patterns  avg_rules     accuracy      \n";
+	print OUTPUT_BEST_RUNS_CLASSOR "\\begin{table}[htbp]
+	\\centering
+		\\begin{tabular}{|l|c|c|c|c|c|c|c||c|c|c|c|}
+		\\hline
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{e} & \\textbf{a} & \\textbf{b} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\hline\n";
 
 	my $data_base;
 
@@ -460,8 +507,18 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$
 		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 
+		$avg_time	= sprintf ("%0.2f", $avg_time);
+		$avg_patterns	= sprintf ("%0.2f", $avg_patterns);
+		$avg_rules	= sprintf ("%0.2f", $avg_rules);
+		$accuracy	= sprintf ("%0.2f", $accuracy);
+
 		write OUTPUT_BEST_RUNS_CLASSOR;
 	}
+
+	print OUTPUT_BEST_RUNS_CLASSOR "		\\end{tabular}
+	\\caption{Best Parameters and Results for each Dataset (for ORIGAMI)}
+	\\label{tab:best_runs_for_each_db_origami}
+\\end{table}";
 
 	close OUTPUT_BEST_RUNS_CLASSOR;
 }
@@ -589,6 +646,6 @@ sub make_best_avg_runs_table ()
 
 	print OUTPUT "		\\end{tabular}
 	\\caption{Best Parameters for Each Run}
-	\\label{tab:parms}
+	\\label{tab:best_parms_for_avg_db}
 \\end{table}";
 }
