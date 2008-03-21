@@ -11,22 +11,22 @@ RankingRule::RuleMeasure RankingRule::msPrioritizedMeasure = RankingRule::MEASUR
 
 RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const uint32 &rProjectionSize, const uint32 &rNumClasses) : Rule (pClass, pPattern)
 {
-	uint32	correctTransactions	= pPattern->GetNumTransactionsOfClass (pClass->GetClassID ());
+	uint32	patternClassFrequence	= pPattern->GetNumTransactionsOfClass (pClass->GetClassID ());
 	uint32	patternFrequence	= pPattern->GetFrequence ();
 	uint32	classFrequence		= pClass->GetProjectionTransactionListSize ();
 
-	mSupport	= (float32) correctTransactions / rProjectionSize;
-	mConfidence	= (float32) correctTransactions / patternFrequence;
+	mSupport	= (float32) patternClassFrequence / rProjectionSize;
+	mConfidence	= (float32) patternClassFrequence / patternFrequence;
+	mLift		= (float32) mSupport / (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
+	mLeverage	= (float32) mSupport - (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
+	mJaccard	= (float32) patternClassFrequence / (patternFrequence + classFrequence - patternClassFrequence);
+	mCosine		= (float32) patternClassFrequence / sqrt (patternFrequence * classFrequence);
+	mKulc		= ((float32) patternClassFrequence / 2) * (1.0 / patternFrequence + 1.0 / classFrequence);
 	mGain		= (float32) mSupport * (log2 (mConfidence) - log2 ((float32) classFrequence / rProjectionSize));
-	mJaccard	= (float32) correctTransactions / (patternFrequence + classFrequence - correctTransactions);
-	mKulc		= ((float32) mSupport / 2) * ((float32) 1.0 / ((float32) patternFrequence / rProjectionSize) + (float32) 1.0 / ((float32) classFrequence / rProjectionSize));
-	mCosine		= (float32) mSupport / sqrt (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
-	mCoherence	= (float32) mSupport /((patternFrequence + classFrequence - (float32) correctTransactions) / rProjectionSize);
-	mSensitivity	= (float32) correctTransactions / classFrequence;
-	mSpecificity	= (float32) (rProjectionSize - classFrequence - patternFrequence + correctTransactions) / (rProjectionSize - classFrequence);
-	mLaplace	= (float32) (correctTransactions + 1) / (patternFrequence + rNumClasses);
-	mLift		= (float32) mSupport / ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
-	mLeverage	= (float32) mSupport - ((float32) patternFrequence / rProjectionSize * classFrequence / rProjectionSize);
+//	mCoherence	= (float32) mSupport /((patternFrequence + classFrequence - (float32) patternClassFrequence) / rProjectionSize);
+	mSensitivity	= (float32) patternClassFrequence / classFrequence;
+	mSpecificity	= (float32) (rProjectionSize - classFrequence - patternFrequence + patternClassFrequence) / (rProjectionSize - classFrequence);
+	mLaplace	= (float32) (patternClassFrequence + 1) / (patternFrequence + rNumClasses);
 }
 
 RankingRule::~RankingRule ()
@@ -69,10 +69,10 @@ const bool RankingRule::operator< (const Object &rRight) const
 			measure_left	= mCosine;
 			measure_right	= rRule.GetCosine ();
 			break;
-		case RankingRule::MEASURE_COHERENCE:
-			measure_left	= mCoherence;
-			measure_right	= rRule.GetCoherence ();
-			break;
+//		case RankingRule::MEASURE_COHERENCE:
+//			measure_left	= mCoherence;
+//			measure_right	= rRule.GetCoherence ();
+//			break;
 		case RankingRule::MEASURE_SENSITIVITY:
 			measure_left	= mSensitivity;
 			measure_right	= rRule.GetSensitivity ();
@@ -105,9 +105,24 @@ const bool RankingRule::operator< (const Object &rRight) const
 	else if (measure_right < RANK_FACTOR_LOWER * measure_left)
 		bRet = false;
 
+	else if (mSupport < RANK_FACTOR_LOWER * rRule.GetSupport ())
+		bRet = true;
+	else if (rRule.GetSupport () < RANK_FACTOR_LOWER * mSupport)
+		bRet = false;
+
 	else if (mConfidence < RANK_FACTOR_LOWER * rRule.GetConfidence ())
 		bRet = true;
 	else if (rRule.GetConfidence () < RANK_FACTOR_LOWER * mConfidence)
+		bRet = false;
+
+	else if (mLift < RANK_FACTOR_LOWER * rRule.GetLift ())
+		bRet = true;
+	else if (rRule.GetLift () < RANK_FACTOR_LOWER * mLift)
+		bRet = false;
+
+	else if (mLeverage < RANK_FACTOR_LOWER * rRule.GetLeverage ())
+		bRet = true;
+	else if (rRule.GetLeverage () < RANK_FACTOR_LOWER * mLeverage)
 		bRet = false;
 
 	else if (mGain < RANK_FACTOR_LOWER * rRule.GetGain ())
@@ -130,10 +145,10 @@ const bool RankingRule::operator< (const Object &rRight) const
 	else if (rRule.GetCosine () < RANK_FACTOR_LOWER * mCosine)
 		bRet = false;
 
-	else if (mCoherence < RANK_FACTOR_LOWER * rRule.GetCoherence ())
-		bRet = true;
-	else if (rRule.GetCoherence () < RANK_FACTOR_LOWER * mCoherence)
-		bRet = false;
+//	else if (mCoherence < RANK_FACTOR_LOWER * rRule.GetCoherence ())
+//		bRet = true;
+//	else if (rRule.GetCoherence () < RANK_FACTOR_LOWER * mCoherence)
+//		bRet = false;
 
 	else if (mSensitivity < RANK_FACTOR_LOWER * rRule.GetSensitivity ())
 		bRet = true;
@@ -148,16 +163,6 @@ const bool RankingRule::operator< (const Object &rRight) const
 	else if (mLaplace < RANK_FACTOR_LOWER * rRule.GetLaplace ())
 		bRet = true;
 	else if (rRule.GetLaplace () < RANK_FACTOR_LOWER * mLaplace)
-		bRet = false;
-
-	else if (mLift < RANK_FACTOR_LOWER * rRule.GetLift ())
-		bRet = true;
-	else if (rRule.GetLift () < RANK_FACTOR_LOWER * mLift)
-		bRet = false;
-
-	else if (mSupport < RANK_FACTOR_LOWER * rRule.GetSupport ())
-		bRet = true;
-	else if (rRule.GetSupport () < RANK_FACTOR_LOWER * mSupport)
 		bRet = false;
 
 	else
@@ -209,10 +214,10 @@ const bool RankingRule::operator> (const Object &rRight) const
 			measure_left	= mCosine;
 			measure_right	= rRule.GetCosine ();
 			break;
-		case RankingRule::MEASURE_COHERENCE:
-			measure_left	= mCoherence;
-			measure_right	= rRule.GetCoherence ();
-			break;
+//		case RankingRule::MEASURE_COHERENCE:
+//			measure_left	= mCoherence;
+//			measure_right	= rRule.GetCoherence ();
+//			break;
 		case RankingRule::MEASURE_SENSITIVITY:
 			measure_left	= mSensitivity;
 			measure_right	= rRule.GetSensitivity ();
@@ -245,9 +250,24 @@ const bool RankingRule::operator> (const Object &rRight) const
 	else if (measure_right > RANK_FACTOR_GREATER * measure_left)
 		bRet = false;
 
+	else if (mSupport > RANK_FACTOR_GREATER * rRule.GetSupport ())
+		bRet = true;
+	else if (rRule.GetSupport () > RANK_FACTOR_GREATER * mSupport)
+		bRet = false;
+
 	else if (mConfidence > RANK_FACTOR_GREATER * rRule.GetConfidence ())
 		bRet = true;
 	else if (rRule.GetConfidence () > RANK_FACTOR_GREATER * mConfidence)
+		bRet = false;
+
+	else if (mLift > RANK_FACTOR_GREATER * rRule.GetLift ())
+		bRet = true;
+	else if (rRule.GetLift () > RANK_FACTOR_GREATER * mLift)
+		bRet = false;
+
+	else if (mLeverage > RANK_FACTOR_GREATER * rRule.GetLeverage ())
+		bRet = true;
+	else if (rRule.GetLeverage () > RANK_FACTOR_GREATER * mLeverage)
 		bRet = false;
 
 	else if (mGain > RANK_FACTOR_GREATER * rRule.GetGain ())
@@ -270,10 +290,10 @@ const bool RankingRule::operator> (const Object &rRight) const
 	else if (rRule.GetCosine () > RANK_FACTOR_GREATER * mCosine)
 		bRet = false;
 
-	else if (mCoherence > RANK_FACTOR_GREATER * rRule.GetCoherence ())
-		bRet = true;
-	else if (rRule.GetCoherence () > RANK_FACTOR_GREATER * mCoherence)
-		bRet = false;
+//	else if (mCoherence > RANK_FACTOR_GREATER * rRule.GetCoherence ())
+//		bRet = true;
+//	else if (rRule.GetCoherence () > RANK_FACTOR_GREATER * mCoherence)
+//		bRet = false;
 
 	else if (mSensitivity > RANK_FACTOR_GREATER * rRule.GetSensitivity ())
 		bRet = true;
@@ -290,15 +310,6 @@ const bool RankingRule::operator> (const Object &rRight) const
 	else if (rRule.GetLaplace () > RANK_FACTOR_GREATER * mLaplace)
 		bRet = false;
 
-	else if (mLift > RANK_FACTOR_GREATER * rRule.GetLift ())
-		bRet = true;
-	else if (rRule.GetLift () > RANK_FACTOR_GREATER * mLift)
-		bRet = false;
-
-	else if (mSupport > RANK_FACTOR_GREATER * rRule.GetSupport ())
-		bRet = true;
-	else if (rRule.GetSupport () > RANK_FACTOR_GREATER * mSupport)
-		bRet = false;
 	else
 	{
 		uint32	leftClassFrequence	= mpClass->GetProjectionTransactionListSize ();
@@ -353,10 +364,10 @@ const float32& RankingRule::GetCosine () const
 	return mCosine;
 }
 
-const float32& RankingRule::GetCoherence () const
-{
-	return mCoherence;
-}
+//const float32& RankingRule::GetCoherence () const
+//{
+//	return mCoherence;
+//}
 
 const float32& RankingRule::GetSensitivity () const
 {
@@ -385,5 +396,6 @@ const float32& RankingRule::GetLeverage () const
 
 void RankingRule::Print () const
 {
-	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mLift [%f], mLeverage [f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mLift, mLeverage);
+//	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mCoherence [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mLift [%f], mLeverage [f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mCoherence, mSensitivity, mSpecificity, mLaplace, mLift, mLeverage);
+	LOGMSG (MEDIUM_LEVEL, "RankingRule::Print () - p [%p], rule [%s], mSupport [%f], mConfidence [%f], mGain [%f], mJaccard [%f], mKulc [%f], mCosine [%f], mSensitivity [%f], mSpecificity [%f], mLaplace [%f], mLift [%f], mLeverage [f]\n", this, GetPrintableString ().c_str (), mSupport, mConfidence, mGain, mJaccard, mKulc, mCosine, mSensitivity, mSpecificity, mLaplace, mLift, mLeverage);
 }
