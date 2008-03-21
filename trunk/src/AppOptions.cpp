@@ -46,6 +46,7 @@ AppOptions::AppOptions ()
 	mOrtMetric		= AppOptions::DEFAULT_ORT_METRIC		;
 	mOrtMethod		= AppOptions::DEFAULT_ORT_METHOD		;
 	mOrtOrdering		= AppOptions::DEFAULT_ORT_ORDERING		;
+	mRuleMeasure		= AppOptions::DEFAULT_RULE_MEASURE		;
 	m_debug_level		= AppOptions::DEFAULT_DEBUG_LEVEL		;
 	mVerbose		= AppOptions::DEFAULT_VERBOSE			;
 	mHelp			= AppOptions::DEFAULT_HELP			;
@@ -70,6 +71,7 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"orth-metric"		, 1, 0, 'e'},
 		{"orth-method"		, 1, 0, 'w'},
 		{"orth-pat-ordering"	, 1, 0, 'g'},
+		{"rule-measure"		, 1, 0, 'u'},
 		{"origami-alpha"	, 1, 0, 'a'},
 		{"origami-beta"		, 1, 0, 'b'},
 		{"debug"		, 1, 0, 'd'},
@@ -82,7 +84,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:p:s:c:n:l:m:x:r:o:e:w:g:a:b:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:p:s:c:n:l:m:x:r:o:e:w:g:u:a:b:d:vh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -145,6 +147,10 @@ void AppOptions::Run (int argc, char* const* argv)
 				mOrtOrdering = (PatternList::OrtOrdering) optarg [0];
 				break;
 
+			case 'u':
+				mRuleMeasure = (RankingRule::RuleMeasure) optarg [0];
+				break;
+
 			case 'a':
 				mAlpha = atof (optarg);
 				break;
@@ -191,6 +197,8 @@ void AppOptions::Usage () const
 	cout << "  -w  --orth-method          Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE, ALL]" << endl;
 	cout << "  -g  --orth-pat-ordering    Set the way patterns are ordered for orthogonality heuristic [s,r,i,z,n] [SORTED," << endl;
 	cout << "                               REVERSE SORTED, SORTED BY SIZE, REVERSE SORTED BY SIZE, NONE]" << endl;
+	cout << "  -u  --rule-measure         Set the rule measure used [s,c,g,j,k,o,h,e,p,l,i,v] [SUPPORT, CONFIDENCE, GAIN, JACCARD," << endl;
+	cout << "                               KULC, COSINE, COHERENCE, SENSITIVITY, SPECIFICITY, LAPLACE, LIFT, LEVERAGE]" << endl;
 	cout << "  -a  --origami-alpha        Set the alpha parameter used by ORIGAMI" << endl;
 	cout << "  -b  --origami-beta         Set the beta parameter used by ORIGAMI" << endl;
 	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
@@ -282,6 +290,11 @@ const PatternList::OrtMethod& AppOptions::GetOrtMethod () const
 const PatternList::OrtOrdering& AppOptions::GetOrtOrdering () const
 {
 	return mOrtOrdering;
+}
+
+const RankingRule::RuleMeasure& AppOptions::GetRuleMeasure () const
+{
+	return mRuleMeasure;
 }
 
 const e_debug& AppOptions::GetDebugLevel () const
