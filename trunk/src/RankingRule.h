@@ -24,7 +24,7 @@ class RankingRule : public Rule
 			MEASURE_JACCARD		= 'j',
 			MEASURE_KULC		= 'k',
 			MEASURE_COSINE		= 'o',
-//			MEASURE_COHERENCE	= 'h',
+			MEASURE_CONVICTION	= 'n',
 			MEASURE_SENSITIVITY	= 'e',
 			MEASURE_SPECIFICITY	= 'p',
 			MEASURE_LAPLACE		= 'l',
@@ -48,7 +48,7 @@ class RankingRule : public Rule
 		const	float32&	GetJaccard	()	const	;
 		const	float32&	GetKulc		()	const	;
 		const	float32&	GetCosine	()	const	;
-//		const	float32&	GetCoherence	()	const	;
+		const	float32&	GetConviction	()	const	;
 		const	float32&	GetSensitivity	()	const	;
 		const	float32&	GetSpecificity	()	const	;
 		const	float32&	GetLaplace	()	const	;
@@ -65,7 +65,7 @@ class RankingRule : public Rule
 		float32	mJaccard	;
 		float32	mKulc		;
 		float32	mCosine		;
-//		float32	mCoherence	;
+		float32	mConviction	;
 		float32	mSensitivity	;
 		float32	mSpecificity	;
 		float32	mLaplace	;

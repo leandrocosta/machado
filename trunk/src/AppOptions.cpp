@@ -197,8 +197,8 @@ void AppOptions::Usage () const
 	cout << "  -w  --orth-method          Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE, ALL]" << endl;
 	cout << "  -g  --orth-pat-ordering    Set the way patterns are ordered for orthogonality heuristic [s,r,i,z,n] [SORTED," << endl;
 	cout << "                               REVERSE SORTED, SORTED BY SIZE, REVERSE SORTED BY SIZE, NONE]" << endl;
-	cout << "  -u  --rule-measure         Set the rule measure used [s,c,g,j,k,o,e,p,l,i,v] [SUPPORT, CONFIDENCE, GAIN, JACCARD," << endl;
-	cout << "                               KULC, COSINE, SENSITIVITY, SPECIFICITY, LAPLACE, LIFT, LEVERAGE]" << endl;
+	cout << "  -u  --rule-measure         Set the rule measure used [s,c,g,j,k,o,n,e,p,l,i,v] [SUPPORT, CONFIDENCE, GAIN, JACCARD," << endl;
+	cout << "                               KULC, COSINE, CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE, LIFT, LEVERAGE]" << endl;
 	cout << "  -a  --origami-alpha        Set the alpha parameter used by ORIGAMI" << endl;
 	cout << "  -b  --origami-beta         Set the beta parameter used by ORIGAMI" << endl;
 	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
