@@ -92,12 +92,20 @@ int main(int argc, char* argv[])
 		 * (maximum size of rank)
 		 */
 
+		/*
+		 * Set the measure used by operators
+		 * for rules during the sorting of rank
+		 */
+
+		RankingRule::SetPrioritizedMeasure (pAppOptions->GetRuleMeasure ());
+
 		base.ClassifyTestData (
 				pAppOptions->GetRunMode (),
 				pAppOptions->GetOrtMode (),
 				pAppOptions->GetOrtMethod (),
 				pAppOptions->GetOrtMetric (),
 				pAppOptions->GetOrtOrdering (),
+				pAppOptions->GetRuleMeasure (),
 				pAppOptions->GetMinNumRules (),
 				pAppOptions->GetMaxNumRankRules (),
 				pAppOptions->GetPatternSet (),
