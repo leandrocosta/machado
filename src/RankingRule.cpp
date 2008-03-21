@@ -100,6 +100,10 @@ const bool RankingRule::operator< (const Object &rRight) const
 			break;
 	}
 
+	if (measure_left < measure_right)
+		bRet = true;
+
+/*
 	if (measure_left < RANK_FACTOR_LOWER * measure_right)
 		bRet = true;
 	else if (measure_right < RANK_FACTOR_LOWER * measure_left)
@@ -175,6 +179,7 @@ const bool RankingRule::operator< (const Object &rRight) const
 		else
 			bRet = false;
 	}
+	*/
 
 	return bRet;
 }
@@ -245,6 +250,10 @@ const bool RankingRule::operator> (const Object &rRight) const
 			break;
 	}
 
+	if (measure_left > measure_right)
+		bRet = true;
+
+/*
 	if (measure_left > RANK_FACTOR_GREATER * measure_right)
 		bRet = true;
 	else if (measure_right > RANK_FACTOR_GREATER * measure_left)
@@ -320,6 +329,7 @@ const bool RankingRule::operator> (const Object &rRight) const
 		else
 			bRet = false;
 	}
+*/
 
 	return bRet;
 }
