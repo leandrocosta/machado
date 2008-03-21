@@ -62,6 +62,8 @@ sub get_best_run_for_application ($$)
 {
 	my ($application, $data_base) = @_;
 
+	print "application: $application\n";
+
 	my $RunResult = Common::GetBestRunResult ($application, $data_base);
 
 	$best_run_for_each_db_acc_hsh{$data_base}{$application}	= $RunResult->{ACCURACY};
@@ -77,7 +79,7 @@ sub get_best_run_for_application ($$)
 
 sub get_best_runs_for_data_base ($)
 {
-	get_best_run_for_application ('lazy', $_[0]);
+#	get_best_run_for_application ('lazy', $_[0]);
 	get_best_run_for_application ('classifier_c', $_[0]);
 	get_best_run_for_application ('classifier_o', $_[0]);
 	get_best_run_for_application ('classifier_or', $_[0]);
@@ -123,22 +125,22 @@ sub make_best_app_histogram_graphs ()
 		get_best_runs_for_data_base ($data_base);
 	}
 
-	$best_run_for_each_db_acc_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+#	$best_run_for_each_db_acc_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	$best_run_for_each_db_pat_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+#	$best_run_for_each_db_pat_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	$best_run_for_each_db_rul_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+#	$best_run_for_each_db_rul_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	$best_run_for_each_db_tim_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
+#	$best_run_for_each_db_tim_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
@@ -155,6 +157,7 @@ sub make_avg_app_histogram_graphs ()
 
 	my $data_base;
 
+=comment
 	my $ParmsLazy = Common::GetBestAverageAccParms ('lazy');
 
 	foreach $data_base (@Common::DataBases)
@@ -173,6 +176,7 @@ sub make_avg_app_histogram_graphs ()
 	$best_run_for_avg_db_pat_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_PATTERNS};
 	$best_run_for_avg_db_rul_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_RULES};
 	$best_run_for_avg_db_tim_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_TIME};
+=cut
 
 	my $ParmsClassifierC = Common::GetBestAverageAccParms ('classifier_c');
 
