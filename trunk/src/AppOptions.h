@@ -6,6 +6,7 @@
 #include "base/types.h"
 #include "DataBase.h"
 #include "PatternList.h"
+#include "RankingRule.h"
 
 #include <string>
 using namespace std;
@@ -45,6 +46,7 @@ class AppOptions
 		const	Pattern::OrtMetric&		GetOrtMetric	()	const	;
 		const	PatternList::OrtMethod&		GetOrtMethod	()	const	;
 		const	PatternList::OrtOrdering&	GetOrtOrdering	()	const	;
+		const	RankingRule::RuleMeasure&	GetRuleMeasure	()	const	;
 
 		const	e_debug&	GetDebugLevel	()	const	;
 		const	bool&		GetVerbose	()	const	;
@@ -72,6 +74,7 @@ class AppOptions
 		Pattern::OrtMetric		mOrtMetric	;
 		PatternList::OrtMethod		mOrtMethod	;
 		PatternList::OrtOrdering	mOrtOrdering	;
+		RankingRule::RuleMeasure	mRuleMeasure	;
 
 		e_debug	m_debug_level	;
 		bool	mVerbose	;
@@ -98,6 +101,7 @@ class AppOptions
 		static	const	Pattern::OrtMetric		DEFAULT_ORT_METRIC	= Pattern::METRIC_CLASS_COVERAGE	;
 		static	const	PatternList::OrtMethod		DEFAULT_ORT_METHOD	= PatternList::METHOD_SET		;
 		static	const	PatternList::OrtOrdering	DEFAULT_ORT_ORDERING	= PatternList::ORDERING_NONE		;
+		static	const	RankingRule::RuleMeasure	DEFAULT_RULE_MEASURE	= RankingRule::MEASURE_CONFIDENCE	;
 
 		static	const	e_debug	DEFAULT_DEBUG_LEVEL	= NO_DEBUG	;
 		static	const	bool	DEFAULT_VERBOSE		= false		;
