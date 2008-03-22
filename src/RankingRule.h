@@ -62,14 +62,14 @@ class RankingRule : public Rule
 		float32	mSupport	;
 		float32	mConfidence	;
 		float32	mGain		;
-		float32	mJaccard	;
+		float32	mJaccard	; // coherence
 		float32	mKulc		;
 		float32	mCosine		;
 		float32	mConviction	;
-		float32	mSensitivity	;
+		float32	mSensitivity	; // recall
 		float32	mSpecificity	;
 		float32	mLaplace	;
-		float32	mLift		;
+		float32	mLift		; // interest
 		float32	mLeverage	;
 
 	private:
