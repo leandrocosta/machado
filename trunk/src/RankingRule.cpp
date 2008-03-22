@@ -21,12 +21,12 @@ RankingRule::RankingRule (const Class *pClass, const Pattern *pPattern, const ui
 	mLeverage	= (float32) mSupport - (((float32) patternFrequence / rProjectionSize) * ((float32) classFrequence / rProjectionSize));
 	mJaccard	= (float32) patternClassFrequence / (patternFrequence + classFrequence - patternClassFrequence);
 	mCosine		= (float32) patternClassFrequence / sqrt (patternFrequence * classFrequence);
-	mKulc		= ((float32) patternClassFrequence / 2) * (1.0 / patternFrequence + 1.0 / classFrequence);
+	mKulc		= (patternClassFrequence / 2.0) * (1.0 / patternFrequence + 1.0 / classFrequence);
 	mGain		= (float32) mSupport * (log2 (mConfidence) - log2 ((float32) classFrequence / rProjectionSize));
-	mConviction	= (float32) (patternFrequence * (rProjectionSize - classFrequence)) / ((float32) (patternFrequence - patternClassFrequence) * rProjectionSize);
+	mConviction	= (float32) (patternFrequence * (rProjectionSize - classFrequence)) / ((patternFrequence - patternClassFrequence) * rProjectionSize);
 	mSensitivity	= (float32) patternClassFrequence / classFrequence;
 	mSpecificity	= (float32) (rProjectionSize - classFrequence - patternFrequence + patternClassFrequence) / (rProjectionSize - classFrequence);
-	mLaplace	= (float32) (patternClassFrequence + 1) / (patternFrequence + rNumClasses);
+	mLaplace	= (patternClassFrequence + 1.0) / (patternFrequence + rNumClasses);
 }
 
 RankingRule::~RankingRule ()
