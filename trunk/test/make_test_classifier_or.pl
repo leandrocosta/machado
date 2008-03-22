@@ -107,7 +107,7 @@ sub make_test_classifier_or ($$$$$$$$$$$$$)
 		{
 			my ($a, $p, $r, $t);
 		
-			run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $log_file, \$a, \$p, \$r, \$t);
+			run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $rule_measure, $log_file, \$a, \$p, \$r, \$t);
 
 			$acc += $a;
 			$pat += $p;
