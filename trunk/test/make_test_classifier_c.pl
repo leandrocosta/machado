@@ -131,8 +131,8 @@ sub run_classifier_c ($$$$$$$$$$$$$$)
 	my $training_file = Common::GetTrainingFile ($data_base, $fold);
 	my $testing_file = Common::GetTestingFile ($data_base, $fold);
 
-	print "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -u $rule_measure -r c -d -1 2&>$log_file\n";
-	system "nice -n 19 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -u $rule_measure -r c -d -1 2&>$log_file";
+	print "nice -n 10 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -u $rule_measure -r c -d -1 2&>$log_file\n";
+	system "nice -n 10 $Common::AppClassifier -i $training_file -t $testing_file -s $support -c $confidence -n $min_num_rules -l $max_num_rank_rules -m $min_rule_len -x $max_rule_len -u $rule_measure -r c -d -1 2&>$log_file";
 
 	Common::GetRunResultFromLogFile ($log_file, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 }
