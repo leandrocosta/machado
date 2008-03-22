@@ -96,9 +96,29 @@ sub make_test_classifier_or ($$$$$$$$$$$$$)
 	{
 		my $log_file = "$output_dir/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta."_u".$rule_measure.".".$fold.".log";
 
-		my ($acc, $pat, $rul, $tim);
+		my $acc = 0;
+		my $pat = 0;
+		my $rul = 0;
+		my $tim = 0;
 
-		run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $rule_measure, $log_file, \$acc, \$pat, \$rul, \$tim);
+		my $i;
+
+		for ($i = 0; $i < $Common::NumFolds; $i++)
+		{
+			my ($a, $p, $r, $t);
+		
+			run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $log_file, \$a, \$p, \$r, \$t);
+
+			$acc += $a;
+			$pat += $p;
+			$rul += $r;
+			$tim += $t;
+		}
+
+		$acc /= $Common::NumFolds;
+		$pat /= $Common::NumFolds;
+		$rul /= $Common::NumFolds;
+		$tim /= $Common::NumFolds;
 
 		$$avg_time	+= $tim;
 		$$avg_patterns	+= $pat;
