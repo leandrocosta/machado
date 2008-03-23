@@ -139,7 +139,7 @@ sub save_output_file ($$$$$$$$$$$$$$$$$)
 	my $out_file = "$output_dir/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering."_u".$rule_measure.".out";
 
 	open OUTPUT, ">$out_file";
-	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], rule_measure [$rule_measure}, avg_time [$avg_time], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
+	print OUTPUT "support [$support], confidence [$confidence], pattern_set [$pattern_set], min_num_rules [$min_num_rules], max_num_rank_rules [$max_num_rank_rules], min_rule_len [$min_rule_len], max_rule_len [$max_rule_len], omode [$omode], ometric [$ometric], omethod [$omethod], oordering [$oordering], rule_measure [$rule_measure], avg_time [$avg_time], avg_patterns [$avg_patterns], avg_rules [$avg_rules], accuracy [$accuracy]\n";
 	close OUTPUT;
 
 	if ($accuracy > Common::GetBestAccuracy ('classifier_o', $data_base))
