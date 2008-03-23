@@ -101,10 +101,10 @@ sub make_test_classifier_or ($$$$$$$$$$$$$)
 		my $rul = 0;
 		my $tim = 0;
 
-		my $i;
-
-		for ($i = 0; $i < $Common::NumFolds; $i++)
-		{
+#		my $i;
+#
+#		for ($i = 0; $i < $Common::NumFolds; $i++)
+#		{
 			my ($a, $p, $r, $t);
 		
 			run_classifier_or ($data_base, $fold, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $rule_measure, $log_file, \$a, \$p, \$r, \$t);
@@ -113,12 +113,12 @@ sub make_test_classifier_or ($$$$$$$$$$$$$)
 			$pat += $p;
 			$rul += $r;
 			$tim += $t;
-		}
+#		}
 
-		$acc /= $Common::NumFolds;
-		$pat /= $Common::NumFolds;
-		$rul /= $Common::NumFolds;
-		$tim /= $Common::NumFolds;
+#		$acc /= $Common::NumFolds;
+#		$pat /= $Common::NumFolds;
+#		$rul /= $Common::NumFolds;
+#		$tim /= $Common::NumFolds;
 
 		$$avg_time	+= $tim;
 		$$avg_patterns	+= $pat;
