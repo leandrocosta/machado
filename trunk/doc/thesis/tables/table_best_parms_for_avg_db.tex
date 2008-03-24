@@ -4,27 +4,29 @@
 		\hline
 					& \textbf{LAC}	& \textbf{OLAC}	& \textbf{ORIGAMI}	\\
 		\hline
-		support			& 0.01		& 0.01		& 0.1			\\
+		support			& 0.0001	& 0.0001	& 0.0001		\\
 		\hline
-		confidence		& 0.6		& 0.001		& 0.0001		\\
+		confidence		& 0.01		& 0.0001	& 0.0001		\\
 		\hline
 		min-num-rules		& 1		& 1		& 1			\\
 		\hline
-		max-num-rank-rules	& 1000		& 100		& 1000			\\
+		max-num-rank-rules	& 1000		& 100		& 10			\\
 		\hline
 		min-rule-len		& 1		& 1		& -			\\
 		\hline
-		max-rule-len		& 2		& 2		& -			\\
+		max-rule-len		& 1		& 2		& -			\\
 		\hline
-		metric			& -		& s		& s			\\
+		rule-measure		& n		& n		& c			\\
 		\hline
-		method			& -		& s		& -			\\
+		orth-metric		& -		& s		& s			\\
 		\hline
-		pat-ordering		& -		& s		& -			\\
+		orth-method		& -		& s		& -			\\
 		\hline
-		alpha			& -		& -		& 0.7			\\
+		orth-pat-ordering	& -		& s		& -			\\
 		\hline
-		beta			& -		& -		& 0.8			\\
+		origami-alpha		& -		& -		& 0.1			\\
+		\hline
+		origami-beta		& -		& -		& 0.8			\\
 		\hline
 		\end{tabular}
 	\caption{Best Parameters for Each Run}
