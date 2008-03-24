@@ -5,13 +5,13 @@ use Common;
 
 sub make_best_app_histogram_graphs ();
 sub make_avg_app_histogram_graphs ();
-sub make_ometric_histogram_graphs ($$$$$$$);
+sub make_ometric_histogram_graphs ($$$$$$$$);
 sub make_avg_ometric_histogram_graphs ();
-sub make_lazy_compare_histogram_graphs ();
+#sub make_lazy_compare_histogram_graphs ();
 
 sub get_best_runs_for_data_base ($);
-sub get_ometric_runs_for_classifier_o ($$$$$$$$$$$);
-sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$);
+sub get_ometric_runs_for_classifier_o ($$$$$$$$$$$$);
+sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$$);
 
 my %best_run_for_each_db_acc_hsh;
 my %best_run_for_each_db_pat_hsh;
@@ -49,6 +49,7 @@ system "mkdir -p $Common::OutputDirGraphs/";
 make_best_app_histogram_graphs ();
 make_avg_app_histogram_graphs ();
 make_avg_ometric_histogram_graphs ();
+
 #make_lazy_compare_histogram_graphs ();
 
 ### make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
@@ -85,21 +86,21 @@ sub get_best_runs_for_data_base ($)
 	get_best_run_for_application ('classifier_or', $_[0]);
 }
 
-sub get_ometric_runs_for_classifier_o ($$$$$$$$$$$)
+sub get_ometric_runs_for_classifier_o ($$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $omethod, $oordering) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $omethod, $oordering) = @_;
 
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 's', $omethod, $oordering);
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'c', $omethod, $oordering);
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'l', $omethod, $oordering);
-	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 'a', $omethod, $oordering);
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, 's', $omethod, $oordering);
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, 'c', $omethod, $oordering);
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, 'l', $omethod, $oordering);
+	get_ometric_run_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, 'a', $omethod, $oordering);
 }
 
-sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$)
+sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $ometric, $omethod, $oordering) = @_;
 
-	my $RunResult = Common::GetClassifierORunResult ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11]);
+	my $RunResult = Common::GetClassifierORunResult ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11], $_[12]);
 
 	$ometric_acc_hsh{$data_base}{$ometric} = $RunResult->{ACCURACY};
 	$ometric_pat_hsh{$data_base}{$ometric} = $RunResult->{AVG_PATTERNS};
@@ -145,10 +146,10 @@ sub make_best_app_histogram_graphs ()
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	Common::MakeAppHistogramGraph ('Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_best_run_for_each_db_acc', \%best_run_for_each_db_acc_hsh, 0);
-	Common::MakeAppHistogramGraph ('Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_best_run_for_each_db_pat', \%best_run_for_each_db_pat_hsh, 1);
-	Common::MakeAppHistogramGraph ('Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_best_run_for_each_db_rul', \%best_run_for_each_db_rul_hsh, 1);
-	Common::MakeAppHistogramGraph ('Classification Time Average Histogram', 'Data Sets', 'Classification Time Average', 'histogram_best_run_for_each_db_tim', \%best_run_for_each_db_tim_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_each_db_acc', \%best_run_for_each_db_acc_hsh, 0);
+	Common::MakeAppHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_each_db_pat', \%best_run_for_each_db_pat_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_each_db_rul', \%best_run_for_each_db_rul_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_each_db_tim', \%best_run_for_each_db_tim_hsh, 1);
 }
 
 sub make_avg_app_histogram_graphs ()
@@ -182,7 +183,7 @@ sub make_avg_app_histogram_graphs ()
 
 	foreach $data_base (@Common::DataBases)
 	{
-		my $RunResult = Common::GetClassifierCRunResult ($data_base, $ParmsClassifierC->{SUPPORT}, $ParmsClassifierC->{CONFIDENCE}, $ParmsClassifierC->{MIN_NUM_RULES}, $ParmsClassifierC->{MAX_NUM_RANK_RULES}, $ParmsClassifierC->{MIN_RULE_LEN}, $ParmsClassifierC->{MAX_RULE_LEN});
+		my $RunResult = Common::GetClassifierCRunResult ($data_base, $ParmsClassifierC->{SUPPORT}, $ParmsClassifierC->{CONFIDENCE}, $ParmsClassifierC->{MIN_NUM_RULES}, $ParmsClassifierC->{MAX_NUM_RANK_RULES}, $ParmsClassifierC->{MIN_RULE_LEN}, $ParmsClassifierC->{MAX_RULE_LEN}, $ParmsClassifierC->{RULE_MEASURE});
 
 		$best_run_for_avg_db_acc_hsh{$data_base}{'classifier_c'} = $RunResult->{ACCURACY};
 		$best_run_for_avg_db_pat_hsh{$data_base}{'classifier_c'} = $RunResult->{AVG_PATTERNS};
@@ -199,7 +200,7 @@ sub make_avg_app_histogram_graphs ()
 
 	foreach $data_base (@Common::DataBases)
 	{
-		my $RunResult = Common::GetClassifierORunResult ($data_base, $ParmsClassifierO->{SUPPORT}, $ParmsClassifierO->{CONFIDENCE}, $ParmsClassifierO->{PATTERN_SET}, $ParmsClassifierO->{MIN_NUM_RULES}, $ParmsClassifierO->{MAX_NUM_RANK_RULES}, $ParmsClassifierO->{MIN_RULE_LEN}, $ParmsClassifierO->{MAX_RULE_LEN}, $ParmsClassifierO->{OMODE}, $ParmsClassifierO->{OMETRIC}, $ParmsClassifierO->{OMETHOD}, $ParmsClassifierO->{OORDERING});
+		my $RunResult = Common::GetClassifierORunResult ($data_base, $ParmsClassifierO->{SUPPORT}, $ParmsClassifierO->{CONFIDENCE}, $ParmsClassifierO->{PATTERN_SET}, $ParmsClassifierO->{MIN_NUM_RULES}, $ParmsClassifierO->{MAX_NUM_RANK_RULES}, $ParmsClassifierO->{MIN_RULE_LEN}, $ParmsClassifierO->{MAX_RULE_LEN}, $ParmsClassifierO->{RULE_MEASURE}, $ParmsClassifierO->{OMODE}, $ParmsClassifierO->{OMETRIC}, $ParmsClassifierO->{OMETHOD}, $ParmsClassifierO->{OORDERING});
 
 		$best_run_for_avg_db_acc_hsh{$data_base}{'classifier_o'} = $RunResult->{ACCURACY};
 		$best_run_for_avg_db_pat_hsh{$data_base}{'classifier_o'} = $RunResult->{AVG_PATTERNS};
@@ -216,7 +217,7 @@ sub make_avg_app_histogram_graphs ()
 
 	foreach $data_base (@Common::DataBases)
 	{
-		my $RunResult = Common::GetClassifierORRunResult ($data_base, $ParmsClassifierOR->{SUPPORT}, $ParmsClassifierOR->{CONFIDENCE}, $ParmsClassifierOR->{MIN_NUM_RULES}, $ParmsClassifierOR->{MAX_NUM_RANK_RULES}, $ParmsClassifierOR->{OMETRIC}, $ParmsClassifierOR->{ALPHA}, $ParmsClassifierOR->{BETA});
+		my $RunResult = Common::GetClassifierORRunResult ($data_base, $ParmsClassifierOR->{SUPPORT}, $ParmsClassifierOR->{CONFIDENCE}, $ParmsClassifierOR->{MIN_NUM_RULES}, $ParmsClassifierOR->{MAX_NUM_RANK_RULES}, $ParmsClassifierOR->{RULE_MEASURE}, $ParmsClassifierOR->{OMETRIC}, $ParmsClassifierOR->{ALPHA}, $ParmsClassifierOR->{BETA});
 
 		$best_run_for_avg_db_acc_hsh{$data_base}{'classifier_or'} = $RunResult->{ACCURACY};
 		$best_run_for_avg_db_pat_hsh{$data_base}{'classifier_or'} = $RunResult->{AVG_PATTERNS};
@@ -229,17 +230,17 @@ sub make_avg_app_histogram_graphs ()
 	$best_run_for_avg_db_rul_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_RULES};
 	$best_run_for_avg_db_tim_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_TIME};
 
-	Common::MakeAppHistogramGraph ('Best Parameters Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_best_run_for_avg_db_acc', \%best_run_for_avg_db_acc_hsh, 0);
-	Common::MakeAppHistogramGraph ('Best Parameters Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_best_run_for_avg_db_pat', \%best_run_for_avg_db_pat_hsh, 1);
-	Common::MakeAppHistogramGraph ('Best Parameters Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_best_run_for_avg_db_rul', \%best_run_for_avg_db_rul_hsh, 1);
-	Common::MakeAppHistogramGraph ('Best Parameters Classification Time Average Histogram', 'Data Sets', 'Classification Time Average', 'histogram_best_run_for_avg_db_tim', \%best_run_for_avg_db_tim_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_avg_db_acc', \%best_run_for_avg_db_acc_hsh, 0);
+	Common::MakeAppHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_avg_db_pat', \%best_run_for_avg_db_pat_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_avg_db_rul', \%best_run_for_avg_db_rul_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_avg_db_tim', \%best_run_for_avg_db_tim_hsh, 1);
 }
 
-sub make_ometric_histogram_graphs ($$$$$$$)
+sub make_ometric_histogram_graphs ($$$$$$$$)
 {
 	print "make_ometric_histogram_graphs ()\n";
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode) = @_;
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode) = @_;
 
 	my $data_base;
 
@@ -247,7 +248,7 @@ sub make_ometric_histogram_graphs ($$$$$$$)
 	{
 		print "base: $data_base\n";
 
-		get_ometric_runs_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, 's', 's');
+		get_ometric_runs_for_classifier_o ($data_base, $support, $confidence, 'f', $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, 's', 's');
 	}
 
 	$ometric_acc_hsh{'average'}{'s'} /= scalar @Common::DataBases;
@@ -270,10 +271,10 @@ sub make_ometric_histogram_graphs ($$$$$$$)
 	$ometric_tim_hsh{'average'}{'l'} /= scalar @Common::DataBases;
 	$ometric_tim_hsh{'average'}{'a'} /= scalar @Common::DataBases;
 
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_ometric_acc', \%ometric_acc_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_ometric_pat', \%ometric_pat_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_ometric_rul', \%ometric_rul_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Classification Time Average Histogram', 'Data Sets', 'Classification Time Average', 'histogram_ometric_tim', \%ometric_tim_hsh);
+	Common::MakeOMetricHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_ometric_acc', \%ometric_acc_hsh, 0);
+	Common::MakeOMetricHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_ometric_pat', \%ometric_pat_hsh, 1);
+	Common::MakeOMetricHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_ometric_rul', \%ometric_rul_hsh, 1);
+	Common::MakeOMetricHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_ometric_tim', \%ometric_tim_hsh, 1);
 }
 
 sub make_avg_ometric_histogram_graphs ()
@@ -289,6 +290,7 @@ sub make_avg_ometric_histogram_graphs ()
 	my $max_num_rank_rules	= $ParmsClassifierO->{MAX_NUM_RANK_RULES};
 	my $min_rule_len	= $ParmsClassifierO->{MIN_RULE_LEN};
 	my $max_rule_len	= $ParmsClassifierO->{MAX_RULE_LEN};
+	my $rule_measure	= $ParmsClassifierO->{RULE_MEASURE};
 	my $omode		= $ParmsClassifierO->{OMODE};
 	my $omethod		= $ParmsClassifierO->{OMETHOD};
 	my $oordering		= $ParmsClassifierO->{OORDERING};
@@ -299,7 +301,7 @@ sub make_avg_ometric_histogram_graphs ()
 	{
 		print "base: $data_base\n";
 
-		get_ometric_runs_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $omethod, $oordering);
+		get_ometric_runs_for_classifier_o ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $omethod, $oordering);
 	}
 
 	$ometric_acc_hsh{'average'}{'s'} /= scalar @Common::DataBases;
@@ -322,12 +324,13 @@ sub make_avg_ometric_histogram_graphs ()
 	$ometric_tim_hsh{'average'}{'l'} /= scalar @Common::DataBases;
 	$ometric_tim_hsh{'average'}{'a'} /= scalar @Common::DataBases;
 
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_best_run_for_avg_db_ometric_acc', \%ometric_acc_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_best_run_for_avg_db_ometric_pat', \%ometric_pat_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_best_run_for_avg_db_ometric_rul', \%ometric_rul_hsh);
-	Common::MakeOMetricHistogramGraph ('Orthogonality Metrics Classification Time Average Histogram', 'Data Sets', 'Classification Time Average', 'histogram_best_run_for_avg_db_ometric_tim', \%ometric_tim_hsh);
+	Common::MakeOMetricHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_avg_db_ometric_acc', \%ometric_acc_hsh, 0);
+	Common::MakeOMetricHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_avg_db_ometric_pat', \%ometric_pat_hsh, 1);
+	Common::MakeOMetricHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_avg_db_ometric_rul', \%ometric_rul_hsh, 1);
+	Common::MakeOMetricHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_avg_db_ometric_tim', \%ometric_tim_hsh, 1);
 }
 
+=comment
 sub make_lazy_compare_histogram_graphs ()
 {
 	print "make_lazy_compare_histogram_graphs ()\n";
@@ -404,9 +407,9 @@ sub make_lazy_compare_histogram_graphs ()
 	$best_run_for_lac_avg_db_rul_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_RULES};
 	$best_run_for_lac_avg_db_tim_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_TIME};
 
-	Common::MakeAppHistogramGraph ('Best LAC Parameters Accuracy Histogram', 'Data Sets', 'Accuracy', 'histogram_best_run_for_lac_avg_db_acc', \%best_run_for_lac_avg_db_acc_hsh, 0);
-	Common::MakeAppHistogramGraph ('Best LAC Parameters Patterns Average Histogram', 'Data Sets', 'Patterns Average', 'histogram_best_run_for_lac_avg_db_pat', \%best_run_for_lac_avg_db_pat_hsh, 1);
-	Common::MakeAppHistogramGraph ('Best LAC Parameters Rules Average Histogram', 'Data Sets', 'Rules Average', 'histogram_best_run_for_lac_avg_db_rul', \%best_run_for_lac_avg_db_rul_hsh, 1);
-	Common::MakeAppHistogramGraph ('Best LAC Parameters Classification Time Average Histogram', 'Data Sets', 'Classification Time Average', 'histogram_best_run_for_lac_avg_db_tim', \%best_run_for_lac_avg_db_tim_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_lac_avg_db_acc', \%best_run_for_lac_avg_db_acc_hsh, 0);
+	Common::MakeAppHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_lac_avg_db_pat', \%best_run_for_lac_avg_db_pat_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_lac_avg_db_rul', \%best_run_for_lac_avg_db_rul_hsh, 1);
+	Common::MakeAppHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_lac_avg_db_tim', \%best_run_for_lac_avg_db_tim_hsh, 1);
 }
 =cut
