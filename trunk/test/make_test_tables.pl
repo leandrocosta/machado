@@ -204,15 +204,15 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 
 #	print OUTPUT_LAC_OLAC "		\\end{tabular*}
 	print OUTPUT_LAC_OLAC "		\\end{tabular}
-	\\caption{Comparação entre LAC e OLAC (numero de acertos)}
+	\\caption{Comparação entre LAC e OLAC (número de acertos)}
 	\\label{tab:comparison_lac_olac}
 \\end{table}";
 	print OUTPUT_LAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparação entre LAC e ORIGAMI (numero de acertos)}
+	\\caption{Comparação entre LAC e ORIGAMI (número de acertos)}
 	\\label{tab:comparison_lac_origami}
 \\end{table}";
 	print OUTPUT_OLAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparação entre OLAC e ORIGAMI (numero de acertos)}
+	\\caption{Comparação entre OLAC e ORIGAMI (número de acertos)}
 	\\label{tab:comparison_olac_origami}
 \\end{table}";
 
@@ -360,7 +360,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSC "		\\end{tabular}
-	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para LAC)}
+	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (LAC)}
 	\\label{tab:best_runs_for_each_db_lac}
 \\end{table}";
 
@@ -444,7 +444,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSO "		\\end{tabular}
-	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para OLAC)}
+	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (para OLAC)}
 	\\label{tab:best_runs_for_each_db_olac}
 \\end{table}";
 
@@ -524,7 +524,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$rule_meas
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSOR "		\\end{tabular}
-	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para ORIGAMI)}
+	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (ORIGAMI)}
 	\\label{tab:best_runs_for_each_db_origami}
 \\end{table}";
 
@@ -693,7 +693,7 @@ sub make_best_avg_runs_table ()
 	print OUTPUT "		\\hline\n";
 
 	print OUTPUT "		\\end{tabular}
-	\\caption{Melhores Parametros para cada Execucao}
+	\\caption{Melhores Parâmetros para cada Execução}
 	\\label{tab:best_parms_for_avg_db}
 \\end{table}";
 }
