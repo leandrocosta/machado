@@ -146,7 +146,7 @@ sub make_best_app_histogram_graphs ()
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-	Common::MakeAppHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_each_db_acc', \%best_run_for_each_db_acc_hsh, 0);
+	Common::MakeAppHistogramGraph ('Histograma de Acurácia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_each_db_acc', \%best_run_for_each_db_acc_hsh, 0);
 	Common::MakeAppHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_each_db_pat', \%best_run_for_each_db_pat_hsh, 1);
 	Common::MakeAppHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_each_db_rul', \%best_run_for_each_db_rul_hsh, 1);
 	Common::MakeAppHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_each_db_tim', \%best_run_for_each_db_tim_hsh, 1);
