@@ -204,15 +204,15 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 
 #	print OUTPUT_LAC_OLAC "		\\end{tabular*}
 	print OUTPUT_LAC_OLAC "		\\end{tabular}
-	\\caption{Comparacao entre LAC e OLAC (numero de acertos)}
+	\\caption{Comparação entre LAC e OLAC (numero de acertos)}
 	\\label{tab:comparison_lac_olac}
 \\end{table}";
 	print OUTPUT_LAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparacao entre LAC e ORIGAMI (numero de acertos)}
+	\\caption{Comparação entre LAC e ORIGAMI (numero de acertos)}
 	\\label{tab:comparison_lac_origami}
 \\end{table}";
 	print OUTPUT_OLAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparacao entre OLAC e ORIGAMI (numero de acertos)}
+	\\caption{Comparação entre OLAC e ORIGAMI (numero de acertos)}
 	\\label{tab:comparison_olac_origami}
 \\end{table}";
 
