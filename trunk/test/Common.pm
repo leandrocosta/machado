@@ -266,32 +266,62 @@ sub GetLazyOutputFile ($$$$$$)
 	return $out_file;
 }
 
-sub GetClassifierCOutputFile ($$$$$$$)
+sub GetClassifierCOutputFile ($$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len) = @_;
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure) = @_;
 
 	# s0.0001_c0.0001_n1_l10_m1_x1.0.log
-	my $out_file = "$OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len.".out";
+	my $out_file = "$OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_u".$rule_measure.".out";
 
 	return $out_file;
 }
 
-sub GetClassifierOOutputFile ($$$$$$$$$$$$)
+sub GetClassifierOOutputFile ($$$$$$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering) = @_;
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $ometric, $omethod, $oordering) = @_;
 
 	# s0.0001_c0.0001_pf_n1_l10_m1_x1_oh_es_wp_gs.0.log
-	my $out_file = "$OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering.".out";
+	my $out_file = "$OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering."_u".$rule_measure.".out";
 
 	return $out_file;
 }
 
-sub GetClassifierOROutputFile ($$$$$$$$)
+sub GetClassifierOROutputFile ($$$$$$$$$)
 {
-	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta) = @_;
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $rule_measure, $ometric, $alpha, $beta) = @_;
 
 	# s0.0001_c0.9_n1_l1000_es_a0.2_b0.8.0.log
-	my $out_file = "$OutputDirClassifierOR/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta.".out";
+	my $out_file = "$OutputDirClassifierOR/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta."_u".$rule_measure.".out";
+
+	return $out_file;
+}
+
+sub GetClassifierCLogFile ($$$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $fold) = @_;
+
+	# s0.0001_c0.0001_n1_l10_m1_x1.0.log
+	my $out_file = "$OutputDirClassifierC/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_u".$rule_measure.".".$fold.".log";
+
+	return $out_file;
+}
+
+sub GetClassifierOLogFile ($$$$$$$$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $ometric, $omethod, $oordering, $fold) = @_;
+
+	# s0.0001_c0.0001_pf_n1_l10_m1_x1_oh_es_wp_gs.0.log
+	my $out_file = "$OutputDirClassifierO/$data_base/s".$support."_c".$confidence."_p".$pattern_set."_n".$min_num_rules."_l".$max_num_rank_rules."_m".$min_rule_len."_x".$max_rule_len."_o".$omode."_e".$ometric."_w".$omethod."_g".$oordering."_u".$rule_measure.".".$fold.".log";
+
+	return $out_file;
+}
+
+sub GetClassifierORLogFile ($$$$$$$$$$)
+{
+	my ($data_base, $support, $confidence, $min_num_rules, $max_num_rank_rules, $rule_measure, $ometric, $alpha, $beta, $fold) = @_;
+
+	# s0.0001_c0.9_n1_l1000_es_a0.2_b0.8.0.log
+	my $out_file = "$OutputDirClassifierOR/$data_base/s".$support."_c".$confidence."_n".$min_num_rules."_l".$max_num_rank_rules."_e".$ometric."_a".$alpha."_b".$beta."_u".$rule_measure.".".$fold.".log";
 
 	return $out_file;
 }
@@ -324,7 +354,7 @@ sub GetRunResultFromOutputFile ($)
 	my $avg_rules = 0;
 	my $avg_time = 0;
 
-#	print "file: $out_file\n";
+	print "file: $out_file\n";
 
 	if (-e $out_file)
 	{
@@ -368,19 +398,19 @@ sub GetLazyRunResult ($$$$$$)
 	return GetRunResultFromOutputFile (GetLazyOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5]));
 }
 
-sub GetClassifierCRunResult ($$$$$$$)
+sub GetClassifierCRunResult ($$$$$$$$)
 {
-	return GetRunResultFromOutputFile (GetClassifierCOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6]));
+	return GetRunResultFromOutputFile (GetClassifierCOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]));
 }
 
-sub GetClassifierORunResult ($$$$$$$$$$$$)
+sub GetClassifierORunResult ($$$$$$$$$$$$$)
 {
-	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11]));
+	return GetRunResultFromOutputFile (GetClassifierOOutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8], $_[9], $_[10], $_[11], $_[12]));
 }
 
-sub GetClassifierORRunResult ($$$$$$$$)
+sub GetClassifierORRunResult ($$$$$$$$$)
 {
-	return GetRunResultFromOutputFile (GetClassifierOROutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7]));
+	return GetRunResultFromOutputFile (GetClassifierOROutputFile ($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6], $_[7], $_[8]));
 }
 
 sub MakeAppHistogramGraph ($$$$$$)
@@ -455,9 +485,9 @@ $db,$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$
 	system "$GnuPlotApp $gnu_file";
 }
 
-sub MakeOMetricHistogramGraph ($$$$$)
+sub MakeOMetricHistogramGraph ($$$$$$)
 {
-	my ($title, $xlabel, $ylabel, $graph, $accuracy_hash) = @_;
+	my ($title, $xlabel, $ylabel, $graph, $accuracy_hash, $logscale) = @_;
 
 	my ($db);
 
@@ -511,6 +541,7 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 	print OUTPUT "set title \"$title\"\n";
 	print OUTPUT "set xlabel \"$xlabel\"\n";
 	print OUTPUT "set ylabel \"$ylabel\"\n";
+	print OUTPUT "set logscale y\n" if $logscale;
 #	print OUTPUT "set yrange [0:1] noreverse nowriteback\n";
 	print OUTPUT "plot '$dat_file' using 2:xtic(1) ti col, '' u 3 ti col, '' u 4 ti col, '' u 5 ti col";
 	close OUTPUT;
@@ -575,7 +606,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $accuracy, $avg_patterns, $avg_rules, $avg_time);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -591,6 +622,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 		$max_num_rank_rules	= $_;
 		$min_rule_len		= $_;
 		$max_rule_len		= $_;
+		$rule_measure		= $_;
 		$accuracy		= $_;
 		$avg_patterns		= $_;
 		$avg_rules		= $_;
@@ -602,6 +634,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]]*)\].*/$1/;
 		$accuracy		=~ s/.*accuracy \[([^\]]*)\].*/$1/;
 #		$avg_patterns		=~ s/.*average patterns \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
@@ -618,6 +651,7 @@ sub GetClassifierCParmsFromOutputFile ($)
 		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
 		MIN_RULE_LEN		=> $min_rule_len,
 		MAX_RULE_LEN		=> $max_rule_len,
+		RULE_MEASURE		=> $rule_measure,
 		ACCURACY		=> $accuracy,
 		AVG_PATTERNS		=> $avg_patterns,
 		AVG_RULES		=> $avg_rules,
@@ -631,7 +665,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode, $ometric, $omethod, $oordering, $accuracy, $avg_patterns, $avg_rules, $avg_time);
+	my ($support, $confidence, $pattern_set, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $omode, $ometric, $omethod, $oordering, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -648,6 +682,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 		$max_num_rank_rules	= $_;
 		$min_rule_len		= $_;
 		$max_rule_len		= $_;
+		$rule_measure		= $_;
 		$omode			= $_;
 		$ometric		= $_;
 		$omethod		= $_;
@@ -664,6 +699,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]\}]*)(\]|\}).*/$1/;
 		$omode			=~ s/.*omode \[([^\]]*)\].*/$1/;
 		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
 		$omethod		=~ s/.*omethod \[([^\]]*)\].*/$1/;
@@ -685,6 +721,7 @@ sub GetClassifierOParmsFromOutputFile ($)
 		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
 		MIN_RULE_LEN		=> $min_rule_len,
 		MAX_RULE_LEN		=> $max_rule_len,
+		RULE_MEASURE		=> $rule_measure,
 		OMODE			=> $omode,
 		OMETRIC			=> $ometric,
 		OMETHOD			=> $omethod,
@@ -702,7 +739,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 {
 	my $out_file = $_[0];
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $accuracy, $avg_patterns, $avg_rules, $avg_time);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $rule_measure, $ometric, $alpha, $beta, $accuracy, $avg_patterns, $avg_rules, $avg_time);
 
 	if (-e $out_file)
 	{
@@ -716,6 +753,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 		$confidence		= $_;
 		$min_num_rules		= $_;
 		$max_num_rank_rules	= $_;
+		$rule_measure		= $_;
 		$ometric		= $_;
 		$alpha			= $_;
 		$beta			= $_;
@@ -728,6 +766,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
 		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]]*)\].*/$1/;
 		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
 		$alpha			=~ s/.*alpha \[([^\]]*)\].*/$1/;
 		$beta			=~ s/.*beta \[([^\]]*)\].*/$1/;
@@ -745,6 +784,7 @@ sub GetClassifierORParmsFromOutputFile ($)
 		CONFIDENCE		=> $confidence,
 		MIN_NUM_RULES		=> $min_num_rules,
 		MAX_NUM_RANK_RULES	=> $max_num_rank_rules,
+		RULE_MEASURE		=> $rule_measure,
 		OMETRIC			=> $ometric,
 		ALPHA			=> $alpha,
 		BETA			=> $beta,
