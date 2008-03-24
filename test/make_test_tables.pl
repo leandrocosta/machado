@@ -204,15 +204,15 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 
 #	print OUTPUT_LAC_OLAC "		\\end{tabular*}
 	print OUTPUT_LAC_OLAC "		\\end{tabular}
-	\\caption{Comparison between LAC and OLAC (number of asserts)}
+	\\caption{Comparacao entre LAC e OLAC (numero de acertos)}
 	\\label{tab:comparison_lac_olac}
 \\end{table}";
 	print OUTPUT_LAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparison between LAC and ORIGAMI (number of asserts)}
+	\\caption{Comparacao entre LAC e ORIGAMI (numero de acertos)}
 	\\label{tab:comparison_lac_origami}
 \\end{table}";
 	print OUTPUT_OLAC_ORIGAMI "		\\end{tabular}
-	\\caption{Comparison between OLAC and ORIGAMI (number of asserts)}
+	\\caption{Comparacao entre OLAC e ORIGAMI (numero de acertos)}
 	\\label{tab:comparison_olac_origami}
 \\end{table}";
 
@@ -232,6 +232,7 @@ sub make_best_runs_table ()
 	make_best_runs_table_for_classifier_or ();
 }
 
+=comment
 sub make_best_runs_table_for_lazy ()
 {
 	my $db;
@@ -286,16 +287,17 @@ $db,                $support,     $confidence,  $min_rules,   $max_size,    $ran
 
 	close OUTPUT_BEST_RUNS_LAZY;
 }
+=cut
 
 sub make_best_runs_table_for_classifier_c ()
 {
 	my $db;
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $avg_time, $avg_patterns, $avg_rules, $accuracy);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSC =
-		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
-$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$rule_measure,$avg_patterns,$avg_rules,$avg_time,$accuracy
 		\hline
 .
 
@@ -305,9 +307,9 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 #	print OUTPUT_BEST_RUNS_CLASSC "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSC "\\begin{table}[htbp]
 	\\centering
-		\\begin{tabular}{|l|c|c|c|c|c|c||c|c|c|c|}
+		\\begin{tabular}{|l|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
-		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
 		\\hline\n";
 
 	my $data_base;
@@ -331,6 +333,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
 		$max_rule_len		= $support;
+		$rule_measure		= $support;
 		$avg_time		= $support;
 		$avg_patterns		= $support;
 		$avg_rules		= $support;
@@ -342,6 +345,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]]*)\].*/$1/;
 		$avg_time		=~ s/.*avg_time \[([^\]]*)\].*/$1/;
 		$avg_patterns		=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
 		$avg_rules		=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
@@ -356,7 +360,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSC "		\\end{tabular}
-	\\caption{Best Parameters and Results for each Dataset (for LAC)}
+	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para LAC)}
 	\\label{tab:best_runs_for_each_db_lac}
 \\end{table}";
 
@@ -367,11 +371,11 @@ sub make_best_runs_table_for_classifier_o ()
 {
 	my $db;
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $ometric, $omethod, $oordering, $avg_time, $avg_patterns, $avg_rules, $accuracy);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $rule_measure, $ometric, $omethod, $oordering, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSO =
-		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<< & @<<<<<<< & @<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
-$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$ometric,$omethod,$oordering,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<<<< & @<<<<< & @<<<<<<< & @<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_len,$max_rule_len,$rule_measure,$ometric,$omethod,$oordering,$avg_patterns,$avg_rules,$avg_time,$accuracy
 		\hline
 .
 
@@ -381,9 +385,9 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 #	print OUTPUT_BEST_RUNS_CLASSO "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len omode ometric avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSO "\\begin{table}[htbp]
 	\\centering
-		\\begin{tabular}{|l|c|c|c|c|c|c|c|c|c||c|c|c|c|}
+		\\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
-		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{e} & \\textbf{w} & \\textbf{g} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{e} & \\textbf{w} & \\textbf{g} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
 		\\hline\n";
 
 	my $data_base;
@@ -407,6 +411,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 		$max_num_rank_rules	= $support;
 		$min_rule_len		= $support;
 		$max_rule_len		= $support;
+		$rule_measure		= $support;
 		$ometric		= $support;
 		$omethod		= $support;
 		$oordering		= $support;
@@ -421,6 +426,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
 		$min_rule_len		=~ s/.*min_rule_len \[([^\]]*)\].*/$1/;
 		$max_rule_len		=~ s/.*max_rule_len \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]\}]*)(\]|\}).*/$1/;
 		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
 		$omethod		=~ s/.*omethod \[([^\]]*)\].*/$1/;
 		$oordering		=~ s/.*oordering \[([^\]]*)\].*/$1/;
@@ -438,7 +444,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSO "		\\end{tabular}
-	\\caption{Best Parameters and Results for each Dataset (for OLAC)}
+	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para OLAC)}
 	\\label{tab:best_runs_for_each_db_olac}
 \\end{table}";
 
@@ -449,11 +455,11 @@ sub make_best_runs_table_for_classifier_or ()
 {
 	my $db;
 
-	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $ometric, $alpha, $beta, $avg_time, $avg_patterns, $avg_rules, $accuracy);
+	my ($support, $confidence, $min_num_rules, $max_num_rank_rules, $rule_measure, $ometric, $alpha, $beta, $avg_time, $avg_patterns, $avg_rules, $accuracy);
 
 format OUTPUT_BEST_RUNS_CLASSOR =
-		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<< & @<<<<< & @<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
-$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$alpha,$beta,$avg_patterns,$avg_rules,$avg_time,$accuracy
+		@<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<< & @<<<<<<<<<<<<<<<<<< & @<<<<<<< & @<<<<< & @<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< & @<<<<<<<<<<<<< \\
+$db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$rule_measure,$ometric,$alpha,$beta,$avg_patterns,$avg_rules,$avg_time,$accuracy
 		\hline
 .
 
@@ -463,9 +469,9 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$
 #	print OUTPUT_BEST_RUNS_CLASSOR "data set      support confidence min_num_rules max_num_rank_rules ometric alpha beta avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSOR "\\begin{table}[htbp]
 	\\centering
-		\\begin{tabular}{|l|c|c|c|c|c|c|c||c|c|c|c|}
+		\\begin{tabular}{|l|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
-		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{e} & \\textbf{a} & \\textbf{b} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
+		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{u}	& \\textbf{e} & \\textbf{a} & \\textbf{b} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
 		\\hline\n";
 
 	my $data_base;
@@ -487,6 +493,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$
 		$confidence		= $support;
 		$min_num_rules		= $support;
 		$max_num_rank_rules	= $support;
+		$rule_measure	= $support;
 		$ometric		= $support;
 		$alpha			= $support;
 		$beta			= $support;
@@ -499,6 +506,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$
 		$confidence		=~ s/.*confidence \[([^\]]*)\].*/$1/;
 		$min_num_rules		=~ s/.*min_num_rules \[([^\]]*)\].*/$1/;
 		$max_num_rank_rules	=~ s/.*max_num_rank_rules \[([^\]]*)\].*/$1/;
+		$rule_measure		=~ s/.*rule_measure \[([^\]]*)\].*/$1/;
 		$ometric		=~ s/.*ometric \[([^\]]*)\].*/$1/;
 		$alpha			=~ s/.*alpha \[([^\]]*)\].*/$1/;
 		$beta			=~ s/.*beta \[([^\]]*)\].*/$1/;
@@ -516,7 +524,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$ometric,$
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSOR "		\\end{tabular}
-	\\caption{Best Parameters and Results for each Dataset (for ORIGAMI)}
+	\\caption{Melhores Parametros e Resultados para cada Base de Dados (para ORIGAMI)}
 	\\label{tab:best_runs_for_each_db_origami}
 \\end{table}";
 
@@ -527,13 +535,48 @@ sub get_comparisons_for_data_base ($$)
 {
 	my ($data_base, $comparison_array) = @_;
 
+	my $ParmsClassifierC = Common::GetBestAverageAccParms ('classifier_c');
+	my $ParmsClassifierO = Common::GetBestAverageAccParms ('classifier_o');
+	my $ParmsClassifierOR = Common::GetBestAverageAccParms ('classifier_or');
+
+	my $LAC_S	= $ParmsClassifierC->{SUPPORT};
+	my $LAC_C	= $ParmsClassifierC->{CONFIDENCE};
+	my $LAC_N	= $ParmsClassifierC->{MIN_NUM_RULES};
+	my $LAC_L	= $ParmsClassifierC->{MAX_NUM_RANK_RULES};
+	my $LAC_M	= $ParmsClassifierC->{MIN_RULE_LEN};
+	my $LAC_X	= $ParmsClassifierC->{MAX_RULE_LEN};
+	my $LAC_U	= $ParmsClassifierC->{RULE_MEASURE};
+
+	my $OLAC_S	= $ParmsClassifierO->{SUPPORT};
+	my $OLAC_C	= $ParmsClassifierO->{CONFIDENCE};
+	my $OLAC_N	= $ParmsClassifierO->{MIN_NUM_RULES};
+	my $OLAC_L	= $ParmsClassifierO->{MAX_NUM_RANK_RULES};
+	my $OLAC_M	= $ParmsClassifierO->{MIN_RULE_LEN};
+	my $OLAC_X	= $ParmsClassifierO->{MAX_RULE_LEN};
+	my $OLAC_U	= $ParmsClassifierO->{RULE_MEASURE};
+	my $OLAC_E	= $ParmsClassifierO->{OMETRIC};
+	my $OLAC_W	= $ParmsClassifierO->{OMETHOD};
+	my $OLAC_G	= $ParmsClassifierO->{OORDERING};
+
+	my $ORIGAMI_S	= $ParmsClassifierOR->{SUPPORT};
+	my $ORIGAMI_C	= $ParmsClassifierOR->{CONFIDENCE};
+	my $ORIGAMI_N	= $ParmsClassifierOR->{MIN_NUM_RULES};
+	my $ORIGAMI_L	= $ParmsClassifierOR->{MAX_NUM_RANK_RULES};
+	my $ORIGAMI_U	= $ParmsClassifierOR->{RULE_MEASURE};
+	my $ORIGAMI_E	= $ParmsClassifierOR->{OMETRIC};
+	my $ORIGAMI_A	= $ParmsClassifierOR->{ALPHA};
+	my $ORIGAMI_B	= $ParmsClassifierOR->{BETA};
+
 	my $fold;
 
 	for ($fold = 0; $fold < $Common::NumFolds; $fold++)
 	{
-		my $log_file_classifier_or	= Common::GetBestLogFile ('classifier_or', $data_base, $fold);
-		my $log_file_classifier_c	= Common::GetBestLogFile ('classifier_c', $data_base, $fold);
-		my $log_file_classifier_o	= Common::GetBestLogFile ('classifier_o', $data_base, $fold);
+#		my $log_file_classifier_or	= Common::GetBestLogFile ('classifier_or', $data_base, $fold);
+		my $log_file_classifier_or	= Common::GetClassifierORLogFile ($data_base, $ORIGAMI_S, $ORIGAMI_C, $ORIGAMI_N, $ORIGAMI_L, $ORIGAMI_U, $ORIGAMI_E, $ORIGAMI_A, $ORIGAMI_B, $fold);
+#		my $log_file_classifier_c	= Common::GetBestLogFile ('classifier_c', $data_base, $fold);
+		my $log_file_classifier_c	= Common::GetClassifierCLogFile ($data_base, $LAC_S, $LAC_C, $LAC_N, $LAC_L, $LAC_M, $LAC_X, $LAC_U, $fold);
+#		my $log_file_classifier_o	= Common::GetBestLogFile ('classifier_o', $data_base, $fold);
+		my $log_file_classifier_o	= Common::GetClassifierOLogFile ($data_base, $OLAC_S, $OLAC_C, 'f', $OLAC_N, $OLAC_L, $OLAC_M, $OLAC_X, $OLAC_U, 'h', $OLAC_E, $OLAC_W, $OLAC_G, $fold);
 
 #		print "classifier_or: $log_file_classifier_or\n";
 #		print "classifier_c: $log_file_classifier_c\n";
@@ -593,6 +636,7 @@ sub make_best_avg_runs_table ()
 	my $LAC_L	= $ParmsClassifierC->{MAX_NUM_RANK_RULES};
 	my $LAC_M	= $ParmsClassifierC->{MIN_RULE_LEN};
 	my $LAC_X	= $ParmsClassifierC->{MAX_RULE_LEN};
+	my $LAC_U	= $ParmsClassifierC->{RULE_MEASURE};
 
 	my $OLAC_S	= $ParmsClassifierO->{SUPPORT};
 	my $OLAC_C	= $ParmsClassifierO->{CONFIDENCE};
@@ -600,6 +644,7 @@ sub make_best_avg_runs_table ()
 	my $OLAC_L	= $ParmsClassifierO->{MAX_NUM_RANK_RULES};
 	my $OLAC_M	= $ParmsClassifierO->{MIN_RULE_LEN};
 	my $OLAC_X	= $ParmsClassifierO->{MAX_RULE_LEN};
+	my $OLAC_U	= $ParmsClassifierO->{RULE_MEASURE};
 	my $OLAC_E	= $ParmsClassifierO->{OMETRIC};
 	my $OLAC_W	= $ParmsClassifierO->{OMETHOD};
 	my $OLAC_G	= $ParmsClassifierO->{OORDERING};
@@ -608,6 +653,7 @@ sub make_best_avg_runs_table ()
 	my $ORIGAMI_C	= $ParmsClassifierOR->{CONFIDENCE};
 	my $ORIGAMI_N	= $ParmsClassifierOR->{MIN_NUM_RULES};
 	my $ORIGAMI_L	= $ParmsClassifierOR->{MAX_NUM_RANK_RULES};
+	my $ORIGAMI_U	= $ParmsClassifierOR->{RULE_MEASURE};
 	my $ORIGAMI_E	= $ParmsClassifierOR->{OMETRIC};
 	my $ORIGAMI_A	= $ParmsClassifierOR->{ALPHA};
 	my $ORIGAMI_B	= $ParmsClassifierOR->{BETA};
@@ -621,9 +667,9 @@ sub make_best_avg_runs_table ()
 					& \\textbf{LAC}	& \\textbf{OLAC}	& \\textbf{ORIGAMI}	\\\\
 		\\hline\n";
 
-	print OUTPUT "		support			& $LAC_S		& $OLAC_S		& $ORIGAMI_S			\\\\\n";
+	print OUTPUT "		support			& $LAC_S	& $OLAC_S	& $ORIGAMI_S		\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		confidence		& $LAC_C		& $OLAC_C		& $ORIGAMI_C		\\\\\n";
+	print OUTPUT "		confidence		& $LAC_C		& $OLAC_C	& $ORIGAMI_C		\\\\\n";
 	print OUTPUT "		\\hline\n";
 	print OUTPUT "		min-num-rules		& $LAC_N		& $OLAC_N		& $ORIGAMI_N			\\\\\n";
 	print OUTPUT "		\\hline\n";
@@ -633,19 +679,21 @@ sub make_best_avg_runs_table ()
 	print OUTPUT "		\\hline\n";
 	print OUTPUT "		max-rule-len		& $LAC_X		& $OLAC_X		& -			\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		metric			& -		& $OLAC_E		& $ORIGAMI_E			\\\\\n";
+	print OUTPUT "		rule-measure		& $LAC_U		& $OLAC_U		& $ORIGAMI_U			\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		method			& -		& $OLAC_W		& -			\\\\\n";
+	print OUTPUT "		orth-metric		& -		& $OLAC_E		& $ORIGAMI_E			\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		pat-ordering		& -		& $OLAC_G		& -			\\\\\n";
+	print OUTPUT "		orth-method		& -		& $OLAC_W		& -			\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		alpha			& -		& -		& $ORIGAMI_A			\\\\\n";
+	print OUTPUT "		orth-pat-ordering	& -		& $OLAC_G		& -			\\\\\n";
 	print OUTPUT "		\\hline\n";
-	print OUTPUT "		beta			& -		& -		& $ORIGAMI_B			\\\\\n";
+	print OUTPUT "		origami-alpha		& -		& -		& $ORIGAMI_A			\\\\\n";
+	print OUTPUT "		\\hline\n";
+	print OUTPUT "		origami-beta		& -		& -		& $ORIGAMI_B			\\\\\n";
 	print OUTPUT "		\\hline\n";
 
 	print OUTPUT "		\\end{tabular}
-	\\caption{Best Parameters for Each Run}
+	\\caption{Melhores Parametros para cada Execucao}
 	\\label{tab:best_parms_for_avg_db}
 \\end{table}";
 }
