@@ -18,7 +18,7 @@ O aplicativo \textbf{OLAC} possui a implementação de um classificador baseado em
 \par
 A primeira delas, chamada de \textbf{LAC} (\textit{Lazy Associative Classifier}), é a abordagem \textit{lazy} nas sua versão original (e não-ortogonal), como foi proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas. Depois disso, o algoritmo ordena as regras de acordo com uma métrica escolhida pelo usuário, e obtém a classe mais indicada pelas regras que compõem um \textit{ranking} de tamanho também fornecido pelo usuário.
 \par
-A segunda abordagem, chamada de \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) é a modificação da abordagem \textit{lazy} que considera a ortogonalidade dos padrões durante a tarefa de obtenção de regras. O algoritmo extrai do conjunto de padrões freqüentes um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação. Depois disso, a classe mais indicada é escolhida considerando uma métrica e o tamanho do \textit{ranking}, da mesma forma que é feito no LAC.
+A segunda abordagem, chamada de \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) é a modificação da abordagem \textit{lazy} que considera a ortogonalidade dos padrões durante a tarefa de obtenção de regras. O algoritmo extrai, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação. Depois disso, a classe mais indicada é escolhida considerando uma métrica e o tamanho do \textit{ranking}, da mesma forma que é feito no LAC.
 \par
 A terceira abordage, chamada \textbf{ORIGAMI} é a implementação da estratégia ORIGAMI (como foi proposta em \cite{zaki07origami}) de acordo com a adaptação discutida na seção \ref{sec:ortogonalidade_origami_adaptacao}.
 \par
@@ -32,30 +32,29 @@ Options:
   -s, --support             Set the support
   -c, --confidence          Set the confidence
   -r, --run-mode            Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]
-  -p, --pattern-set         Set the pattern set type [f,m,r] [FREQUENT,
-                              MAXIMAL, RANDOM MAXIMAL]
-  -n, --min-num-rules       Set the minimum number of rules
-  -l, --max-num-rank-rules  Set the maximum number of rules considered in
-                              rank (rank size)
+  -p, --pattern-set         Set the pattern set type [f,m,r] [FREQUENT, MAXIMAL,
+                              RANDOM MAXIMAL]
+  -n, --min-num-rules       Set the minimum number of rules generated
+  -l, --max-num-rank-rules  Set the maximum number of rules considered (rank size)
   -m, --min-rule-len        Set the minimum length of the rules
   -x, --max-rule-len        Set the maximum length of the rules
   -o, --orth-mode           Set the orthogonality mode [h,p,o] [HEURISTICAL,
                               POLYNOMIAL, ORIGAMI]
-  -e, --orth-metric         Set the orthogonality metric [s,c,l,a]
-                              [SIMILARITY, TRANSACTION COVERAGE, CLASS
-                              COVERAGE, ALL]
-  -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR
-                              AVERAGE, ALL]
+  -e, --orth-metric         Set the orthogonality metric [s,c,l,a] [STRUCTURE,
+                              TRANSACTION COVERAGE, CLASS COVERAGE, ALL]
+  -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE,
+                              ALL]
   -g, --orth-pat-ordering   Set the way patterns are ordered for heuristic
-                              [s,r,i,z,n] [SORTED, REVERSE SORTED, SORTED BY
-                              SIZE, REVERSE SORTED BY SIZE, NONE]
+                              [s,r,i,z,n] [SORTED, REVERSE SORTED, SORTED BY SIZE,
+                              REVERSE SORTED BY SIZE, NONE]
   -u, --rule-measure        Set the rule measure used [s,c,j,k,o,n,e,p,l,i,v]
                               [SUPPORT, CONFIDENCE, GAIN, JACCARD, KULC, COSINE,
                               CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE, LIFT,
                               LEVERAGE]
   -a, --origami-alpha       Set the alpha parameter used by ORIGAMI
   -b, --origami-beta        Set the beta parameter used by ORIGAMI
-  -d, --debug               Set the level of debug [0-4] [NODEBUG - MAXLEVEL]
+  -d, --debug               Set the level of debug [-1,0,1,2,3,4] [SILENT, NO DEBUG,
+                              LOW LEVEL, MEDIUM LEVL, HIGH LEVEL, MAX LEVEL]
   -v, --verbose             Use verbose mode
   -h, --help                Display this information
 \end{verbatim}
@@ -94,7 +93,7 @@ Abaixo, encontramos alguns gráficos comparando execuções das três abordagens imp
 %	\item We are still running these experiments with anoter parameters, and trying to get some better results for all approaches.
 %\end{itemize}
 
-\subsection{Melhores Resultados para cada Base de Dados}
+\subsection{Melhores Resultados para Cada Base}
 
 Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma com a acurácia obtida com as três abordagens para cada base de dados. A figura \ref{fig:histogram_best_run_for_each_db_pat} mostra um histograma com o número médio de padrões utilizados para se obter as regras de associação para cada instância de teste, a figura \ref{fig:histogram_best_run_for_each_db_rul} mostra o número médio de regras geradas para cada instância pelas três abordagens, e a figura \ref{fig:histogram_best_run_for_each_db_tim} mostra o tempo médio de cada classificação. Para estes quatro resultados foram utilizados os melhores conjuntos de parâmetros para cada aplicação e base de dados, por exemplo. para a abordagem OLAC para a base \textit{anneal.ac} foi utilizado suporte igual a $0,0001$, mas para a base \textit{horse.ac} foi utilizado suporte igual a $0,3$, já que os melhores resultados para cada base foram obtidos com estes valores.
 
@@ -156,7 +155,7 @@ A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhor
 
 \input{tables/table_best_runs_origami.tex}
 
-\subsection{Melhor Média dos Resultados para Todas as Base de Dados}
+\subsection{Melhor Média dos Resultados para Todas as Bases}
 
 Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma com os melhores resultados para cada base de dados obtidos com LAC, OLAC e ORIGAMI. A figura  \ref{fig:histogram_best_run_for_avg_db_pat} possui um histograma com a média do número de padrões utilizados por cada classificação, a figura \ref{fig:histogram_best_run_for_avg_db_rul} possui a média do número de regras obtidas em cada classificação, e a figura \ref{fig:histogram_best_run_for_avg_db_tim} possui a média do tempo necessário para a classificação de cada instância de teste. Para teste quatro resultados foi utilizado, para cada aplicação, o conjunto de parâmetros que produziu o melhor valor médio de acurácia para todo o conjunto de bases. Os conjuntos de parâmetros para cada abordagem se encontram na tabela \ref{tab:best_parms_for_avg_db}, sendo que alguns deles não são aplicáveis a todas as abordagens.
 

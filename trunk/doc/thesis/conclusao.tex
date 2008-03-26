@@ -1,5 +1,14 @@
 \chapter{Conclusão}
 \label{chapter:conclusao}
 
-\section{Resumo}
+Neste trabalho foi explorado o conceito de ortogonalidade em mineração de dados com o objetivo de se diminuir a redundância e, conseqüentemente, o tamanho do conjunto de padrões freqüentes de uma base de dados. A estratégia foi aplicada ao problema da classificação associativa, onde a ortogonalidade foi explorada sob três perspectivas: estrutura dos padrões, cobertura de transações e cobertura de classes.
+\par
+Foi implementado um classificador baseado em regras de associação com três abordagens distintas: a abordagem clássica \textbf{LAC} (\textit{Lazy Associative Classifier}), proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas, a abordagem ortogonal \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}), que extrai, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação, e uma adaptação do \textbf{ORIGAMI}, encontrado na literatura, e desenvolvido, originalmente, para obtenção de padrões ortogonais em grafos.
+\par
+Os experimentos comprovam a qualidade dos padrões obtidos, visto que os algoritmos baseados em ortogonalidade obtiveram resultados semelhantes aos da abordagem clássica.
+
 \section{Trabalhos Futuros}
+
+Como trabalhos futuros, podemos citar a utilização de ortogonalidade em outros pontos do algoritmo de classificação. Uma forma alternativa de se abordar o problema seria obter um sub-conjunto de itens ortogonais em relação à base de dados, a partir deste, obter todos os padrões freqüentes que seriam considerados na geração das regras. Outra forma seria gerar todas as regras possíveis a partir do conjunto de padrões freqüentes, e aplicar a ortogonalidade, em conjunto com as demais medidas de interesse, na extração do sub-conjunto de regras consideradas para a classificação.
+\par
+Também seria interessante trabalhar em novas heurísticas de obtenção de conjuntos ortogonais, com ênfase em desempenho, e investir no desenvolvimento de novos algoritmos de mineração de padrões freqüentes que já considerem ortogonalidade durante a exploração do espaço de busca dos padrões.
