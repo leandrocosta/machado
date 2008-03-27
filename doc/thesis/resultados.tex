@@ -79,7 +79,7 @@ O aplicativo também foi executado com as outras duas métricas de ortogonalidade 
 
 \section{Experimentos}
 
-Nesta seção serão apresentados os resultados das execuções do aplicativo em vinte e seis bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente utilizado em pesquisas na área de classificação em mineração de dados. Todas as bases foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez instâncias de teste para cada uma delas. Cada instância de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento. Como resultados foram considerados a média das dez execuções diferentes para cada base de dados.
+Nesta seção serão apresentados os resultados das execuções do aplicativo em vinte e seis bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente utilizado em pesquisas na área de classificação em mineração de dados. Todas as bases foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez configurações de teste para cada uma delas. Cada configuração de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento. Como resultados foram considerados a média das dez execuções diferentes para cada base de dados.
 \par
 Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms}. Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC \footnote{Quando a métrica de ortogonalidade baseada na estrutura dos padrões é utilizada em conjunto com o tamanho máximo de regra igual a $1$, OLAC terá o mesmo comportamento que LAC, já que a similaridade entre dois padrões freqüentes será sempre zero.}, e dos casos em que $\alpha$ é maior ou igual a $\beta$ para o ORIGAMI. É importante lembrar que boa parte dos parâmetros desta tabela não são utilizados por todas as abordagens.
 
@@ -253,6 +253,18 @@ Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordage
 
 \input{tables/table_comparison_olac_origami.tex}
 
+\subsection{Estudo de Casos de Teste}
+
+Nesta seção apresentaremos alguns casos de teste extraídos do \textit{log} de execução das abordagens LAC e OLAC.
+
+\subsubsection{Base \textit{breast.ac}}
+
+Serão apresentados, nesta seção, os detalhes do processo de classificação de uma instância de teste em que o LAC obteve sucesso e o OLAC não. A configuração selecionada possui 69 instâncias de teste, das quais o OLAC classificou quatro de maneira errada, e o LAC, apenas duas. Para uma das instâncias com as quais o OLAC não obteve sucesso, o LAC encontrou dez padrões freqüentes, com suporte maior ou igual a 0.001 (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_patterns}), com os quais gerou vinte regras de associação com confiança maior ou igual a 0.01 (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_rules}).
+
+\input{tables/table_lac_x_olac_breast.ac.lac_patterns.tex}
+\input{tables/table_lac_x_olac_breast.ac.lac_rules.tex}
+
+TODO: Comentar sobre as regras, a média dos valores de convicção, a classificação correta do LAC. Apresentar as tabelas para o OLAC, comentar sobre as regras, mencionar a regra incorreta que possui convicção muito alta, discutir. Comentar sobre a segunda instância de testes, não é necesário apresentar as tabelas novamente.
 %\section{Comparação Ortogonal x Não Ortogonal}
 %
 %Histogramas de acurácia, número de padrões e número de regras. \\
