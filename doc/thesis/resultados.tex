@@ -255,16 +255,48 @@ Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordage
 
 \subsection{Estudo de Casos de Teste}
 
-Nesta seção apresentaremos alguns casos de teste extraídos do \textit{log} de execução das abordagens LAC e OLAC.
+Nesta seção apresentaremos dois casos de teste extraídos do \textit{log} de execução em que as abordagens baseadas em ortogonalidade não obtêm sucesso na classificação das instâncias de teste. Foram utilizados os resultados das três abordagens considerando os parâmetros da tabela  \ref{tab:best_parms_for_avg_db}.
 
-\subsubsection{Base \textit{breast.ac}}
+\subsubsection{Caso de Teste LAC x OLAC}
 
-Serão apresentados, nesta seção, os detalhes do processo de classificação de uma instância de teste em que o LAC obteve sucesso e o OLAC não. A configuração selecionada possui 69 instâncias de teste, das quais o OLAC classificou quatro de maneira errada, e o LAC, apenas duas. Para uma das instâncias com as quais o OLAC não obteve sucesso, o LAC encontrou dez padrões freqüentes, com suporte maior ou igual a 0.001 (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_patterns}), com os quais gerou vinte regras de associação com confiança maior ou igual a 0.01 (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_rules}).
+Serão apresentados, nesta seção, os detalhes do processo de classificação de uma instância aleatória de teste em que o LAC obteve sucesso e o OLAC não. A configuração selecionada possui 668 transações de treinamento e 69 instâncias de teste da base \textit{breast.ac}, das quais o OLAC classificou quatro de maneira errada, e o LAC, apenas duas. Serão apresentados os detalhes da classificação da instância da tabela \ref{tab:table_lac_x_olac_breast.ac.test_instance_1}. Esta instância possui 10 itens, sendo todos eles freqüentes (suporte maior que 0.0001) na projeção obtida, que corresponde a 630 transações da base de treinamento. Visto que o LAC foi executado com tamanho máximo das regras igual a 1, foram encontrados 10 padrões freqüentes (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_patterns}), com os quais foram geradas 20 regras de associação com confiança maior ou igual a 0,01 (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_rules}).
 
+\input{tables/table_lac_x_olac_breast.ac.test_instance_1.tex}
 \input{tables/table_lac_x_olac_breast.ac.lac_patterns.tex}
 \input{tables/table_lac_x_olac_breast.ac.lac_rules.tex}
 
-TODO: Comentar sobre as regras, a média dos valores de convicção, a classificação correta do LAC. Apresentar as tabelas para o OLAC, comentar sobre as regras, mencionar a regra incorreta que possui convicção muito alta, discutir. Comentar sobre a segunda instância de testes, não é necesário apresentar as tabelas novamente.
+\par
+Já o OLAC, que foi executado com tamanho máximo de regra igual a 2, obteve um conjunto de 55 padrões freqüentes, dos quais foram extraídos 7 padrões ortogonais (tabela \ref{tab:table_lac_x_olac_breast.ac.olac_patterns}), e, a partir destes, gerou 14 regras com confiança maior ou igual a 0.001 (tabela \ref{tab:table_lac_x_olac_breast.ac.olac_rules}).
+
+\input{tables/table_lac_x_olac_breast.ac.olac_patterns.tex}
+\input{tables/table_lac_x_olac_breast.ac.olac_rules.tex}
+
+\par
+Analisando as tabelas \ref{tab:table_lac_x_olac_breast.ac.lac_patterns} e \ref{tab:table_lac_x_olac_breast.ac.olac_patterns}, percebe-se que todos os itens da instância de teste são encontrados nos conjuntos de padrões freqüentes das duas execuções. No caso do LAC, já era seperado que cada item correspondesse a um padrão, pelo fato de todos os itens serem freqüentes. Em relação ao OLAC, era esperado um sub-conjunto dos padrões freqüentes com baixa redundância em relação ao conjunto original. Como o OLAC foi executado com tamanho máximo de regra igual a 2, o conjunto de padrões freqüentes encontrados foi bem maior que o mesmo conjunto obtido pela estratégia LAC, porém, nota-se que o conjunto de padrões ortogonais é menor, mesmo cobrindo todos os itens da instância de teste. Além disso, nenhum item foi utilizado mais de uma vez, o que comprova a baixa redundância do conjunto.
+\par
+Entretanto, apesar da boa qualidade do conjunto de padrões ortogonais encontrado, a classificação não foi realizada com sucesso pelo OLAC. Uma análise simples das tabelas \ref{tab:table_lac_x_olac_breast.ac.lac_rules} e \ref{tab:table_lac_x_olac_breast.ac.olac_rules} é suficiente para entender o motivo deste erro. Na primeira tabela, vemos que as regras que mais contribuem para a classificação correta aparecem no topo do \textit{ranking} (posições 1, 2 e 4), com medidas de convicção grandes o sucificente para que a escolha da classe correta seja realizada. A média das convicções das regras que apontam para a classe \textbf{CLASS=1} é 7,14, enquanto que, para a classe \textbf{CLASS=0}, este valor é igual a 3,35. Já na segunda tabela, nota-se a presença de regras que contribuem para a classificação falsa numa proporção próxima à das regras verdadeiras. A primeira regra do \textit{ranking}, que possui o padrão \textbf{w=attr8=-2.5 w=attr10=-1.5} e aponta para a  classe \textbf{CLASS=0}, é responsável pela maior contribuição para o erro da classificação, com a medida de convicção igual a 46,27. Na primeira tabela, vemos que os padrões \textbf{w=attr8=-2.5} e \textbf{w=attr10=-1.5} também contribuem para a classe falsa, mas com convicções iguais a 13,80 e 11.10, respectivamente. O que acontece, neste caso, é que existe uma relação entre o padrão \textbf{w=attr8=-2.5 w=attr10=-1.5} e a classe \textbf{CLASS=0} muito maior que a relação entre os sub-padrões \textbf{w=attr8=-2.5} e \textbf{w=attr10=-1.5} e a classe \textbf{CLASS=0}. Isto fez com que a média das regras que apontam para a classe \textbf{CLASS=0} ficasse em 9,01, enquanto que a média da classe \textbf{CLASS=1} ficou em 8,68.
+\par
+Um caso semelhante ocorre também com a segunda instância classificada de maneira errada pelo OLAC, onde o padrão \textbf{w=attr9=2.5-9.5 w=attr7=?}, por não fazer parte de nenhuma transação de classe \textbf{CLASS=0} na projeção, obteve uma medida infinita de convicção, fazendo com que esta classe fosse escolhida como resultado, onde o correto seria escolher a classe \textbf{CLASS=1}.
+\par
+Situações desse tipo contribuíram para que a abordagem OLAC não classificasse corretamente todas as instâncias em que a abordagem LAC obteve sucesso. No entanto, os erros encontrados estão mais relacionados com a natureza dos dados do que com o conceito de ortogonalidade.
+
+\subsubsection{Caso de Teste LAC x ORIGAMI}
+
+Nesta seção comparamos o comportamento do LAC e do ORIGAMI no processo de classificação de uma instância aleatória de teste em que o LAC obteve sucesso e o ORIGAMI não. A configuração selecionada possui 52 transações de treinamento e 5 instâncias de teste da base \textit{labor.ac}, das quais o ORIGAMI classificou 2 de maneira correta, e o LAC não errou nenhuma classificação. A instância escolhida se encontra na tabela \ref{tab:table_lac_x_origami_labor.ac.test_instance_1}. Esta instância possui 16 itens, sendo todos eles freqüentes na projeção obtida, que corresponde às 52 transações da base de treinamento. Assim como no exemplo anterior, cada item da instância de teste deu origem a um padrão freqüente (tabela \ref{tab:table_lac_x_origami_labor.ac.lac_patterns}), com os quais foram obtidas 31 regras de associação com confiança maior ou igual a 0,01 (tabela \ref{tab:table_lac_x_origami_labor.ac.lac_rules}).
+
+\input{tables/table_lac_x_origami_labor.ac.test_instance_1.tex}
+\input{tables/table_lac_x_origami_labor.ac.lac_patterns.tex}
+\input{tables/table_lac_x_origami_labor.ac.lac_rules.tex}
+
+\par
+O ORIGAMI, por sua vez, obteve um conjunto de 13 padrões maximais, que se encontram na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_patterns}, de onde foi extraído um único padrão ortogonal, e, posteriormente, a única regra de associação com confiança maior ou igual a 0,0001, que pode ser vista na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_rules}. É importante notar que todos os padrões maximais obtidos possuem suporte igual a 0,019231, o que corresponde à fração 1/52, ou seja, nenhum padrão maximal obtido aparece em mais de uma transação na base de dados. A combinação de parâmetros de execução utilizada foi responsável por fazer com que o algoritmo não selecionasse uma maior quantidade de padrões ortogonais. Como o valor do parâmetro $\alpha$ utilizado foi muito baixo (0,1), e o suporte utilizado favoreceu a obtenção de grandes padrões maximais, a métrica de ortogonalidade por estrutura de padrões não foi adequada. Isso aconteceu porque todos os padrões encontrados possuem similaridade maior que 10\%, pelo fato de vários itens aparecerem em mais de um padrão. Os itens \textbf{w=attr1=ignore} e \textbf{w=attr8=?}, por exemplo, estão presentes em todos os padrões.
+\par
+Com isso, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{CLASS=1}, fazendo com que o algoritmo classifique a instância de teste de maneira errada.
+
+\input{tables/table_lac_x_origami_labor.ac.origami_patterns.tex}
+\input{tables/table_lac_x_origami_labor.ac.origami_rules.tex}
+
+
 %\section{Comparação Ortogonal x Não Ortogonal}
 %
 %Histogramas de acurácia, número de padrões e número de regras. \\
