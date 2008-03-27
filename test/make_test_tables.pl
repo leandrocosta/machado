@@ -80,6 +80,7 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 #		\\textbf{Data Sets}	& \\textbf{OLAC \\& LAC}	& \\textbf{OLAC \\& \$\\neg\$ LAC} & \\textbf{\$\\neg\$ OLAC \\& LAC}	& \\textbf{\$\\neg\$ OLAC \\& \$\\neg\$ LAC}	\\\\
 	print OUTPUT_LAC_OLAC "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{OLAC}		& \\textbf{OLAC}			& \\textbf{\$\\neg\$ OLAC}	& \\textbf{\$\\neg\$ OLAC}	\\\\
@@ -91,6 +92,7 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 	open OUTPUT_LAC_ORIGAMI, ">$out_lac_origami_file";
 	print OUTPUT_LAC_ORIGAMI "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{ORIGAMI}	& \\textbf{ORIGAMI}		& \\textbf{\$\\neg\$ ORIGAMI}	& \\textbf{\$\\neg\$ ORIGAMI}	\\\\
@@ -102,6 +104,7 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 #		Data Sets	& \\multicolumn{1}{p{2.5cm}}{OLAC \\& ORIGAMI}	& OLAC \\& \$\\neg\$ ORIGAMI & \$\\neg\$ OLAC \\& ORIGAMI	& \$\\neg\$ OLAC \\& \$\\neg\$ ORIGAMI	\\\\
 	print OUTPUT_OLAC_ORIGAMI "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{OLAC}		& \\textbf{OLAC}			& \\textbf{\$\\neg\$ OLAC}	& \\textbf{\$\\neg\$ OLAC}	\\\\
@@ -307,6 +310,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 #	print OUTPUT_BEST_RUNS_CLASSC "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSC "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -385,6 +389,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 #	print OUTPUT_BEST_RUNS_CLASSO "data set      support confidence min_num_rules max_num_rank_rules min_rule_len max_rule_len omode ometric avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSO "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{e} & \\textbf{w} & \\textbf{g} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -469,6 +474,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$rule_meas
 #	print OUTPUT_BEST_RUNS_CLASSOR "data set      support confidence min_num_rules max_num_rank_rules ometric alpha beta avg_time      avg_patterns  avg_rules     accuracy      \n";
 	print OUTPUT_BEST_RUNS_CLASSOR "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{u}	& \\textbf{e} & \\textbf{a} & \\textbf{b} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -662,6 +668,7 @@ sub make_best_avg_runs_table ()
 
 	print OUTPUT "\\begin{table}[htbp]
 	\\centering
+		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|}
 		\\hline
 					& \\textbf{LAC}	& \\textbf{OLAC}	& \\textbf{ORIGAMI}	\\\\
