@@ -185,3 +185,14 @@ while (bKeepRunning)
 	if (duplicates > maximais_set)
 		bKeepRunning = false;
 }
+
+===
+
+Rodar:
+costa@antares /tmp/costa/personal/machado/test $ more output/classifier_o/breast.ac/best.out
+support [0.0001], confidence [0.0001], pattern_set [f], min_num_rules [1], max_num_rank_rules [100], min_rule_len [1], max_rule_len [3], omode [h], ometric [s], omethod [s], oordering [z], rule_measure [c}, avg_time [0.006560337], avg_patterns [6.921305], avg_rules [13.48043], accuracy [0.9756729]
+---
+Rodar:
+costa@tigre:/tmp/costa/personal/machado/test> more output/classifier_or/waveform.ac/best.out
+support [0.1], confidence [0.0001], min_num_rules [1], max_num_rank_rules [1000], ometric [s], alpha [0.7], beta [0.9], rule_measure [e], avg_time [0.07764388], avg_patterns [18.445], avg_rules [50.8622], accuracy [0.7672]
+---
