@@ -1,8 +1,6 @@
-%\chapter{Experimentos e Resultados}
 \chapter{Experimentos e Resultados}
 \label{chapter:resultados}
 
-%\section{O Aplicativo \textbf{OLAC}}
 \section{O Aplicativo \textbf{OLAC}}
 
 %\par
@@ -67,12 +65,13 @@ A opção \textbf{-n} é utilizada para fornecer o número mínimo de regras a serem 
 
 Abaixo será apresentado um exemplo de execução do aplicativo, demonstrando o seu funcionamento e os resultados obtidos pela abordagem \textbf{OLAC}:
 
-A base de transações da tabela \ref{tab:example_training_db} foi criado sobre o conjunto de itens $\I = \left\{ A, B, C, D, E \right\}$, e utilizada como base de treinamento para o classificador. Uma única transação $ABE$ de classe $CLASS=1$ foi utilizada como instância de teste. O aplicativo \textbf{olac} foi executado, primeiramente, em modo \textbf{LAC} (ou não-ortogonal) utilizando os parâmetros encontrados na tabela \ref{tab:example_run_parms}.
+A base de transações da tabela \ref{tab:example_training_db} foi criada sobre o conjunto de itens $\I = \left\{ A, B, C, D, E \right\}$, e utilizada como base de treinamento para o classificador. Uma única transação $ABE$ de classe $CLASS=1$ foi utilizada como instância de teste. O aplicativo \textbf{olac} foi executado, primeiramente, em modo \textbf{LAC} (ou não-ortogonal) utilizando os parâmetros encontrados na tabela \ref{tab:example_run_parms}.
 
 \input{tables/table_example_training_db.tex}
 
 \input{tables/table_example_run_parms.tex}
 
+\par
 Esta execução gerou o conjunto de padrões freqüentes $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ e classificou corretamente a inst6ancia de teste. Depois disso, o aplicativo foi executado em modo \textbf{OLAC} (ortogonal) utilizando os mesmos parâmetros da tabela \ref{tab:example_run_parms}, e \textit{SIMILARIDADE} como métrica de ortogonalidade. Esta abordagem obteve o conjunto de padrões ortogonais $\Or = \left\{ AE, B \right\}$ do conjunto original de padrões freqüentes, e classificou corretamente a instância de teste com as regras geradas deste sub-conjunto de padrões. Como podemos observar, o conjunto de padrões ortogonais utilizado pelo OLAC é consideravelmente menor que o conjunto de padrões freqüentes original. E mais, o conjunto de padrões ortogonais não possui redundância entre seus elementos. É esperado que a redundância de um determinado conjunto de padrões ortogonais seja sempre menor que a redundância do seu conjunto original de padrões freqüentes.
 \par
 O aplicativo também foi executado com as outras duas métricas de ortogonalidade (cobertura de transações e cobertura de classes), extraindo, respectivamente, $\Or = \left\{ AB, E \right\}$ e $\Or = \left\{ B, E \right\}$ como conjuntos de padrões ortogonais, e estas execuções também classificaram a instância de teste corretamente.
@@ -168,6 +167,7 @@ Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma c
 	\label{fig:histogram_best_run_for_avg_db_acc}
 \end{figure}
 
+\par
 Como podemos ver, na tabela \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente, sendo que o OLAC, dessa vez, se saiu um pouco melhor que o LAC. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. No entanto, o tamanho do \textit{ranking} do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
 
 \begin{figure}[htbp]
@@ -177,7 +177,27 @@ Como podemos ver, na tabela \ref{fig:histogram_best_run_for_avg_db_acc}, as melh
 	\label{fig:histogram_best_run_for_avg_db_pat}
 \end{figure}
 
-Na tabela \ref{fig:histogram_best_run_for_avg_db_pat} vemos as quantidades de padrões gerados por cada abordagem. A diferença entre o LAC e o OLAC neste histograma não é tão grande quanto no resultado anterior por influência dos parâmetros de execução. Além da diferença entre o tamanho máximo das regras, que favorece o LAC \footnote{Os padrões freqüentes utilizados pelo classificador são obtidos por meio de uma busca em largura no espaço de padrões, limitada pelo tamanho máximo da regra. Logo, o algoritmo só obtém os padrões de tamanho menor ou igual a este parâmetro}, o suporte utilizado pelo OLAC é dez vezes menor que o suporte do LAC.
+\par
+Na tabela \ref{fig:histogram_best_run_for_avg_db_pat} vemos as quantidades de padrões gerados por cada abordagem. A diferença entre os resultados obtidos com o LAC e o OLAC neste histograma não é tão grande quanto no resultado anterior por influência dos parâmetros de execução. Além da diferença entre o tamanho máximo das regras, que favorece o LAC \footnote{Os padrões freqüentes utilizados pelo classificador são obtidos por meio de uma busca em largura no espaço de padrões, limitada pelo tamanho máximo da regra. Logo, o algoritmo só obtém os padrões de tamanho menor ou igual a este parâmetro}, o suporte utilizado pelo OLAC é dez vezes menor que o suporte do LAC.
+\par
+Analisando um exemplo de classificação é possível perceber como a utlização de padrões ortogonais pode auxiliar na classificação das transações. Para isso, usamos, como exemplo, uma configuração de teste da base \textbf{austra.ac}. A configuração selecionada possui 621 transações de treinamento e 69 instâncias de teste, das quais o OLAC classificou 61 de maneira correta, e o LAC acertou 60 vezes. A instância da instância da tabela \ref{tab:table_lac_x_olac_austra.ac.test_instance_1} foi classificada corretamente pelo OLAC, mas não pelo LAC. Esta instância possui 14 itens, sendo todos eles freqüentes (suporte maior que 0.0001) na projeção obtida, que corresponde às 621 transações da base de treinamento. Como o LAC foi executado com tamanho máximo das regras igual a 1, foram encontrados 14 padrões freqüentes (tabela \ref{tab:table_lac_x_olac_austra.ac.lac_patterns}), com os quais foram geradas 28 regras de associação com confiança maior ou igual a 0,01 (tabela \ref{tab:table_lac_x_olac_austra.ac.lac_rules}).
+
+\input{tables/table_lac_x_olac_austra.ac.test_instance_1.tex}
+\input{tables/table_lac_x_olac_austra.ac.lac_patterns.tex}
+\input{tables/table_lac_x_olac_austra.ac.lac_rules.tex}
+
+\par
+Já o OLAC, que foi executado com tamanho máximo de regra igual a 2, obteve um conjunto de 105 padrões freqüentes, dos quais foram extraídos 9 padrões ortogonais (tabela \ref{tab:table_lac_x_olac_austra.ac.olac_patterns}), e, a partir destes, foram geradas 18 regras com confiança maior ou igual a 0.001 (tabela \ref{tab:table_lac_x_olac_austra.ac.olac_rules}).
+
+\input{tables/table_lac_x_olac_austra.ac.olac_patterns.tex}
+\input{tables/table_lac_x_olac_austra.ac.olac_rules.tex}
+
+\par
+Analisando as tabelas \ref{tab:table_lac_x_olac_austra.ac.lac_rules} e \ref{tab:table_lac_x_olac_austra.ac.olac_rules}, é possível perceber algumas características interessantes que aparecem nas regras obtidas pelo OLAC. Vemos, por exemplo, que a primeira regra do \textit{ranking}, que possui convicção igual a 3.77, é uma regra que contribui positivamente para o resultado correto do algoritmo, e foi obtida por meio da combinação de dois padrões que, na abordagem LAC, geraram regras com convicções iguais a 2.54 e 1.55 respectivamente. Nota-se que a combinação dos dois padrões, além de diminuir a redundância das regras, melhorou a sua medida de convicção, fazendo com que o algoritmo se aproximasse do resultado correto.
+\par
+E adicionalmente, podemos perceber também que a última regra do \textit{ranking} da abordagem OLAC, que possui convicção igual a 0.51 e contribui negativamente para o resultado, e foi obtida por meio da combinação de duas regras da abordagem LAC com convicções iguais a 0.69 e 0.56, respectivamente, ou seja, nesse caso, a medida de convicção diminuiu. Logo, temos aqui um exemplo de como a ortogonalidade pode diminuir a redundância nas informações obtidas, e ainda melhorar a efetividade do algoritmo.
+\par
+Este fato é notado com freqüência nos casos em que o LAC é executado com o tamanho máximo de regra maior que 1, pois neste caso, o número muito maior de regras será gerado, fazendo com haja redundância tanto das regras que contribuem positivamente para o sucesso da classificação quanto das que contribuem negativamente. Entretanto, não é raro encontrar transações nas bases de dados que são definidas por um número muito pequeno de padrões, e nestes casos, a redundância das regras falsas exerce maiores influências que a redundância das regras verdadeiras. É justamente nestes casos que a aplicação da ortogonalidade favorece o algoritmo.
 
 \begin{figure}[htbp]
 	\centering
@@ -186,7 +206,8 @@ Na tabela \ref{fig:histogram_best_run_for_avg_db_pat} vemos as quantidades de pa
 	\label{fig:histogram_best_run_for_avg_db_rul}
 \end{figure}
 
-Já o ORIGAMI obteve, para a maior parte das bases, apenas um padrão freqüente. Isto se deve ao valor do suporte obtido na sua melhor execução. Um suporte tão baixo dificulta a geração randômica de padrões maximais, além de favorecer a possibilidade de só existir um padrão maximal para cada instância da base de teste.
+\par
+Em relação ao ORIGAMI, esta abordagem obteve, para a maior parte das bases, apenas um padrão freqüente e ortogonal. Isto se deve à combinação dos parâmetros utilizados na sua melhor execução. Um suporte baixo favorece a geração de grandes padrões maximais, que tendem a se aproximar do padrão máximo obtido com todos os itens da instância de teste. Como a métrica de ortogonalidade baseada na estrutura dos padrões foi utilizada, isto torna difícil a obtenção de conjuntos ortogonais, mesmo utilizando um valor baixo para o parâmetro $\alpha$, visto que a probabilidade de dois padrões maximais possuirem itens em comum é muito grande. Em grande parte dos experimentos, o tamanho médio dos padrões maximais ficou bem próximo do tamanho da instância de teste.
 \par
 Novamente, como era de se esperar, o LAC obteve o melhor desempenho das três abordagens.
 
