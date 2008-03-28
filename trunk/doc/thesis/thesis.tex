@@ -16,6 +16,8 @@
 	bookmarksnumbered=true,
 	linktocpage,
 	colorlinks]{hyperref}
+%	colorlinks,
+%	hypertexnames=false]{hyperref}
 \usepackage{natbib}
 
 \let\newfloat=\undefined
@@ -50,6 +52,8 @@
 
 \begin{document}
 
+%\pagenumbering{roman}   % i, ii, iii, iv, ...
+
 \ufmgthesis{
 	title		= {Mineração de Padrões Freqüentes Ortogonais},
 	author		= {Leandro Souza Costa},
@@ -57,7 +61,7 @@
 	course		= {Ciência da Computação},
 	address		= {Belo Horizonte},
 	date		= {2008-04-16},
-	logo		= {img/brasao.eps},
+	logo		= {img/brasao},
 	advisor		= {Wagner Meira Jr.}{Ph.~D.}{.},
 	member		= {Marcos André Gonçalves}{Ph.~D.}{.},
 	member		= {Sandra Aparecida de Amo}{Ph.~D.}{Universidade Federal de Uberlândia},
@@ -65,6 +69,9 @@
 	dedication	= {dedicatoria.tex},
 	ack		= {agradecimentos.tex}
 }
+
+%\pagenumbering{arabic}  % 1, 2, 3, 4, ...
+%\setcounter{page}{1}
 
 \include{introducao}
 \include{classificacao}
