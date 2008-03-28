@@ -29,30 +29,6 @@ O processo de descoberta de conhecimento em bases de dados consiste na seguinte 
 
 De acordo com \cite{Fayyad96}, mineração de dados é um passo do processo KDD que consiste na enumeração de padrões sobre os dados, sujeito a aceitáveis limitações de eficiência computacional. Considerando que padrões enumeráveis sobre uma base finita de dados são potencialmente infinitos, e que tal enumeração envolve alguma forma de pesquisa num espaço amplo, limitações computacionais adicionam severos limites sobre o sub-espaço que pode ser explorado por um algoritmo de mineração de dados. Por este motivo, a constante busca por novas metodologias e algoritmos de enumeração de padrões em grandes bases de dados tem sido foco de inúmeras frentes de pesquisa em mineração de dados.
 
-%\par
-%A princípio, mineração de dados é uma técnica que pode ser aplicada a quaisquer tipos de dados, incluindo dados de transações, \textit{multimedia}, dados espaciais, informações temporais, e até mesmo a \textbf{WWW} (\textit{World Wide Web}). Os tipos de padrões que podem se descobertos dependem das funcionalidades aplicadas. As funcionalidades de mineração de dados e a variedade de conhecimento que elas podem descobrir são apresentadas na seguinte lista:
-
-%\begin{itemize}
-%	\item{Caracterização:} Categorização de dados
-%\end{itemize}
-%
-%Que tipo de dado pode ser minerado?
-%\par
-%O que pode ser descoberto?
-%\par
-%Tudo o que pode ser descoberto é de interesse do usuário?
-%\par
-%Como sistemas de mineração de dados podem ser categorizados?
-%\par
-%What are the "issues"?
-%\par
-%Falar das soluções encontradas na mineração de dados para resolver os problemas citados, (agrupamento, regras associativas, etc). "Mineração de dados é uma tecnologia usada para revelar informação estratégica escondida em grandes massas de dados". \\
-%fonte: http://br.geocities.com/dugimenes/mineracao.htm \\
-%fonte: http://pt.wikipedia.org/wiki/Minera\%C3\%A7\%C3\%A3o\_de\_dados \\
-%Citar \cite{Kumar06}. \\
-%Procurar livros, como \cite{Han00}. \\
-%http://books.google.com/books?hl=en\&lr=\&id=AfL0t-YzOrEC\&oi=fnd\&pg=PR21\&dq=data+mining\&ots=UuSVuVarG6\&sig=swJzbDeqSGlffWudUjXszg5vNPA\#PPP1,M1
-
 \subsection{Padrões Freqüentes}
 \label{sec:introducao_padroes}
 
@@ -61,8 +37,6 @@ De acordo com \cite{Han00}, são chamados padrões freqüentes aqueles que aparecem
 Padrões freqüentes assumem um papel essencial em muitas tarefas de mineração de dados que possuem, como objetivo, encontrar padrões de determinado interesse numa base, tais como regras de associação, correlações, seqüências, episódios, classificadores, agrupamentos e muitas outras das quais a mineração de regras de associação é uma das mais populares \citep{goethals03survey}. Desde a introdução deste termo, em 1993, por \citeauthor{agrawal93mining}, a mineração de padrões freqüentes e regras de associação têm recebido grande atenção. Nas últimas décadas, centenas de artigos científicos foram publicados apresentando algoritmos, abordagens e melhorias para resolver problemas de mineração de padrões freqüentes e regras de associação de forma mais eficiente.
 \par
 Dentre as características mais importantes dos padrões freqüentes, podemos citar o suporte, que representa a medida de popularidade do padrão em relação à base. Um padrão é considerado freqüente se possui suporte maior que um dado limite inferior. Na prática, não estamos interessados apenas no conjunto de padrões freqüentes, mas também nos respectivos suportes destes padrões.
-
-%Ótimo Survey sobre mineração de padrões freqüentes (possui descrição do problema, mineração de itemsets, espaço de busca, regras de associação, algoritmo apriori fp-growth, etc...): \cite{goethals03survey}.
 
 \subsection{Regras de Associação}
 
@@ -80,12 +54,6 @@ Considerando uma base de dados de transações em que cada transação represente um
 
 Uma das características mais difundidas das regras de associação é a confiança. A confiança de uma regra representa a probabilidade de que uma transação da base de dados coberta pelo antecedente da regra também seja coberta pelo termo conseqüente. Em geral, além do conjunto de regras de associação, estamos interessados também no suporte dos termos antecedentes, e na confiança de cada regra.
 
-%\par
-%Artigo que fala de classificação e Regras de Associação: \cite{liu98integrating} (CBA)
-%O Survey também fala de regras de associação: \cite{goethals03survey}.
-%Artigo do Zaki, que fala também (CHARM): \cite{zaki99charm}.
-%Novos algoritmos para descoberta rápida de regras de associação: \cite{DBLP:conf/kdd/ZakiPOL97}.
-
 \section{Ortogonalidade}
 
 Em matemática, ortogonalidade é uma característica que denota perpendicularidade, ou existência de ângulos retos. Formalmente, dois vetores $x$ e $y$ são ortogonais num espaço vetorial $V$ se o produto interno $\left\langle x,y \right\rangle$ é zero. Esta situação é descrita por $x \bot y$.
@@ -99,17 +67,6 @@ De acordo com \cite{salton75vsm}, o modelo de espaço vetorial, ou simplesmente m
 Já a ortogonalidade, particularmente, tem sido explorada em áreas como visualização \citep{cui07}, reconhecimento facial \citep{nagao98}, taxonomia \citep{smith00}, dentre outras.
 \par
 Como exemplo de aplicação do termo em mineração de dados, podemos citar \cite{DBLP:conf/kdd/XinCYH06}, que utiliza métricas de significância e redundância para extrair, de um grande conjunto de padrões freqüentes, um sub-conjunto (top-$k$) de padrões com um valor mínimo de redundância. O autor comenta que este estudo abriu uma nova direção na procura por diferentes e significantes top-$k$ respostas para atividades de mineração de dados, que podem resultar em estudos promissores.
-
-%\par
-%Na próxima seção serão apresentados os objetivos deste trabalho, relacionados com os termos apresentados nesta introdução - mineração de dados, padrões freqüentes, regras de associação e ortogonalidade.
-
-% como forma de se obter uma medida de dissimilaridade entre duas entidades quaisquer. Um exemplo é o caso do \textbf{Modelo de Espaço Vetorial}, aplicado à \textbf{Recuperação de Informação}.
-%\par
-%De acordo com \cite{salton75vsm}, o modelo de espaço vetorial, ou simplesmente modelo vetorial, representa documentos e consultas como vetores de termos. Termos são ocorrências únicas nos documentos. Os documentos devolvidos como resultado para uma consulta são representados similarmente, ou seja, o vetor resultado para uma consulta é montado através de um cálculo de similaridade. Aos termos das consultas e documentos são atribuídos pesos que especificam o tamanho e a direção de seu vetor de representação. Ao ângulo formado por estes vetores dá-se o nome de $q$. O termo $\cos(q)$ determina a proximidade da ocorrência. O cálculo da similaridade é baseado neste ângulo entre os vetores que representam o documento e a consulta.
-
-%Boa fonte para ortogonalidade (termo geral) - wikepedia: http://en.wikipedia.org/wiki/Orthogonal \\
-%Citar poucos artigos que tratam de ortogonalidade, como ORIGAMI \citep{zaki07origami}, Redundancy-Aware Top-k Patterns \citep{DBLP:conf/kdd/XinCYH06} e Orthogonal Decision Trees \citep{dutta2004orthogonal}. \\
-%Procurar mais fontes.
 
 \section{Objetivos}
 \label{sec:introducao_objetivos}
