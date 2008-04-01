@@ -1,7 +1,7 @@
 \chapter{Classificação Associativa}
 \label{chapter:classificacao}
 
-Classificação já é um problema muito bem explorado na ciência da computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
+Classificação já é um problema muito bem explorado na Ciência da Computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
 \par
 Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{liu98integrating, dong99caep, li01cmar}. Esta abordagem, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constrói um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
 \par
@@ -49,7 +49,7 @@ Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathc
 \subsection{Regras de Associação}
 \label{sec:classificacao_regras}
 
-Uma regra de associação é uma aplicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$. A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$ \citep{agrawal93mining}.
+Uma regra de associação é uma implicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$. A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$ \citep{agrawal93mining}.
 \par
 O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup Y$ em $\mathcal{D}$, e a freqüência da regra é a freqüência de $X \cup Y$. Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma$.
 \par
@@ -71,7 +71,7 @@ Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \t
 \par
 Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra possível de se aplicar a uma determinada instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
 \par
-Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas inutilizáveis durante a classificação, por serem desnecessárias para todas as instâncias de teste.
+Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas desnecessárias durante a classificação, por não serem aplicáveis a nenhuma instância de teste.
 \par
 Diferente da abordagem \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regras específicas para cada instância de teste. A abordagem \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada para a classificação. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
 \par

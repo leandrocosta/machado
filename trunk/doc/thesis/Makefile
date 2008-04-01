@@ -33,10 +33,10 @@ ps: thesis.ps
 %.ps: %.tex %.bbl
 	latex $<
 	latex $<
-	dvips $*.dvi
+	dvips $*.dvi -o $*.ps
 
 #%.ps: %.dvi
-#	dvips $<
+#	dvips $< -o $*.ps
 
 #%.dvi: %.tex %.bbl
 #	latex $<
