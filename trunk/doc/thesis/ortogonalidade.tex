@@ -299,7 +299,7 @@ No nosso caso, não utilizamos o parâmetro $\alpha$, limite inferior para a métri
 	\item Ao final do processo, o algoritmo compara a métrica de ortogonalidade obtida com a métrica do conjunto anterior (que possuía um elemento a menos). Se a métrica se manteve, ou melhorou, o algoritmo mantém o novo conjunto como solução, e volta ao início do ciclo. Se não, o algoritmo termina o ciclo, e o conjunto anterior é dado como resultado.
 \end{enumerate}
 
-A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui uma grande influência no algoritmo, pois um novo padrão verificado só fará parte do conjunto solução se a ortogonalidade do novo conjunto for maior que a do antigo, logo, em caso de empate, os primeiros padrões terão preferência sobre os últimos. Cinco formas diferentes de ordenação do conjunto de padrões freqüentes foram implementadas:
+A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui uma grande influência no algoritmo, pois um novo padrão verificado só fará parte do conjunto-solução se a ortogonalidade do novo conjunto for maior que a do antigo, logo, em caso de empate, os primeiros padrões terão preferência sobre os últimos. Cinco formas diferentes de ordenação do conjunto de padrões freqüentes foram implementadas:
 
 \begin{enumerate}
 	\item Ordenação lexicográfica crescente;
