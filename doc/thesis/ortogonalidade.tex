@@ -1,7 +1,11 @@
 \chapter{Padrões Freqüentes e Ortogonais}
 \label{chapter:ortogonalidade}
 
-Como já foi mencionado na seção \ref{sec:introducao_padroes}, padrões freqüentes são largamente utilizados em diversas aplicações na área de mineração de dados, incluindo regras de associação, classificação, agrupamento, indexação, dentre outras. Encontra-se, na literatura, uma grande quantidade de algoritmos de mineração de padrões freqüentes que, para muitas aplicações, produzem resultados satisfatórios (como os apresentados na seção \ref{sec:introducao_trabalhos}). Entretanto, grande parte destas soluções ainda possuem problemas não resolvidos.
+Neste capítulo serão apresentadas as razões que justificam a utilização do conceito de ortogonalidade na mineração de padrões freqüentes, e no problema de classificação associativa. Também serão introduzidas as métricas de ortogonalidade consideradas, e a forma como foram utilizadas. Em seguida, será detalhada a forma como a ortogonalidade foi empregada num algoritmo de classificação baseado na abordagem \textit{lazy}, em conjunto com a heurística de obtenção de conjuntos ortogonais. Por fim, apresentamos a estratégia ORIGAMI e a sua adaptação ao problema de classificação associativa.
+
+\section{Introdução}
+
+Como já foi mencionado na seção \ref{sec:introducao_padroes}, padrões freqüentes são largamente utilizados em diversas aplicações na área de mineração de dados, incluindo regras de associação, classificação, agrupamento, indexação, dentre outras. Encontra-se, na literatura, uma grande quantidade de algoritmos de mineração de padrões freqüentes que, para muitas aplicações, produzem resultados satisfatórios (como os apresentados no capítulo \ref{chapter:trabalhos}). Entretanto, grande parte destas soluções ainda possuem problemas não resolvidos.
 \par
 Uma das razões que contribuem para este fato é que, de acordo com a definição, qualquer sub-conjunto de um padrão freqüente também é freqüente, o que faz com que o tamanho do conjunto-solução do algoritmo cresça de maneira explosiva. A introdução de conceitos como padrões fechados ou padrões maximais ajudou a resolver esta questão, porém, as abordagens existentes minimizam o conjunto-solução apenas sob a perspectiva do suporte, não considerando a semântica dos dados, o que pode fazer com que padrões interessantes ao usuário sejam retirados da solução durante o processo de minimização do resultado.
 \par
@@ -307,7 +311,7 @@ A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui 
 
 As ordenações lexicográficas foram utilizadas para se diminuir a distância entre dois padrões da seqüência, fazendo com que a modificação do conjunto-solução seja realizada de forma suave. Espera-se que, neste caso, a diferença estrutural entre dois padrões consecutivos do conjunto durante cada iteração seja a menor possível. As ordenações por tamanho foram utilizas para dar prioridade, hora aos maiores padrões (ordenação decrescente), hora aos menores padrões (ordenação crescente).
 
-O pseudo-código do algoritmo de classificação associativa baseada em ortogonalidade \textbf{OLAC} (\textit{Orthogonal Lazy Assiciative Classifier}) pode ser visto no algoritmo \ref{alg:olac}.\
+O pseudo-código do algoritmo de classificação associativa baseada em ortogonalidade \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) pode ser visto no algoritmo \ref{alg:olac}.\
 
 \begin{algorithm}
 \caption{OLAC}

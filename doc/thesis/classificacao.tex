@@ -1,6 +1,10 @@
 \chapter{Classificação Associativa}
 \label{chapter:classificacao}
 
+Neste capítulo apresentaremos fundamentos teóricos relacionadas à Classificação Associativa, como definições de padrões freqüentes e regras de associação, além de uma breve discussão a respeito das estratégias \textit{eager} e \textit{lazy} encontradas na literatura. Também serão apresentadas e discutidas algumas métricas amplamente utilizadas na avaliação de regras de associação.
+
+\section{Introdução}
+
 Classificação já é um problema muito bem explorado na Ciência da Computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
 \par
 Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{liu98integrating, dong99caep, li01cmar}. Esta abordagem, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constrói um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
