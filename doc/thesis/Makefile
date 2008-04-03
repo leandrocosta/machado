@@ -29,6 +29,7 @@ ps: thesis.ps
 %.pdf: %.tex %.bbl
 	latex $<
 	pdflatex $<
+	pdflatex $<
 
 %.ps: %.tex %.bbl
 	latex $<
