@@ -140,19 +140,27 @@ De qualquer forma, com as abordagens ortogonais foi possível classificar as inst
 
 \clearpage
 
-Como já foi observado, na tabela \ref{tab:best_runs_for_each_db_lac} se encontram os parâmetros que obtiveram as melhores acurácias para o LAC, e os resultados de cada execução.
+Como já foi dito, na tabela \ref{tab:best_runs_for_each_db_lac} se encontram os parâmetros que obtiveram as melhores acurácias para o LAC, e os resultados de cada execução. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando um pequeno valor para suporte (em geral, entre $0.0001$ e $0.1$) e para confiança ($0.01$ em média). Isto sugere que, em grande parte das bases, existam transações cujas classes sejam bem representadas por padrões de freqüência muito baixa. A seguir, veremos que os melhores resultados para as abordagens ortogonais tabém foram obtidos com valores semelhantes a estes.
 
 \input{tables/table_best_runs_lac.tex}
 
 \clearpage
 
-A tabela \ref{tab:best_runs_for_each_db_olac} possui os parâmetros das melhores execuções do OLAC para cada base de dados.
+A tabela \ref{tab:best_runs_for_each_db_olac} possui os parâmetros das melhores execuções do OLAC para cada base de dados. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando regras de tamanho máximo igual a $2$, e métrica de ortogonalidade baseada na estrutura dos padrões.
+\par
+O motivo pelo qual as métricas baseadas em cobertura de classes e de transações não produziram resultados melhores pode estar relacionado com a heurística de obtenção de conjuntos ortogonais. Examinando os resultados de tais execuções, percebemos que, em muitas situações, o algoritmo obteve conjuntos pequenos de padrões ortogonais ($2$ a $4$ padrões) com uma medida muito alta de ortogonalidade. Acontece que, de acordo com a nossa heurística, se a adição de um elemento a mais ao conjunto-solução diminui a medida de ortogonalidade do mesmo, este elemento não é adicionado, e o conjunto anterior é tido como resultado.
+\par
+Um grande número de fatores contribui para que a nossa heurística encontre conjuntos de padrões com alto valor de ortogonalidade para as métricas baseadas em cobertura, a começar pela natureza dos dados. É fácil perceber que padrões raros na base possuem maior probabilidade de fazer parte de conjuntos ortogonais, visto que a sobreposição de cobertura entre estes padrões, tanto de classes quanto de transações, acontecerá em menor freqüência.
+\par
+Uma forma de evitar que padrões muito raros sejam inseridos no conjunto-solução é aumentar o valor do suporte utilizado pelo algoritmo, porém, fazendo isto, não será possível classificar corretamente transações cujas classes são pouco freqüentes, ou são bem representadas por padrões raros.
 
 \input{tables/table_best_runs_olac.tex}
 
 \clearpage
 
-A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados.
+A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria detes casos, os valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
+\par
+Novamente, neste caso, percebemos a predominânica da métrica baseada na estrutura dos padrões nos melhores resultados obtidos.
 
 \input{tables/table_best_runs_origami.tex}
 
@@ -171,7 +179,7 @@ Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma d
 \end{figure}
 
 \par
-Como podemos ver, na tabela \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente, sendo que o OLAC, dessa vez, se saiu um pouco melhor que o LAC. As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.808$, $0.813$ e $ 0.782$. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. Isto faz com que o OLAC encontre uma quantidade de padrões freqüentes muito maior que o LAC, no entanto, o tamanho do \textit{ranking} de regras do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
+Como podemos ver, na tabela \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente, sendo que o OLAC, dessa vez, se saiu um pouco melhor que o LAC. As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.808$, $0.813$ e $0.782$. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. Isto faz com que o OLAC encontre uma quantidade de padrões freqüentes muito maior que o LAC, no entanto, o tamanho do \textit{ranking} de regras do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
 
 \begin{figure}[htbp]
 	\centering
