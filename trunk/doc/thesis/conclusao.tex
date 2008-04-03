@@ -5,7 +5,13 @@ Neste trabalho foi explorado o conceito de ortogonalidade em mineração de dados 
 \par
 Foi implementado um classificador baseado em regras de associação com três abordagens distintas: a abordagem clássica \textbf{LAC} (\textit{Lazy Associative Classifier}), proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas, a abordagem ortogonal \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}), que extrai, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação, e uma adaptação do \textbf{ORIGAMI}, encontrado na literatura, e desenvolvido, originalmente, para obtenção de padrões ortogonais em grafos.
 \par
-Os experimentos comprovam a qualidade dos padrões obtidos, visto que os algoritmos baseados em ortogonalidade obtiveram resultados semelhantes aos da abordagem clássica.
+Os experimentos comprovam a qualidade dos padrões obtidos, visto que os algoritmos baseados em ortogonalidade obtiveram resultados semelhantes aos da abordagem clássica. Vimos que, apesar do LAC ter levado vantagem na maior parte das bases, os resultados obtidos pelas abordagens ortogonais mantiveram a qualidade, fazendo com que as médias das acurácias para as três abordagens ficassem bem próximas.
+\par
+Também foram apresentados alguns casos de teste em que as abordagens ortogonais levaram desvantagem. Nestes casos, foi demonstrado que a falha na classificação não aconteceu por falta de qualidade nos conjuntos ortogonais, mas sim por causa das características dos padrões ortogonais selecionados.
+\par
+Em geral, os experimentos comprovaram a qualidade dos resultados obtidos com a aplicação de ortogonalidade no problema de classificação associativa.
+
+%Os resultados obtidos com a execução das três abordagens considerando o melhor conjunto de parâmetros para cada base de dados 
 
 \section{Trabalhos Futuros}
 
