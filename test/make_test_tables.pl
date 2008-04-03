@@ -77,14 +77,14 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 
 	open OUTPUT_LAC_OLAC, ">$out_lac_olac_file";
 #		\\begin{tabular*}{.95\\textwidth}{|l|c|c|c|c|}
-#		\\textbf{Data Sets}	& \\textbf{OLAC \\& LAC}	& \\textbf{OLAC \\& \$\\neg\$ LAC} & \\textbf{\$\\neg\$ OLAC \\& LAC}	& \\textbf{\$\\neg\$ OLAC \\& \$\\neg\$ LAC}	\\\\
+#		\\textbf{Bases de Dados}	& \\textbf{OLAC \\& LAC}	& \\textbf{OLAC \\& \$\\neg\$ LAC} & \\textbf{\$\\neg\$ OLAC \\& LAC}	& \\textbf{\$\\neg\$ OLAC \\& \$\\neg\$ LAC}	\\\\
 	print OUTPUT_LAC_OLAC "\\begin{table}[htbp]
 	\\centering
 		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{OLAC}		& \\textbf{OLAC}			& \\textbf{\$\\neg\$ OLAC}	& \\textbf{\$\\neg\$ OLAC}	\\\\
-		\\textbf{Data Sets}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
+		\\textbf{Bases de Dados}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
 				& \\textbf{LAC}		& \\textbf{\$\\neg\$ LAC}		& \\textbf{LAC}			& \\textbf{\$\\neg\$ LAC}		\\\\
 		\\hline\n";
 
@@ -96,19 +96,19 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{ORIGAMI}	& \\textbf{ORIGAMI}		& \\textbf{\$\\neg\$ ORIGAMI}	& \\textbf{\$\\neg\$ ORIGAMI}	\\\\
-		\\textbf{Data Sets}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
+		\\textbf{Bases de Dados}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
 				&  \\textbf{LAC}		& \\textbf{\$\\neg\$ LAC}		& \\textbf{LAC}			& \\textbf{\$\\neg\$ LAC}		\\\\
 		\\hline\n";
 
 	open OUTPUT_OLAC_ORIGAMI, ">$out_olac_origami_file";
-#		Data Sets	& \\multicolumn{1}{p{2.5cm}}{OLAC \\& ORIGAMI}	& OLAC \\& \$\\neg\$ ORIGAMI & \$\\neg\$ OLAC \\& ORIGAMI	& \$\\neg\$ OLAC \\& \$\\neg\$ ORIGAMI	\\\\
+#		Bases de Dados	& \\multicolumn{1}{p{2.5cm}}{OLAC \\& ORIGAMI}	& OLAC \\& \$\\neg\$ ORIGAMI & \$\\neg\$ OLAC \\& ORIGAMI	& \$\\neg\$ OLAC \\& \$\\neg\$ ORIGAMI	\\\\
 	print OUTPUT_OLAC_ORIGAMI "\\begin{table}[htbp]
 	\\centering
 		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|c|}
 		\\hline
 				& \\textbf{OLAC}		& \\textbf{OLAC}			& \\textbf{\$\\neg\$ OLAC}	& \\textbf{\$\\neg\$ OLAC}	\\\\
-		\\textbf{Data Sets}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
+		\\textbf{Bases de Dados}	& \\textbf{\\&}		& \\textbf{\\&}			& \\textbf{\\&}			& \\textbf{\\&}			\\\\
 				& \\textbf{ORIGAMI}	& \\textbf{\$\\neg\$ ORIGAMI}	& \\textbf{ORIGAMI}		& \\textbf{\$\\neg\$ ORIGAMI}	\\\\
 		\\hline\n";
 
@@ -164,6 +164,36 @@ $db, $y_classor_y_classo, $n_classor_y_classo, $y_classor_n_classo, $n_classor_n
 			$n_classo_y_classc++	if ! $correct_classo && $correct_classc;
 			$n_classo_n_classc++	if ! $correct_classo && ! $correct_classc;
 		}
+
+		# relativizar
+		$y_classor_y_classo /= scalar @comparison_array;
+		$y_classor_n_classo /= scalar @comparison_array;
+		$n_classor_y_classo /= scalar @comparison_array;
+		$n_classor_n_classo /= scalar @comparison_array;
+
+		$y_classor_y_classc /= scalar @comparison_array;
+		$y_classor_n_classc /= scalar @comparison_array;
+		$n_classor_y_classc /= scalar @comparison_array;
+		$n_classor_n_classc /= scalar @comparison_array;
+
+		$y_classo_y_classc /= scalar @comparison_array;
+		$y_classo_n_classc /= scalar @comparison_array;
+		$n_classo_y_classc /= scalar @comparison_array;
+		$n_classo_n_classc /= scalar @comparison_array;
+
+		# arredondar
+		$y_classor_y_classo	= sprintf ("%0.2f", 100 * $y_classor_y_classo);
+		$y_classor_n_classo	= sprintf ("%0.2f", 100 * $y_classor_n_classo);
+		$n_classor_y_classo	= sprintf ("%0.2f", 100 * $n_classor_y_classo);
+		$n_classor_n_classo	= sprintf ("%0.2f", 100 * $n_classor_n_classo);
+		$y_classor_y_classc	= sprintf ("%0.2f", 100 * $y_classor_y_classc);
+		$y_classor_n_classc	= sprintf ("%0.2f", 100 * $y_classor_n_classc);
+		$n_classor_y_classc	= sprintf ("%0.2f", 100 * $n_classor_y_classc);
+		$n_classor_n_classc	= sprintf ("%0.2f", 100 * $n_classor_n_classc);
+		$y_classo_y_classc	= sprintf ("%0.2f", 100 * $y_classo_y_classc);
+		$y_classo_n_classc	= sprintf ("%0.2f", 100 * $y_classo_n_classc);
+		$n_classo_y_classc	= sprintf ("%0.2f", 100 * $n_classo_y_classc);
+		$n_classo_n_classc	= sprintf ("%0.2f", 100 * $n_classo_n_classc);
 
 		write OUTPUT;
 		write OUTPUT_LAC_OLAC;
