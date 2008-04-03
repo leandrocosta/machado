@@ -55,12 +55,13 @@ Considerando uma base de dados de transações em que cada transação represente um
 Uma das características mais difundidas das regras de associação é a confiança. A confiança de uma regra representa a probabilidade de que uma transação da base de dados coberta pelo antecedente da regra também seja coberta pelo termo conseqüente. Em geral, além do conjunto de regras de associação, estamos interessados também no suporte dos termos que as compõem, e na confiança de cada regra.
 
 \section{Ortogonalidade}
+\label{sec:introducao_ortogonalidade}
 
 Em matemática, ortogonalidade é uma característica que denota perpendicularidade, ou existência de ângulos retos. Formalmente, dois vetores $x$ e $y$ são ortogonais num espaço vetorial $V$ se o produto interno $\left\langle x,y \right\rangle$ é zero. Esta situação é descrita por $x \bot y$.
 \par
-O termo pode ser estendido para o uso geral, denotando a característica de independência, não redundância, não sobreposição, e, até mesmo, a importância de uma entidade qualquer $Y$ dado que $X$ já é conhecida. Neste trabalho, o termo ortogonalidade está mais relacionado com a ausência de redundância (ou sobreposição), ou seja, o inverso da similaridade entre dois elementos.
+O termo pode ser estendido para o uso geral, denotando a característica de independência, não redundância, não sobreposição, e, até mesmo, a importância de uma entidade qualquer $Y$ dado que $X$ já é conhecida. Neste trabalho, o termo ortogonalidade está mais relacionado com a ausência de redundância entre dois elementos.
 \par
-Dado um conjunto de elementos, estamos interessados no quanto os elementos deste conjunto contribuem com informações não redundantes para a solução de um problema. Considerando que seja possível medir esta contribuição, e chamá-la de \textbf{significância}, podemos definir \textbf{ortogonalidade} como a média das significâncias dos elemento de um conjunto.
+Dado um conjunto qualquer, estamos interessados no quanto os elementos deste conjunto contribuem com informações não redundantes para a solução de um problema. Considerando que seja possível medir esta contribuição, e chamá-la de \textbf{significância}, podemos definir \textbf{ortogonalidade} como a média das significâncias dos elementos do conjunto.
 \par
 Os termos similaridade e ortogonalidade têm sido explorados em várias áreas da Ciência da Computação, e com diversos objetivos. Um exemplo é o caso do Modelo de Espaço Vetorial, aplicado à Recuperação de Informação, que utiliza modelos vetoriais e métricas de similaridade para se aproximar termos da pesquisa de um usuário aos documentos de determinada coleção.
 %\par

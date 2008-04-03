@@ -1,13 +1,13 @@
-\chapter{Experimentos e Resultados}
+\chapter{Avaliação Experimental}
 \label{chapter:resultados}
 
-Neste capítulo, apresentamos o aplicativo OLAC, descrevemos a sua interface de interação com o usuário, e incluímos um exemplo de execução que demonstra o comportamento da abordagem baseada em ortogonalidade. Em seguida, são apresentados os resultados obtidos com a execução das três abordagens de classificação implementadas no aplicativo em $26$ bases de dados do repositório \textbf{UCI}.
+Neste capítulo, apresentamos o aplicativo \textbf{olac}, descrevemos a sua interface de interação com o usuário, e incluímos um exemplo de execução que demonstra o comportamento da abordagem baseada em ortogonalidade. Em seguida, são apresentados os resultados obtidos com a execução das três abordagens de classificação implementadas no aplicativo em $26$ bases de dados do repositório \textbf{UCI}.
 
-\section{O Aplicativo \textbf{OLAC}}
+\section{O Aplicativo \textbf{olac}}
 
-O aplicativo \textbf{OLAC} possui a implementação de três abordagens distintas de um classificador baseado em regras de associação.
+O aplicativo \textbf{olac} possui a implementação de três abordagens distintas de um classificador baseado em regras de associação.
 \par
-A primeira delas, chamada de \textbf{LAC} (\textit{Lazy Associative Classifier}), é a abordagem \textit{lazy} nas sua versão original (e não-ortogonal), como foi proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas. Depois disso, o algoritmo ordena as regras de acordo com uma métrica escolhida pelo usuário, e obtém a classe mais indicada pelas regras que compõem um \textit{ranking} de tamanho também fornecido pelo usuário.
+A primeira delas, chamada de \textbf{LAC} (\textit{Lazy Associative Classifier}), é a abordagem \textit{lazy} na sua versão original (e não-ortogonal), como foi proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas. Depois disso, o algoritmo ordena as regras de acordo com uma métrica escolhida pelo usuário, e obtém a classe mais indicada pelas regras que compõem um \textit{ranking} de tamanho também fornecido pelo usuário.
 \par
 A segunda abordagem, chamada de \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) é a modificação da abordagem \textit{lazy} que considera a ortogonalidade dos padrões durante a tarefa de obtenção de regras. O algoritmo extrai, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação. Depois disso, a classe mais indicada é escolhida considerando uma métrica e o tamanho do \textit{ranking}, da mesma forma que é feito no LAC.
 \par
@@ -71,9 +71,17 @@ O aplicativo também foi executado com as outras duas métricas de ortogonalidade 
 
 \section{Experimentos}
 
-Nesta seção serão apresentados os resultados das execuções do aplicativo em vinte e seis bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente utilizado em pesquisas na área de classificação em mineração de dados. Todas as bases foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez configurações de teste para cada uma delas. Cada configuração de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento. Como resultados foram considerados a média das dez execuções diferentes para cada base de dados.
+Nesta seção serão apresentados os resultados das execuções do aplicativo em vinte e seis bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente utilizado em pesquisas na área de classificação em mineração de dados.
+
+\subsection{Metodologia}
+
+A metodologia de testes adotada nos experimentos é baseada em trabalhos anteriores relacionados com classificação associativa que realizam experimentos em bases de dados do mesmo repositório \citep{Veloso06Lazy,DBLP:conf/sdm/YinH03,li01cmar,liu98integrating,friedman96lazy}.
 \par
-Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms}. Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC \footnote{Quando a métrica de ortogonalidade baseada na estrutura dos padrões é utilizada em conjunto com o tamanho máximo de regra igual a $1$, OLAC terá o mesmo comportamento que LAC, já que a similaridade entre dois padrões freqüentes será sempre zero.}, e dos casos em que $\alpha$ é maior ou igual a $\beta$ para o ORIGAMI. É importante lembrar que boa parte dos parâmetros desta tabela não são utilizados por todas as abordagens.
+Todas as bases utilizadas durante os testes foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez configurações de teste para cada uma delas. Cada configuração de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento. Como resultados foram considerados a média das dez execuções diferentes para cada base de dados.
+\par
+Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms}. Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC \footnote{Quando a métrica de ortogonalidade baseada na estrutura dos padrões é utilizada em conjunto com o tamanho máximo de regra igual a $1$, OLAC terá o mesmo comportamento que LAC, já que a similaridade entre dois padrões freqüentes será sempre zero.}, e dos casos em que $\alpha$ é maior ou igual a $\beta$ para o ORIGAMI. É importante lembrar que alguns dos parâmetros desta tabela não são utilizados por todas as abordagens.
+\par
+A seguir serão apresentados os resultados obtidos pelos experimentos. Na seção \ref{resultados_experimentos_cada_base} serão apresentados os melhores resultados obtidos para as três abordagens, onde o conjunto de parâmetros de execução utilizado foi o mais adequado para cada aplicação e base de dados. Já na seção \ref{resultados_experimentos_todas_base} serão apresentados os melhores resultados obtidos onde o conjunto de parâmetros de execução utilizado em cada abordagem foi o que produziu a melhor média de acurácia para todas as bases.
 
 \input{tables/table_test_parms.tex}
 
@@ -86,8 +94,9 @@ Abaixo, encontramos alguns gráficos comparando execuções das três abordagens imp
 %\end{itemize}
 
 \subsection{Melhores Resultados para Cada Base}
+\label{resultados_experimentos_cada_base}
 
-Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma com a acurácia obtida com as três abordagens para cada base de dados. A figura \ref{fig:histogram_best_run_for_each_db_pat} mostra um histograma com o número médio de padrões utilizados para se obter as regras de associação para cada instância de teste, a figura \ref{fig:histogram_best_run_for_each_db_rul} mostra o número médio de regras geradas para cada instância pelas três abordagens, e a figura \ref{fig:histogram_best_run_for_each_db_tim} mostra o tempo médio de cada classificação. Para estes quatro resultados foram utilizados os melhores conjuntos de parâmetros para cada aplicação e base de dados, por exemplo. para a abordagem OLAC para a base \textit{anneal.ac} foi utilizado suporte igual a $0.0001$, mas para a base \textit{horse.ac} foi utilizado suporte igual a $0.3$, já que os melhores resultados para cada base foram obtidos com estes valores.
+Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma de acurácia obtida com as três abordagens para cada base de dados. A figura \ref{fig:histogram_best_run_for_each_db_pat} mostra um histograma com o número médio de padrões utilizados para se obter as regras de associação para cada instância de teste, a figura \ref{fig:histogram_best_run_for_each_db_rul} mostra o número médio de regras geradas para cada instância pelas três abordagens, e a figura \ref{fig:histogram_best_run_for_each_db_tim} mostra o tempo médio de cada classificação. Para estes quatro resultados foram utilizados os melhores conjuntos de parâmetros para cada aplicação e base de dados, por exemplo, para a abordagem OLAC para a base \textit{anneal.ac} foi utilizado suporte igual a $0.0001$, mas para a base \textit{horse.ac} foi utilizado suporte igual a $0.3$, já que os melhores resultados para cada base foram obtidos com estes valores.
 
 \begin{figure}[htbp]
 	\centering
@@ -148,8 +157,9 @@ A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhor
 \input{tables/table_best_runs_origami.tex}
 
 \subsection{Melhor Média dos Resultados para Todas as Bases}
+\label{resultados_experimentos_todas_base}
 
-Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma com os melhores resultados para cada base de dados obtidos com LAC, OLAC e ORIGAMI. A figura  \ref{fig:histogram_best_run_for_avg_db_pat} possui um histograma com a média do número de padrões utilizados por cada classificação, a figura \ref{fig:histogram_best_run_for_avg_db_rul} possui a média do número de regras obtidas em cada classificação, e a figura \ref{fig:histogram_best_run_for_avg_db_tim} possui a média do tempo necessário para a classificação de cada instância de teste. Para teste quatro resultados foi utilizado, para cada aplicação, o conjunto de parâmetros que produziu o melhor valor médio de acurácia para todo o conjunto de bases. Os conjuntos de parâmetros para cada abordagem se encontram na tabela \ref{tab:best_parms_for_avg_db}, sendo que alguns deles não são aplicáveis a todas as abordagens.
+Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma de acurácia obtido com as abordagens LAC, OLAC e ORIGAMI. A figura  \ref{fig:histogram_best_run_for_avg_db_pat} possui um histograma com a média do número de padrões utilizados por cada classificação, a figura \ref{fig:histogram_best_run_for_avg_db_rul} possui a média do número de regras obtidas em cada classificação, e a figura \ref{fig:histogram_best_run_for_avg_db_tim} possui a média do tempo necessário para a classificação de cada instância de teste. Para estes quatro resultados foi utilizado, para cada aplicação, o conjunto de parâmetros que produziu o melhor valor médio de acurácia para todo o conjunto de bases. Os conjuntos de parâmetros para cada abordagem se encontram na tabela \ref{tab:best_parms_for_avg_db}, sendo que alguns deles não são aplicáveis a todas as abordagens.
 
 \input{tables/table_best_parms_for_avg_db.tex}
 
@@ -315,3 +325,7 @@ Assim, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{
 
 \input{tables/table_lac_x_origami_labor.ac.origami_patterns.tex}
 \input{tables/table_lac_x_origami_labor.ac.origami_rules.tex}
+
+\section{Considerações}
+
+Neste capítulo, foi apresentado o aplicativo \textbf{olac}, sua interface de interação com o usuário, e um exemplo de execução onde foi demonstrado o comportamento da abordagem OLAC. Em seguida, foram apresentados os resultados obtidos com a execução das três abordagens de classificação em $26$ bases de dados disponíveis no repositório \textbf{UCI}.
