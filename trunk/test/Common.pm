@@ -458,6 +458,7 @@ $db,$$accuracy_hash{$db}{'classifier_c'},$$accuracy_hash{$db}{'classifier_o'},$$
 	print OUTPUT "set style histogram clustered gap 1 title offset character 0, 0, 0\n";
 	print OUTPUT "set datafile missing '-'\n";
 	print OUTPUT "set style data histograms\n";
+	print OUTPUT "set key under nobox\n";
 	print OUTPUT "set xtics border in scale 1,0.5 nomirror rotate by -45 offset character 0, 0, 0 \n";
 	print OUTPUT "set xtics (";
 
@@ -502,7 +503,7 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 
 	open OUTPUT_OMETRIC, ">$dat_file";
 
-	print OUTPUT_OMETRIC "data_file           similarity          coverage            class_coverage      all                 \n";
+	print OUTPUT_OMETRIC "data_file           \"estrutura de padroes\" \"cobertura de transacoes\" \"cobertura de classes\" \"todas as metricas\"\n";
 
 	foreach $data_base (@DataBases)
 	{
@@ -524,6 +525,7 @@ $db,$$accuracy_hash{$db}{'s'},$$accuracy_hash{$db}{'c'},$$accuracy_hash{$db}{'l'
 	print OUTPUT "set style histogram clustered gap 1 title offset character 0, 0, 0\n";
 	print OUTPUT "set datafile missing '-'\n";
 	print OUTPUT "set style data histograms\n";
+	print OUTPUT "set key under nobox\n";
 	print OUTPUT "set xtics border in scale 1,0.5 nomirror rotate by -45 offset character 0, 0, 0 \n";
 	print OUTPUT "set xtics (";
 
