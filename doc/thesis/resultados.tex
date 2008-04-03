@@ -265,7 +265,7 @@ O tempo de execução do algoritmo para cada métrica varia de acordo com a naturez
 
 \subsubsection{Comparação das Abordagens Quanto ao Número de Acertos}
 
-Na tabela \ref{tab:comparison_lac_olac} temos uma comparação entre as execuções do LAC e do OLAC, onde se encontram, para cada base de dados, o número de instâncias de teste que as duas abordagens acertaram (segunda coluna), o número de instâncias que o OLAC acertou e o LAC errou (terceira coluna), o número de instâncias que o LAC acertou e o OLAC errou (quarta coluna), e o número de instâncias que as duas abordagens erraram (quinta coluna). Os resultados foram obtidos com as melhores execuções para a média de todas as bases de dados (utilizando os parâmetros da tabela \ref{tab:best_parms_for_avg_db}).
+Na tabela \ref{tab:comparison_lac_olac} temos uma comparação entre as execuções do LAC e do OLAC, onde se encontram, para cada base de dados, a porcentagem de instâncias de teste que as duas abordagens acertaram (segunda coluna), a porcentagem de instâncias que o OLAC acertou e o LAC errou (terceira coluna), a porcentagem de instâncias que o LAC acertou e o OLAC errou (quarta coluna), e a porcentagem de instâncias que as duas abordagens erraram (quinta coluna). Os resultados foram obtidos com as melhores execuções para a média de todas as bases de dados (utilizando os parâmetros da tabela \ref{tab:best_parms_for_avg_db}).
 \par
 Com estes dados é possível notar que a maioria dos acertos das duas abordagens são coincidentes, ou seja, a abordagem OLAC está realizando, na maior parte das vezes, as mesmas classificações da abordagem LAC. A taxa de erro da estratégia OLAC em relação à quantidade de acertos total da estratégia LAC é de, aproximadamente, $2.3\%$, e a taxa de erro do LAC em relação ao OLAC é de $3.7\%$.
 
@@ -284,6 +284,7 @@ Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordage
 \input{tables/table_comparison_olac_origami.tex}
 
 \subsection{Estudo de Casos de Teste}
+\label{resultados_experimentos_estudos}
 
 Nesta seção apresentaremos dois casos de teste extraídos do \textit{log} de execução em que as abordagens baseadas em ortogonalidade não obtêm sucesso na classificação das instâncias de teste. Foram utilizados os resultados das três abordagens considerando os parâmetros da tabela \ref{tab:best_parms_for_avg_db}.
 
@@ -329,3 +330,15 @@ Assim, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{
 \section{Considerações}
 
 Neste capítulo, foi apresentado o aplicativo \textbf{olac}, sua interface de interação com o usuário, e um exemplo de execução onde foi demonstrado o comportamento da abordagem OLAC. Em seguida, foram apresentados os resultados obtidos com a execução das três abordagens de classificação em $26$ bases de dados disponíveis no repositório \textbf{UCI}.
+\par
+Na seção \ref{resultados_experimentos_cada_base} foram apresentados os melhores resultados obtidos com a execução das abordagens utilizando parâmetros diferentes para cada base de dados. As três abordagens apresentarem resultados muito próximos, em média, sendo que a abordagem LAC obteve uma leve vantagem sobre as outras. Entretanto, podemos perceber que este comportamento não se repetiu em todas as bases.
+\par
+Analisando os resultados, vemos que o LAC se saiu melhor em $11$ bases de dados, o OLAC, por sua vez, se saiu melhor em $6$ bases, assim como ORIGAMI. Além disso, as três abordagens obtiveram o mesmo resultado para $1$ base, e o LAC e o OLAC ainda empataram em outras $2$ bases. A superioridade das abordagens ortogonais em algumas bases indica que, mesmo quando os melhores parâmetros para cada execução são utilizados, ainda é possível obter vantagens com as abordagens baseadas em ortogonalidade.
+\par
+Na seção \ref{resultados_experimentos_todas_base} foram apresentados os melhores resultados obtidos com a execução das três abordagens utilizando o mesmo conjunto de parâmetros para todas as bases. Este resultado comprova a qualidade dos padrões ortogonais obtidos pelo OLAC, visto que a média das acurácias encontradas por esta abordagem ($0.813$) foi até um pouco maior que a média encontrada pelo LAC ($0.808$).
+\par
+Analisando os resultados, vemos que o LAC novamente se saiu melhor em $11$ bases, o OLAC, por sua vez, se saiu melhor em $8$ bases, e o ORIGAMI, em $6$. As três abordagens ainda empataram em $1$ base. Apesar do LAC continuar com os melhores resultados num número maior de bases, o OLAC obteve melhores resultados em média. Isto se deve à qualidade dos resultados obtidos, mesmo nos casos em que os do LAC são melhores.
+\par
+Na seção \ref{resultados_experimentos_estudos} foram apresentados estudos de caso que comparam a classificação de uma instância pela abordagem ortogonal e não ortogonal para o OLAC e o ORIGAMI. Os estudos mostram um exemplo em que a abordagem ortogonal não consegue classificar corretamente uma instância em que a abordagem não ortogonal obtém sucesso. É possível perceber que a falha na classificação pelas abordagens ortogonais não foi causada pela má qualidade dos conjuntos ortogonais, mas sim pelas características dos padrões encontrados nestes conjuntos, que fizeram com que as métricas de avaliação das regras geradas indicassem a classificação falsa com maior convicção que a verdadeira.
+\par
+Em geral, os resultados obtidos demonstram que as abordagens ortogonais obtiveram resultados de boa qualidade, quando comparados com a abordagem clássica não ortogonal.
