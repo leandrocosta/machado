@@ -116,7 +116,7 @@ Como podemos ver na figura \ref{fig:histogram_best_run_for_each_db_acc}, os valo
 	\label{fig:histogram_best_run_for_each_db_pat}
 \end{figure}
 
-O número de padrões gerados pelas abordagens OLAC e ORIGAMI é sempre menor ou igual ao número de padrões gerados pela abordagem LAC. Na figura \ref{fig:histogram_best_run_for_each_db_pat} vemos que, em alguns casos, as três abordagens utilizam uma quantidade de padrões freqüentes bem semelhante para gerar as regras, como na base \textit{crx.ac}. Porém, em casos como os das bases \textit{auto.ac}, \textit{vehicle} ou \textit{waveform.ac}, a diferença chega a duas ou três ordens de grandeza. Em média, foi possível reduzir o número de padrões em uma ordem de grandeza utilizando a ortogonalidade.
+O número de padrões gerados pelas abordagens OLAC e ORIGAMI é sempre menor ou igual ao número de padrões gerados pela abordagem LAC. Na figura \ref{fig:histogram_best_run_for_each_db_pat} vemos que, em alguns casos, as três abordagens utilizam uma quantidade de padrões freqüentes bem semelhante para gerar as regras, como na base \textit{crx.ac}. Porém, em casos como os das bases \textit{auto.ac}, \textit{vehicle.ac} ou \textit{waveform.ac}, a diferença chega a duas ou três ordens de grandeza. Em média, foi possível reduzir o número de padrões em uma ordem de grandeza utilizando a ortogonalidade.
 
 \begin{figure}[htbp]
 	\centering
@@ -142,7 +142,7 @@ De qualquer forma, com as abordagens ortogonais foi possível classificar as inst
 
 \clearpage
 
-Como já foi dito, na tabela \ref{tab:best_runs_for_each_db_lac} se encontram os parâmetros que obtiveram as melhores acurácias para o LAC, e os resultados de cada execução. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando um pequeno valor para suporte (em geral, entre $0.0001$ e $0.1$) e para confiança ($0.01$ em média). Isto sugere que, em grande parte das bases, existam transações cujas classes sejam bem representadas por padrões de freqüência muito baixa. A seguir, veremos que os melhores resultados para as abordagens ortogonais tabém foram obtidos com valores semelhantes a estes.
+Como já foi dito, na tabela \ref{tab:best_runs_for_each_db_lac} se encontram os parâmetros que obtiveram as melhores acurácias para o LAC, e os resultados de cada execução. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando um pequeno valor para suporte (em geral, entre $0.0001$ e $0.1$) e para confiança ($0.01$ em média). Isto sugere que, em grande parte das bases, existam transações cujas classes sejam bem representadas por padrões de freqüência muito baixa. A seguir, veremos que os melhores resultados para as abordagens ortogonais também foram obtidos com valores semelhantes a estes.
 
 \input{tables/table_best_runs_lac.tex}
 
@@ -160,9 +160,9 @@ Uma forma de evitar que padrões muito raros sejam inseridos no conjunto-solução 
 
 \clearpage
 
-A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria detes casos, os valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
+A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria destes casos, os valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
 \par
-Novamente, neste caso, percebemos a predominânica da métrica baseada na estrutura dos padrões nos melhores resultados obtidos.
+Novamente, neste caso, percebemos a predominância da métrica baseada na estrutura dos padrões nos melhores resultados obtidos.
 
 \input{tables/table_best_runs_origami.tex}
 
