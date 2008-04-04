@@ -341,6 +341,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 	print OUTPUT_BEST_RUNS_CLASSC "\\begin{table}[htbp]
 	\\centering
 		\\renewcommand{\\tabcolsep}{1.8mm}
+		\\resizebox{0.95\\textwidth}{!} {
 		\\begin{tabular}{|l|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -394,6 +395,7 @@ $db,                $support,     $confidence,  $min_num_rules,$max_num_rank_rul
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSC "		\\end{tabular}
+		}
 	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (LAC)}
 	\\label{tab:best_runs_for_each_db_lac}
 \\end{table}";
@@ -420,6 +422,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 	print OUTPUT_BEST_RUNS_CLASSO "\\begin{table}[htbp]
 	\\centering
 		\\renewcommand{\\tabcolsep}{1.8mm}
+		\\resizebox{0.95\\textwidth}{!} {
 		\\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{m}	& \\textbf{x}	& \\textbf{u}	& \\textbf{e} & \\textbf{w} & \\textbf{g} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -479,6 +482,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$min_rule_
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSO "		\\end{tabular}
+		}
 	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (para OLAC)}
 	\\label{tab:best_runs_for_each_db_olac}
 \\end{table}";
@@ -505,6 +509,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$rule_meas
 	print OUTPUT_BEST_RUNS_CLASSOR "\\begin{table}[htbp]
 	\\centering
 		\\renewcommand{\\tabcolsep}{1.8mm}
+		\\resizebox{0.95\\textwidth}{!} {
 		\\begin{tabular}{|l|c|c|c|c|c|c|c|c||c|c|c|c|}
 		\\hline
 		\\textbf{dataset}	& \\textbf{s}	& \\textbf{c}	& \\textbf{n}	& \\textbf{l}	& \\textbf{u}	& \\textbf{e} & \\textbf{a} & \\textbf{b} & \\textbf{pat.}	& \\textbf{rul.}	& \\textbf{tim.}	& \\textbf{acc.}	\\\\
@@ -560,6 +565,7 @@ $db,          $support,$confidence,$min_num_rules,$max_num_rank_rules,$rule_meas
 	}
 
 	print OUTPUT_BEST_RUNS_CLASSOR "		\\end{tabular}
+		}
 	\\caption{Melhores Parâmetros e Resultados para cada Base de Dados (ORIGAMI)}
 	\\label{tab:best_runs_for_each_db_origami}
 \\end{table}";
