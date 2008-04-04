@@ -6,7 +6,7 @@ Version=4
 MainFile=thesis.tex
 UseBibTeX=1
 UseMakeIndex=0
-ActiveProfile=LaTeX => PS
+ActiveProfile=LaTeX => PDF
 ProjectLanguage=pt
 ProjectDialect=BR
 

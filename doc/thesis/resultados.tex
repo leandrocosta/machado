@@ -15,6 +15,7 @@ A terceira abordagem, chamada \textbf{ORIGAMI} é a implementação da estratégia O
 \par
 A interface de interação do usuário com o aplicativo foi realizada por meio de argumentos fornecidos em linha de comando pelo usuário, de acordo com o formato de execução apresentado abaixo:
 
+\begin{footnotesize}
 \begin{verbatim}
 Usage: ./olac [options]
 Options:
@@ -49,6 +50,7 @@ Options:
   -v, --verbose             Use verbose mode
   -h, --help                Display this information
 \end{verbatim}
+\end{footnotesize}
 
 As opções \textbf{-i} e \textbf{-t} são utilizadas para fornecer os arquivos de treinamento e teste, respectivamente. O suporte para obtenção de padrões freqüentes, e a confiança para obtenção das regras de associação são fornecidos por \textbf{s} e \textbf{c}. A opção \textbf{-r} é usada para se escolher o modo de execução do algoritmo (\textbf{CLASSICAL} para \textbf{LAC} e \textbf{ORTHOGONAL} para \textbf{OLAC} e \textbf{ORIGAMI}). A opção \textbf{-p} é usada para se escolher o conjunto de padrões a ser obtido. Em geral, padrões freqüentes são utilizados pelas versões LAC e OLAC, e padrões maximais aleatórios são utilizados pela versão ORIGAMI, no entanto, é possível executar o aplicativo com diferentes combinações de abordagens e conjuntos de padrões, como por exemplo, utilizar o conjunto de todos os padrões maximais no LAC, ou executar o ORIGAMI com padrões freqüentes.
 \par
@@ -58,14 +60,14 @@ A opção \textbf{-n} é utilizada para fornecer o número mínimo de regras a serem 
 
 Abaixo será apresentado um exemplo de execução do aplicativo, demonstrando o seu funcionamento e os resultados obtidos pela abordagem \textbf{OLAC}:
 
-A base de transações da tabela \ref{tab:example_training_db} foi criada sobre o conjunto de itens $\I = \left\{ A, B, C, D, E \right\}$, e utilizada como base de treinamento para o classificador. Uma única transação $ABE$ de classe $CLASS=1$ foi utilizada como instância de teste. O aplicativo \textbf{olac} foi executado, primeiramente, em modo \textbf{LAC} (ou não-ortogonal) utilizando os parâmetros encontrados na tabela \ref{tab:example_run_parms}.
+A base de transações apresentada na tabela \ref{tab:example_training_db} foi criada sobre o conjunto de itens $\I = \left\{ A, B, C, D, E \right\}$, e utilizada como base de treinamento para o classificador. Uma única transação $ABE$ de classe $CLASS=1$ foi utilizada como instância de teste. O aplicativo \textbf{olac} foi executado, primeiramente, em modo \textbf{LAC} (ou não-ortogonal) utilizando os parâmetros encontrados na tabela \ref{tab:example_run_parms}.
 
 \input{tables/table_example_training_db.tex}
 
 \input{tables/table_example_run_parms.tex}
 
 \par
-Esta execução gerou o conjunto de padrões freqüentes $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ e classificou corretamente a instância de teste. Depois disso, o aplicativo foi executado em modo \textbf{OLAC} (ortogonal) utilizando os mesmos parâmetros da tabela \ref{tab:example_run_parms}, e \textit{estrutura} como métrica de ortogonalidade. Esta abordagem obteve o conjunto de padrões ortogonais $\Or = \left\{ AE, B \right\}$ do conjunto original de padrões freqüentes, e classificou corretamente a instância de teste com as regras geradas deste sub-conjunto de padrões. Como podemos observar, o conjunto de padrões ortogonais utilizado pelo OLAC é consideravelmente menor que o conjunto de padrões freqüentes original. E mais, o conjunto de padrões ortogonais não possui redundância entre seus elementos. É esperado que a redundância de um determinado conjunto de padrões ortogonais seja sempre menor que a redundância do conjunto original de padrões freqüentes.
+Esta execução gerou o conjunto $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ de padrões freqüentes e classificou corretamente a instância de teste. Depois disso, o aplicativo foi executado em modo \textbf{OLAC} (ortogonal) utilizando os mesmos parâmetros da tabela \ref{tab:example_run_parms}, e \textit{estrutura} como métrica de ortogonalidade. Esta abordagem obteve o conjunto de padrões ortogonais $\Or = \left\{ AE, B \right\}$ do conjunto original de padrões freqüentes, e classificou corretamente a instância de teste com as regras geradas deste sub-conjunto de padrões. Como podemos observar, o conjunto de padrões ortogonais utilizado pelo OLAC é consideravelmente menor que o conjunto de padrões freqüentes original. E mais, o conjunto de padrões ortogonais não possui redundância entre seus elementos. É esperado que a redundância de um determinado conjunto de padrões ortogonais seja sempre menor que a redundância do conjunto original de padrões freqüentes.
 \par
 O aplicativo também foi executado com as outras duas métricas de ortogonalidade (cobertura de transações e cobertura de classes), extraindo, respectivamente, $\Or = \left\{ AB, E \right\}$ e $\Or = \left\{ B, E \right\}$ como conjuntos de padrões ortogonais, e estas execuções também classificaram a instância de teste corretamente.
 
@@ -330,7 +332,7 @@ Nesta seção comparamos o comportamento do LAC e do ORIGAMI no processo de classi
 \par
 O ORIGAMI, por sua vez, obteve um conjunto de $13$ padrões maximais, que se encontram na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_patterns}, de onde foi extraído um único padrão ortogonal, e, posteriormente, a única regra de associação com confiança maior ou igual a $0.0001$, que pode ser vista na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_rules}. É importante notar que todos os padrões maximais obtidos possuem suporte igual a $0.019231$, o que corresponde à fração $\frac{1}{52}$, ou seja, nenhum padrão maximal obtido aparece em mais de uma transação na base de dados. A combinação de parâmetros de execução utilizada foi responsável por fazer com que o algoritmo não selecionasse uma maior quantidade de padrões ortogonais. Como o valor do parâmetro $\alpha$ utilizado foi muito baixo ($0.1$), e o suporte utilizado favoreceu a obtenção de grandes padrões maximais, a métrica de ortogonalidade por estrutura de padrões não foi adequada. Isso aconteceu porque todos os padrões encontrados possuem similaridade maior que $10\%$, pelo fato de vários itens aparecerem em mais de um padrão. Os itens \textbf{w=attr1=ignore} e \textbf{w=attr8=?}, por exemplo, estão presentes em todos os padrões.
 \par
-Assim, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{CLASS=1}, fazendo com que o algoritmo classifique a instância de teste de maneira errada.
+Como resultado, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{CLASS=1}, fazendo com que o algoritmo classifique a instância de teste de maneira errada.
 
 \input{tables/table_lac_x_origami_labor.ac.origami_patterns.tex}
 \input{tables/table_lac_x_origami_labor.ac.origami_rules.tex}

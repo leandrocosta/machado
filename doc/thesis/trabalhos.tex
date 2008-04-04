@@ -9,7 +9,7 @@ O problema de compactação do conjunto de padrões freqüentes tem sido abordado de
 \par
 Uma segunda alternativa para ser compactar o conjunto de padrões freqüentes é desenvolver modelos alternativos de representação de tais conjuntos. Neste caso, o resultado obtido pela aplicação não é, necessariamente, constituído de um conjunto de padrões. Em \cite{boulicaut03freesets}, por exemplo, os autores introduzem uma estrutura chamada \textit{free-sets} de onde é possível aproximar o suporte de qualquer padrão da base. Os experimentos demonstram que a obtenção de \textit{free-sets} é possível mesmo quando a extração dos padrões freqüentes se torna intratável. Em \cite{DBLP:conf/icde/ZhuYHYC07} são introduzidos os chamados padrões colossais, e uma nova metodologia de mineração de padrões, que aproxima o conjunto resultado do conjunto de padrões freqüentes colossais. Note que, neste caso, o resultado do algoritmo é constituído, não do conjunto de padrões colossais, mas sim de uma aproximação deste conjunto.
 \par
-Nesta dissertação, estamos interessados em diminuir o tamanho do conjunto-solução como foi feito nos primeiros trabalhos apresentados, ou seja, obtendo, como resultado, um sub-conjunto (top-$k$) de padrões a partir do conjunto original de padrões freqüentes.
+No nosso trabalho, estamos interessados em diminuir o tamanho do conjunto-solução como foi feito nos primeiros trabalhos apresentados, ou seja, obtendo, como resultado, um sub-conjunto (top-$k$) de padrões a partir do conjunto original de padrões freqüentes.
 
 \section{Diminuição de Redundância no Conjunto de Padrões Freqüentes}
 
@@ -19,7 +19,7 @@ Em \cite{xin05mining} encontramos uma abordagem diferente para o problema, onde 
 \par
 Em \cite{zaki07origami} encontramos um novo paradigma para obtenção de uma representação resumida do conjunto de padrões freqüentes aplicado ao problema de mineração de grafos. O artigo apresenta a formulação da obtenção do conjunto $\alpha$-ortogonal e $\beta$-representativo como um problema de otimização NP-Hard. Um conjunto de padrões é considerado $\alpha$-ortogonal se a similaridade entre os padrões que o compõem é menor ou igual a um determinado valor $\alpha$. Dado um conjunto de padrões, um sub-conjunto deste é $\beta$-representativo em relação aos elementos que não fazem parte dele se, para cada um destes elementos, existe um elemento no sub-conjunto cuja similaridade entre os dois é maior ou igual a $\beta$. O objetivo é obter sub-conjuntos de padrões não redundantes que possuem um certo nível de representatividade em relação ao conjunto original. Esta abordagem será discutida com mais detalhes na seção \ref{sec:ortogonalidade_origami}.
 \par
-Nesta dissertação, estamos interessados em minimizar o conjunto de padrões freqüentes com o auxílio de uma função objetivo a ser definida de acordo com a aplicação. No nosso caso, a aplicação utilizada é a classificação associativa, e a função objetivo é a medida de ortogonalidade do conjunto, que está relacionada com a métrica de ortogonalidade utilizada.
+Nesta dissertação, estamos interessados em minimizar a redundância do conjunto de padrões freqüentes com o auxílio de uma função objetivo a ser definida de acordo com a aplicação. No nosso caso, a aplicação utilizada é a classificação associativa, e a função objetivo é a medida de ortogonalidade do conjunto, que está relacionada com a métrica de ortogonalidade utilizada.
 
 \section{Classificação Associativa}
 
