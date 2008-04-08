@@ -1,25 +1,97 @@
 \documentclass{beamer}
-\usepackage{beamerthemesplit}
+%\usepackage{beamerthemesplit}
 \usepackage[brazil]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 
-\title[Orientador: Wagner Meira Jr.]{Mineração de Padrões Freqüentes Ortogonais e sua Aplicação em Classificação Associativa}
-\author{Leandro Souza Costa}
+\ifpdf
+	\usepackage{epstopdf}
+\fi
+
+%\usetheme[secheader]{Berlin}
+\usetheme[compress]{Berlin}
+\usetheme{Darmstadt}
+
+\title[Mineração de Padrões Ortogonais]{Mineração de Padrões Freqüentes Ortogonais e sua Aplicação em Classificação Associativa}
+\author[Leandro S. Costa]{Leandro Souza Costa \\ Orientador: Wagner Meira Jr.}
+\institute[DCC-UFMG]{Departamento de Ciência da Computação \\ Universidade Federal de Minas Gerais}
+%\logo{\includegraphics[height=1cm]{../thesis/img/ufmg}}
 \date{\today}
 
 \begin{document}
 
-\maketitle
-
 \begin{frame}
-\frametitle{Hello World!}
-Hello World!
+\titlepage
 \end{frame}
 
+\section*{Sumário}
 \begin{frame}
-\frametitle{Hello World!}
-Hello World Again!
+\tableofcontents
 \end{frame}
+
+\section{Introdução}
+\begin{frame}\frametitle{Introdução}Breve introdução...\end{frame}
+
+\subsection{Mineração de Dados}
+\begin{frame}\frametitle{Mineração de Dados}Sobre mineração de dados...\end{frame}
+
+\subsection{Ortogonalidade}
+\begin{frame}\frametitle{Ortogonalidade}Sobre ortogonalidade...\end{frame}
+
+\subsection{Objetivos}
+\begin{frame}\frametitle{Objetivos}Objetivos...\end{frame}
+
+\subsection{Trabalhos Relacionados}
+\begin{frame}\frametitle{Trabalhos Relacionados}Trabalhos relacionados...\end{frame}
+\begin{frame}\frametitle{Trabalhos Relacionados}Maus trabalhos relacionados...\end{frame}
+
+\section{Classificação Associativa}
+\begin{frame}\frametitle{Introdução}Breve introdução...\end{frame}
+
+\subsection{Fundamentos Teóricos}
+\begin{frame}\frametitle{Padrões Freqüentes}Padrões freqüentes...\end{frame}
+\begin{frame}\frametitle{Regras de Associação}Regras de associação...\end{frame}
+
+\subsection{Estratégias eager e lazy}
+\begin{frame}\frametitle{Estratégia eager}Estratégia eager...\end{frame}
+\begin{frame}\frametitle{Estratégia lazy}Estratégia lazy...\end{frame}
+
+\subsection{Métricas de Regras de Associação}
+\begin{frame}\frametitle{Métricas de Regras de Associação}Métricas de regras de associação...\end{frame}
+
+\section{Padrões Freqüentes e Ortogonais}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Métricas de Ortogonalidade}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Classificação Associativa e Ortogonalidade}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Estratégia ORIGAMI}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\section{Avaliação Experimental}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{O Aplicativo olac}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Exemplo de Execução}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Experimentos}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\section{Conclusão}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
+
+\subsection{Trabalhos Futuros}
+\begin{frame}\frametitle{Título}Texto...\end{frame}
 
 \end{document}
+
+%\begin{frame}
+%\frametitle{Mineração de Dados}
+%Mineração de Dados
+%\end{frame}
