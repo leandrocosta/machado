@@ -1,0 +1,222 @@
+\section{Padrões Freqüentes e Ortogonais}
+\subsection{Contextualização}
+
+\begin{frame}{Padrões Freqüentes}
+	\begin{itemize}[<+-| alert@+>]
+		\item Largamente utilizados em diversas aplicações, incluindo regras de associação, classificação, agrupamento, indexação, etc.;
+		\item Minimizar o conjunto-solução ainda é um desafio:
+		\begin{itemize}[<+-| alert@+>]
+			\item Padrões freqüentes obedecem à propriedade de antimonotonia;
+			\item Soluções propostas minimizam o conjunto-solução apenas sob a perspectiva do suporte, não considerando a semântica dos dados.
+		\end{itemize}
+		\item Diminuir a redundância no conjunto-solução é outro desafio:
+		\begin{itemize}[<+-| alert@+>]
+			\item Poucos estudos têm se dedicado a obter sub-conjuntos de alta significância e baixa redundância ao mesmo tempo.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Padrões Freqüentes}
+	\begin{block}{Padrões Ortogonais}
+		O objetivo da aplicação de ortogonalidade no problema da mineração de padrões freqüentes é desenvolver uma técnica capaz de extrair um sub-conjunto de padrões com tanto alta significância quanto baixa redundância entre seus elementos.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Métricas de Ortogonalidade}
+	\begin{itemize}[<+-| alert@+>]
+		\item É necessário definir métricas de ortogonalidade capazes de avaliar um possível conjunto solução;
+		\item O complemento do coeficiente de \textbf{Jaccard} aplicado à cobertura da base de dados pode ser considerado como uma métrica de ortogonalidade entre dois padrões: \[D(p_1,p_2) = 1 - \frac{|TS(p_1) \cap TS(p_2)|}{|TS(p_1) \cup TS(p_2)|},\] onde $TS(p)$ é o conjunto de transações cobertas pelo padrão $p$.
+		\item Estamos interessados em definir métricas aplicáveis a conjuntos de qualquer tamanho.
+	\end{itemize}
+\end{frame}
+
+\subsection{Métricas de Ortogonalidade}
+
+\begin{frame}{Considerando Estrutura dos Padrões}
+	\begin{block}{Motivação}
+		Dois padrões são ortogonais se eles não possuem itens em comum, ou seja, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não o são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado a conjuntos maiores, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não o são.
+	\end{block}
+\end{frame}
+\begin{frame}{Considerando Estrutura dos Padrões}
+	\begin{itemize}[<+-| alert@+>]
+		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$);
+		\item Chamamos de $\Il \subseteq \I$ o sub-conjunto itens que aparecem em, pelo menos, um dos padrões de $\Fl$;
+		\item Para cada item $i \subseteq \Il$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Estrutura dos Padrões}
+	\begin{itemize}[<+-| alert@+>]
+		\item A ortogonalidade baseada na estrutura dos padrões do conjunto é dada por: \[O_e = \frac{\sum_{i \subseteq \Il} w_i}{|\Il|}.\]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Transações}
+	\begin{block}{Motivação}
+		Dois padrões são ortogonais se eles cobrem áreas diferentes da base de dados, ou seja, se os conjuntos de transações cobertas por cada padrão não possuem elementos em comum.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Transações}
+	\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{../thesis/img/coverage}
+	\caption{Visualização de Cobertura de Transações na Base de Dados}
+	\label{fig:covex1}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Transações}
+	\begin{itemize}[<+-| alert@+>]
+		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$);
+		\item Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
+		\item Para cada transação $t \subseteq \Dl$ é dado um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Transações}
+	\begin{itemize}[<+-| alert@+>]
+		\item A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\].
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Classes}
+	\begin{block}{Motivação}
+		Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, os conjuntos de transações cobertas por cada um dos padrões não devem possuir classes em comum.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Classes}
+	\begin{itemize}[<+-| alert@+>]
+		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
+		\item Seja $\C$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Classes}
+	\begin{itemize}[<+-| alert@+>]
+		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considerando Cobertura de Classes}
+	\begin{itemize}[<+-| alert@+>]
+		\item A ortogonalidade baseada em cobertura de classes é dada por: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
+	\end{itemize}
+\end{frame}
+
+\subsection{Classificação Associativa e Ortogonalidade}
+
+\begin{frame}{Utilização da ortogonalidade no LAC}
+	\begin{itemize}[<+-| alert@+>]
+		\item Para cada instância de teste, o LAC cria uma projeção da base de treinamento apenas com as transações que possuem itens em comum com a instância;
+		\item A partir desta projeção, a obtém um conjunto de padrões freqüentes, de acordo com determinado suporte fornecido pelo usuário;
+		\item Com estes padrões, gera as regras de associação utilizadas durante a tarefa de classificação.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Utilização da ortogonalidade no LAC}
+	\begin{itemize}[<+-| alert@+>]
+		\item Neste trabalho, a ortogonalidade foi utilizada para se extrair, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais;
+		\item As regras de associação foram geradas a partir do sub-conjunto de padrões ortogonais obtido.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+	\begin{itemize}[<+-| alert@+>]
+		\item O problema de se encontrar o sub-conjunto de padrões com maior métrica de ortogonalidade, dado o conjunto de padrões freqüentes, é não polinomial;
+		\item Foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+
+\begin{algorithm}[H]
+\caption{OLAC}
+\label{alg:olac}
+\begin{algorithmic}[1]
+
+\REQUIRE $\D, \sigma$
+%\alert<2>{
+	\STATE $\F \leftarrow FindFrequentPatterns (\D, \sigma)$
+%}
+%\alert<3>{
+	\STATE $Sort (\F)$
+%}
+%\alert<4>{
+	\STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
+%}
+	\REPEAT
+%\alert<6>{
+		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
+%}
+%\alert<7>{
+		\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+%}
+%\alert<8>{
+		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
+%}
+%\alert<9>{
+		\FOR {$P \in \F, P \notin \Or_{try}$}
+%}
+%\alert<10>{
+			\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
+%}
+%\alert<11>{
+			\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
+%}
+%\alert<12>{
+			\STATE $rate_{tmp} = GetRate (\Or)$
+%}
+%\alert<13>{
+			\IF {$rate_{tmp} \leq rate_{try}$}
+%}
+%\alert<14>{
+				\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
+%}
+%\alert<13>{
+			\ELSE
+%}
+%\alert<15>{
+				\STATE $rate_{try} \leftarrow rate_{tmp}$
+%}
+%\alert<13>{
+			\ENDIF
+%}
+%\alert<9>{
+		\ENDFOR
+%}
+%\alert<16>{
+		\IF {$rate_{try} \geq rate$}
+%}
+%\alert<17>{
+			\STATE $\Or \leftarrow \Or_{try}$
+%}
+%\alert<16>{
+		\ENDIF
+%}
+	\UNTIL {$rate_{try} < rate$}
+%\alert<18>{
+	\STATE $\R \leftarrow \Or$
+%}
+
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item No início do algoritmo, o conjunto-solução é inicializado com apenas um elemento, e a métrica de ortogonalidade do conjunto com o valor $0$ (zero), e então começa o ciclo de iterações:
+%		\begin{enumerate}[<+-| alert@+>]
+%			\item Um novo elemento é incluído ao conjunto;
+%			\item É realizada uma busca por todo o conjunto de padrões que não fazem parte do conjunto-solução. Durante este procedimento, cada padrão verificado é incluído na solução, substituindo, neste conjunto, o elemento que mais se assemelha àquele. Se a métrica de ortogonalidade do conjunto melhorou, o algoritmo mantém a troca. Se não, a troca é desfeita, e o próximo padrão da seqüência é verificado;
+%			\item Ao final do processo, o algoritmo compara a métrica de ortogonalidade obtida com a métrica do conjunto anterior (que possuía um elemento a menos). Se a métrica se manteve, ou melhorou, o algoritmo mantém o novo conjunto como solução, e volta ao início do ciclo. Se não, o algoritmo termina o ciclo, e o conjunto anterior é dado como resultado.
+%		\end{enumerate}
+%	\end{itemize}
+%\end{frame}
+
+
+% Métricas de Ortogonalidade
+% Classificação Associativa e Ortogonalidade
+% Estratégia ORIGAMI
