@@ -1,4 +1,129 @@
 \section{Avaliação Experimental}
+\subsection{O Aplicativo olac}
+
+\begin{frame}{Apresentação do Aplicativo}
+	\begin{itemize}[<+-| alert@+>]
+		\item O aplicativo \textbf{olac} possui a implementação de três abordagens distintas de um classificador baseado em regras de associação:
+		\begin{itemize}[<+-| alert@+>]
+			\item A abordagem LAC (\textit{Lazy Associative Classifier}), é a abordagem \textit{lazy} na sua versão original (e não-ortogonal);
+			\item A abordagem OLAC (\textit{Orthogonal Lazy Associative Classifier}) é a modificação da abordagem \textit{lazy} que considera a ortogonalidade dos padrões durante a tarefa de obtenção de regras;
+			\item A abordagem ORIGAMI é a implementação da adaptação apresentada para a estratégia ORIGAMI.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile,shrink=30]{Opções de Execução}
+
+\begin{verbatim}
+Usage: ./olac [options]
+Options:
+  -i, --training-file       Set the training file
+  -t, --testing-file        Set the testing file
+  -s, --support             Set the support
+  -c, --confidence          Set the confidence
+  -r, --run-mode            Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]
+  -p, --pattern-set         Set the pattern set type [f,m,r] [FREQUENT, MAXIMAL,
+                              RANDOM MAXIMAL]
+  -n, --min-num-rules       Set the minimum number of rules generated
+  -l, --max-num-rank-rules  Set the maximum number of rules considered (rank size)
+  -m, --min-rule-len        Set the minimum length of the rules
+  -x, --max-rule-len        Set the maximum length of the rules
+  -o, --orth-mode           Set the orthogonality mode [h,p,o] [HEURISTICAL,
+                              POLYNOMIAL, ORIGAMI]
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile,shrink=30]{Opções de Execução}
+
+\begin{verbatim}
+  -e, --orth-metric         Set the orthogonality metric [s,c,l,a] [STRUCTURE,
+                              TRANSACTION COVERAGE, CLASS COVERAGE, ALL]
+  -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE,
+                              ALL]
+  -g, --orth-pat-ordering   Set the way patterns are ordered for heuristic
+                              [s,r,i,z,n] [SORTED, REVERSE SORTED, SORTED BY SIZE,
+                              REVERSE SORTED BY SIZE, NONE]
+  -u, --rule-measure        Set the rule measure used [s,c,j,k,o,n,e,p,l,i,v]
+                              [SUPPORT, CONFIDENCE, JACCARD, KULC, COSINE,
+                              CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE,
+                              LIFT, LEVERAGE]
+  -a, --origami-alpha       Set the alpha parameter used by ORIGAMI
+  -b, --origami-beta        Set the beta parameter used by ORIGAMI
+  -d, --debug               Set the level of debug [-1,0,1,2,3,4] [SILENT, NO DEBUG,
+                              LOW LEVEL, MEDIUM LEVL, HIGH LEVEL, MAX LEVEL]
+  -v, --verbose             Use verbose mode
+  -h, --help                Display this information
+\end{verbatim}
+
+\end{frame}
+
+\subsection{Experimentos}
+
+\begin{frame}{Metodologia}
+	\begin{itemize}[<+-| alert@+>]
+		\item Foram utilizadas 26 bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente referenciado em pesquisas na área de classificação em mineração de dados;
+		\item Todas as bases utilizadas durante os testes foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez configurações de teste para cada uma delas;
+		\item Cada configuração de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento;
+			\end{itemize}
+\end{frame}
+
+\begin{frame}{Metodologia}
+	\begin{itemize}[<+-| alert@+>]
+		\item Como resultados foram considerados a média das dez execuções diferentes para cada base de dados;
+		\item Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms};
+		\item Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Metodologia}
+	\input{../thesis/tables/table_test_parms.tex}
+\end{frame}
+
+\subsection{Melhores Resultados para Cada Base}
+\begin{frame}{Acurácia}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_acc}
+	\caption{Histograma de Acurácia (melhores resultados para cada base de dados)}
+	\label{fig:histogram_best_run_for_each_db_acc}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Número de Padrões}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_pat}
+	\caption{Histograma de Padrões (melhores resultados para cada base de dados)}
+	\label{fig:histogram_best_run_for_each_db_pat}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Número de Regras}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_rul}
+	\caption{Histograma de Regras (melhores resultados para cada base de dados)}
+	\label{fig:histogram_best_run_for_each_db_rul}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Tempo de Classificação}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_tim}
+	\caption{Histograma de Tempo (melhores resultados para cada base de dados)}
+	\label{fig:histogram_best_run_for_each_db_tim}
+\end{figure}
+
+\end{frame}
 
 % O Aplicativo olac
 % Exemplo de Execução
