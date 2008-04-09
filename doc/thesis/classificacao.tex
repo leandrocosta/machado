@@ -59,10 +59,14 @@ O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup
 \par
 A confiança de uma regra de associação $X \Rightarrow Y$ em $\mathcal{D}$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$: \[confianca(X \Rightarrow Y,\mathcal{D}):=P(Y|X) = \frac{suporte(X \cup Y,\mathcal{D})}{suporte(X,\mathcal{D})}.\]
 
-Dizemos que a regra é de confiança se $P(X|Y)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
+Dizemos que a regra é de confiança se $P(Y|X)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
 
 \begin{definition}
-Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por: \[\mathcal{R}(\mathcal{D},\sigma,\gamma) := \left\{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma), confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\right\}.\]
+Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por:
+\begin{multline*}
+\mathcal{R}(\mathcal{D},\sigma,\gamma) := \{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma), \\
+confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\}.
+\end{multline*}
 \end{definition}
 
 \begin{problem}[Mineração de Regras de Associação]
@@ -71,7 +75,7 @@ Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathc
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
-Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de \textit{itemsets} freqüentes em relação à base de treinamento, e o organizam em ordem decrescente, de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de regras a partir de \textit{itemsets} freqüentes em relação à base de treinamento, e as organizam em ordem decrescente, de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
 \par
 Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra possível de se aplicar a uma determinada instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
 \par
@@ -98,7 +102,7 @@ Abaixo, fornecemos a definição de algumas das métricas mais utilizadas. Utilizam
 	\item{Lift:} Definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, e introduzida por \cite{brin97dynamic}, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser susceptível a ruídos em pequenas bases de dados. Raros \textit{itemsets} com baixa probabilidade, que ocorrem juntos algumas vezes podem produzir altos valores para \textit{lift};
 	\item{Jaccard:} O coeficiente de Jaccard é uma medida estatística utilizada para comparar similaridade e diversidade entre conjuntos, definida pela razão entre a interseção e a união entre dois conjuntos. Esta métrica, obtida pela expressão $jaccard(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X)+P(Y)-P(X \wedge Y)}$, é considerada como medida de interesse aplicada a regras de associação em diversos trabalhos encontrados na literatura \citep{tan02,geng06,Wu07Association};
 	\item{Laplace:} Definida como $laplace(X \Rightarrow Y) = \frac{frequencia(X \wedge Y) + 1}{frequencia(X) + c}$, onde $c$ é o número de classes do domínio, foi introduzida por \cite{clark91} como uma métrica alternativa para avaliação de regras de associação;
-	\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, a medida \textit{Kulczynski} é muito utilizada na área química, e foi proposta como métrica para regras de associação em \cite{Wu07Association};
+	\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, esta medida, originalmente conhecida como \textit{Kulczynski}, é muito utilizada na área química, e foi proposta como métrica para regras de associação em \cite{Wu07Association};
 	\item{Cosseno:} Esta métrica, bastante utilizada como medida de similaridade para textos, também é amplamente utilizada na avaliação de regras de associação \citep{tan02,geng06,Wu07Association}, e é definida como $cosseno(X \Rightarrow Y) = \frac{P(X \wedge Y)}{\sqrt{P(X) \times P(Y)}}$;
 	\item{Sensitividade:} Definida como $sensitividade(X \Rightarrow Y) = P(X|Y)$, sensitividade (ou \textit{recall}) é bastante utilizada em sistemas de recuperação de informação. Foi proposta como métrica de avaliação de regras de associação em \cite{geng06};
 	\item{Especificidade:} Definida como $especificidade(X \Rightarrow Y) = P(\neg Y | \neg X)$, e também citada por \cite{geng06}, esta métrica representa a proporção de verdadeiro-negativos sobre os casos negativos da regra.
