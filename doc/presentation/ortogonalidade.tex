@@ -205,6 +205,109 @@
 
 \end{frame}
 
+\subsection{Estratégia ORIGAMI}
+
+\begin{frame}{Contextualização}
+O \textbf{ORIGAMI} é um algoritmo para mineração de grafos encontrado na literatura, onde os autores introduzem a definição de conjuntos $\alpha$-ortogonais e $\beta$-representativos, e apresentam o novo paradigma de mineração de conjuntos de grafos ortogonais com foco nos padrões, e não nas transações.
+\end{frame}
+
+\begin{frame}{Definição de $\alpha$-ortogonalidade}
+	\begin{itemize}[<+-| alert@+>]
+		\item Seja $\F$ o conjunto de todos os sub-grafos freqüentes de uma coleção;
+		\item Seja $sim : \F \times \F \rightarrow \left[0, 1\right]$ uma função binária e simétrica que retorna a \textit{similaridade} entre dois grafos;
+		\item Dada uma coleção de grafos $\G$, e um limite superior para similaridade $\alpha \in \left[0, 1\right]$, dizemos que o sub-conjunto de grafos $\R \subseteq \G$ é \textbf{$\alpha$-ortogonal} em relação a $\G$ se, e somente se, para quaisquer $G_a, G_b \in \R, sim(G_a, G_b) \leq \alpha$ e para qualquer $G_a \in \R$ e qualquer $G_b \in \G \backslash \R, sim(G_a, G_b) > \alpha$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Definição de $\alpha$-ortogonalidade}
+	\begin{itemize}[<+-| alert@+>]
+		\item Dada uma coleção de grafos $\G$,um conjunto $\alpha$-ortogonal $\R \subseteq \G$ e um limite inferior para similaridade $\beta \in \left[0, 1\right]$, dizemos que $\R$ \textbf{representa} um grafo $G \in \G$ se existe algum $G_a \in \R$ tal que $sim(G_a, G) \geq \beta$. Seja $\Upsilon(\R,\G) = \left\{G \in \G : \exists G_a \in \R, sim(G, G_a) \geq \beta\right\}$, dizemos que $\R$ é um conjunto $\beta$-representativo para $\Upsilon(\R, \G)$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Definição de $\alpha$-ortogonalidade}
+	\begin{itemize}[<+-| alert@+>]		
+		\item Dada uma coleção de grafos $\G$ e o seu conjunto $\alpha$-ortogonal e $\beta$-representativo $\R$, chamamos de \textbf{resíduo} de $\R$ o conjunto de padrões não representados em $\G$, dado como $\Delta(\R, \G) = \G \backslash \left\{ \R \cup \Upsilon(\R, \G) \right\}$, o \textit{resíduo} de $\R$ é definido como a cardinalidade do seu conjunto resíduo $|\Delta(\R, \G)|$. Finalmente, definimos a média de similaridade do resíduo de $\R$ como $ars(\R, \G) = \frac{\sum_{G_b \in \Delta(\R, \G)} {max_{G_a \in \R} \left\{sim(G_a, G_b)\right\}}}{|\Delta(\R, \G)|}$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Definição de $\alpha$-ortogonalidade}
+	\begin{block}{Objetivo}
+		O objetivo é encontrar conjuntos de grafos $\alpha$-ortogonais e $\beta$-representativos em relação ao conjunto de sub-grafos maximais $\M$.
+	\end{block}
+\end{frame}
+
+\begin{frame}[shrink=5]{O Algoritmo ORIGAMI}
+
+\begin{algorithm}[H]
+\caption{ORIGAMI}
+\label{alg:origami}
+\begin{algorithmic}[1]
+
+\REQUIRE $\D, \sigma, \alpha, \beta$
+\STATE $EM \leftarrow EdgeMap (\D)$
+\STATE $\F_1 \leftarrow FindFrequentEdges (\D, \sigma)$
+\STATE $\widehat{\M} \leftarrow 0$
+\WHILE {$\neg StopCondition ()$}
+	\STATE $M \leftarrow RandomMaximalGraph (\D, \F_1, EM, \sigma)$
+	\STATE $\widehat{\M} \leftarrow \widehat{\M} \cup M$
+\ENDWHILE
+\STATE $\R \leftarrow OrthogonalRepresentativeSets (\widehat{\M}, \alpha, \beta)$
+
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+\begin{frame}{Adaptação do Algoritmo}
+	\begin{itemize}[<+-| alert@+>]
+		\item Foi implementada uma adaptação do ORIGAMI para o problema de Classificação Associativa;
+		\item Foi implementada uma heurística de obtenção de padrões maximais baseada no trabalho apresentado no artigo;
+		\item Foi implementada uma heurística de obtenção do conjunto ortogonal baseada no trabalho apresentado no artigo.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heurística de Obtenção de Padrões Maximais}
+	\begin{itemize}[<+-| alert@+>]
+		\item O algoritmo inicia a execução com o conjunto-resultado vazio;
+		\item A cada iteração, tenta obter o maior padrão freqüente possível, selecionando itens aleatoriamente;
+			\begin{itemize}[<+-| alert@+>]
+				\item Se o algoritmo escolhe um item já utilizado, ou que produz um padrão não freqüente, um contador de tentativas é decrementado;
+				\item A condição de parada para a geração do padrão maximal candidato é que o número de escolhas erradas do item não deve ser maior que o tamanho da instância de teste.
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heurística de Obtenção de Padrões Maximais}
+	\begin{itemize}[<+-| alert@+>]
+		\item Ao obter um novo padrão maximal, o algoritmo tenta inseri-lo no conjunto-solução;
+		\begin{itemize}[<+-| alert@+>]
+			\item Se o padrão escolhido já existe no conjunto, o algoritmo incrementa um segundo contador de tentativas;
+			\item A condição de parada para a obtenção de padrões maximais é que o número de padrões candidatos não maximais ou já conhecidos não deve ser superior ao tamanho da instância de teste.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heurística de Obtenção do Conjunto Ortogonal}
+	\begin{itemize}[<+-| alert@+>]
+		\item O algoritmo inicia a execução com o valor de resíduo igual a $0$ (zero);
+		\item A cada iteração, tenta obter um novo conjunto ortogonal selecionando, aleatoriamente, padrões maximais encontrados na primeira fase do algoritmo, e adicionando-os ao conjunto-solução;
+		\begin{itemize}[<+-| alert@+>]
+			\item Se, durante a obtenção dos padrões, o padrão selecionado já ter sido utilizado, ou não possuir similaridade menor que $\alpha$ para com todos os outros padrões do conjunto-solução, o algoritmo decrementa um contador de tentativas;
+			\item A condição de parada local para a geração de conjuntos ortogonais é que, durante este processo, o número máximo de escolhas erradas de padrões não pode ser maior que a quantidade de padrões maximais total.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heurística de Obtenção do Conjunto Ortogonal}
+	\begin{itemize}[<+-| alert@+>]		
+		\item Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo;
+		\item Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passar a ser o conjunto ortogonal recém-encontrado;
+		\item A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de conjuntos ortogonais candidatos que não melhoram o resultado não pode ser maior que a quantidade de padrões maximais total.
+	\end{itemize}
+\end{frame}
+
+
 %\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
 %	\begin{itemize}[<+-| alert@+>]
 %		\item No início do algoritmo, o conjunto-solução é inicializado com apenas um elemento, e a métrica de ortogonalidade do conjunto com o valor $0$ (zero), e então começa o ciclo de iterações:
