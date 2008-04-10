@@ -76,7 +76,7 @@
 
 \begin{frame}{Considerando Cobertura de Transações}
 	\begin{itemize}[<+-| alert@+>]
-		\item A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\].
+		\item A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\]
 	\end{itemize}
 \end{frame}
 
@@ -129,7 +129,8 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+%\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
 
 \begin{algorithm}[H]
 \caption{OLAC}
@@ -137,68 +138,30 @@
 \begin{algorithmic}[1]
 
 \REQUIRE $\D, \sigma$
-%\alert<2>{
 	\STATE $\F \leftarrow FindFrequentPatterns (\D, \sigma)$
-%}
-%\alert<3>{
 	\STATE $Sort (\F)$
-%}
-%\alert<4>{
 	\STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
-%}
 	\REPEAT
-%\alert<6>{
-		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
-%}
-%\alert<7>{
-		\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
-%}
-%\alert<8>{
+%		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
+%		\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+%		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
+%		\FOR {$P \in \F, P \notin \Or_{try}$}
+%			\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
+%			\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
+%			\STATE $rate_{tmp} = GetRate (\Or)$
+%			\IF {$rate_{tmp} \leq rate_{try}$}
+%				\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
+%			\ELSE
+%				\STATE $rate_{try} \leftarrow rate_{tmp}$
+%			\ENDIF
+%		\ENDFOR
+		\STATE $\Or_{try} \leftarrow GetNextCandidateSet (\Or, \F)$
 		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
-%}
-%\alert<9>{
-		\FOR {$P \in \F, P \notin \Or_{try}$}
-%}
-%\alert<10>{
-			\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
-%}
-%\alert<11>{
-			\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
-%}
-%\alert<12>{
-			\STATE $rate_{tmp} = GetRate (\Or)$
-%}
-%\alert<13>{
-			\IF {$rate_{tmp} \leq rate_{try}$}
-%}
-%\alert<14>{
-				\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
-%}
-%\alert<13>{
-			\ELSE
-%}
-%\alert<15>{
-				\STATE $rate_{try} \leftarrow rate_{tmp}$
-%}
-%\alert<13>{
-			\ENDIF
-%}
-%\alert<9>{
-		\ENDFOR
-%}
-%\alert<16>{
 		\IF {$rate_{try} \geq rate$}
-%}
-%\alert<17>{
 			\STATE $\Or \leftarrow \Or_{try}$
-%}
-%\alert<16>{
 		\ENDIF
-%}
 	\UNTIL {$rate_{try} < rate$}
-%\alert<18>{
 	\STATE $\R \leftarrow \Or$
-%}
 
 \end{algorithmic}
 \end{algorithm}
@@ -237,7 +200,7 @@ O \textbf{ORIGAMI} é um algoritmo para mineração de grafos encontrado na literat
 	\end{block}
 \end{frame}
 
-\begin{frame}[shrink=5]{O Algoritmo ORIGAMI}
+\begin{frame}{O Algoritmo ORIGAMI}
 
 \begin{algorithm}[H]
 \caption{ORIGAMI}
