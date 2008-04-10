@@ -1,4 +1,6 @@
-\documentclass{beamer}
+%\documentclass{beamer}
+%\documentclass[draft]{beamer}
+\documentclass[draft,handout]{beamer}
 
 \usepackage[brazil]{babel}
 \usepackage[latin1]{inputenc}
@@ -11,14 +13,14 @@
 	\usepackage{epstopdf}
 \fi
 
-\let\newfloat=\undefined
-\usepackage[ruled]{algorithm}
+%\let\newfloat=\undefined
+\usepackage[portugues,boxed]{algorithm2e}
 \usepackage{algorithmic}
 
 %\newcommand{\theHalgorithm}{\arabic{algorithm}}
 
 % Mudando o label dos algoritmos para portugês
-\floatname{algorithm}{Algoritmo}
+%\floatname{algorithm}{Algoritmo}
 
 % Variáveis matemáticas
 \newcommand{\C}{\mathcal{C}}
@@ -37,26 +39,29 @@
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Or}{\mathcal{O}}
 \newcommand{\R}{\mathcal{R}}
-\newcommand{\Se}{\mathcal{S}}
+%\newcommand{\Se}{\mathcal{S}}
 
 \usetheme[compress]{Berlin}
+%\usetheme{Berlin}
 
 \title[Mineração de Padrões Freqüentes e Ortogonais]{Mineração de Padrões Freqüentes Ortogonais e sua Aplicação em Classificação Associativa}
 \author[Leandro S. Costa]{Leandro Souza Costa \\ Orientador: Wagner Meira Jr.}
 \institute[DCC-UFMG]{Departamento de Ciência da Computação \\ Universidade Federal de Minas Gerais}
-\logo{\includegraphics[height=.8cm]{../thesis/img/ufmg}}
+\logo{\includegraphics[height=.8cm]{../thesis/img/speed}}
 \date[Dissertação de Mestrado]{Defesa de Dissertação de Mestrado \\ \today}
 
 \begin{document}
+
+\setbeamercovered{transparent}
 
 \begin{frame}
 \titlepage
 \end{frame}
 
-\section*{Sumário}
-\begin{frame}[shrink=5]
-\tableofcontents
-\end{frame}
+%\section*{Sumário}
+%\begin{frame}[shrink=5]
+%\tableofcontents
+%\end{frame}
 
 \include{introducao}
 \include{classificacao}
