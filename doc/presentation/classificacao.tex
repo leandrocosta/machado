@@ -83,28 +83,28 @@
 	\end{block}
 \end{frame}
 
-\subsection{Métricas de Regras de Associação}
+%\subsection{Métricas de Regras de Associação}
+%
+%\begin{frame}{Métricas Alternativas}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item{Convicção:} Definida como $conviccao(X \Rightarrow Y) = \frac{P(X) \times P(\neg Y)}{P(X \wedge \neg Y)}$, compara a probabilidade de $X$ aparecer sem $Y$ com a freqüência real do aparecimento de $X$ sem $Y$;
+%		\item{Leverage:} Definida como $leverage(X \Rightarrow Y) = P(X \wedge Y) - (P(X) \times P(Y))$, mede a diferença de $X$ e $Y$ aparecendo juntos na base de dados e o que seria esperado se $X$ e $Y$ fossem estatisticamente dependentes;
+%		\item{Lift:} Definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser susceptível a ruídos em pequenas bases de dados;
+%	\end{itemize}
+%\end{frame}		
 
-\begin{frame}{Métricas Alternativas}
-	\begin{itemize}[<+-| alert@+>]
-		\item{Convicção:} Definida como $conviccao(X \Rightarrow Y) = \frac{P(X) \times P(\neg Y)}{P(X \wedge \neg Y)}$, compara a probabilidade de $X$ aparecer sem $Y$ com a freqüência real do aparecimento de $X$ sem $Y$;
-		\item{Leverage:} Definida como $leverage(X \Rightarrow Y) = P(X \wedge Y) - (P(X) \times P(Y))$, mede a diferença de $X$ e $Y$ aparecendo juntos na base de dados e o que seria esperado se $X$ e $Y$ fossem estatisticamente dependentes;
-		\item{Lift:} Definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser susceptível a ruídos em pequenas bases de dados;
-	\end{itemize}
-\end{frame}		
+%\begin{frame}{Métricas Alternativas}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item{Jaccard:} O coeficiente de Jaccard é uma medida estatística utilizada para comparar similaridade e diversidade entre conjuntos, definida pela razão entre a interseção e a união entre dois conjuntos. Esta métrica é obtida pela expressão $jaccard(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X)+P(Y)-P(X \wedge Y)}$;
+%		\item{Laplace:} Definida como $laplace(X \Rightarrow Y) = \frac{frequencia(X \wedge Y) + 1}{frequencia(X) + c}$, onde $c$ é o número de classes do domínio;
+%		\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, a medida \textit{Kulczynski} é muito utilizada na área química;
+%		\item{Cosseno:} Esta métrica, bastante utilizada como medida de similaridade para textos,  é definida como $cosseno(X \Rightarrow Y) = \frac{P(X \wedge Y)}{\sqrt{P(X) \times P(Y)}}$;
+%	\end{itemize}
+%\end{frame}		
 
-\begin{frame}{Métricas Alternativas}
-	\begin{itemize}[<+-| alert@+>]
-		\item{Jaccard:} O coeficiente de Jaccard é uma medida estatística utilizada para comparar similaridade e diversidade entre conjuntos, definida pela razão entre a interseção e a união entre dois conjuntos. Esta métrica é obtida pela expressão $jaccard(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X)+P(Y)-P(X \wedge Y)}$;
-		\item{Laplace:} Definida como $laplace(X \Rightarrow Y) = \frac{frequencia(X \wedge Y) + 1}{frequencia(X) + c}$, onde $c$ é o número de classes do domínio;
-		\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, a medida \textit{Kulczynski} é muito utilizada na área química;
-		\item{Cosseno:} Esta métrica, bastante utilizada como medida de similaridade para textos,  é definida como $cosseno(X \Rightarrow Y) = \frac{P(X \wedge Y)}{\sqrt{P(X) \times P(Y)}}$;
-	\end{itemize}
-\end{frame}		
-
-\begin{frame}{Métricas Alternativas}
-	\begin{itemize}[<+-| alert@+>]
-		\item{Sensitividade:} Definida como $sensitividade(X \Rightarrow Y) = P(X|Y)$, sensitividade (ou \textit{recall}) é bastante utilizada em sistemas de recuperação de informação;
-		\item{Especificidade:} Definida como $especificidade(X \Rightarrow Y) = P(\neg Y | \neg X)$, esta métrica representa a proporção de verdadeiro-negativos sobre os casos negativos da regra.
-	\end{itemize}
-\end{frame}
+%\begin{frame}{Métricas Alternativas}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item{Sensitividade:} Definida como $sensitividade(X \Rightarrow Y) = P(X|Y)$, sensitividade (ou \textit{recall}) é bastante utilizada em sistemas de recuperação de informação;
+%		\item{Especificidade:} Definida como $especificidade(X \Rightarrow Y) = P(\neg Y | \neg X)$, esta métrica representa a proporção de verdadeiro-negativos sobre os casos negativos da regra.
+%	\end{itemize}
+%\end{frame}
