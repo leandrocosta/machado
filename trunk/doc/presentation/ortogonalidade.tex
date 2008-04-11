@@ -88,16 +88,17 @@
 
 \begin{frame}{Considerando Cobertura de Classes}
 	\begin{itemize}[<+-| alert@+>]
-		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
-		\item Seja $\C$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$;
+		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$) e $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
+		\item Seja $\C$ um conjunto de classes associadas às transações de $\D$ e $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$;
+		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;		
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Classes}
-	\begin{itemize}[<+-| alert@+>]
-		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;
-	\end{itemize}
-\end{frame}
+%\begin{frame}{Considerando Cobertura de Classes}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{Considerando Cobertura de Classes}
 	\begin{itemize}[<+-| alert@+>]
@@ -129,8 +130,8 @@
 	\end{itemize}
 \end{frame}
 
-%\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
-\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
 
 \begin{algorithm}[H]
 \caption{OLAC}
@@ -142,7 +143,7 @@
 	\STATE $Sort (\F)$
 	\STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
 	\REPEAT
-%		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
+		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
 %		\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
 %		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
 %		\FOR {$P \in \F, P \notin \Or_{try}$}
@@ -155,14 +156,42 @@
 %				\STATE $rate_{try} \leftarrow rate_{tmp}$
 %			\ENDIF
 %		\ENDFOR
-		\STATE $\Or_{try} \leftarrow GetNextCandidateSet (\Or, \F)$
-		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
-		\IF {$rate_{try} \geq rate$}
-			\STATE $\Or \leftarrow \Or_{try}$
+		\STATE $\Or_{c} \leftarrow GetNextCandidateSet (\Or, \F)$
+		\STATE $rate_{c} = GetOrthogonalityRate (\Or_{c})$
+		\IF {$rate_{c} \geq rate$}
+			\STATE $\Or \leftarrow \Or_{c}$
 		\ENDIF
-	\UNTIL {$rate_{try} < rate$}
+	\UNTIL {$rate_{c} < rate$}
 	\STATE $\R \leftarrow \Or$
 
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+
+\begin{algorithm}[H]
+\caption{OLAC - GetNextCandidateSet}
+\label{alg:olac_getNextCandidateSet}
+\begin{algorithmic}[1]
+
+\REQUIRE $\Or, \F$
+\STATE $\Or_{c} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+\STATE $rate_{c} = GetOrthogonalityRate (\Or_{c})$
+\FOR {$P \in \F, P \notin \Or_{c}$}
+	\STATE $S \leftarrow GetMoreSimilar (\Or_{c}, P)$
+	\STATE $\Or_{c} \leftarrow \Or_{c} \cup P \ \backslash \ S$
+	\STATE $rate_{try} = GetRate (\Or_{c})$
+	\IF {$rate_{try} > rate_{c}$}
+		\STATE $rate_{c} \leftarrow rate_{try}$
+	\ELSE
+		\STATE $\Or_{c} \leftarrow \Or_{c} \cup S \  \backslash \  P$
+	\ENDIF
+\ENDFOR
+\RETURN $\Or_{c}$
+%
 \end{algorithmic}
 \end{algorithm}
 
