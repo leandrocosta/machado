@@ -6,7 +6,7 @@
 		\item Largamente utilizados em diversas aplicações, incluindo regras de associação, classificação, agrupamento, indexação, etc.;
 		\item Minimizar o conjunto-solução ainda é um desafio:
 		\begin{itemize}[<+-| alert@+>]
-			\item Padrões freqüentes obedecem à propriedade de antimonotonia;
+			\item Padrões freqüentes obedecem à propriedade de anti-monotonia;
 			\item Soluções propostas minimizam o conjunto-solução apenas sob a perspectiva do suporte, não considerando a semântica dos dados.
 		\end{itemize}
 		\item Diminuir a redundância no conjunto-solução é outro desafio:
@@ -294,7 +294,7 @@ O \textbf{ORIGAMI} é um algoritmo para mineração de grafos encontrado na literat
 \begin{frame}{Heurística de Obtenção do Conjunto Ortogonal}
 	\begin{itemize}[<+-| alert@+>]		
 		\item Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo;
-		\item Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passar a ser o conjunto ortogonal recém-encontrado;
+		\item Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passa a ser o conjunto ortogonal recém-encontrado;
 		\item A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de conjuntos ortogonais candidatos que não melhoram o resultado não pode ser maior que a quantidade de padrões maximais total.
 	\end{itemize}
 \end{frame}
