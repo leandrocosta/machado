@@ -11,24 +11,6 @@
 
 \subsection{Fundamentos Teóricos}
 
-\begin{frame}{Classificação Associativa}
-	\begin{itemize}[<+-| alert@+>]
-		\item Dados de entrada: Coleção de registros;
-		\item Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como \textbf{classe};
-		\item Classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas.
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Estratégias \textit{eager} e \textit{lazy}}
-	\begin{block}{Estratégia \textit{eager}}
-		Gera um conjunto de regras a partir da base de treinamento, e, para cada instância de teste, utiliza a melhor regra do conjunto para classificá-la.
-	\end{block}
-	\pause
-	\begin{block}{Estratégia \textit{lazy}}
-		Para cada instância de teste, gera um conjunto de regras a partir de uma projeção da base de treinamento que possui apenas transações relacionadas com a instância de teste.
-	\end{block}
-\end{frame}
-
 \begin{frame}{Padrões Freqüentes}
 	\begin{itemize}[<+-| alert@+>]
 		\item Seja $\mathcal{I}$ um conjunto de itens;
@@ -82,6 +64,25 @@
 		\end{multline*}
 	\end{block}
 \end{frame}
+
+\begin{frame}{Classificação Associativa}
+	\begin{itemize}[<+-| alert@+>]
+		\item Dados de entrada: Coleção de registros;
+		\item Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como \textbf{classe};
+		\item Classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Estratégias \textit{eager} e \textit{lazy}}
+	\begin{block}{Estratégia \textit{eager}}
+		Gera um conjunto de regras a partir da base de treinamento, e, para cada instância de teste, utiliza a melhor regra do conjunto para classificá-la.
+	\end{block}
+	\pause
+	\begin{block}{Estratégia \textit{lazy}}
+		Para cada instância de teste, gera um conjunto de regras a partir de uma projeção da base de treinamento que possui apenas transações relacionadas com a instância de teste.
+	\end{block}
+\end{frame}
+
 
 %\subsection{Métricas de Regras de Associação}
 %
