@@ -13,54 +13,56 @@
 
 \begin{frame}{Padrões Freqüentes}
 	\begin{itemize}[<+-| alert@+>]
-		\item Seja $\mathcal{I}$ um conjunto de itens;
-		\item Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset} (ou padrão);
-		\item Uma transação sobre $\mathcal{I}$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset};
-		\item Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \mathcal{I}$, se $X \subseteq I$;
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Padrões Freqüentes}
-	\begin{itemize}[<+-| alert@+>]
-		\item Uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$ é um conjunto de transações sobre $\mathcal{I}$;
-		\item A freqüência de um \textit{itemset} $X$ em $\mathcal{D}$ é o número de transações cobertas por $X$ em $\mathcal{D}$;
-		\item O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$;
-		\item Um \textit{itemset} é freqüente se o seu suporte é maior ou igual a um dado valor relativo mínimo $\sigma$, com $0 \leq \sigma \leq 1$.
+%		\item Seja $\I$ um conjunto de itens;
+		\item Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \I$, onde $\I$ é um conjunto de itens, é chamado de \textit{itemset} (ou padrão);
+		\item Uma transação sobre $\I$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset};
+%		\item Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \I$, se $X \subseteq I$;
+%	\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Padrões Freqüentes}
+%	\begin{itemize}[<+-| alert@+>]
+		\item Uma base de dados de transações $\D$ sobre $\I$ é um conjunto de transações sobre $\I$;
+%		\item A freqüência de um \textit{itemset} $X$ em $\D$ é o número de transações cobertas por $X$ em $\D$;
+		\item O suporte de um \textit{itemset} $X$ em $\D$ é a probabilidade de $X$ ocorrer em uma transação $T \in \D$;
+		\item Um padrão é freqüente se o seu suporte é maior ou igual a um dado valor relativo mínimo $\sigma$, com $0 \leq \sigma \leq 1$.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Padrões Freqüentes}
 	\begin{block}{Definição}
-		Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\mathcal{D}$ em relação a $\sigma$ é dado por: \[\mathcal{F}(\mathcal{D},\sigma):=\left\{X \subseteq \mathcal{I} | suporte (X,\mathcal{D}) \geq \sigma \right\}.\]
+		Seja $\D$ uma base de dados de transações sobre um conjunto de itens $\I$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\D$ em relação a $\sigma$ é dado por: \[\F(\D,\sigma):=\left\{X \subseteq \I | suporte (X,\D) \geq \sigma \right\}.\]
 	\end{block}
 %	\pause
 %	\begin{block}{Mineração de Padrões Freqüentes}
-%		Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, e um suporte mínimo $\sigma$, encontre $\mathcal{F}(\mathcal{D},\sigma)$.
+%		Dado um conjunto de itens $\I$, uma base de dados de transações $\D$ sobre $\I$, e um suporte mínimo $\sigma$, encontre $\F(\D,\sigma)$.
 %	\end{block}
 \end{frame}
 
 \begin{frame}{Regras de Associação}
 	\begin{itemize}[<+-| alert@+>]
-		\item Uma regra de associação é uma implicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$;
-		\item A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$;
-		\item O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup Y$ em $\mathcal{D}$, e a freqüência da regra é a freqüência de $X \cup Y$;
+		\item Uma regra de associação é uma implicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\I$, e $Y$ é um único item em $\I$ que não está presente em $X$;
+%		\item A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$;
+%		\item O suporte de uma regra $X \Rightarrow Y$ em $\D$ é o suporte de $X \cup Y$ em $\D$, e a freqüência da regra é a freqüência de $X \cup Y$;
+		\item O suporte de uma regra $X \Rightarrow Y$ em $\D$ é o suporte de $X \cup Y$ em $\D$;
+		\item A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq \gamma \leq 1$ se, e somente se, a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$, é maior que $\gamma$;
 	\end{itemize}
 \end{frame}
 	
-\begin{frame}{Regras de Associação}
-	\begin{itemize}[<+-| alert@+>]
-		\item Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma$;
-		\item A confiança de uma regra de associação $X \Rightarrow Y$ em $\mathcal{D}$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$;
-		\item Dizemos que a regra é de confiança se $P(Y|X)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
-	\end{itemize}
-\end{frame}
+%\begin{frame}{Regras de Associação}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma$;
+%		\item A confiança de uma regra de associação $X \Rightarrow Y$ em $\D$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$;
+%		\item Dizemos que a regra é de confiança se $P(Y|X)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{Regras de Associação}
 	\begin{block}{Definição}
-		Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por:
+		Seja $\D$ uma base de dados de transações sobre um conjunto de itens $\I$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por:
 		\begin{multline*}
-			\mathcal{R}(\mathcal{D},\sigma,\gamma) := \{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma), \\
-			confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\}.
+			\R(\D,\sigma,\gamma) := \{X \Rightarrow Y|X,Y \subseteq \I, X \cap Y = \left\{ \right\}, X \cup Y \in \F(\D,\sigma), \\
+			confianca(X \Rightarrow Y,\D) \geq \gamma\}.
 		\end{multline*}
 	\end{block}
 \end{frame}
@@ -83,6 +85,11 @@
 	\end{block}
 \end{frame}
 
+%\begin{frame}{LAC (\textit{Lazy Associative Classifier}}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Classificador associativo baseado na estratégia \textit{lazy}.
+%	\end{itemize}
+%\end{frame}
 
 %\subsection{Métricas de Regras de Associação}
 %
