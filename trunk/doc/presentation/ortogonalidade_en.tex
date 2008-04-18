@@ -101,35 +101,35 @@
 
 \begin{frame}{Considering Class Coverage}
 	\begin{itemize}[<+-| alert@+>]
-		\item The orthogonality based in classe coverage is given by: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
+		\item The orthogonality based in class coverage is given by: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
 	\end{itemize}
 \end{frame}
 
-\subsection{Classificação Associativa e Ortogonalidade}
+\subsection{Associative Classification and Orthogonality}
 
-\begin{frame}{Utilização da ortogonalidade no LAC}
+\begin{frame}{Using Orthogonality in LAC}
 	\begin{itemize}[<+-| alert@+>]
-		\item Para cada instância de teste, o LAC (\textit{Lazy Associative Classifier}) cria uma projeção da base de treinamento apenas com as transações que possuem itens em comum com a instância;
-		\item A partir desta projeção, a obtém um conjunto de padrões freqüentes, de acordo com determinado suporte fornecido pelo usuário;
-		\item Com estes padrões, gera as regras de associação utilizadas durante a tarefa de classificação.
+		\item For each test instance, LAC (\textit{Lazy Associative Classifier}) builds a projection of training dataset with only transactions that share items with the instance;
+		\item After that, the algorithm gets a set of frequent patterns according to a support given by the user;
+		\item With these patterns, it generate association rules used to classify the instance.
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Utilização da ortogonalidade no LAC}
+\begin{frame}{Using Orthogonality in LAC}
 	\begin{itemize}[<+-| alert@+>]
-		\item Neste trabalho, a ortogonalidade foi utilizada para se extrair, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais;
-		\item As regras de associação foram geradas a partir do sub-conjunto de padrões ortogonais obtido.
+		\item In this work, orthogonality was used to extract, from the frequent patterns set, a sub-set of orthogonal patterns;
+		\item The association rules were generated from this sub-set.
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+\begin{frame}{Heuristic to Get Orthogonal Sets}
 	\begin{itemize}[<+-| alert@+>]
-		\item O problema de se encontrar o sub-conjunto de padrões com maior métrica de ortogonalidade, dado o conjunto de padrões freqüentes, é não polinomial;
-		\item Foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
+		\item Find the sub-set of patterns with best orthogonality metric is NP-Hard;
+		\item It was developed a greedy heuristic that starts with an orthogonal set with two elements, and, iteratively, tries to obtain a new set with one more element adding candidate patterns and modifying the set in order to maximize the metric.
 	\end{itemize}
 \end{frame}
 
-\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+\begin{frame}[shrink=5]{Heuristic to Get Orthogonal Sets}
 %\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
 
 \begin{algorithm}[H]
@@ -168,7 +168,7 @@
 
 \end{frame}
 
-\begin{frame}[shrink=5]{Heurística de Obtenção de Conjuntos Ortogonais}
+\begin{frame}[shrink=5]{Heuristic to Get Orthogonal Sets}
 %\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
 
 \begin{algorithm}[H]
@@ -196,39 +196,39 @@
 
 \end{frame}
 
-\subsection{Estratégia ORIGAMI}
+\subsection{The ORIGAMI Strategy}
 
-\begin{frame}{Contextualização}
-O \textbf{ORIGAMI} é um algoritmo para mineração de grafos encontrado na literatura, onde os autores introduzem a definição de conjuntos $\alpha$-ortogonais e $\beta$-representativos, e apresentam o novo paradigma de mineração de conjuntos de grafos ortogonais com foco nos padrões, e não nas transações.
+\begin{frame}{Contextualizing}
+The \textbf{ORIGAMI} is a graph mining algorithm found in literature, where the authors introduce a definition for $\alpha$-orthogonality and $\beta$-representativity, and present a new paradigm for mining a summary representation of the set of frequent graphs by considering the distances in the pattern space.
 \end{frame}
 
-\begin{frame}{Definição de $\alpha$-ortogonalidade}
+\begin{frame}{$\alpha$-orthogonality Definition}
 	\begin{itemize}[<+-| alert@+>]
-		\item Seja $\F$ o conjunto de todos os sub-grafos freqüentes de uma coleção;
-		\item Seja $sim : \F \times \F \rightarrow \left[0, 1\right]$ uma função binária e simétrica que retorna a \textit{similaridade} entre dois grafos;
-		\item Dada uma coleção de grafos $\G$, e um limite superior para similaridade $\alpha \in \left[0, 1\right]$, dizemos que o sub-conjunto de grafos $\R \subseteq \G$ é \textbf{$\alpha$-ortogonal} em relação a $\G$ se, e somente se, para quaisquer $G_a, G_b \in \R, sim(G_a, G_b) \leq \alpha$ e para qualquer $G_a \in \R$ e qualquer $G_b \in \G \backslash \R, sim(G_a, G_b) > \alpha$;
+		\item Let $\F$ be the set of all frequent sub-graphs of a collection;
+		\item Let $sim : \F \times \F \rightarrow \left[0, 1\right]$ be a symmetric binary function that returns the \textit{similarity} between two graphs;
+		\item Given a collection of graphs $\G$, and an upper-bound for similarity $\alpha \in \left[0, 1\right]$, we say that the sub-set of graphs $\R \subseteq \G$ is \textbf{$\alpha$-orthogonal} with respect to $\G$ if, and only if, for any $G_a, G_b \in \R, sim(G_a, G_b) \leq \alpha$ and for any $G_i \in \G \backslash \R$ there exists a $G_j \in \R, sim(G_i, G_j) > \alpha$;
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Definição de $\alpha$-ortogonalidade}
+\begin{frame}{$\alpha$-orthogonality Definition}
 	\begin{itemize}[<+-| alert@+>]
-		\item Dada uma coleção de grafos $\G$,um conjunto $\alpha$-ortogonal $\R \subseteq \G$ e um limite inferior para similaridade $\beta \in \left[0, 1\right]$, dizemos que $\R$ \textbf{representa} um grafo $G \in \G$ se existe algum $G_a \in \R$ tal que $sim(G_a, G) \geq \beta$. Seja $\Upsilon(\R,\G) = \left\{G \in \G : \exists G_a \in \R, sim(G, G_a) \geq \beta\right\}$, dizemos que $\R$ é um conjunto $\beta$-representativo para $\Upsilon(\R, \G)$;
+		\item Given a collection of graphs $\G$, an $\alpha$-orthogonal set $\R \subseteq \G$ and a lower-bound for similarity $\beta \in \left[0, 1\right]$, we say that $\R$ \textbf{represents} a graph $G \in \G$ if there exists some $G_a \in \R$ such that $sim(G_a, G) \geq \beta$. Given $\Upsilon(\R,\G) = \left\{G \in \G : \exists G_a \in \R, sim(G, G_a) \geq \beta\right\}$, we say that $\R$ is a $\beta$-representative set for $\Upsilon(\R, \G)$;
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Definição de $\alpha$-ortogonalidade}
-	\begin{itemize}[<+-| alert@+>]		
-		\item Dada uma coleção de grafos $\G$ e o seu conjunto $\alpha$-ortogonal e $\beta$-representativo $\R$, chamamos de \textbf{resíduo} de $\R$ o conjunto de padrões não representados em $\G$, dado como $\Delta(\R, \G) = \G \backslash \left\{ \R \cup \Upsilon(\R, \G) \right\}$, o \textit{resíduo} de $\R$ é definido como a cardinalidade do seu conjunto resíduo $|\Delta(\R, \G)|$. Finalmente, definimos a média de similaridade do resíduo de $\R$ como $ars(\R, \G) = \frac{\sum_{G_b \in \Delta(\R, \G)} {max_{G_a \in \R} \left\{sim(G_a, G_b)\right\}}}{|\Delta(\R, \G)|}$.
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{itemize}[<+-| alert@+>]
+		\item Given a collection of graphs $\G$, an $\alpha$-orthogonal set and its $\beta$-representative set $\R$, we call \textbf{residue} of $\R$ the set of patterns not represented in $\G$, given as $\Delta(\R, \G) = \G \backslash \left\{ \R \cup \Upsilon(\R, \G) \right\}$, the \textit{residue} of $\R$ is defined as the cardinality of its residue-set $|\Delta(\R, \G)|$. Finaly, we define the average residue similarity for $\R$ as follows: $ars(\R, \G) = \frac{\sum_{G_b \in \Delta(\R, \G)} {max_{G_a \in \R} \left\{sim(G_a, G_b)\right\}}}{|\Delta(\R, \G)|}$.
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Definição de $\alpha$-ortogonalidade}
-	\begin{block}{Objetivo}
-		O objetivo é encontrar conjuntos de grafos $\alpha$-ortogonais e $\beta$-representativos em relação ao conjunto de sub-grafos maximais $\M$.
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{block}{Objective}
+		The goal is to find sets of $\alpha$-orthogonal and $\beta$-representative graphs related to the maximal sub-graphs set $\M$.
 	\end{block}
 \end{frame}
 
-\begin{frame}{O Algoritmo ORIGAMI}
+\begin{frame}{The ORIGAMI Algorithm}
 
 \begin{algorithm}[H]
 \caption{ORIGAMI}
@@ -250,51 +250,51 @@ O \textbf{ORIGAMI} é um algoritmo para mineração de grafos encontrado na literat
 
 \end{frame}
 
-\begin{frame}{Adaptação do Algoritmo}
+\begin{frame}{The ORIGAMI Adaptation}
 	\begin{itemize}[<+-| alert@+>]
-		\item Foi implementada uma adaptação do ORIGAMI para o problema de Classificação Associativa;
-		\item Foi implementada uma heurística de obtenção de padrões maximais baseada no trabalho apresentado no artigo;
-		\item Foi implementada uma heurística de obtenção do conjunto ortogonal baseada no trabalho apresentado no artigo.
+		\item It was implemented an adaptation of ORIGAMI for the Associative Classification Problem;
+		\item It was implemented a heuristic to get maximal patterns based on the article;
+		\item It was implemented a heuristic to get orthogonal patterns based on the article.
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Heurística de Obtenção de Padrões Maximais}
+\begin{frame}{Heuristic to Get Maximal Patterns}
 	\begin{itemize}[<+-| alert@+>]
-		\item O algoritmo inicia a execução com o conjunto-resultado vazio;
-		\item A cada iteração, tenta obter o maior padrão freqüente possível, selecionando itens aleatoriamente;
+		\item The algorithm starts with an empty result-set;
+		\item On each iteration, it tries to get the largest frequent pattern possible, selection items randomly;
 			\begin{itemize}[<+-| alert@+>]
-				\item Se o algoritmo escolhe um item já utilizado, ou que produz um padrão não freqüente, um contador de tentativas é decrementado;
-				\item A condição de parada para a geração do padrão maximal candidato é que o número de escolhas erradas do item não deve ser maior que o tamanho da instância de teste.
+				\item If the algorithm chooses an item that is already in the pattern, or that makes the pattern infrequent, a counter is decremented;
+				\item The stop-condition for the candidate pattern generation is that the number of wrong chooses for the random item should be, at most, equal to the test instance size.
 			\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Heurística de Obtenção de Padrões Maximais}
+\begin{frame}{Heuristic to Get Maximal Patterns}
 	\begin{itemize}[<+-| alert@+>]
-		\item Ao obter um novo padrão maximal, o algoritmo tenta inseri-lo no conjunto-solução;
+		\item After generate a new maximal pattern, the algorithm tries to insert it in the result-set;
 		\begin{itemize}[<+-| alert@+>]
-			\item Se o padrão escolhido já existe no conjunto, o algoritmo incrementa um segundo contador de tentativas;
-			\item A condição de parada para a obtenção de padrões maximais é que o número de padrões candidatos não maximais ou já conhecidos não deve ser superior ao tamanho da instância de teste.
+			\item If the pattern is already in the set, the algorithm decrements a second counter of tries;
+			\item The stop condition for the maximal patterns set generation is that number of candidate patterns generated that are not maximal or are already in the set should be, at most, equal to the test instance size.
 		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Heurística de Obtenção do Conjunto Ortogonal}
+\begin{frame}{Heuristic to Get the Orthogonal Patterns Set}
 	\begin{itemize}[<+-| alert@+>]
-		\item O algoritmo inicia a execução com o valor de resíduo igual a $0$ (zero);
-		\item A cada iteração, tenta obter um novo conjunto ortogonal selecionando, aleatoriamente, padrões maximais encontrados na primeira fase do algoritmo, e adicionando-os ao conjunto-solução;
+		\item The algorithm starts with a residue equal to $0$ (zero);
+		\item On each iteration, it tries to get a new orthogonal set selecting, randomly, maximal patterns found in the first step of the algorithm, and adding them to the result-set;
 		\begin{itemize}[<+-| alert@+>]
-			\item Se, durante a obtenção dos padrões, o padrão selecionado já ter sido utilizado, ou não possuir similaridade menor que $\alpha$ para com todos os outros padrões do conjunto-solução, o algoritmo decrementa um contador de tentativas;
-			\item A condição de parada local para a geração de conjuntos ortogonais é que, durante este processo, o número máximo de escolhas erradas de padrões não pode ser maior que a quantidade de padrões maximais total.
+			\item If the algorithm selects a pattern that is already in the set or does not have similarity lower than $\alpha$ with all the other patterns of the set, the algorithm decrements a counter of tries;
+			\item The stop-condition is that the maximum number of wrong patterns chosen should be, at most, equal to the number of maximal patterns.
 		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Heurística de Obtenção do Conjunto Ortogonal}
-	\begin{itemize}[<+-| alert@+>]		
-		\item Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo;
-		\item Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passa a ser o conjunto ortogonal recém-encontrado;
-		\item A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de conjuntos ortogonais candidatos que não melhoram o resultado não pode ser maior que a quantidade de padrões maximais total.
+\begin{frame}{Heuristic to Get the Orthogonal Patterns Set}
+	\begin{itemize}[<+-| alert@+>]
+		\item After generate a new orthogonal set, the algorithm calculate its residue-value;
+		\item If the residue is the best until now, it consider the set found as the new best result;
+		\item The stop-condition for the algorithm is that the maximum number of orthogonal sets generated that don't improve the result should be, at most, equal to the number of maximal patterns.
 	\end{itemize}
 \end{frame}
 
