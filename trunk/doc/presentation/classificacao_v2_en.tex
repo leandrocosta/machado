@@ -1,0 +1,118 @@
+\section{Classificação Associativa}
+\subsection{Contextualização}
+
+\begin{frame}{Modelos de Classificação}
+	\begin{itemize}[<+-| alert@+>]
+		\item Modelos propostos: redes neurais, estatísticos, árvores de decisão, algoritmos genéticos, etc.;
+		\item Modelo baseado em árvores de decisão é um dos mais indicados para Mineração de Dados;
+		\item Classificação Associativa produz resultados ainda melhores.
+	\end{itemize}
+\end{frame}
+
+\subsection{Fundamentos Teóricos}
+
+\begin{frame}{Padrões Freqüentes}
+	\begin{itemize}[<+-| alert@+>]
+%		\item Seja $\I$ um conjunto de itens;
+		\item Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \I$, onde $\I$ é um conjunto de itens, é chamado de \textit{itemset} (ou padrão);
+		\item Uma transação sobre $\I$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset};
+%		\item Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \I$, se $X \subseteq I$;
+%	\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Padrões Freqüentes}
+%	\begin{itemize}[<+-| alert@+>]
+		\item Uma base de dados de transações $\D$ sobre $\I$ é um conjunto de transações sobre $\I$;
+%		\item A freqüência de um \textit{itemset} $X$ em $\D$ é o número de transações cobertas por $X$ em $\D$;
+		\item O suporte de um \textit{itemset} $X$ em $\D$ é a probabilidade de $X$ ocorrer em uma transação $T \in \D$;
+		\item Um padrão é freqüente se o seu suporte é maior ou igual a um dado valor relativo mínimo $\sigma$, com $0 \leq \sigma \leq 1$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Padrões Freqüentes}
+	\begin{block}{Definição}
+		Seja $\D$ uma base de dados de transações sobre um conjunto de itens $\I$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\D$ em relação a $\sigma$ é dado por: \[\F(\D,\sigma):=\left\{X \subseteq \I | suporte (X,\D) \geq \sigma \right\}.\]
+	\end{block}
+%	\pause
+%	\begin{block}{Mineração de Padrões Freqüentes}
+%		Dado um conjunto de itens $\I$, uma base de dados de transações $\D$ sobre $\I$, e um suporte mínimo $\sigma$, encontre $\F(\D,\sigma)$.
+%	\end{block}
+\end{frame}
+
+\begin{frame}{Regras de Associação}
+	\begin{itemize}[<+-| alert@+>]
+		\item Uma regra de associação é uma implicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\I$, e $Y$ é um único item em $\I$ que não está presente em $X$;
+%		\item A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$;
+%		\item O suporte de uma regra $X \Rightarrow Y$ em $\D$ é o suporte de $X \cup Y$ em $\D$, e a freqüência da regra é a freqüência de $X \cup Y$;
+		\item O suporte de uma regra $X \Rightarrow Y$ em $\D$ é o suporte de $X \cup Y$ em $\D$;
+		\item A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq \gamma \leq 1$ se, e somente se, a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$, é maior que $\gamma$;
+	\end{itemize}
+\end{frame}
+	
+%\begin{frame}{Regras de Associação}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma$;
+%		\item A confiança de uma regra de associação $X \Rightarrow Y$ em $\D$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$;
+%		\item Dizemos que a regra é de confiança se $P(Y|X)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
+%	\end{itemize}
+%\end{frame}
+
+\begin{frame}{Regras de Associação}
+	\begin{block}{Definição}
+		Seja $\D$ uma base de dados de transações sobre um conjunto de itens $\I$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por:
+		\begin{multline*}
+			\R(\D,\sigma,\gamma) := \{X \Rightarrow Y|X,Y \subseteq \I, X \cap Y = \left\{ \right\}, X \cup Y \in \F(\D,\sigma), \\
+			confianca(X \Rightarrow Y,\D) \geq \gamma\}.
+		\end{multline*}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Classificação Associativa}
+	\begin{itemize}[<+-| alert@+>]
+		\item Dados de entrada: Coleção de registros;
+		\item Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como \textbf{classe};
+		\item Classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Estratégias \textit{eager} e \textit{lazy}}
+	\begin{block}{Estratégia \textit{eager}}
+		Gera um conjunto de regras a partir da base de treinamento, e, para cada instância de teste, utiliza a melhor regra do conjunto para classificá-la.
+	\end{block}
+	\pause
+	\begin{block}{Estratégia \textit{lazy}}
+		Para cada instância de teste, gera um conjunto de regras a partir de uma projeção da base de treinamento que possui apenas transações relacionadas com a instância de teste.
+	\end{block}
+\end{frame}
+
+%\begin{frame}{LAC (\textit{Lazy Associative Classifier}}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Classificador associativo baseado na estratégia \textit{lazy}.
+%	\end{itemize}
+%\end{frame}
+
+\subsection{Métricas de Regras de Associação}
+
+\begin{frame}{Métricas Alternativas}
+	\begin{itemize}[<+-| alert@+>]
+		\item{Convicção:} Definida como $conviccao(X \Rightarrow Y) = \frac{P(X) \times P(\neg Y)}{P(X \wedge \neg Y)}$, compara a probabilidade de $X$ aparecer sem $Y$ com a freqüência real do aparecimento de $X$ sem $Y$;
+		\item{Leverage:} Definida como $leverage(X \Rightarrow Y) = P(X \wedge Y) - (P(X) \times P(Y))$, mede a diferença de $X$ e $Y$ aparecendo juntos na base de dados e o que seria esperado se $X$ e $Y$ fossem estatisticamente dependentes;
+		\item{Lift:} Definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser susceptível a ruídos em pequenas bases de dados;
+	\end{itemize}
+\end{frame}		
+
+\begin{frame}{Métricas Alternativas}
+	\begin{itemize}[<+-| alert@+>]
+		\item{Jaccard:} O coeficiente de Jaccard é uma medida estatística utilizada para comparar similaridade e diversidade entre conjuntos, definida pela razão entre a interseção e a união entre dois conjuntos. Esta métrica é obtida pela expressão $jaccard(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X)+P(Y)-P(X \wedge Y)}$;
+		\item{Laplace:} Definida como $laplace(X \Rightarrow Y) = \frac{frequencia(X \wedge Y) + 1}{frequencia(X) + c}$, onde $c$ é o número de classes do domínio;
+		\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, a medida \textit{Kulczynski} é muito utilizada na área química;
+		\item{Cosseno:} Esta métrica, bastante utilizada como medida de similaridade para textos,  é definida como $cosseno(X \Rightarrow Y) = \frac{P(X \wedge Y)}{\sqrt{P(X) \times P(Y)}}$;
+	\end{itemize}
+\end{frame}		
+
+\begin{frame}{Métricas Alternativas}
+	\begin{itemize}[<+-| alert@+>]
+		\item{Sensitividade:} Definida como $sensitividade(X \Rightarrow Y) = P(X|Y)$, sensitividade (ou \textit{recall}) é bastante utilizada em sistemas de recuperação de informação;
+		\item{Especificidade:} Definida como $especificidade(X \Rightarrow Y) = P(\neg Y | \neg X)$, esta métrica representa a proporção de verdadeiro-negativos sobre os casos negativos da regra.
+	\end{itemize}
+\end{frame}
