@@ -12,8 +12,7 @@
 #include "base/Tokenizer.h"
 
 
-class PatternList	;
-class RuleList		;
+class PatternList;
 
 
 class DataBase : private IOManager, private Tokenizer
