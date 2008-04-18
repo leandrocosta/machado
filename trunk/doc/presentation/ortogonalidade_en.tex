@@ -46,41 +46,41 @@
 
 \begin{frame}{Considering Pattern Structures}
 	\begin{itemize}[<+-| alert@+>]
-		\item The orthogonality based in patterns structure for the set is giben by: \[O_e = \frac{\sum_{i \subseteq \Il} w_i}{|\Il|}.\]
+		\item The orthogonality based in patterns structure for the set is given by: \[O_e = \frac{\sum_{i \subseteq \Il} w_i}{|\Il|}.\]
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Considering Transaction Coverage}
-	\begin{block}{Motivação}
-		Dois padrões são ortogonais se eles cobrem áreas diferentes da base de dados, ou seja, se os conjuntos de transações cobertas por cada padrão não possuem elementos em comum.
+	\begin{block}{Motivation}
+		Two patterns are orthogonal if they appear in different areas in dataset. In other words, if the sets of transactions covered by each pattern don't have elements in common.
 	\end{block}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Transações}
+\begin{frame}{Considering Transaction Coverage}
 	\begin{figure}
 	\centering
 	\includegraphics[width=0.5\textwidth]{../thesis/img/coverage}
-	\caption{Visualização de Cobertura de Transações na Base de Dados}
+	\caption{Visualization of Transaction Coverage in the Dataset}
 	\label{fig:covex1}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Transações}
+\begin{frame}{Considering Transaction Coverage}
 	\begin{itemize}[<+-| alert@+>]
-		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$);
-		\item Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
-		\item Para cada transação $t \subseteq \Dl$ é dado um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$;
+		\item Let $\I$ be a set of items, $\D$ a dataset of transactions in $\I$, $\F$ the set of frequent patterns in $\D$, and $\Fl$ a sub-set of $\F$ ($\Fl \subseteq \F$);
+		\item We say that $\Dl \subseteq \D$ is the sub-set of transactions covered by, at least, one of the patterns found in $\Fl$;
+		\item For each transaction $t \subseteq \Dl$ is given a weight: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] where $\Flt$ is the sub-set of patterns from $\Fl$ that appear in the transaction $t$;
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Transações}
+\begin{frame}{Considering Transaction Coverage}
 	\begin{itemize}[<+-| alert@+>]
-		\item A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\]
+		\item The orthogonality based in transaction coverage is given by: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\]
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Classes}
-	\begin{block}{Motivação}
+\begin{frame}{Considering Class Coverage}
+	\begin{block}{Motivation}
 		Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, os conjuntos de transações cobertas por cada um dos padrões não devem possuir classes em comum.
 	\end{block}
 \end{frame}
