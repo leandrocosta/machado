@@ -81,15 +81,15 @@
 
 \begin{frame}{Considering Class Coverage}
 	\begin{block}{Motivation}
-		Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, os conjuntos de transações cobertas por cada um dos padrões não devem possuir classes em comum.
+		Two patterns are orthogonal if they are found in transactions with distinct classes. In other words, the sets of transactions covered by the pattens may not have classes in common.
 	\end{block}
 \end{frame}
 
-\begin{frame}{Considerando Cobertura de Classes}
+\begin{frame}{Considering Class Coverage}
 	\begin{itemize}[<+-| alert@+>]
-		\item Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$) e $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$;
-		\item Seja $\C$ um conjunto de classes associadas às transações de $\D$ e $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$;
-		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;		
+		\item Let $\I$ be a set of items, $\D$ a dataset of transactions in $\I$, $\F$ the set of frequent patterns in $\D$, $\Fl$ a sub-set from $\F$ ($\Fl \subseteq \F$) and $\Dl \subseteq \D$ the sub-set of transactions covered by, at least, one of the patters found in $\Fl$;
+		\item We say that $\C$ is the set of classes associated to transactions in $\D$ and $\Cl \subseteq \C$ the sub-set of classes associated to transactions in $\Dl$;
+		\item For each class $c \subseteq \Cl$ is given a weight: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] where  $\Flc$ is the sub-set of patterns from $\Fl$ that cover a number of transactions with class $c \subseteq \Cl$ higher than $90\%$ of the expected average;		
 	\end{itemize}
 \end{frame}
 
@@ -99,9 +99,9 @@
 %	\end{itemize}
 %\end{frame}
 
-\begin{frame}{Considerando Cobertura de Classes}
+\begin{frame}{Considering Class Coverage}
 	\begin{itemize}[<+-| alert@+>]
-		\item A ortogonalidade baseada em cobertura de classes é dada por: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
+		\item The orthogonality based in classe coverage is given by: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
 	\end{itemize}
 \end{frame}
 
