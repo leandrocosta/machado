@@ -45,7 +45,7 @@ Uma forma de se obter esta medida, é analisar os itens dos padrões. Definimos qu
 \par
 A métrica de ortogonalidade baseada na estrutura dos padrões associa pesos aos itens, de modo que, quanto maior a sua popularidade, menor será o seu peso. O resultado é dado pela média dos pesos de todos os itens que fazem parte dos padrões do conjunto.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Il \subseteq \I$ o sub-conjunto itens que aparecem em, pelo menos, um dos padrões de $\Fl$. Para cada item $i \subseteq \Il$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$. É fácil perceber que o numerador da expressão terá o seu valor mínimo ($0$) quando o item for compartilhado por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando o item estiver presente em apenas um padrão. A constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Il \subseteq \I$ o sub-conjunto de itens que aparecem em, pelo menos, um dos padrões de $\Fl$. Para cada item $i \subseteq \Il$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$. É fácil perceber que o numerador da expressão terá o seu valor mínimo ($0$) quando o item for compartilhado por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando o item estiver presente em apenas um padrão. A constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
 %\par
 %Esta expressão foi definida de forma que o peso de um item qualquer $i$ encontrado num conjunto de padrões $\Fl$ fosse  o intervalo $[0-1]$ fosse dividido em parcelas iguais, numa quantidade igual ao 
 \par
@@ -315,7 +315,7 @@ A ordem como o algoritmo percorre o conjunto de padrões em cada iteração possui 
 	\item Nenhuma ordenação.
 \end{enumerate}
 
-As ordenações lexicográficas foram utilizadas para se diminuir a distância entre dois padrões da seqüência, fazendo com que a modificação do conjunto-solução seja realizada de forma suave. Espera-se que, neste caso, a diferença estrutural entre dois padrões consecutivos do conjunto durante cada iteração seja a menor possível. As ordenações por tamanho foram utilizas para dar prioridade, hora aos maiores padrões (ordenação decrescente), hora aos menores padrões (ordenação crescente).
+As ordenações lexicográficas foram utilizadas para se diminuir a distância entre dois padrões da seqüência, fazendo com que a modificação do conjunto-solução seja realizada de forma suave. Espera-se que, neste caso, a diferença estrutural entre dois padrões consecutivos do conjunto durante cada iteração seja a menor possível. As ordenações por tamanho foram utilizadas para dar prioridade, ora aos maiores padrões (ordenação decrescente), ora aos menores padrões (ordenação crescente).
 
 O pseudo-código do algoritmo de classificação associativa baseada em ortogonalidade \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) pode ser visto no algoritmo \ref{alg:olac}.
 
