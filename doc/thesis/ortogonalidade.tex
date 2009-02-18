@@ -37,23 +37,28 @@ Nas próximas sub-seções apresentaremos três métricas de ortogonalidade, sendo as
 \subsection{Estrutura dos Padrões}
 \label{sec:ortogonalidade_metricas_estrutura}
 
-Considerando a estrutura dos padrões, ou seja, o conjunto de itens pelos quais são definidos, dizemos que dois padrões são ortogonais se eles não possuem itens em comum, ou seja, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não o são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado a conjuntos maiores, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não o são.
-\par
+%Considerando a estrutura dos padrões, ou seja, o conjunto de itens pelos quais são definidos, dizemos que dois padrões são ortogonais se eles não possuem itens em comum, ou seja, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não o são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado a conjuntos maiores, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não o são.
+%\par
+Considerando a estrutura dos padrões, ou seja, o conjunto de itens pelos quais são definidos, pode-se dizer que os padrões $ABC$ e $DEF$ são ortogonais, mas $ABC$ e $CDE$ não o são, já que o item $C$ está presente nos dois padrões. O mesmo pode ser aplicado a conjuntos maiores, por exemplo, os padrões $AB$, $CD$ e $EF$ são ortogonais, mas os padrões $AB$, $BC$ e $CD$ não o são.
+
+\begin{definition}
+\label{def:ortogonaliade_metricas_estrutura}
+Considerando a estrutura dos padrões, dois padrões são ortogonais se eles não possuem itens em comum.
+\end{definition}
+
 Entretanto, a simples informação de que um determinado conjunto de padrões é ortogonal ou não é insuficiente para que um possível conjunto-solução seja avaliado. Para tanto, é preciso desenvolver uma métrica dada por uma função $f: \Se \rightarrow \left[0, 1\right]$ (onde $\Se$ é o conjunto de elementos avaliado) que forneça a medida de ortogonalidade do conjunto.
 \par
 Uma forma de se obter esta medida, é analisar os itens dos padrões. Definimos que dois ou mais padrões são ortogonais se eles não compartilham itens, ou seja, a presença de um mesmo item em mais de um padrão do conjunto, intuitivamente, deve contribuir de maneira negativa para a medida de ortogonalidade do mesmo. Dessa forma, optou-se por medir a ortogonalidade de um conjunto por meio da qualidade dos itens encontrados nos padrões, onde, neste caso, a qualidade de um item está diretamente relacionada com a sua raridade no conjunto de padrões.
 \par
 A métrica de ortogonalidade baseada na estrutura dos padrões associa pesos aos itens, de modo que, quanto maior a sua popularidade, menor será o seu peso. O resultado é dado pela média dos pesos de todos os itens que fazem parte dos padrões do conjunto.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Il \subseteq \I$ o sub-conjunto de itens que aparecem em, pelo menos, um dos padrões de $\Fl$. Para cada item $i \subseteq \Il$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$. É fácil perceber que o numerador da expressão terá o seu valor mínimo ($0$) quando o item for compartilhado por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando o item estiver presente em apenas um padrão. A constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\IlF \subseteq \I$ o sub-conjunto de itens que aparecem em, pelo menos, um dos padrões de $\Fl$. Para cada item $i \subseteq \IlF$ é dado um peso: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] onde $\Fli \subseteq \Fl$ é o sub-conjunto de padrões de $\Fl$ que contém o item $i$. É fácil perceber que o numerador da expressão terá o seu valor mínimo ($0$) quando o item for compartilhado por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando o item estiver presente em apenas um padrão. A constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
 %\par
 %Esta expressão foi definida de forma que o peso de um item qualquer $i$ encontrado num conjunto de padrões $\Fl$ fosse  o intervalo $[0-1]$ fosse dividido em parcelas iguais, numa quantidade igual ao 
 \par
 De acordo com esta expressão, se o conjunto possui quatro padrões, e um item $i$ está presente em apenas um deles, o valor do seu peso $w_i$ é equivalente a $1$. Se o item estiver presente em $3$ padrões do conjunto, o peso $w_i$ será $\frac{1}{3}$. Itens compartilhados por todos os padrões têm peso igual a $0$.
 \par
-Finalmente, a ortogonalidade baseada na estrutura dos padrões do conjunto é dada por: \[O_e = \frac{\sum_{i \subseteq \Il} w_i}{|\Il|}.\]
-\par
-Como exemplo, suponha um conjunto de itens $\I = \left\{A, B, C, D, E \right\}$ e um conjunto de padrões: $\F = \left\{ AB, ABC \right\}$. Na tabela \ref{tab:item_w1} encontramos o valor do peso de cada item, de acordo com a expressão apresentada. Os itens $D$ e $E$ não possuem pesos, pelo fato de não serem encontrados nos padrões.
+Finalmente, a ortogonalidade baseada na estrutura dos padrões do conjunto é dada por: \[O_e = \frac{\sum_{i \subseteq \IlF} w_i}{|\IlF|},\] onde $0 \le O_e \le 1$. Como exemplo, suponha um conjunto de itens $\I = \left\{A, B, C, D, E \right\}$ e um conjunto de padrões: $\F = \left\{ AB, ABC \right\}$. Na tabela \ref{tab:item_w1} encontramos o valor do peso de cada item, de acordo com a expressão apresentada. Os itens $D$ e $E$ não possuem pesos, pelo fato de não serem encontrados nos padrões.
 
 \begin{table}[htbp]
 	\centering
@@ -101,13 +106,22 @@ Como podemos ver, o item $C$ é o único que faz parte de apenas um padrão, portan
 
 Note que o novo padrão possui um novo item ($D$) que antes não era encontrado no conjunto. A inserção de $BCD$ fez com que o peso de $A$ aumentasse, visto que este item não faz parte do padrão. Já o peso de $B$ continuou o mesmo, e o novo item $D$ entrou no conjunto com peso $1$. Assim, a ortogonalidade do novo conjunto é $O_e = 0,5$.
 
+\begin{proposition}
+De acordo com a definição \ref{def:ortogonaliade_metricas_estrutura}, um conjunto de padrões é totalmente ortogonal por estrutura se e somente se $O_e = 1$.
+\end{proposition}
+
 %Dois padrões são similares se possuem itens em comum, logo, dois padrões são ortogonais se não possuem itens em comum. Mostrar exemplo: AB e CD são mais ortogonais que AB e BC. Fazer figura do exemplo.
 
 \subsection{Cobertura de Transações}
 \label{sec:ortogonalidade_metricas_transacoes}
 
 Considerando o espaço de transações, dizemos que dois padrões são ortogonais se eles cobrem áreas diferentes da base de dados, ou seja, se não existem sobreposições nas coberturas de cada padrão do conjunto.
-\par
+
+\begin{definition}
+\label{def:ortogonaliade_metricas_transacoes}
+Considerando a cobertura de transações, dois padrões são ortogonais se eles não possuem transações em comum.
+\end{definition}
+
 Na figura \ref{fig:covex1} temos uma representação de uma base de dados, e os conjuntos de transações cobertas por três padrões ($X$, $Y$ e  $Z$). As transações que fazem parte das áreas $T_X$, $T_Y$ e $T_Z$ são cobertas por apenas um dos padrões ($X$, $Y$ e $Z$ respectivamente). As transações de $T_{XY}$ são cobertas por $X$ e $Y$, e as transações de $T_{XYZ}$ são cobertas pelos três padrões do exemplo. Se precisamos de padrões que cobrem diferentes áreas da base de dados, então nós estamos interessados em maximizar $T_X$, $T_Y$ e $T_Z$, no caso do exemplo.
 
 \begin{figure}
@@ -136,13 +150,11 @@ Na figura \ref{fig:covex1} temos uma representação de uma base de dados, e os co
 
 A métrica de ortogonalidade baseada em cobertura de transações pode ser calculada de maneira análoga à relacionada com a estrutura, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as transações cobertas pelos padrões, e não os seus itens.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Para cada transação $t \subseteq \Dl$ é dado um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$. As mesmas análises realizadas sobre a métrica baseada na estrutura dos padrões podem ser aplicadas aqui. O numerador da expressão terá o seu valor mínimo ($0$) quando a transação for coberta por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando a transação for coberta por apenas um padrão. Da mesma forma, constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\DlF \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Para cada transação $t \subseteq \DlF$ é dado um peso: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] onde $\Flt$ é o sub-conjunto de padrões de $\Fl$ que cobrem a transação $t$. As mesmas análises realizadas sobre a métrica baseada na estrutura dos padrões podem ser aplicadas aqui. O numerador da expressão terá o seu valor mínimo ($0$) quando a transação for coberta por todos os padrões do conjunto, e terá o seu valor máximo ($|\Fl| - 1$) quando a transação for coberta por apenas um padrão. Da mesma forma, constante $1$ é subtraída de $|\Fl|$ no denominador justamente para que o valor máximo obtido com a fração seja $1$.
 \par
 De acordo com esta expressão, se nós tivermos $4$ padrões, e uma transação $t$ coberta por apenas um deles, então o seu peso $w_t$ será $1$. Se esta transação for coberta por dois padrões do conjunto, o valor de $w_t$ será $\frac{1}{2}$. As transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
-A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\]
-\par
-Suponha uma base de dados $\D = \left\{ A, ABCD, BCDE, CDEF \right\}$, e um conjunto de padrões $\F = \left\{ AB, BC, CD \right\}$. Na tabela \ref{tab:transacao_w1} encontramos valor do peso de cada transação, de acordo com a expressão apresentada. A transação $A$ não possui peso, pelo fato de não ser coberta por nenhum dos padrões.
+A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_t = \frac{\sum_{t \subseteq \DlF} w_t}{|\DlF|},\], onde $0 \le O_t \le 1$. Suponha uma base de dados $\D = \left\{ A, ABCD, BCDE, CDEF \right\}$, e um conjunto de padrões $\F = \left\{ AB, BC, CD \right\}$. Na tabela \ref{tab:transacao_w1} encontramos valor do peso de cada transação, de acordo com a expressão apresentada. A transação $A$ não possui peso, pelo fato de não ser coberta por nenhum dos padrões.
 
 \begin{table}[htbp]
 	\centering
@@ -165,26 +177,33 @@ Suponha uma base de dados $\D = \left\{ A, ABCD, BCDE, CDEF \right\}$, e um conj
 
 A transação $CDEF$ é a única coberta por apenas um padrão do conjunto, portanto, é associado o peso $1$ para ela. A transação $BCDE$ é coberta por dois padrões, portanto, recebe o peso $0,5$, e a transação $ABCD$ recebe o peso $0$, já que ela é coberta por todos os padrões do conjunto. A média dos pesos das transações nos dá o valor da ortogonalidade do conjunto: $O_t = 0,5$.
 
+\begin{proposition}
+De acordo com a definição \ref{def:ortogonaliade_metricas_transacoes}, um conjunto de padrões é totalmente ortogonal por cobertura de transações se e somente se $O_t = 1$.
+\end{proposition}
+
 \subsection{Cobertura de Classes}
 \label{sec:ortogonalidade_metricas_classes}
 
 As duas métricas de ortogonalidade apresentadas nas seções \ref{sec:ortogonalidade_metricas_estrutura} e \ref{sec:ortogonalidade_metricas_transacoes} estão relacionadas apenas com os padrões e as transações da base, e podem ser utilizadas em qualquer tipo de aplicação. Já a métrica apresentada nesta seção é voltada diretamente para o problema da classificação, pois está relacionada com as classes das transações cobertas pelos padrões do conjunto.
 \par
-A motivação para esta métrica está calcada na seguinte consideração: Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, se os conjuntos de transações cobertas por cada um dos padrões não possuem classes em comum.
-\par
+%A motivação para esta métrica está calcada na seguinte consideração: Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, se os conjuntos de transações cobertas por cada um dos padrões não possuem classes em comum.
+%\par
+
+\begin{definition}
+Dois padrões são ortogonais se são encontrados em transações de classes distintas na base de dados, ou seja, se os conjuntos de transações cobertas por cada um dos padrões não possuem classes em comum.
+\end{definition}
+
 Imagine um conjunto de três documentos, $d_1$, $d_2$ e $d_3$. em que $d_1$ e $d_2$ pertencem à classe $c_1$ e $d_3$ pertence à classe $c_2$. Agora, imagine um conjunto de três padrões, $p_1$, $p_2$ e $p_3$, onde $p_1$ é encontrado no documento $d_1$, $p_2$ é encontrado no documento $d_2$ e $p_3$ aparece no documento $d_3$. Neste caso, considerando-se a cobertura de classes, poderiamos dizer que $p_1$ e $p_2$, apesar de aparecerem em documentos diferentes, não são termos ortogonais, já que os documentos $d_1$ e $d_2$ possuem a mesma classe. Em contrapartida, os padrões $p_2$ e $p_3$ são ortogonais, visto que são encontrados em documentos de classes diferentes.
 \par
-A métrica de cobertura de classes pode ser calculada de maneira análoga às relacionadas métricas de similaridade entre padrões e cobertura de transações, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as classes existentes nas transações cobertas pelos padrões.
+A métrica de ortogonalidade por cobertura de classes pode ser calculada de maneira análoga às métricas de similaridade entre padrões e cobertura de transações, sendo que, neste caso, os elementos que possuem pesos a serem calculados são as classes existentes nas transações cobertas pelos padrões.
 \par
 Antes de apresentar a definição matemática da métrica, é importante falar sobre as características esperadas de um conjunto de padrões ortogonais considerando-se cobertura de classes. Tomemos um conjunto de transações $\D$, um conjunto de padrões freqüentes $\F$ em $\D$, um sub-conjunto de transações $\Dlc$ (onde todas as transações pertencem à classe $c$) e um sub-conjunto de padrões (independentes, ou seja, ortogonais) $\Fl$ em $\Dlc$. Por serem padrões ortogonais, espera-se que eles não apareçam juntos em transações de mesma classe, e, ao mesmo tempo, espera-se que todas as transações sejam cobertas pelos padrões freqüentes. Logo, a cobertura esperada de cada padrão para a classe $c$ é $\frac{|\Dlc|}{|\Fl|}$.
 \par
-Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\Dl \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Seja $\C$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\Cl \subseteq \C$ o sub-conjunto de classes associadas às transações de $\Dl$. Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada \footnote{Dado um conjunto de transações $\Dlc$ onde todas as transações possuem a classe $c$ e um conjunto de padrões $\Fl$ em $\Dlc$, a cobertura esperada de cada padrão para a classe $c$ é $\frac{|\Dlc|}{|\Fl|}$ (considerando que todos os padrões são independentes, ou seja, ortogonais).}. Também aqui são válidas as análises realizadas sobre o comportamento desta fração para as duas métricas apresentadas anteriormente.
+Seja $\I$ um conjunto de itens, $\D$ uma base de dados de transações em $\I$, $\F$ o conjunto de padrões freqüentes em $\D$, e $\Fl$ um sub-conjunto de $\F$ ($\Fl \subseteq \F$). Chamamos de $\DlF \subseteq \D$ o sub-conjunto transações cobertas por, pelo menos, um dos padrões de $\Fl$. Seja $\CD$ um conjunto de classes associadas às transações de $\D$. Chamamos de $\ClD \subseteq \C$ o sub-conjunto de classes associadas às transações de $\DlF$. Para cada classe $c \subseteq \ClD$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \ClD$ maior que $90\%$ da média esperada \footnote{Dado um conjunto de transações $\Dlc$ onde todas as transações possuem a classe $c$ e um conjunto de padrões $\Fl$ em $\Dlc$, a cobertura esperada de cada padrão para a classe $c$ é $\frac{|\Dlc|}{|\Fl|}$ (considerando que todos os padrões são independentes, ou seja, ortogonais).}. Também aqui são válidas as análises realizadas sobre o comportamento desta fração para as duas métricas apresentadas anteriormente.
 \par
-De acordo com esta expressão, se nós temos 4 padrões, e uma classe $c$ que aparece em transações cobertas por apenas um deles, então o seu peso $w_c$ será $1$. Se esta classe aparece em transações cobertas por dois padrões do conjunto de maneira balanceada (por exemplo, $50\%$ das  transações da classe aparece em um dos padrões, e o $50\%$ restantes no outro), o valor de $w_c$ será $\frac{1}{2}$. As classes que aparecem por igual em transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
+De acordo com esta expressão, se nós temos 4 padrões, e uma classe $c$ que aparece em transações cobertas por apenas um deles, então o seu peso $w_c$ será $1$. Se esta classe aparece em transações cobertas por dois padrões do conjunto de maneira balanceada (por exemplo, $50\%$ das  transações da classe aparece em um dos padrões, e o $50\%$ restante no outro), o valor de $w_c$ será $\frac{1}{2}$. As classes que aparecem por igual em transações cobertas por todos os padrões do conjunto terão peso igual a $0$.
 \par
-Por fim, a ortogonalidade baseada em cobertura de classes é dada por: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
-\par
-Suponha uma base de dados $\D$ em que as transações e suas respectivas classes são encontradas na tabela \ref{tab:classe_db}.
+Por fim, a ortogonalidade baseada em cobertura de classes é dada por: \[O_c = \frac{\sum_{c \subseteq \ClD} w_c}{|\ClD|},\] onde $0 \le O_C \le 1$. Suponha uma base de dados $\D$ em que as transações e suas respectivas classes são encontradas na tabela \ref{tab:classe_db}.
 
 \begin{table}[htbp]
 	\centering

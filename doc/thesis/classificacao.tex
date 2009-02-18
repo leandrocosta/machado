@@ -75,7 +75,7 @@ Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathc
 
 \section{Estratégias \textit{eager} e \textit{lazy}}
 
-Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de regras a partir de \textit{itemsets} freqüentes em relação à base de treinamento, e as organizam em ordem decrescente, de acordo com o ganho de informação. Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de regras a partir de \textit{itemsets} freqüentes em relação à base de treinamento, e as organizam em ordem decrescente, de acordo com métricas apropriadas (alguma delas discutidas na seção \ref{sec:classificacao_metricas}). Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
 \par
 Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra possível de se aplicar a uma determinada instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
 \par
@@ -89,8 +89,9 @@ Em \cite{Veloso06Lazy}, encontramos a demonstração de que estratégias \textit{la
 %Descrever as duas estratégias, e apresentar as vantagens do lazy.
 
 \section{Métricas de Regras de Associação}
+\label{sec:classificacao_metricas}
 
-Classificadores associativos, após produzirem um conjunto de regras de associação a partir de documentos que constituem a base de treinamento, organizam as regras em ordem decrescente, de acordo com uma determinada métrica, para então utilizá-las na classificação de determinada instância de teste. Encontramos, na literatura, diversas métricas para este propósito, desde as mais conhecidas suporte e confiança até outras mais sofisticadas, como coerência, convicção, interesse, correlação, dentre outras.
+Classificadores associativos, após produzirem um conjunto de regras de associação a partir de documentos que constituem a base de treinamento, organizam as regras em ordem decrescente, de acordo com uma métrica apropriada, para então utilizá-las na classificação de determinada instância de teste. Encontramos, na literatura, diversas métricas para este propósito, desde as mais conhecidas suporte e confiança até outras mais sofisticadas, como coerência, convicção, interesse, correlação, dentre outras.
 \par
 Abaixo, fornecemos a definição de algumas das métricas mais utilizadas. Utilizamos o termo $Z$ para designar uma regra associativa, que também pode ser descrita como $X \Rightarrow Y$. O termo $\mathcal{D}$ foi utilizado para designar a base de treinamento. Chamamos de $P(W)$ a probabilidade de que uma transação qualquer de $\mathcal{D}$ seja coberta por $W$: \[P(W) = \frac{frequencia(W)}{|\mathcal{D}|},\] onde $W$ pode ser tanto uma regra quanto um de seus elementos (padrão ou classe), e $frequencia(W)$ é o número de transações em $\mathcal{D}$ cobertas por $W$.
 
@@ -114,4 +115,4 @@ Neste trabalho, o famoso \textit{framework} suporte-confiança foi utilizado dura
 
 \section{Considerações}
 
-Neste capítulo foram apresentados os fundamentos teóricos relacionadas à Classificação Associativa, e as vantagens da estratégia \textit{lazy} sobre a estratégia \textit{eager}. Em seguida, foram apresentadas algumas métricas bastante utilizadas na avaliação de regras de associação. No capítulo seguinte, será discutido a utilização de ortogonalidade na classificação associativa, que inclui uma discussão sobre métricas e estratégias de ortogonalidade, uma explicação detalhada da utilização de ortogonalidade pelo classificador e das heurística de obtenção de conjuntos ortogonais, e ainda a adaptação da estratégia ORIGAMI para o problema de classificação.
+Neste capítulo foram apresentados os fundamentos teóricos relacionadas à Classificação Associativa, e as vantagens da estratégia \textit{lazy} sobre a estratégia \textit{eager}. Em seguida, foram apresentadas algumas métricas bastante utilizadas na avaliação de regras de associação. No capítulo seguinte, será discutido a utilização de ortogonalidade na classificação associativa, que inclui uma discussão sobre métricas e estratégias de ortogonalidade, uma explicação detalhada da utilização de ortogonalidade pelo classificador e das heurística de obtenção de conjuntos ortogonais, e ainda a adaptação da estratégia ORIGAMI para o problema de classificação associativa.
