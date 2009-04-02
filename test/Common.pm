@@ -13,6 +13,7 @@ $OutputDirClassifierO	= "$OutputDir/classifier_o";
 $OutputDirClassifierOR	= "$OutputDir/classifier_or";
 $OutputDirGraphs	= "$OutputDir/graphs";
 $OutputDirTables	= "$OutputDir/tables";
+$OutputDirTTests	= "$OutputDir/ttests";
 
 #$GnuPlotApp		= '~/local/gnuplot/bin/gnuplot';
 $GnuPlotApp		= '/usr/bin/gnuplot';
@@ -58,7 +59,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	0.6,
 #	0.7,
 #	0.8,
-#	0.9,
+	0.9,
 #	0.95,
 #	0.99,
 #	1
@@ -76,27 +77,27 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	0.6,
 #	0.7,
 #	0.8,
-#	0.9,
+	0.9,
 #	0.95,
 #	0.99,
 #	1
 );
 
 @ClassifierPatternSets = (
-#	'f',
+	'f',
 #	'm',
 #	'r'
 );
 
 @MinNumRules = (
-#	1,
+	1,
 #	10,
 #	100,
 #	1000
 );
 
 @MaxNumRankRules = (
-#	1,
+	1,
 #	10,
 #	100,
 #	1000,
@@ -106,11 +107,11 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierMinRuleLens = (
-#	1,
+	1,
 );
 
 @ClassifierMaxRuleLens = (
-#	1,
+	1,
 #	2,
 #	3,
 #	4,
@@ -118,25 +119,25 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierOModes = (
-#	'h',
+	'h',
 #	'p'
 );
 
 @ClassifierOMetrics = (
-#	's',
+	's',
 #	'c',
 #	'l',
 #	'a'
 );
 
 @ClassifierOMethods = (
-#	's',
+	's',
 #	'p',
 #	'a'
 );
 
 @ClassifierOOrderings = (
-#	's',
+	's',
 #	'r',
 #	'i',
 #	'z',
@@ -144,7 +145,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierRMeasures = (
-#	's',	# SUPPORT
+	's',	# SUPPORT
 #	'c',	# CONFIDENCE
 #	'g',	# GAIN
 #	'j',	# JACCARD
