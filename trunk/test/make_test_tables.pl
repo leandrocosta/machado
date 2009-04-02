@@ -265,63 +265,6 @@ sub make_best_runs_table ()
 	make_best_runs_table_for_classifier_or ();
 }
 
-=comment
-sub make_best_runs_table_for_lazy ()
-{
-	my $db;
-
-	my ($support, $confidence, $min_rules, $max_size, $ranking_size, $avg_patterns, $avg_rules, $accuracy);
-
-format OUTPUT_BEST_RUNS_LAZY =
-@<<<<<<<<<<<<<@<<<<<<<@<<<<<<<<<<@<<<<<<<<<@<<<<<<<<@<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<@<<<<<<<<<<<<<
-$db,                $support,     $confidence,  $min_rules,   $max_size,    $ranking_size, $avg_patterns, $avg_rules, $accuracy
-.
-
-	my $out_file = "$Common::OutputDirTables/table_best_runs_lazy.out";
-
-	open OUTPUT_BEST_RUNS_LAZY, ">$out_file";
-	print OUTPUT_BEST_RUNS_LAZY "data set      support confidence min_rules max_size ranking_size avg_patterns  avg_rules     accuracy\n";
-
-	my $data_base;
-
-	foreach $data_base (@Common::DataBases)
-	{
-		print "base: $data_base\n";
-
-		$db = $data_base;
-
-		my $file_best_run = Common::GetBestOutputFile ('lazy', $data_base);
-
-		open INPUT, "<$file_best_run";
-
-		$support = <INPUT>;
-
-		chomp $support;
-
-		$confidence	= $support;
-		$min_rules	= $support;
-		$max_size	= $support;
-		$ranking_size	= $support;
-		$avg_patterns	= $support;
-		$avg_rules	= $support;
-		$accuracy	= $support;
-
-		$support	=~ s/.*support \[([^\]]*)\].*/$1/;
-		$confidence	=~ s/.*confidence \[([^\]]*)\].*/$1/;
-		$min_rules	=~ s/.*min_rules \[([^\]]*)\].*/$1/;
-		$max_size	=~ s/.*max_size \[([^\]]*)\].*/$1/;
-		$ranking_size	=~ s/.*ranking_size \[([^\]]*)\].*/$1/;
-		$avg_patterns	=~ s/.*avg_patterns \[([^\]]*)\].*/$1/;
-		$avg_rules	=~ s/.*avg_rules \[([^\]]*)\].*/$1/;
-		$accuracy	=~ s/.*accuracy \[([^\]]*)\].*/$1/;
-
-		write OUTPUT_BEST_RUNS_LAZY;
-	}
-
-	close OUTPUT_BEST_RUNS_LAZY;
-}
-=cut
-
 sub make_best_runs_table_for_classifier_c ()
 {
 	my $db;
