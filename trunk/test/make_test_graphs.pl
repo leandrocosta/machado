@@ -7,7 +7,6 @@ sub make_best_app_histogram_graphs ();
 sub make_avg_app_histogram_graphs ();
 sub make_ometric_histogram_graphs ($$$$$$$$);
 sub make_avg_ometric_histogram_graphs ();
-#sub make_lazy_compare_histogram_graphs ();
 
 sub get_best_run_for_application ($$);
 sub get_best_runs_for_data_base ($);
@@ -51,8 +50,6 @@ make_best_app_histogram_graphs ();
 make_avg_app_histogram_graphs ();
 make_avg_ometric_histogram_graphs ();
 
-#make_lazy_compare_histogram_graphs ();
-
 ### make_ometric_histogram_graphs ($support, $confidence, $min_num_rules, $max_num_rank_rules, $min_rule_len, $max_rule_len, $omode);
 
 
@@ -81,7 +78,6 @@ sub get_best_run_for_application ($$)
 
 sub get_best_runs_for_data_base ($)
 {
-#	get_best_run_for_application ('lazy', $_[0]);
 	get_best_run_for_application ('classifier_c', $_[0]);
 	get_best_run_for_application ('classifier_o', $_[0]);
 	get_best_run_for_application ('classifier_or', $_[0]);
@@ -127,22 +123,18 @@ sub make_best_app_histogram_graphs ()
 		get_best_runs_for_data_base ($data_base);
 	}
 
-#	$best_run_for_each_db_acc_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_acc_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-#	$best_run_for_each_db_pat_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_pat_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-#	$best_run_for_each_db_rul_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_rul_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
 
-#	$best_run_for_each_db_tim_hsh{'average'}{'lazy'}		/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_c'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_o'}	/= scalar @Common::DataBases;
 	$best_run_for_each_db_tim_hsh{'average'}{'classifier_or'}	/= scalar @Common::DataBases;
@@ -158,27 +150,6 @@ sub make_avg_app_histogram_graphs ()
 	print "make_avg_app_histogram_graphs ()\n";
 
 	my $data_base;
-
-=comment
-	my $ParmsLazy = Common::GetBestAverageAccParms ('lazy');
-
-	foreach $data_base (@Common::DataBases)
-	{
-		print "base: $data_base\n";
-
-		my $RunResult = Common::GetLazyRunResult ($data_base, $ParmsLazy->{SUPPORT}, $ParmsLazy->{CONFIDENCE}, $ParmsLazy->{MIN_RULES}, $ParmsLazy->{MAX_SIZE}, $ParmsLazy->{RANKING_SIZE});
-
-		$best_run_for_avg_db_acc_hsh{$data_base}{'lazy'} = $RunResult->{ACCURACY};
-		$best_run_for_avg_db_pat_hsh{$data_base}{'lazy'} = $RunResult->{AVG_PATTERNS};
-		$best_run_for_avg_db_rul_hsh{$data_base}{'lazy'} = $RunResult->{AVG_RULES};
-		$best_run_for_avg_db_tim_hsh{$data_base}{'lazy'} = $RunResult->{AVG_TIME};
-	}
-
-	$best_run_for_avg_db_acc_hsh{'average'}{'lazy'} = $ParmsLazy->{ACCURACY};
-	$best_run_for_avg_db_pat_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_PATTERNS};
-	$best_run_for_avg_db_rul_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_RULES};
-	$best_run_for_avg_db_tim_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_TIME};
-=cut
 
 	my $ParmsClassifierC = Common::GetBestAverageAccParms ('classifier_c');
 
@@ -330,87 +301,3 @@ sub make_avg_ometric_histogram_graphs ()
 	Common::MakeOMetricHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_avg_db_ometric_rul', \%ometric_rul_hsh, 1);
 	Common::MakeOMetricHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_avg_db_ometric_tim', \%ometric_tim_hsh, 1);
 }
-
-=comment
-sub make_lazy_compare_histogram_graphs ()
-{
-	print "make_lazy_compare_histogram_graphs ()\n";
-
-	my $data_base;
-
-	my $ParmsLazy = Common::GetBestAverageAccParms ('lazy');
-
-	foreach $data_base (@Common::DataBases)
-	{
-		print "base: $data_base\n";
-
-		my $RunResult = Common::GetLazyRunResult ($data_base, $ParmsLazy->{SUPPORT}, $ParmsLazy->{CONFIDENCE}, $ParmsLazy->{MIN_RULES}, $ParmsLazy->{MAX_SIZE}, $ParmsLazy->{RANKING_SIZE});
-
-		$best_run_for_lac_avg_db_acc_hsh{$data_base}{'lazy'} = $RunResult->{ACCURACY};
-		$best_run_for_lac_avg_db_pat_hsh{$data_base}{'lazy'} = $RunResult->{AVG_PATTERNS};
-		$best_run_for_lac_avg_db_rul_hsh{$data_base}{'lazy'} = $RunResult->{AVG_RULES};
-		$best_run_for_lac_avg_db_tim_hsh{$data_base}{'lazy'} = $RunResult->{AVG_TIME};
-	}
-
-	$best_run_for_lac_avg_db_acc_hsh{'average'}{'lazy'} = $ParmsLazy->{ACCURACY};
-	$best_run_for_lac_avg_db_pat_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_PATTERNS};
-	$best_run_for_lac_avg_db_rul_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_RULES};
-	$best_run_for_lac_avg_db_tim_hsh{'average'}{'lazy'} = $ParmsLazy->{AVG_TIME};
-
-	my $ParmsClassifierC = Common::GetBestAverageAccParms ('classifier_c');
-
-	foreach $data_base (@Common::DataBases)
-	{
-		my $RunResult = Common::GetClassifierCRunResult ($data_base, 0.0001, $ParmsLazy->{CONFIDENCE}, $ParmsLazy->{MIN_RULES}, $ParmsLazy->{RANKING_SIZE}, 1, $ParmsLazy->{MAX_SIZE}-1);
-
-		$best_run_for_lac_avg_db_acc_hsh{$data_base}{'classifier_c'} = $RunResult->{ACCURACY};
-		$best_run_for_lac_avg_db_pat_hsh{$data_base}{'classifier_c'} = $RunResult->{AVG_PATTERNS};
-		$best_run_for_lac_avg_db_rul_hsh{$data_base}{'classifier_c'} = $RunResult->{AVG_RULES};
-		$best_run_for_lac_avg_db_tim_hsh{$data_base}{'classifier_c'} = $RunResult->{AVG_TIME};
-	}
-
-	$best_run_for_lac_avg_db_acc_hsh{'average'}{'classifier_c'} = $ParmsClassifierC->{ACCURACY};
-	$best_run_for_lac_avg_db_pat_hsh{'average'}{'classifier_c'} = $ParmsClassifierC->{AVG_PATTERNS};
-	$best_run_for_lac_avg_db_rul_hsh{'average'}{'classifier_c'} = $ParmsClassifierC->{AVG_RULES};
-	$best_run_for_lac_avg_db_tim_hsh{'average'}{'classifier_c'} = $ParmsClassifierC->{AVG_TIME};
-
-	my $ParmsClassifierO = Common::GetBestAverageAccParms ('classifier_o');
-
-	foreach $data_base (@Common::DataBases)
-	{
-		my $RunResult = Common::GetClassifierORunResult ($data_base, 0.0001, $ParmsLazy->{CONFIDENCE}, $ParmsClassifierO->{PATTERN_SET}, $ParmsLazy->{MIN_RULES}, $ParmsLazy->{RANKING_SIZE}, 1, $ParmsLazy->{MAX_SIZE}, $ParmsClassifierO->{OMODE}, $ParmsClassifierO->{OMETRIC}, $ParmsClassifierO->{OMETHOD}, $ParmsClassifierO->{OORDERING});
-
-		$best_run_for_lac_avg_db_acc_hsh{$data_base}{'classifier_o'} = $RunResult->{ACCURACY};
-		$best_run_for_lac_avg_db_pat_hsh{$data_base}{'classifier_o'} = $RunResult->{AVG_PATTERNS};
-		$best_run_for_lac_avg_db_rul_hsh{$data_base}{'classifier_o'} = $RunResult->{AVG_RULES};
-		$best_run_for_lac_avg_db_tim_hsh{$data_base}{'classifier_o'} = $RunResult->{AVG_TIME};
-	}
-
-	$best_run_for_lac_avg_db_acc_hsh{'average'}{'classifier_o'} = $ParmsClassifierO->{ACCURACY};
-	$best_run_for_lac_avg_db_pat_hsh{'average'}{'classifier_o'} = $ParmsClassifierO->{AVG_PATTERNS};
-	$best_run_for_lac_avg_db_rul_hsh{'average'}{'classifier_o'} = $ParmsClassifierO->{AVG_RULES};
-	$best_run_for_lac_avg_db_tim_hsh{'average'}{'classifier_o'} = $ParmsClassifierO->{AVG_TIME};
-
-	my $ParmsClassifierOR = Common::GetBestAverageAccParms ('classifier_or');
-
-	foreach $data_base (@Common::DataBases)
-	{
-		my $RunResult = Common::GetClassifierORRunResult ($data_base, 0.0001, $ParmsLazy->{CONFIDENCE}, $ParmsLazy->{MIN_RULES}, $ParmsLazy->{RANKING_SIZE}, $ParmsClassifierOR->{OMETRIC}, $ParmsClassifierOR->{ALPHA}, $ParmsClassifierOR->{BETA});
-
-		$best_run_for_lac_avg_db_acc_hsh{$data_base}{'classifier_or'} = $RunResult->{ACCURACY};
-		$best_run_for_lac_avg_db_pat_hsh{$data_base}{'classifier_or'} = $RunResult->{AVG_PATTERNS};
-		$best_run_for_lac_avg_db_rul_hsh{$data_base}{'classifier_or'} = $RunResult->{AVG_RULES};
-		$best_run_for_lac_avg_db_tim_hsh{$data_base}{'classifier_or'} = $RunResult->{AVG_TIME};
-	}
-
-	$best_run_for_lac_avg_db_acc_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{ACCURACY};
-	$best_run_for_lac_avg_db_pat_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_PATTERNS};
-	$best_run_for_lac_avg_db_rul_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_RULES};
-	$best_run_for_lac_avg_db_tim_hsh{'average'}{'classifier_or'} = $ParmsClassifierOR->{AVG_TIME};
-
-	Common::MakeAppHistogramGraph ('Histograma de Acuracia', 'Bases de Dados', 'Acuracia', 'histogram_best_run_for_lac_avg_db_acc', \%best_run_for_lac_avg_db_acc_hsh, 0);
-	Common::MakeAppHistogramGraph ('Histograma de Padroes', 'Bases de Dados', 'Padroes', 'histogram_best_run_for_lac_avg_db_pat', \%best_run_for_lac_avg_db_pat_hsh, 1);
-	Common::MakeAppHistogramGraph ('Histograma de Regras', 'Bases de Dados', 'Regras', 'histogram_best_run_for_lac_avg_db_rul', \%best_run_for_lac_avg_db_rul_hsh, 1);
-	Common::MakeAppHistogramGraph ('Histograma de Tempo', 'Bases de Dados', 'Tempo', 'histogram_best_run_for_lac_avg_db_tim', \%best_run_for_lac_avg_db_tim_hsh, 1);
-}
-=cut
