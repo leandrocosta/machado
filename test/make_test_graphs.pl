@@ -9,6 +9,7 @@ sub make_ometric_histogram_graphs ($$$$$$$$);
 sub make_avg_ometric_histogram_graphs ();
 #sub make_lazy_compare_histogram_graphs ();
 
+sub get_best_run_for_application ($$);
 sub get_best_runs_for_data_base ($);
 sub get_ometric_runs_for_classifier_o ($$$$$$$$$$$$);
 sub get_ometric_run_for_classifier_o ($$$$$$$$$$$$$);
