@@ -56,7 +56,7 @@ $db, $t_c_o, $t_c_or, $t_o_or
 	}
 
 	print OUTPUT_TTEST_BEST "		\\end{tabular}
-	\\caption{Resultado do teste-t (Melhores par√¢tros para cada execu√ß)}
+	\\caption{Resultado do teste-t (melhores par‚metros para cada arquivo e abordagem)}
 	\\label{tab:ttest_best}
 \\end{table}";
 
@@ -102,7 +102,7 @@ $db, $t_c_o, $t_c_or, $t_o_or
 	}
 
 	print OUTPUT_TTEST_BEST_AVG "		\\end{tabular}
-	\\caption{Resultado do teste-t (Melhores par√¢tros para cada eabordagem)}
+	\\caption{Resultado do teste-t (melhores par‚metros para cada abordagem)}
 	\\label{tab:ttest_best}
 \\end{table}";
 
