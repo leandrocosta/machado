@@ -9,7 +9,7 @@ sub get_best_results_for_application ($$);
 sub get_best_avg_results_for_application ($$);
 sub make_ttest_best_tables_for_data_base ($$$$);
 sub make_ttest_best_avg_tables_for_data_base ($$$$);
-sub make_ttest ($$$$$);
+sub make_ttest ($$$$$$$);
 
 make_ttest_best_table ();
 make_ttest_best_avg_table ();
@@ -39,7 +39,9 @@ $db, $t_c_o, $t_c_or, $t_o_or
 		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|}
 		\\hline
-		\\textbf{Bases de Dados}	& \\textbf{LAC x OLAC}	& \\textbf{LAC x ORIGAMI}	& \\textbf{OLAC x ORIGAMI}	\\\\
+					& \\textbf{LAC}		& \\textbf{LAC}		& \\textbf{OLAC}		\\\\
+		\\textbf{Bases de Dados}	& \\textbf{x}		& \\textbf{x}		& \\textbf{x}		\\\\
+					& \\textbf{OLAC}		& \\textbf{ORIGAMI}	& \\textbf{ORIGAMI}	\\\\
 		\\hline\n";
 
 	my $data_base;
@@ -84,7 +86,9 @@ $db, $t_c_o, $t_c_or, $t_o_or
 		\\renewcommand{\\tabcolsep}{1.8mm}
 		\\begin{tabular}{|l|c|c|c|}
 		\\hline
-		\\textbf{Bases de Dados}	& \\textbf{LAC x OLAC}	& \\textbf{LAC x ORIGAMI}	& \\textbf{OLAC x ORIGAMI}	\\\\
+					& \\textbf{LAC}		& \\textbf{LAC}		& \\textbf{OLAC}		\\\\
+		\\textbf{Bases de Dados}	& \\textbf{x}		& \\textbf{x}		& \\textbf{x}		\\\\
+					& \\textbf{OLAC}		& \\textbf{ORIGAMI}	& \\textbf{ORIGAMI}	\\\\
 		\\hline\n";
 
 
@@ -103,7 +107,7 @@ $db, $t_c_o, $t_c_or, $t_o_or
 
 	print OUTPUT_TTEST_BEST_AVG "		\\end{tabular}
 	\\caption{Resultado do teste-t (melhores parâmetros para cada abordagem)}
-	\\label{tab:ttest_best}
+	\\label{tab:ttest_best_avg}
 \\end{table}";
 
 	close OUTPUT_TTEST_BEST_AVG;
@@ -129,9 +133,9 @@ sub make_ttest_best_tables_for_data_base ($$$$)
 	my $ttest_out_c_or	= "$Common::OutputDirTTests/ttest_${data_base}_best_c_or.out";
 	my $ttest_out_o_or	= "$Common::OutputDirTTests/ttest_${data_base}_best_o_or.out";
 
-	make_ttest ($ttest_dat_c, $ttest_dat_o, $ttest_R_c_o, $ttest_out_c_o, $t_c_o);
-	make_ttest ($ttest_dat_c, $ttest_dat_or, $ttest_R_c_or, $ttest_out_c_or, $t_c_or);
-	make_ttest ($ttest_dat_o, $ttest_dat_or, $ttest_R_o_or, $ttest_out_o_or, $t_o_or);
+	make_ttest ($ttest_dat_c, $ttest_dat_o, $ttest_R_c_o, $ttest_out_c_o, $t_c_o, 'LAC', 'OLAC');
+	make_ttest ($ttest_dat_c, $ttest_dat_or, $ttest_R_c_or, $ttest_out_c_or, $t_c_or, 'LAC', 'ORIGAMI');
+	make_ttest ($ttest_dat_o, $ttest_dat_or, $ttest_R_o_or, $ttest_out_o_or, $t_o_or, 'OLAC', 'ORIGAMI');
 }
 
 sub make_ttest_best_avg_tables_for_data_base ($$$$)
@@ -154,9 +158,9 @@ sub make_ttest_best_avg_tables_for_data_base ($$$$)
 	my $ttest_out_c_or	= "$Common::OutputDirTTests/ttest_${data_base}_best_avg_c_or.out";
 	my $ttest_out_o_or	= "$Common::OutputDirTTests/ttest_${data_base}_best_avg_o_or.out";
 
-	make_ttest ($ttest_dat_c, $ttest_dat_o, $ttest_R_c_o, $ttest_out_c_o, $t_c_o);
-	make_ttest ($ttest_dat_c, $ttest_dat_or, $ttest_R_c_or, $ttest_out_c_or, $t_c_or);
-	make_ttest ($ttest_dat_o, $ttest_dat_or, $ttest_R_o_or, $ttest_out_o_or, $t_o_or);
+	make_ttest ($ttest_dat_c, $ttest_dat_o, $ttest_R_c_o, $ttest_out_c_o, $t_c_o, 'LAC', 'OLAC');
+	make_ttest ($ttest_dat_c, $ttest_dat_or, $ttest_R_c_or, $ttest_out_c_or, $t_c_or, 'LAC', 'ORIGAMI');
+	make_ttest ($ttest_dat_o, $ttest_dat_or, $ttest_R_o_or, $ttest_out_o_or, $t_o_or, 'OLAC', 'ORIGAMI');
 }
 
 sub get_best_results_for_application ($$)
@@ -217,9 +221,9 @@ sub get_best_avg_results_for_application ($$)
 	close OUTPUT;
 }
 
-sub make_ttest ($$$$$)
+sub make_ttest ($$$$$$$)
 {
-	my ($ttest_dat_1, $ttest_dat_2, $file_R_input, $file_R_output, $diff) = @_;
+	my ($ttest_dat_1, $ttest_dat_2, $file_R_input, $file_R_output, $diff, $app1, $app2) = @_;
 
 	open OUTPUT, ">$file_R_input";
 	print OUTPUT "c <- scan('$ttest_dat_1');\n";
@@ -231,7 +235,7 @@ sub make_ttest ($$$$$)
 	my $t = `grep "t = " $file_R_output | sed -s 's/t = \\(.*\\), df = .*/\\1/g'`;
 	chomp $t;
 
-	$$diff = '=';
-	$$diff = '>' if $t > 2.88;
-	$$diff = '<' if $t < -2.88;
+	$$diff = '-';
+	$$diff = $app1 if $t > 2.88;
+	$$diff = $app2 if $t < -2.88;
 }
