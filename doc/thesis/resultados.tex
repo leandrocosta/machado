@@ -103,7 +103,7 @@ Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_acc}
-	\caption{Histograma de Acurácia (melhores resultados para cada base de dados)}
+	\caption{Histograma de Acurácia (melhores resultados para cada base)}
 	\label{fig:histogram_best_run_for_each_db_acc}
 \end{figure}
 
@@ -112,7 +112,7 @@ Como podemos ver na figura \ref{fig:histogram_best_run_for_each_db_acc}, os valo
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_pat}
-	\caption{Histograma de Padrões (melhores resultados para cada base de dados)}
+	\caption{Histograma de Padrões (melhores resultados para cada base)}
 	\label{fig:histogram_best_run_for_each_db_pat}
 \end{figure}
 
@@ -121,7 +121,7 @@ O número de padrões gerados pelas abordagens OLAC e ORIGAMI é sempre menor ou ig
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_rul}
-	\caption{Histograma de Regras (melhores resultados para cada base de dados)}
+	\caption{Histograma de Regras (melhores resultados para cada base)}
 	\label{fig:histogram_best_run_for_each_db_rul}
 \end{figure}
 
@@ -136,7 +136,7 @@ De qualquer forma, com as abordagens ortogonais foi possível classificar as inst
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_tim}
-	\caption{Histograma de Tempo (melhores resultados para cada base de dados)}
+	\caption{Histograma de Tempo (melhores resultados para cada base)}
 	\label{fig:histogram_best_run_for_each_db_tim}
 \end{figure}
 
@@ -176,7 +176,7 @@ Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma d
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_acc}
-	\caption{Histograma de Acurácia (média dos resultados para todas as bases de dados)}
+	\caption{Histograma de Acurácia (melhores resultados para cada abordagem)}
 	\label{fig:histogram_best_run_for_avg_db_acc}
 \end{figure}
 
@@ -186,7 +186,7 @@ Como podemos ver, na figura \ref{fig:histogram_best_run_for_avg_db_acc}, as melh
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_pat}
-	\caption{Histograma de Padrões (média dos resultados para todas as bases de dados)}
+	\caption{Histograma de Padrões (melhores resultados para cada abordagem)}
 	\label{fig:histogram_best_run_for_avg_db_pat}
 \end{figure}
 
@@ -215,7 +215,7 @@ Este fato é notado com freqüência nos casos em que o LAC é executado com o taman
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_rul}
-	\caption{Histograma de Regras (média dos resultados para todas as bases de dados)}
+	\caption{Histograma de Regras (melhores resultados para cada abordagem)}
 	\label{fig:histogram_best_run_for_avg_db_rul}
 \end{figure}
 
@@ -227,7 +227,7 @@ Novamente, como era de se esperar, o LAC obteve o melhor desempenho das três abo
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_tim}
-	\caption{Histograma de Tempo (média dos resultados para todas as bases de dados)}
+	\caption{Histograma de Tempo (melhores resultados para cada abordagem)}
 	\label{fig:histogram_best_run_for_avg_db_tim}
 \end{figure}
 
@@ -295,7 +295,7 @@ Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordage
 
 \subsection{Avaliação teste-t de Student}
 
-Com o objetivo de verificar se os resultados são estatisticamente equivalentes, tanto para os experimentos executados com os melhores parâmetros para cada base quanto para os experimentos executados com os parâmetros que obtiveram as melhores médias para todas as bases, a cada conjunto de resultados foi aplicado o teste-t pareado com confiança igual a 99\%. Os resultados se encontram nas tabelas \ref{tab:testt_best} e \ref{tab:testt_best_avg} respectivamente. Cada uma delas possui três comparações distintas: LAC $\times$ OLAC, LAC $\times$ ORIGAMI e OLAC $\times$ ORIGAMI. O valor encontrado em cada coluna, para cada base de dados, é o nome da abordagem que possui os melhores resultados em acurácia ou um hífem (caso os resultados sejam estatisticamente equivalentes). Analisando estas tabelas nota-se que todos os resultados são equivalentes entre LAC e OLAC, com exceção dos resultados obtidos com a base \textbf{waveform.ac} na tabela \ref{tab:ttest_best_avg}.
+Com o objetivo de verificar se os resultados são estatisticamente equivalentes, tanto para os experimentos executados com os melhores parâmetros para cada base quanto para os experimentos executados com os parâmetros que obtiveram as melhores médias para todas as bases, a cada conjunto de resultados foi aplicado o teste-t pareado com confiança igual a 99\%. Os resultados se encontram nas tabelas \ref{tab:ttest_best} e \ref{tab:ttest_best_avg} respectivamente. Cada uma delas possui três comparações distintas: LAC $\times$ OLAC, LAC $\times$ ORIGAMI e OLAC $\times$ ORIGAMI. O valor encontrado em cada coluna, para cada base de dados, é o nome da abordagem que possui os melhores resultados em acurácia ou um hífem (caso os resultados sejam estatisticamente equivalentes). Analisando estas tabelas nota-se que todos os resultados são equivalentes entre LAC e OLAC, com exceção dos resultados obtidos com a base \textbf{waveform.ac} na tabela \ref{tab:ttest_best_avg}.
 
 \input{tables/table_ttest_best.tex}
 \input{tables/table_ttest_best_avg.tex}
