@@ -679,7 +679,7 @@ sub make_best_avg_runs_table ()
 	print OUTPUT "		\\hline\n";
 
 	print OUTPUT "		\\end{tabular}
-	\\caption{Melhores Parâmetros para cada Execução}
+	\\caption{Melhores Parâmetros para cada Abordagem}
 	\\label{tab:best_parms_for_avg_db}
 \\end{table}";
 }
