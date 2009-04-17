@@ -319,7 +319,7 @@ Sendo assim, a forma escolhida neste trabalho foi continuar utilizando todos os 
 
 O problema de se encontrar o sub-conjunto de padrões com maior métrica de ortogonalidade, dado o conjunto de padrões freqüentes, é não NP-completo, visto que pode, facilmente, ser reduzido ao Problema de Decisão (dado um valor $N$ com $0 \le N \le 1$ e um conjunto de padrões freqüentes $\F$, existe $S \subseteq \F$ tal que $O(S) \ge N$?). Portanto, foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
 \par
-Esta abordagem é semelhante à que foi proposta em \cite{zaki07origami}. Este artigo apresenta um algoritmo que considera o conjunto de padrões freqüentes como um grafo em que cada vértice representa um padrão, e uma aresta entre dois vértices representa a similaridade entre os padrões. No entanto, só são representadas as arestas que possuem similaridade menor que $\alpha$ (parâmetro do algoritmo). O objetivo da heurística é encontrar um clique de tamanho máximo neste grafo. Para tanto, o algoritmo escolhe um vértice aleatoriamente e o adiciona no conjunto-solução. Após este passo, o algoritmo passa a visitar os vizinhos dos vértices que já fazem parte da solução, escolhendo sempre o melhor candidato para adicionar ao conjunto, até que não haja mais vértices para se adicionar.
+Esta abordagem é semelhante à que foi proposta em \cite{zaki07origami}. Este artigo apresenta um algoritmo que considera o conjunto de padrões freqüentes como um grafo em que cada vértice representa um padrão, e uma aresta entre dois vértices representa a similaridade entre os padrões. No entanto, só são representadas as arestas que possuem similaridade menor que $\alpha$ (parâmetro do algoritmo). O objetivo da heurística é encontrar um clique de tamanho máximo neste grafo. Para isso, o algoritmo escolhe um vértice aleatoriamente e o adiciona no conjunto-solução. Após este passo, o algoritmo passa a visitar os vizinhos dos vértices que já fazem parte da solução, escolhendo sempre o melhor candidato para adicionar ao conjunto, até que não haja mais vértices para se adicionar.
 \par
 No nosso caso, não utilizamos o parâmetro $\alpha$, limite inferior para a métrica de ortogonalidade. Sendo assim, todos os padrões são candidatos ao conjunto-resultado. A obtenção do conjunto ortogonal de padrões é realizada de forma iterativa, onde, no início da execução, o algoritmo inicializa o conjunto-solução com apenas um elemento, e a métrica de ortogonalidade do conjunto com o valor $0$ (zero), e então começa o ciclo de iterações em que, a cada etapa:
 
@@ -361,7 +361,7 @@ O pseudo-código do algoritmo de classificação associativa baseada em ortogonalid
 	\FOR {$P \in \F, P \notin \Or_{try}$}
 		\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
 		\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
-		\STATE $rate_{tmp} = GetRate (\Or)$
+		\STATE $rate_{tmp} = GetOrthogonalityRate (\Or_{try})$
 		\IF {$rate_{tmp} \leq rate_{try}$}
 			\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
 		\ELSE
@@ -376,6 +376,20 @@ O pseudo-código do algoritmo de classificação associativa baseada em ortogonalid
 
 \end{algorithmic}
 \end{algorithm}
+
+A seguir será apresentado a ordem de complexidade do algoritmo (desconsiderando o método \textit{FindFrequentPatterns}, que obtém o conjunto de padrões freqüentes na base.
+
+\subsubsection{Análise de Complexidade}
+
+O método \textit{GetMoreSimilar} (linha $9$) recebe um padrão como parâmetro e é responsável por obter, de um conjunto de padrões, o padrão mais similar (ou menos ortogonal) ao fornecido. A ordem de complexidade deste método é $O(\F \times \I^2)$, onde $\F$ é o conjunto de padrões freqüentes, e $\I$ é o conjunto de itens encontrados nos padrões de $\F$.
+\par
+O método \textit{GetOrthogonalityRate} (linha $11$) retorna a ortogonalidade do conjunto-resultado candidato naquela iteração, e possui ordem de complexidade $O(\F^2 \times \I^2)$.
+\par
+O \textit{loop} da linha $8$ itera sobre o conjunto de padrões freqüentes executando os métodos acima para cada padrão encontrado, e possui complexidade $O(\F^2 \times \I^2)$.
+\par
+O método \textit{GetOrthogonalityRate} (linha $5$) possui complexidade $O(\F^2 \times \I^2)$, como já foi demonstrado. Já o método \textit{GetFirstAvailablePattern} possui complexidade $O(\F)$, pois é responsável por obter, do conjunto de padrões freqüentes, o primeiro padrão que ainda não faz parte do conjunto-solução.
+\par
+Na linha $7$ temos novamente o método \textit{GetOrthogonalityRate}, e na linha $4$, um \textit{loop} com complexidade $O(\F^3 \times \I^2)$, pois ele é responsável por executar todo o seu bloco interno até que o conjunto-solução possua a melhor métrica de ortogonalidade possível.
 
 \section{Estratégia ORIGAMI}
 \label{sec:ortogonalidade_origami}
