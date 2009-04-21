@@ -107,7 +107,7 @@ Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma
 	\label{fig:histogram_best_run_for_each_db_acc}
 \end{figure}
 
-Como podemos ver na figura \ref{fig:histogram_best_run_for_each_db_acc}, os valores de acurácia obtidos com as três versões do algoritmo estão muito próximas, sendo que a versão não ortogonal ainda possui uma pequena vantagem sobre as outras. As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.843$, $0.840$ e $ 0.839$.
+Como podemos ver na figura \ref{fig:histogram_best_run_for_each_db_acc}, os valores de acurácia obtidos com as três versões do algoritmo estão muito próximas (de fato, este comportamento será comprovado na seção \ref{resultados_experimentos_ttest}). As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.843$, $0.840$ e $ 0.839$.
 
 \begin{figure}[htbp]
 	\centering
@@ -181,7 +181,7 @@ Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma d
 \end{figure}
 
 \par
-Como podemos ver, na figura \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente, sendo que o OLAC, dessa vez, se saiu um pouco melhor que o LAC. As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.808$, $0.813$ e $0.782$. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. Isto faz com que o OLAC encontre uma quantidade de padrões freqüentes muito maior que o LAC, no entanto, o tamanho do \textit{ranking} de regras do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
+Como podemos ver, na figura \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente (fato que também será comprovado na seção \ref{resultados_experimentos_ttest}). As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.808$, $0.813$ e $0.782$. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. Isto faz com que o OLAC encontre uma quantidade de padrões freqüentes muito maior que o LAC, no entanto, o tamanho do \textit{ranking} de regras do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
 
 \begin{figure}[htbp]
 	\centering
@@ -294,8 +294,9 @@ Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordage
 \input{tables/table_comparison_olac_origami.tex}
 
 \subsection{Avaliação teste-t de Student}
+\label{resultados_experimentos_ttest}
 
-Com o objetivo de verificar se os resultados são estatisticamente equivalentes, tanto para os experimentos executados com os melhores parâmetros para cada base quanto para os experimentos executados com os parâmetros que obtiveram as melhores médias para todas as bases, a cada conjunto de resultados foi aplicado o teste-t pareado com confiança igual a 99\%. Os resultados se encontram nas tabelas \ref{tab:ttest_best} e \ref{tab:ttest_best_avg} respectivamente. Cada uma delas possui três comparações distintas: LAC $\times$ OLAC, LAC $\times$ ORIGAMI e OLAC $\times$ ORIGAMI. O valor encontrado em cada coluna, para cada base de dados, é o nome da abordagem que possui os melhores resultados em acurácia ou um hífem (caso os resultados sejam estatisticamente equivalentes). Analisando estas tabelas nota-se que todos os resultados são equivalentes entre LAC e OLAC, com exceção dos resultados obtidos com a base \textbf{waveform.ac} na tabela \ref{tab:ttest_best_avg}.
+Com o objetivo de verificar se os resultados de todas as abordagens são estatisticamente equivalentes, tanto para os experimentos executados com os parâmetros que obtiveram melhores acurácias para cada base quanto para os experimentos executados com os parâmetros que obtiveram as melhores médias de acurácia para todas as bases, a cada conjunto de resultados (comparando as abordagens par-a-par) foi aplicado o teste-t pareado com confiança igual a 99\%. Os resultados se encontram nas tabelas \ref{tab:ttest_best} e \ref{tab:ttest_best_avg} respectivamente. Cada uma delas possui três comparações distintas: LAC $\times$ OLAC, LAC $\times$ ORIGAMI e OLAC $\times$ ORIGAMI. O valor encontrado em cada coluna, para cada base de dados, é o nome da abordagem que possui os melhores resultados ou um hífem (caso os resultados sejam estatisticamente equivalentes). Analisando estas tabelas nota-se que todos os resultados são equivalentes entre LAC e OLAC, com exceção dos resultados obtidos com a base \textbf{waveform.ac} na tabela \ref{tab:ttest_best_avg}.
 
 \input{tables/table_ttest_best.tex}
 \input{tables/table_ttest_best_avg.tex}
