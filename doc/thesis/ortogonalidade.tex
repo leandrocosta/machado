@@ -171,7 +171,7 @@ A ortogonalidade baseada em cobertura de transações do conjunto é dada por: \[O_
 		$CDEF$		& $1$	\\
 		\hline
 		\end{tabular}		
-	\caption{Pesos das Transações para Ortogonalidade Baseada na Cobertura de Transações}
+	\caption{Pesos das Transações para Ortogonalidade Baseada em Cobertura de Transações}
 	\label{tab:transacao_w1}
 \end{table}
 
@@ -242,7 +242,7 @@ Suponha um conjunto de padrões $\F = \left\{AB, CD, EF \right\}$. Os pesos de ca
 		$2$	& $0,5$	\\
 		\hline
 		\end{tabular}		
-	\caption{Pesos das Classes para Ortogonalidade Baseada na Cobertura de Classes}
+	\caption{Pesos das Classes para Ortogonalidade Baseada em Cobertura de Classes}
 	\label{tab:classe_w1}
 \end{table}
 
@@ -317,7 +317,14 @@ Sendo assim, a forma escolhida neste trabalho foi continuar utilizando todos os 
 
 \subsection{Heurística de Obtenção de Conjuntos Ortogonais}
 
-O problema de se encontrar o sub-conjunto $S$ de padrões freqüentes com a maior medida de ortogonalidade $O(S)$, dado o conjunto de padrões freqüentes $F$ ($S \subseteq F$) é NP-completo. Como prova, basta considerar o seguinte problema de decisão associado: dado um valor $N$ em que $0 \le N \le 1$ e um conjunto de padrões freqüentes $\F$, existe $S \subseteq \F$ tal que $O(S) \ge N$?. Portanto, foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
+%O problema de se encontrar o sub-conjunto $S$ de padrões freqüentes com a maior medida de ortogonalidade $O(S)$, dado o conjunto de padrões freqüentes $F$ ($S \subseteq F$) é NP-completo. Como prova, basta considerar o seguinte problema de decisão associado: dado um valor $N$ em que $0 \le N \le 1$ e um conjunto de padrões freqüentes $\F$, existe $S \subseteq \F$ tal que $O(S) \ge N$?. Portanto, foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
+O problema de se encontrar o sub-conjunto $S$ de padrões freqüentes com a maior medida de ortogonalidade $O(\Se)$, dado o conjunto de padrões freqüentes $\F$ ($\Se \subseteq \F$) é NP-completo. Como prova, basta considerar o seguinte problema de decisão associado:
+
+\begin{problem}[Obtenção de Conjuntos Ortogonais]
+Dado um valor qualquer $N$ em que $0 \le N \le 1$ e um conjunto de padrões freqüentes $\F$, existe $\Se \subseteq \F$ tal que $O(\Se) \ge N$?
+\end{problem}
+
+Portanto, foi desenvolvida uma heurística gulosa que inicia com um conjunto ortogonal de dois elementos, e, iterativamente, tenta obter um novo conjunto com um elemento a mais, acrescentando padrões candidatos e realizando modificações para que a métrica de ortogonalidade seja maximizada.
 \par
 Esta abordagem é semelhante à que foi proposta em \cite{zaki07origami}. Este artigo apresenta um algoritmo que considera o conjunto de padrões freqüentes como um grafo em que cada vértice representa um padrão, e uma aresta entre dois vértices representa a similaridade entre os padrões. No entanto, só são representadas as arestas que possuem similaridade menor que $\alpha$ (parâmetro do algoritmo). O objetivo da heurística é encontrar um clique de tamanho máximo neste grafo. Para isso, o algoritmo escolhe um vértice aleatoriamente e o adiciona no conjunto-solução. Após este passo, o algoritmo passa a visitar os vizinhos dos vértices que já fazem parte da solução, escolhendo sempre o melhor candidato para adicionar ao conjunto, até que não haja mais vértices para se adicionar.
 \par
@@ -465,4 +472,4 @@ Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo.
 
 \section{Considerações}
 
-Neste capítulo foram apresentadas as maiores contribuições deste trabalho. Em primeiro lugar, foram definidas três métricas de ortogonalidade aplicáveis a conjuntos de padrões, sendo as duas primeiras aplicáveis a qualquer problema relacionado com mineração de padrões freqüentes em bases de transações, e a terceira indicada para o problema da classificação associativa. Em seguida, foram apresentadas a estratégia de utilização de ortogonalidade num algoritmo de classificação baseado na abordagem \textit{lazy}, e uma heurística de obtenção de padrões ortogonais. Por último, apresentamos uma descrição detalhada da estratégia ORIGAMI, incluindo conceitos e definições relacionadas, além da adaptação do algoritmo ao problema da classificação associativa. No capítulo seguinte serão apresentados os experimentos e resultados obtidos com as duas abordagens baseadas em ortogonalidade sugeridas, e a sua comparação com a abordagem clássica (não ortogonal) já existente.
+Neste capítulo foram apresentadas as maiores contribuições do trabalho. Em primeiro lugar, foram definidas três métricas de ortogonalidade aplicáveis a conjuntos de padrões, sendo as duas primeiras aplicáveis a qualquer problema relacionado com mineração de padrões freqüentes em bases de transações, e a terceira indicada para o problema da classificação associativa. Em seguida, foram apresentadas a estratégia de utilização de ortogonalidade num algoritmo de classificação baseado na abordagem \textit{lazy}, e uma heurística de obtenção de padrões ortogonais. Por último, apresentamos uma descrição detalhada da estratégia ORIGAMI, incluindo conceitos e definições relacionadas, além da adaptação do algoritmo ao problema da classificação associativa. No capítulo seguinte serão apresentados os experimentos e resultados obtidos com as duas abordagens baseadas em ortogonalidade sugeridas, e a sua comparação com a abordagem clássica (não ortogonal) já existente.
