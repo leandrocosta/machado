@@ -397,6 +397,8 @@ O \textit{loop} da linha $8$ itera sobre o conjunto de padrões freqüentes execut
 O método \textit{GetOrthogonalityRate} (linha $5$) possui complexidade $O(\F^2 \times \I^2)$, como já foi demonstrado. Já o método \textit{GetFirstAvailablePattern} possui complexidade $O(\F)$, pois é responsável por obter, do conjunto de padrões freqüentes, o primeiro padrão que ainda não faz parte do conjunto-solução.
 \par
 Na linha $7$ temos novamente o método \textit{GetOrthogonalityRate}, e na linha $4$, um \textit{loop} com complexidade $O(\F^3 \times \I^2)$, pois ele é responsável por executar todo o seu bloco interno até que o conjunto-solução possua a melhor métrica de ortogonalidade possível.
+\par
+Logo, conclui-se que o algoritmo \textbf{OLAC} possui complexidade de tempo $O(\F^3 \times \I^2)$.
 
 \section{Estratégia ORIGAMI}
 \label{sec:ortogonalidade_origami}
@@ -469,6 +471,31 @@ Ao obter um novo padrão maximal, o algoritmo tenta inseri-lo no conjunto-solução
 Como heurística para obtenção do conjunto ortogonal, o algoritmo inicia a execução com o valor de resíduo igual a $0$ (zero) e, a cada iteração, tenta obter um conjunto ortogonal adicionando a ele, aleatoriamente, padrões maximais obtidos no primeiro passo do algoritmo, até que não seja mais possível acrescentar novos padrões, ou a condição de parada local seja atingida. Se, durante a obtenção dos padrões, o padrão selecionado já fizer parte do conjunto-resultado, ou não possuir similaridade menor que $\alpha$ para com todos os outros padrões do conjunto-solução, o algoritmo decrementa um contador de tentativas. A condição de parada local para a geração de conjuntos ortogonais é que, durante este processo, o número máximo de escolhas erradas de padrões não pode ser maior que a quantidade de padrões maximais total.
 \par
 Ao obter um novo conjunto ortogonal, o algoritmo calcula o valor do seu resíduo. Se este valor é menor que o atual, o resíduo é atualizado, e o conjunto-solução passar a ser o conjunto ortogonal recém-encontrado. A condição de parada para o algoritmo é que, durante todo o processo, o número máximo de conjuntos ortogonais candidatos que não melhoram o resultado não pode ser maior que a quantidade de padrões maximais total.
+\par
+Na seção \ref{sec:ortogonalidade_origami_adaptacao_exemplo} será apresentado um exemplo para facilitar o entendimento do algoritmo.
+
+\subsubsection{Exemplo de Execução}
+\label{sec:ortogonalidade_origami_adaptacao_exemplo}
+
+Esta seção pretende, com auxílio de um exemplo de execução, facilitar o entendimento da adaptação da estratégia ORIGAMI ao problema de classificação associativa. O foco do exemplo é demonstrar como o algoritmo constrói o conjunto-solução a partir dos padrões maximais gerados na primeira fase do algoritmo. O exemplo será apresentado por meio de uma série de iterações, onde, a cada passo, a execução de uma etapa do algoritmo será demonstrada. A seguir, o exemplo de como o conjunto de padrões maximais é obtido:
+
+\begin{itemize}
+	\item O algoritmo inicia com um conjunto-solução vazio, e incia um ciclo de execuções onde, a cada iteração, gera o maior padrão freqüente possível selecionando itens que gazem parte da base de dados, até que a condição de parada seja alcançada. Suponha que, na primeira iteração, o algoritmo tenha gerado o padrão \textbf{ABC}. Este padrão é adicionado ao conjunto-solução, que, neste momento, passa a ser constituído de apenas 1 elemento;
+	\item Na próxima iteração do algoritmo, um novo padrão freqüente deve ser gerado da mesma forma que na iteração anterior. Suponha que, desta vez, o padrão \textbf{ABD} seja gerado. O novo padrão é adicionado ao conjunto. O novo conjunto-solução é formado pelos padrões \textbf{ABC} e \textbf{ABD};
+	\item Na terceira iteração, suponha que o algoritmo tenha gerado o padrão \textbf{BC}, e que a condição de parada tenha sido atingida antes que este se tornasse um padrão maximal. Neste caso, o novo padrão não será inserido no conjunto-solução, pois ele é sub-padrão de um dos padrões que já fazem parte do conjunto;
+	\item Na próxima iteração, suponha que o algoritmo tenha gerado o padrão \textbf{ABDE}. Agora temos uma situação diferente da anterior, pois no conjunto-solução já existe um sub-padrão deste. Assim, o algoritmo adiciona o novo padrão ao conjunto e remove o seu sub-padrão da solução. Agora, o novo conjunto-solução é formado pelos padrões \textbf{ABC} e \textbf{ABDE};
+	\item A execução termina se a condição de parada for alcançada, ou seja, se o número de novos padrões freqüentes gerados que não podem ser adicionados ao conjunto-solução for maior que o número de transações da instância de teste;
+	\item Suponha que a execução deste passo tenha finalizado com um conjunto-solução constituído dos padrões \textbf{ABC}, \textbf{ABDE}, \textbf{ACDE} e \textbf{EF}. Este será o conjunto de padrões maximais utilizado na próxima etapa do algoritmo.
+\end{itemize}
+
+A seguir o exemplo de como o conjunto de padrões ortogonais é obtido:
+
+\begin{itemize}
+	\item O algoritmo inicia com o valor de resíduo igual a 0 (zero e, a cada iteração, tenta obter um candidato a conjunto-solução selecionando, aleatoriamente, padrões maximais obtidos na etapa anterior. Suponha que, na primeira iteração, o algoritmo tenha selecionado o padrão \textbf{ABC}. Neste ponto, o conjunto-solução passa a ser constituído de apenas 1 elemento;
+	\item Na segunda iteraçao do algoritmo, suponha que o padrão \textbf{ABDE} tenha sido selecionado. Para que este padrão seja adicionado ao conjunto-solução, ele deve ter similaridade menor que $\alpha$ para com todos os padrões que já fazem parte da solução. No nosso exemplo, vamos considerar que esta condição seja verdadeira, e que o novo padrão tenha sido adicionado ao conjunto. O novo conjunto-solução é formado pelos padrões \textbf{ABC} e \textbf{ABDE};
+	\item Na iteração seguinte, suponha que o padrão \textbf{ACDE} tenha sido selecionado, e que este possua similaridade maior que $\alpha$ em relação ao padrão \textbf{ABDE}. Neste caso, o novo padrão não é adicionado ao conjunto-solução;
+	\item O algoritmo continua selecionando padrões aleatoriamente e tentando inseri-los no conjunto-solução até que a condição de parada seja alcançada. Neste ponto, o valor do resíduo é calculado. Se o resíduo corrente for menor que o já obtido até o momento, o seu valor é atualizado, e o novo conjunto passa a ser o melhor candidato à solução.
+\end{itemize}
 
 \section{Considerações}
 
