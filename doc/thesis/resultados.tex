@@ -152,9 +152,9 @@ A tabela \ref{tab:best_runs_for_each_db_olac} possui os parâmetros das melhores 
 \par
 O motivo pelo qual as métricas baseadas em cobertura de classes e de transações não produziram resultados melhores pode estar relacionado com a heurística de obtenção de conjuntos ortogonais. Examinando os resultados de tais execuções, percebemos que, em muitas situações, o algoritmo obteve conjuntos pequenos de padrões ortogonais ($2$ a $4$ padrões) com uma medida muito alta de ortogonalidade. Acontece que, de acordo com a nossa heurística, se a adição de um elemento a mais ao conjunto-solução diminui a medida de ortogonalidade do mesmo, este elemento não é adicionado, e o conjunto anterior é tido como resultado.
 \par
-Um grande número de fatores contribui para que a nossa heurística encontre conjuntos de padrões com alto valor de ortogonalidade para as métricas baseadas em cobertura, a começar pela natureza dos dados. É fácil perceber que padrões raros na base possuem maior probabilidade de fazer parte de conjuntos ortogonais, visto que a sobreposição de cobertura entre estes padrões, tanto de classes quanto de transações, acontecerá em menor freqüência.
+Um grande número de fatores contribui para que a nossa heurística encontre conjuntos de padrões com alto valor de ortogonalidade para as métricas baseadas em cobertura, a começar pela natureza dos dados. É fácil perceber que padrões pouco freqüentes na base possuem maior probabilidade de fazer parte de conjuntos ortogonais, visto que a sobreposição de cobertura entre estes padrões, tanto de classes quanto de transações, acontecerá em menor freqüência.
 \par
-Uma forma de evitar que padrões muito raros sejam inseridos no conjunto-solução é aumentar o valor do suporte utilizado pelo algoritmo, porém, fazendo isto, não será possível classificar corretamente transações cujas classes são pouco freqüentes, ou são bem representadas por padrões raros.
+Uma forma de evitar que padrões pouco freqüntes sejam inseridos no conjunto-solução é aumentar o valor do suporte utilizado pelo algoritmo, porém, fazendo isto, não será possível classificar corretamente transações cujas classes são pouco freqüentes, ou são bem representadas por padrões pouco freqüentes.
 
 \input{tables/table_best_runs_olac.tex}
 
