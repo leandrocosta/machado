@@ -40,7 +40,7 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 
 //	uint32 total_rules = GetSize ();
 
-	RankingRuleList *pReverseSortedRuleList = static_cast<const RankingRuleList *>(GetPartialReverseSortCopy (rMaxNumRankRules));
+	RankingRuleList *pReverseSortedRuleList = GetPartialReverseSortCopy (rMaxNumRankRules);
 
 	uint32 rules = 0;
 
@@ -187,4 +187,9 @@ const string RankingRuleList::GetClassificationValue (const uint32 &rMaxNumRankR
 	LOGMSG (LOW_LEVEL, "RankingRuleList::GetClassificationValue () - class [%s]\n", class_guess.c_str ());
 
 	return class_guess;
+}
+
+RankingRuleList* RankingRuleList::GetPartialReverseSortCopy	(const uint64 &size) const
+{
+  return static_cast<RankingRuleList *>(ObjectList::GetPartialReverseSortCopy (size));
 }

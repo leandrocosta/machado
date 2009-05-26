@@ -202,7 +202,7 @@ const uint32 Pattern::GetNumTransactionsOfClass (const uint32 &classID) const
 	return mClassCoverageArray [classID];
 }
 
-const float32 Pattern::GetSimilarity (const Pattern *pPattern, const OrtMetric &rMetric) const
+const float32 Pattern::GetSimilarity (const Pattern *pPattern, const OrtMetric &rMetric, const float32 &rClassCoverageFactor) const
 {
 	float32 similarity = 0;
 
@@ -215,10 +215,10 @@ const float32 Pattern::GetSimilarity (const Pattern *pPattern, const OrtMetric &
 			similarity = GetTransCovSimilarity (pPattern);
 			break;
 		case METRIC_CLASS_COVERAGE:
-			similarity = GetClassCovSimilarity (pPattern);
+			similarity = GetClassCovSimilarity (pPattern, rClassCoverageFactor);
 			break;
 		case METRIC_ALL:
-			similarity = GetSimilarity (pPattern) * GetTransCovSimilarity (pPattern) * GetClassCovSimilarity (pPattern);
+			similarity = GetSimilarity (pPattern) * GetTransCovSimilarity (pPattern) * GetClassCovSimilarity (pPattern, rClassCoverageFactor);
 			break;
 		case METRIC_UNKNOWN:
 		default:
@@ -288,7 +288,7 @@ const float32 Pattern::GetTransCovSimilarity (const Pattern *pPattern) const
 	return similarity;
 }
 
-const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
+const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern, const float32 &rClassCoverageFactor) const
 {
 	float32 similarity = 0;
 
@@ -308,7 +308,7 @@ const float32 Pattern::GetClassCovSimilarity (const Pattern *pPattern) const
 
 			float32 mean = (float32) (classCoverageArrayLeft [i] + classCoverageArrayRight [i]) / 2;
 
-			if (classCoverageArrayLeft [i] >= 0.9 * mean && classCoverageArrayRight [i] >= 0.9 * mean)
+			if (classCoverageArrayLeft [i] >= rClassCoverageFactor * mean && classCoverageArrayRight [i] >= rClassCoverageFactor * mean)
 				num++;
 		}
 	}

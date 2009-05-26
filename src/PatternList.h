@@ -68,6 +68,7 @@ class PatternList : public ObjectList
 		const	uint32		GetResidue		(
 							const PatternList *pPatternList,
 							const Pattern::OrtMetric &rMetric,
+              const float32 &rClassCoverageFactor,
 							const float32 &beta)				const	;
 
 	public:
@@ -77,6 +78,7 @@ class PatternList : public ObjectList
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering,
+					const float32 &rClassCoverageFactor,
 					const float32 &rAlpha,
 					const float32 &rBeta,
 					float32 &rRate)					;
@@ -85,32 +87,38 @@ class PatternList : public ObjectList
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering,
+					const float32 &rClassCoverageFactor,
 					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListClassHeuristical	(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
 					const OrtOrdering &ordering,
+					const float32 &rClassCoverageFactor,
 					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListPolynomial		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
+					const float32 &rClassCoverageFactor,
 					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListPolynomial		(
 					const TransactionList *pTransactionList,
 					const OrtMethod &method,
 					const Pattern::OrtMetric &rMetric,
 					const uint32 &num_patterns,
+					const float32 &rClassCoverageFactor,
 					float32 &rRate)					;
 		PatternList*	GetOrthogonalPatternListORIGAMI			(
 					const TransactionList *pTransactionList,
 					const Pattern::OrtMetric &rMetric,
+          const float32 &rClassCoverageFactor,
 					const float32 &rAlpha,
 					const float32 &rBeta)				;
 		PatternList*	GetOrthogonalPatternListORIGAMIRandomCandidate	(
 					const TransactionList *pTransactionList,
 					const Pattern::OrtMetric &rMetric,
+          const float32 &rClassCoverageFactor,
 					const float32 &alpha,
 					const float32 &beta)				;
 
@@ -125,27 +133,27 @@ class PatternList : public ObjectList
 	public:
 			Pattern*	GetMoreSimilar			(
 							const Pattern *pPattern,
-							const Pattern::OrtMetric &rMetric)		const	;
+							const Pattern::OrtMetric &rMetric, const float32 &rClassCoverageFactor)		const	;
 		const	float32		GetSetSimilarityRate		()				const	;
 		const	float32		GetSetCoverageRate		(
 							const TransactionList *pTransactionList)	const	;
 		const	float32		GetSetClassCoverageRate		(
-							const TransactionList *pTransactionList)	const	;
+							const TransactionList *pTransactionList, const float32 &rClassCoverageFactor)	const	;
 		const	float32		GetPairAverageSimilarityRate	()				const	;
 		const	float32		GetPairAverageCoverageRate	(
 							const TransactionList *pTransactionList)	const	;
 		const	float32		GetPairAverageClassCoverageRate	(
-							const TransactionList *pTransactionList)	const	;
+							const TransactionList *pTransactionList, const float32 &rClassCoverageFactor)	const	;
 		const	float32		GetRate				(
 							const TransactionList *pTransactionList,
 							const OrtMethod &method,
-							const Pattern::OrtMetric &rMetric)		const	;
+							const Pattern::OrtMetric &rMetric, const float32 &rClassCoverageFactor)		const	;
 		const	float32		GetSetRate			(
 							const TransactionList *pTransactionList,
-							const Pattern::OrtMetric &rMetric)		const	;
+							const Pattern::OrtMetric &rMetric, const float32 &rClassCoverageFactor)		const	;
 		const	float32		GetPairAverageRate		(
 							const TransactionList *pTransactionList,
-							const Pattern::OrtMetric &rMetric)		const	;
+							const Pattern::OrtMetric &rMetric, const float32 &rClassCoverageFactor)		const	;
 		const	bool		FindSuperPatternOf		(const Pattern *pPattern)	const	;
 			void		RemoveSubPatternsOf		(const Pattern *pPattern)		;
 

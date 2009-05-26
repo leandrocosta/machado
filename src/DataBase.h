@@ -44,6 +44,7 @@ class DataBase : private IOManager, private Tokenizer
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const Transaction::PatternSet &rPatternSet,
+				const float32 &rClassCoverageFactor,
 				const float32 &rAlpha,
 				const float32 &rBeta)					;
 		void	MakeProjection		(Transaction *pTransaction)		;
@@ -67,6 +68,7 @@ class DataBase : private IOManager, private Tokenizer
 				const uint32 &rMinNumRules,
 				const uint32 &rMaxNumRankRules,
 				const Transaction::PatternSet &rPatternSet,
+				const float32 &rClassCoverageFactor,
 				const float32 &rAlpha,
 				const float32 &rBeta)					;
 		void	PrintDataInfo		()				const	;

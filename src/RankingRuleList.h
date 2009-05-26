@@ -24,6 +24,7 @@ class RankingRuleList : public ObjectList
 		const	string	GetClassificationValue	(
 				const uint32 &rMaxNumRankRules,
 				const RankingRule::RuleMeasure &measure)	const	;
+		RankingRuleList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
 };
 
 

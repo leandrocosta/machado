@@ -99,8 +99,8 @@ class ObjectList : public Object
 			void		ReverseSort			()				;
 			void		SortBySize			()				;
 			void		ReverseSortBySize		()				;
-		const	ObjectList*	GetPartialSortCopy		(const uint64 &size)	const	;
-		const	ObjectList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
+		ObjectList*	GetPartialSortCopy		(const uint64 &size)	const	;
+		ObjectList*	GetPartialReverseSortCopy	(const uint64 &size)	const	;
 
 	public:
 		const	uint64	GetSize	()	const	;

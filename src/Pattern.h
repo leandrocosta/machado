@@ -51,10 +51,10 @@ class Pattern : public ItemSet
 	public:
 		const	TransactionList&	GetTransactionList		()							const	;
 		const	uint32			GetNumTransactionsOfClass	(const uint32 &classID)					const	;
-		const	float32			GetSimilarity			(const Pattern *pPattern, const OrtMetric &rMetric)	const	;
+		const	float32			GetSimilarity			(const Pattern *pPattern, const OrtMetric &rMetric, const float32 &rClassCoverageFactor)	const	;
 		const	float32			GetSimilarity			(const Pattern *pPattern)				const	;
 		const	float32			GetTransCovSimilarity		(const Pattern *pPattern)				const	;
-		const	float32			GetClassCovSimilarity		(const Pattern *pPattern)				const	;
+		const	float32			GetClassCovSimilarity		(const Pattern *pPattern, const float32 &rClassCoverageFactor)				const	;
 			void			AddChildPattern			(Pattern *pPattern)						;
 			PatternList*		GetMaximalPatternList		()								;
 		const	bool			IsSuperPatternOf		(const Pattern *pPattern)				const	;

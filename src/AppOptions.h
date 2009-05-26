@@ -37,6 +37,7 @@ class AppOptions
 		const	uint32&		GetMaxNumRankRules	()	const	;
 		const	uint32&		GetMinRuleLen		()	const	;
 		const	uint32&		GetMaxRuleLen		()	const	;
+		const	float32&	GetClassCoverageFactor		()	const	;
 		const	float32&	GetAlpha		()	const	;
 		const	float32&	GetBeta			()	const	;
 
@@ -65,6 +66,7 @@ class AppOptions
 		uint32		mMaxNumRankRules	;
 		uint32		mMinRuleLen		;
 		uint32		mMaxRuleLen		;
+		float32		mClassCoverageFactor			;
 		float32		mAlpha			;
 		float32		mBeta			;
 
@@ -91,6 +93,8 @@ class AppOptions
 		static	const	uint32	DEFAULT_MIN_NUM_RULES		= 1	;
 		static	const	uint32	DEFAULT_MIN_RULE_LEN		= 1	;
 		static	const	uint32	DEFAULT_MAX_RULE_LEN		= 10	;
+
+		static	const	float32	DEFAULT_CLASS_COVERAGE_FACTOR		= 0.9	;
 
 		static	const	float32	DEFAULT_ORIGAMI_ALPHA		= 0.1	;
 		static	const	float32	DEFAULT_ORIGAMI_BETA		= 0.9	;
