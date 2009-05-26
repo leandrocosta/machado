@@ -48,10 +48,10 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @ClassifierSupports = (
-#	0.0001,
-#	0.001,
-#	0.01,
-#	0.1,
+	0.0001,
+	0.001,
+	0.01,
+	0.1,
 #	0.2,
 #	0.3,
 #	0.4,
@@ -66,10 +66,10 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 );
 
 @Confidences = (
-#	0.0001,
-#	0.001,
-#	0.01,
-#	0.1,
+	0.0001,
+	0.001,
+	0.01,
+	0.1,
 #	0.2,
 #	0.3,
 #	0.4,
@@ -99,7 +99,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 @MaxNumRankRules = (
 	1,
 #	10,
-#	100,
+	100,
 #	1000,
 #	10000,
 #	100000,
@@ -112,7 +112,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 
 @ClassifierMaxRuleLens = (
 	1,
-#	2,
+	2,
 #	3,
 #	4,
 #	5
@@ -126,7 +126,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 @ClassifierOMetrics = (
 	's',
 #	'c',
-#	'l',
+	'l',
 #	'a'
 );
 
@@ -157,6 +157,16 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #	'l',	# LAPLACE
 #	'i',	# LIFT
 #	'v'	# LEVERAGE
+);
+
+@ClassCoverageFactors = (
+  0.7,
+  0.8,
+  0.9,
+  1.0,
+  1.1,
+  1.2,
+  1.3
 );
 
 @ORIGAMIAlphas = (
@@ -195,6 +205,7 @@ $GnuPlotApp		= '/usr/bin/gnuplot';
 #);
 
 $NumFolds = 10;
+$Debug = -1;
 
 ###
 
