@@ -190,7 +190,7 @@ void ObjectList::ReverseSortBySize ()
 #endif
 }
 
-const ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
+ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
 {
 	uint64 reverse_size = mList.size ();
 
@@ -204,7 +204,7 @@ const ObjectList* ObjectList::GetPartialSortCopy (const uint64 &size) const
 	return pObjectList;
 }
 
-const ObjectList* ObjectList::GetPartialReverseSortCopy	(const uint64 &size) const
+ObjectList* ObjectList::GetPartialReverseSortCopy	(const uint64 &size) const
 {
 	uint64 reverse_size = mList.size ();
 

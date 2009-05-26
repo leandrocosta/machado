@@ -38,6 +38,7 @@ AppOptions::AppOptions ()
 	mMaxNumRankRules	= AppOptions::DEFAULT_MAX_NUM_RANK_RULES	;
 	mMinRuleLen		= AppOptions::DEFAULT_MIN_RULE_LEN		;
 	mMaxRuleLen		= AppOptions::DEFAULT_MAX_RULE_LEN		;
+	mClassCoverageFactor			= AppOptions::DEFAULT_CLASS_COVERAGE_FACTOR		;
 	mAlpha			= AppOptions::DEFAULT_ORIGAMI_ALPHA		;
 	mBeta			= AppOptions::DEFAULT_ORIGAMI_BETA		;
 	mPatternSet		= AppOptions::DEFAULT_PATTERN_SET		;
@@ -72,6 +73,7 @@ void AppOptions::Run (int argc, char* const* argv)
 		{"orth-method"		, 1, 0, 'w'},
 		{"orth-pat-ordering"	, 1, 0, 'g'},
 		{"rule-measure"		, 1, 0, 'u'},
+		{"class-cov-factor"	, 1, 0, 'f'},
 		{"origami-alpha"	, 1, 0, 'a'},
 		{"origami-beta"		, 1, 0, 'b'},
 		{"debug"		, 1, 0, 'd'},
@@ -84,7 +86,7 @@ void AppOptions::Run (int argc, char* const* argv)
 
 	while (1)
 	{
-		c = getopt_long (argc, argv, "i:t:p:s:c:n:l:m:x:r:o:e:w:g:u:a:b:d:vh", long_options, &option_index);
+		c = getopt_long (argc, argv, "i:t:p:s:c:n:l:m:x:r:o:e:w:g:u:f:a:b:d:vh", long_options, &option_index);
 
 		if (c == -1)
 			break;
@@ -151,6 +153,10 @@ void AppOptions::Run (int argc, char* const* argv)
 				mRuleMeasure = (RankingRule::RuleMeasure) optarg [0];
 				break;
 
+			case 'f':
+				mClassCoverageFactor = atof (optarg);
+				break;
+
 			case 'a':
 				mAlpha = atof (optarg);
 				break;
@@ -199,6 +205,7 @@ void AppOptions::Usage () const
 	cout << "                               REVERSE SORTED, SORTED BY SIZE, REVERSE SORTED BY SIZE, NONE]" << endl;
 	cout << "  -u  --rule-measure         Set the rule measure used [s,c,g,j,k,o,n,e,p,l,i,v] [SUPPORT, CONFIDENCE, GAIN, JACCARD," << endl;
 	cout << "                               KULC, COSINE, CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE, LIFT, LEVERAGE]" << endl;
+	cout << "  -f  --class-cov-factor     Set the class coverage factor used by OLAC" << endl;
 	cout << "  -a  --origami-alpha        Set the alpha parameter used by ORIGAMI" << endl;
 	cout << "  -b  --origami-beta         Set the beta parameter used by ORIGAMI" << endl;
 	cout << "  -d, --debug                Set the level of debug [0-4] [NODEBUG - MAXLEVEL]" << endl;
@@ -250,6 +257,11 @@ const uint32& AppOptions::GetMinRuleLen () const
 const uint32& AppOptions::GetMaxRuleLen () const
 {
 	return mMaxRuleLen;
+}
+
+const float32& AppOptions::GetClassCoverageFactor () const
+{
+	return mClassCoverageFactor;
 }
 
 const float32& AppOptions::GetAlpha () const
