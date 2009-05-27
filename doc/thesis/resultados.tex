@@ -160,7 +160,7 @@ Uma forma de evitar que padrões pouco freqüentes sejam inseridos no conjunto-sol
 
 \clearpage
 
-A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria destes casos, os valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
+A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa parte das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria destes casos, utilizando valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
 \par
 Novamente, neste caso, percebemos a predominância da métrica baseada na estrutura dos padrões nos melhores resultados obtidos.
 
@@ -206,7 +206,7 @@ Já o OLAC, que foi executado com tamanho máximo de regra igual a $2$, obteve um 
 \input{tables/table_lac_x_olac_austra.ac.olac_rules.tex}
 
 \par
-Examinando as tabelas \ref{tab:table_lac_x_olac_austra.ac.lac_rules} e \ref{tab:table_lac_x_olac_austra.ac.olac_rules}, é possível perceber algumas características interessantes que aparecem nas regras obtidas pelo OLAC. Vemos, por exemplo, que a primeira regra do \textit{ranking}, que possui convicção próxima de $3.77$, é uma regra que contribui positivamente para o resultado correto do algoritmo, e foi obtida por meio da combinação de dois padrões que, na abordagem LAC, geraram regras com convicções próximas a $2.54$ e $1.55$ respectivamente. Nota-se que a combinação dos dois padrões, além de diminuir a redundância das regras, melhorou a sua medida de convicção, fazendo com que o algoritmo se aproximasse do resultado correto.
+Examinando as tabelas \ref{tab:table_lac_x_olac_austra.ac.lac_rules} e \ref{tab:table_lac_x_olac_austra.ac.olac_rules}, é possível perceber algumas características interessantes que aparecem nas regras obtidas pelo OLAC. Vemos, por exemplo, que a primeira regra do \textit{ranking}, que possui convicção próxima de $3.77$, é uma regra que contribui positivamente para o resultado correto do algoritmo, e foi obtida por meio da combinação de dois padrões que, na abordagem LAC, geraram regras com convicções próximas de $2.54$ e $1.55$ respectivamente. Nota-se que a combinação dos dois padrões, além de diminuir a redundância das regras, melhorou a sua medida de convicção, fazendo com que o algoritmo se aproximasse do resultado correto.
 \par
 E adicionalmente, podemos perceber também que a última regra do \textit{ranking} da abordagem OLAC, que possui convicção igual a $0.51$ e contribui negativamente para o resultado, e foi obtida por meio da combinação de duas regras da abordagem LAC com convicções iguais a $0.69$ e $0.56$, respectivamente, ou seja, nesse caso, a medida de convicção diminuiu. Logo, temos aqui um exemplo de como a ortogonalidade pode diminuir a redundância nas informações obtidas, e ainda melhorar a efetividade do algoritmo.
 \par
@@ -349,7 +349,7 @@ Como resultado, a única regra obtida pela abordagem ORIGAMI aponta para a classe
 
 Neste capítulo, foi apresentado o aplicativo \textbf{olac}, sua interface de interação com o usuário, e um exemplo de execução onde foi demonstrado o comportamento da abordagem OLAC. Em seguida, foram apresentados os resultados obtidos com a execução das três abordagens de classificação em $26$ bases de dados disponíveis no repositório \textbf{UCI}.
 \par
-Na seção \ref{resultados_experimentos_cada_base} foram apresentados os melhores resultados obtidos com a execução das abordagens utilizando parâmetros diferentes para cada base de dados. As três abordagens apresentarem resultados muito próximos, em média, sendo que a abordagem LAC obteve uma leve vantagem sobre as outras. Entretanto, podemos perceber que este comportamento não se repetiu em todas as bases.
+Na seção \ref{resultados_experimentos_cada_base} foram apresentados os melhores resultados obtidos com a execução das abordagens utilizando parâmetros diferentes para cada base de dados. As três abordagens obtiveram resultados muito próximos, em média, sendo que a abordagem LAC obteve uma leve vantagem sobre as outras. Entretanto, podemos perceber que este comportamento não se repetiu em todas as bases.
 \par
 Analisando os resultados, vemos que o LAC se saiu melhor em $11$ bases de dados, o OLAC, por sua vez, se saiu melhor em $6$ bases, assim como ORIGAMI. Além disso, as três abordagens obtiveram o mesmo resultado para $1$ base, e o LAC e o OLAC ainda empataram em outras $2$ bases. A superioridade das abordagens ortogonais em algumas bases indica que, mesmo quando os melhores parâmetros para cada execução são utilizados, ainda é possível obter vantagens com as abordagens baseadas em ortogonalidade.
 \par
@@ -357,6 +357,8 @@ Na seção \ref{resultados_experimentos_todas_base} foram apresentados os melhores
 \par
 Analisando os resultados, vemos que o LAC novamente se saiu melhor em $11$ bases, o OLAC, por sua vez, se saiu melhor em $8$ bases, e o ORIGAMI, em $6$. As três abordagens ainda empataram em $1$ base. Apesar do LAC continuar com os melhores resultados num número maior de bases, o OLAC obteve melhores resultados em média. Isto se deve à qualidade dos resultados obtidos, mesmo nos casos em que os do LAC são melhores.
 \par
+Na seção \ref{resultados_experimentos_ttest} foram apresentados resultados obtidos com o auxílio da metodologia teste-t de Student que comprovam a equivalência estatística entre as abordagens.
+\par
 Na seção \ref{resultados_experimentos_estudos} foram apresentados estudos de caso que comparam a classificação de uma instância pela abordagem ortogonal e não ortogonal para o OLAC e o ORIGAMI. Os estudos mostram um exemplo em que a abordagem ortogonal não consegue classificar corretamente uma instância em que a abordagem não ortogonal obtém sucesso. É possível perceber que a falha na classificação pelas abordagens ortogonais não foi causada pela má qualidade dos conjuntos ortogonais, mas sim pelas características dos padrões encontrados nestes conjuntos, que fizeram com que as métricas de avaliação das regras geradas indicassem a classificação falsa com maior convicção que a verdadeira.
 \par
-Em geral, os resultados obtidos demonstram que as abordagens ortogonais obtiveram resultados de boa qualidade, quando comparados com a abordagem clássica não ortogonal.
+Em geral, os resultados demonstram que as abordagens ortogonais obtiveram resultados de boa qualidade, quando comparados com a abordagem clássica não ortogonal.
