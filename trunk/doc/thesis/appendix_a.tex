@@ -1,74 +1,11 @@
-\chapter{Demais Resultados}
-\section{Resultados com \textit{confiança} como Medida de Interesse das Regras de Associação}
+\chapter{Cálculo do Fator da Métrica Cobertura de Classes}
+\label{apx:class_cov_factor}
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_acc_uc}
-	\caption{Histograma de Acurácia (melhores resultados para cada base de dados)}
-	\label{fig:histogram_best_run_for_each_db_acc_uc}
-\end{figure}
+A obtenção do fator utilizado no cálculo da métrica de ortogonalidade por cobertura de classes foi realizada com o auxílio da própria ferramenta desenvolvida neste trabalho.
+\par
+Foram realizadas várias execuções da ferramenta com um conjunto fixo de padrões e vários fatores diferentes para cada uma das vinte e seis bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learing Repository}), e o fator que obteve os melhores resultados em média foi selecionado. Na tabela \ref{tab:table_test_parms_class_cov_factor} se encontram os parâmetros utilizados no processo, e na tabela \ref{tab:table_test_parms_class_cov_factor_results} se encontram os resultados obtidos par cada fator.
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_pat_uc}
-	\caption{Histograma de Padrões (melhores resultados para cada base de dados)}
-	\label{fig:histogram_best_run_for_each_db_pat_uc}
-\end{figure}
+\input{tables/table_test_parms_class_cov_factor.tex}
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_rul_uc}
-	\caption{istograma de Regras (melhores resultados para cada base de dados)}
-	\label{fig:histogram_best_run_for_each_db_rul_uc}
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_tim_uc}
-	\caption{Histograma de Tempo (melhores resultados para cada base de dados)}
-	\label{fig:histogram_best_run_for_each_db_tim_uc}
-\end{figure}
-
-\input{tables/table_best_runs_lac_uc.tex}
-
-\input{tables/table_best_runs_olac_uc.tex}
-
-\input{tables/table_best_runs_origami_uc.tex}
-
-\input{tables/table_best_parms_for_avg_db_uc.tex}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_acc_uc}
-	\caption{Histograma de Acurácia (média dos resultados para todas as bases de dados)}
-	\label{fig:histogram_best_run_for_avg_db_acc_uc}
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_pat_uc}
-	\caption{Histograma de Padrões (média dos resultados para todas as bases de dados)}
-	\label{fig:histogram_best_run_for_avg_db_pat_uc}
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_rul_uc}
-	\caption{Histograma de Regras (média dos resultados para todas as bases de dados)}
-	\label{fig:histogram_best_run_for_avg_db_rul_uc}
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_tim_uc}
-	\caption{Histograma de Tempo (média dos resultados para todas as bases de dados)}
-	\label{fig:histogram_best_run_for_avg_db_tim_uc}
-\end{figure}
-
-\input{tables/table_comparison_lac_olac_uc.tex}
-
-\input{tables/table_comparison_lac_origami_uc.tex}
-
-\input{tables/table_comparison_olac_origami_uc.tex}
-
+\input{tables/table_test_parms_class_cov_factor_results.tex}
 
