@@ -1,0 +1,316 @@
+\section{Frequent and Orthogonal Patterns}
+\subsection{Contextualizing}
+
+\begin{frame}{Frequent Patterns}
+	\begin{itemize}[<+-| alert@+>]
+		\item Widely used in several applications, including association rules, classification, clustering, indexing, etc.;
+		\item Minimize the result is still a challenge:
+		\begin{itemize}[<+-| alert@+>]
+			\item One of the properties of Frequent Patterns is anti-monotonicity.
+		\end{itemize}
+		\item Minimize redundancy is another challenge:
+		\begin{itemize}[<+-| alert@+>]
+			\item There is limited work on finding those top-k patterns which demonstrate high-significance and low-redundancy simultaneously.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Frequent Patterns}
+	\begin{block}{Orthogonal Patterns}
+		Our goal is to apply orthogonality in the frequent pattern mining problem, extracting a sub-set of patterns with high-significance and low-redundancy simultaneously.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Orthogonality Metrics}
+	\begin{itemize}[<+-| alert@+>]
+		\item It is necessary to define orthogonality metrics in order to evaluate sets;
+		\item The Jaccard similarity coefficient complement applied to dataset coverage may be considered as an orthogonality metric applicable to two patterns: \[D(p_1,p_2) = 1 - \frac{|TS(p_1) \cap TS(p_2)|}{|TS(p_1) \cup TS(p_2)|},\] where $TS(p)$ is the set of transactions covered by $p$.
+		\item We are interested in metrics applicable to sets of different sizes.
+	\end{itemize}
+\end{frame}
+
+\subsection{Orthogonality Metrics}
+
+\begin{frame}{Considering Pattern Structures}
+	\begin{block}{Motivation}
+		Two patterns are orthogonal if they don't share items. We say that the patterns $ABC$ and $DEF$ are orthogonal, but $ABC$ e $CDE$ are not, since the item $C$ is present in both patterns. This may be applied to bigger sets, for example, the patterns $AB$, $CD$ e $EF$ are orthogonal, but the patterns $AB$, $BC$ e $CD$ are not.
+	\end{block}
+\end{frame}
+\begin{frame}{Considering Pattern Structures}
+	\begin{itemize}[<+-| alert@+>]
+		\item Let $\I$ be a set of items, $\D$ a dataset of transactions in $\I$, $\F$ the set of frequent patterns in $\D$, and $\Fl$ a sub-set of $\F$ ($\Fl \subseteq \F$);
+		\item We say that $\Il \subseteq \I$ is the sub-set of items that appear in, at least, one of the patterns found in $\Fl$;
+		\item For each item $i \subseteq \Il$ is given a weight: \[w_i = \frac{|\Fl|-|\Fli|}{|\Fl|-1},\] where $\Fli \subseteq \Fl$ is the sub-set of patterns from $\Fl$ that contains the item $i$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considering Pattern Structures}
+	\begin{itemize}[<+-| alert@+>]
+		\item The orthogonality based in patterns structure for the set is given by: \[O_e = \frac{\sum_{i \subseteq \Il} w_i}{|\Il|}.\]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considering Transaction Coverage}
+	\begin{block}{Motivation}
+		Two patterns are orthogonal if they appear in different areas in dataset. In other words, if the sets of transactions covered by each pattern don't have elements in common.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Considering Transaction Coverage}
+	\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{../thesis/img/coverage}
+	\caption{Visualization of Transaction Coverage in the Dataset}
+	\label{fig:covex1}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Considering Transaction Coverage}
+	\begin{itemize}[<+-| alert@+>]
+		\item Let $\I$ be a set of items, $\D$ a dataset of transactions in $\I$, $\F$ the set of frequent patterns in $\D$, and $\Fl$ a sub-set of $\F$ ($\Fl \subseteq \F$);
+		\item We say that $\Dl \subseteq \D$ is the sub-set of transactions covered by, at least, one of the patterns found in $\Fl$;
+		\item For each transaction $t \subseteq \Dl$ is given a weight: \[w_t = \frac{|\Fl| - |\Flt|}{|\Fl| - 1},\] where $\Flt$ is the sub-set of patterns from $\Fl$ that appear in the transaction $t$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considering Transaction Coverage}
+	\begin{itemize}[<+-| alert@+>]
+		\item The orthogonality based in transaction coverage is given by: \[O_t = \frac{\sum_{t \subseteq \Dl} w_t}{|\Dl|}.\]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Considering Class Coverage}
+	\begin{block}{Motivation}
+		Two patterns are orthogonal if they are found in transactions with distinct classes. In other words, the sets of transactions covered by the pattens may not have classes in common.
+	\end{block}
+\end{frame}
+
+\begin{frame}{Considering Class Coverage}
+	\begin{itemize}[<+-| alert@+>]
+		\item Let $\I$ be a set of items, $\D$ a dataset of transactions in $\I$, $\F$ the set of frequent patterns in $\D$, $\Fl$ a sub-set from $\F$ ($\Fl \subseteq \F$) and $\Dl \subseteq \D$ the sub-set of transactions covered by, at least, one of the patters found in $\Fl$;
+		\item We say that $\C$ is the set of classes associated to transactions in $\D$ and $\Cl \subseteq \C$ the sub-set of classes associated to transactions in $\Dl$;
+		\item For each class $c \subseteq \Cl$ is given a weight: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] where  $\Flc$ is the sub-set of patterns from $\Fl$ that cover a number of transactions with class $c \subseteq \Cl$ higher than $90\%$ of the expected average;		
+	\end{itemize}
+\end{frame}
+
+%\begin{frame}{Considerando Cobertura de Classes}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Para cada classe $c \subseteq \Cl$ é dado um peso: \[w_c = \frac{|\Fl| - |\Flc|}{|\Fl| - 1},\] onde $\Flc$ é o sub-conjunto de padrões de $\Fl$ que cobrem uma quantidade de transações de classe $c \subseteq \Cl$ maior que $90\%$ da média esperada;
+%	\end{itemize}
+%\end{frame}
+
+\begin{frame}{Considering Class Coverage}
+	\begin{itemize}[<+-| alert@+>]
+		\item The orthogonality based in class coverage is given by: \[O_c = \frac{\sum_{c \subseteq \Cl} w_c}{|\Cl|}.\]
+	\end{itemize}
+\end{frame}
+
+\subsection{Associative Classification and Orthogonality}
+
+\begin{frame}{Using Orthogonality in LAC}
+	\begin{itemize}[<+-| alert@+>]
+		\item For each test instance, LAC (\textit{Lazy Associative Classifier}) builds a projection of training dataset with only transactions that share items with the instance;
+		\item After that, the algorithm gets a set of frequent patterns according to a support given by the user;
+		\item With these patterns, it generate association rules used to classify the instance.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Using Orthogonality in LAC}
+	\begin{itemize}[<+-| alert@+>]
+		\item In this work, orthogonality was used to extract, from the frequent patterns set, a sub-set of orthogonal patterns;
+		\item The association rules were generated from this sub-set.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heuristic to Get Orthogonal Sets}
+	\begin{itemize}[<+-| alert@+>]
+		\item Find the sub-set of patterns with best orthogonality metric is NP-Hard;
+		\item It was developed a greedy heuristic that starts with an orthogonal set with two elements, and, iteratively, tries to obtain a new set with one more element adding candidate patterns and modifying the set in order to maximize the metric.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[shrink=5]{Heuristic to Get Orthogonal Sets}
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+
+\begin{algorithm}[H]
+\caption{OLAC}
+\label{alg:olac}
+\begin{algorithmic}[1]
+
+\REQUIRE $\D, \sigma$
+	\STATE $\F \leftarrow FindFrequentPatterns (\D, \sigma)$
+	\STATE $Sort (\F)$
+	\STATE $\Or \leftarrow GetFirstAvailablePattern (\F)$
+	\REPEAT
+		\STATE $rate \leftarrow GetOrthogonalityRate (\Or)$
+%		\STATE $\Or_{try} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+%		\STATE $rate_{try} = GetOrthogonalityRate (\Or_{try})$
+%		\FOR {$P \in \F, P \notin \Or_{try}$}
+%			\STATE $S \leftarrow GetMoreSimilar (\Or, P)$
+%			\STATE $\Or_{try} \leftarrow \Or_{try} \cup P \ \backslash \ S$
+%			\STATE $rate_{tmp} = GetRate (\Or)$
+%			\IF {$rate_{tmp} \leq rate_{try}$}
+%				\STATE $\Or_{try} \leftarrow \Or_{try} \cup S \  \backslash \  P$
+%			\ELSE
+%				\STATE $rate_{try} \leftarrow rate_{tmp}$
+%			\ENDIF
+%		\ENDFOR
+		\STATE $\Or_{c} \leftarrow GetNextCandidateSet (\Or, \F)$
+		\STATE $rate_{c} = GetOrthogonalityRate (\Or_{c})$
+		\IF {$rate_{c} \geq rate$}
+			\STATE $\Or \leftarrow \Or_{c}$
+		\ENDIF
+	\UNTIL {$rate_{c} < rate$}
+	\STATE $\R \leftarrow \Or$
+
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+\begin{frame}[shrink=5]{Heuristic to Get Orthogonal Sets}
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+
+\begin{algorithm}[H]
+\caption{OLAC - GetNextCandidateSet}
+\label{alg:olac_getNextCandidateSet}
+\begin{algorithmic}[1]
+
+\REQUIRE $\Or, \F$
+\STATE $\Or_{c} \leftarrow \Or \cup GetFirstAvailablePattern (\F)$
+\STATE $rate_{c} = GetOrthogonalityRate (\Or_{c})$
+\FOR {$P \in \F, P \notin \Or_{c}$}
+	\STATE $S \leftarrow GetMoreSimilar (\Or_{c}, P)$
+	\STATE $\Or_{c} \leftarrow \Or_{c} \cup P \ \backslash \ S$
+	\STATE $rate_{try} = GetRate (\Or_{c})$
+	\IF {$rate_{try} > rate_{c}$}
+		\STATE $rate_{c} \leftarrow rate_{try}$
+	\ELSE
+		\STATE $\Or_{c} \leftarrow \Or_{c} \cup S \  \backslash \  P$
+	\ENDIF
+\ENDFOR
+\RETURN $\Or_{c}$
+%
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+\subsection{The ORIGAMI Strategy}
+
+\begin{frame}{Contextualizing}
+The \textbf{ORIGAMI} is a graph mining algorithm found in literature, where the authors introduce a definition for $\alpha$-orthogonality and $\beta$-representativity, and present a new paradigm for mining a summary representation of the set of frequent graphs by considering the distances in the pattern space.
+\end{frame}
+
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{itemize}[<+-| alert@+>]
+		\item Let $\F$ be the set of all frequent sub-graphs of a collection;
+		\item Let $sim : \F \times \F \rightarrow \left[0, 1\right]$ be a symmetric binary function that returns the \textit{similarity} between two graphs;
+		\item Given a collection of graphs $\G$, and an upper-bound for similarity $\alpha \in \left[0, 1\right]$, we say that the sub-set of graphs $\R \subseteq \G$ is \textbf{$\alpha$-orthogonal} with respect to $\G$ if, and only if, for any $G_a, G_b \in \R, sim(G_a, G_b) \leq \alpha$ and for any $G_i \in \G \backslash \R$ there exists a $G_j \in \R, sim(G_i, G_j) > \alpha$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{itemize}[<+-| alert@+>]
+		\item Given a collection of graphs $\G$, an $\alpha$-orthogonal set $\R \subseteq \G$ and a lower-bound for similarity $\beta \in \left[0, 1\right]$, we say that $\R$ \textbf{represents} a graph $G \in \G$ if there exists some $G_a \in \R$ such that $sim(G_a, G) \geq \beta$. Given $\Upsilon(\R,\G) = \left\{G \in \G : \exists G_a \in \R, sim(G, G_a) \geq \beta\right\}$, we say that $\R$ is a $\beta$-representative set for $\Upsilon(\R, \G)$;
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{itemize}[<+-| alert@+>]
+		\item Given a collection of graphs $\G$, an $\alpha$-orthogonal set and its $\beta$-representative set $\R$, we call \textbf{residue} of $\R$ the set of patterns not represented in $\G$, given as $\Delta(\R, \G) = \G \backslash \left\{ \R \cup \Upsilon(\R, \G) \right\}$, the \textit{residue} of $\R$ is defined as the cardinality of its residue-set $|\Delta(\R, \G)|$. Finaly, we define the average residue similarity for $\R$ as follows: $ars(\R, \G) = \frac{\sum_{G_b \in \Delta(\R, \G)} {max_{G_a \in \R} \left\{sim(G_a, G_b)\right\}}}{|\Delta(\R, \G)|}$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{$\alpha$-orthogonality Definition}
+	\begin{block}{Objective}
+		The goal is to find sets of $\alpha$-orthogonal and $\beta$-representative graphs related to the maximal sub-graphs set $\M$.
+	\end{block}
+\end{frame}
+
+\begin{frame}{The ORIGAMI Algorithm}
+
+\begin{algorithm}[H]
+\caption{ORIGAMI}
+\label{alg:origami}
+\begin{algorithmic}[1]
+
+\REQUIRE $\D, \sigma, \alpha, \beta$
+\STATE $EM \leftarrow EdgeMap (\D)$
+\STATE $\F_1 \leftarrow FindFrequentEdges (\D, \sigma)$
+\STATE $\widehat{\M} \leftarrow 0$
+\WHILE {$\neg StopCondition ()$}
+	\STATE $M \leftarrow RandomMaximalGraph (\D, \F_1, EM, \sigma)$
+	\STATE $\widehat{\M} \leftarrow \widehat{\M} \cup M$
+\ENDWHILE
+\STATE $\R \leftarrow OrthogonalRepresentativeSets (\widehat{\M}, \alpha, \beta)$
+
+\end{algorithmic}
+\end{algorithm}
+
+\end{frame}
+
+\begin{frame}{The ORIGAMI Adaptation}
+	\begin{itemize}[<+-| alert@+>]
+		\item It was implemented an adaptation of ORIGAMI for the Associative Classification Problem;
+		\item It was implemented a heuristic to get maximal patterns based on the article;
+		\item It was implemented a heuristic to get orthogonal patterns based on the article.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heuristic to Get Maximal Patterns}
+	\begin{itemize}[<+-| alert@+>]
+		\item The algorithm starts with an empty result-set;
+		\item On each iteration, it tries to get the largest frequent pattern possible, selection items randomly;
+			\begin{itemize}[<+-| alert@+>]
+				\item If the algorithm chooses an item that is already in the pattern, or that makes the pattern infrequent, a counter is decremented;
+				\item The stop-condition for the candidate pattern generation is that the number of wrong chooses for the random item should be, at most, equal to the test instance size.
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heuristic to Get Maximal Patterns}
+	\begin{itemize}[<+-| alert@+>]
+		\item After generate a new maximal pattern, the algorithm tries to insert it in the result-set;
+		\begin{itemize}[<+-| alert@+>]
+			\item If the pattern is already in the set, the algorithm decrements a second counter of tries;
+			\item The stop condition for the maximal patterns set generation is that number of candidate patterns generated that are not maximal or are already in the set should be, at most, equal to the test instance size.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heuristic to Get the Orthogonal Patterns Set}
+	\begin{itemize}[<+-| alert@+>]
+		\item The algorithm starts with a residue equal to $0$ (zero);
+		\item On each iteration, it tries to get a new orthogonal set selecting, randomly, maximal patterns found in the first step of the algorithm, and adding them to the result-set;
+		\begin{itemize}[<+-| alert@+>]
+			\item If the algorithm selects a pattern that is already in the set or does not have similarity lower than $\alpha$ with all the other patterns of the set, the algorithm decrements a counter of tries;
+			\item The stop-condition is that the maximum number of wrong patterns chosen should be, at most, equal to the number of maximal patterns.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Heuristic to Get the Orthogonal Patterns Set}
+	\begin{itemize}[<+-| alert@+>]
+		\item After generate a new orthogonal set, the algorithm calculate its residue-value;
+		\item If the residue is the best until now, it consider the set found as the new best result;
+		\item The stop-condition for the algorithm is that the maximum number of orthogonal sets generated that don't improve the result should be, at most, equal to the number of maximal patterns.
+	\end{itemize}
+\end{frame}
+
+
+%\begin{frame}{Heurística de Obtenção de Conjuntos Ortogonais}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item No início do algoritmo, o conjunto-solução é inicializado com apenas um elemento, e a métrica de ortogonalidade do conjunto com o valor $0$ (zero), e então começa o ciclo de iterações:
+%		\begin{enumerate}[<+-| alert@+>]
+%			\item Um novo elemento é incluído ao conjunto;
+%			\item É realizada uma busca por todo o conjunto de padrões que não fazem parte do conjunto-solução. Durante este procedimento, cada padrão verificado é incluído na solução, substituindo, neste conjunto, o elemento que mais se assemelha àquele. Se a métrica de ortogonalidade do conjunto melhorou, o algoritmo mantém a troca. Se não, a troca é desfeita, e o próximo padrão da seqüência é verificado;
+%			\item Ao final do processo, o algoritmo compara a métrica de ortogonalidade obtida com a métrica do conjunto anterior (que possuía um elemento a menos). Se a métrica se manteve, ou melhorou, o algoritmo mantém o novo conjunto como solução, e volta ao início do ciclo. Se não, o algoritmo termina o ciclo, e o conjunto anterior é dado como resultado.
+%		\end{enumerate}
+%	\end{itemize}
+%\end{frame}
+
+
+% Métricas de Ortogonalidade
+% Classificação Associativa e Ortogonalidade
+% Estratégia ORIGAMI

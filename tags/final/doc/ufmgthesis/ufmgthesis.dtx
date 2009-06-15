@@ -1,0 +1,2095 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2004,2005,2006,2007 by Vilar Camara Neto and Eduardo Freire
+% Nakamura.
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.2 of this license or (at your option) any later
+% version.  The latest version of this license is in:
+%
+%     http://www.latex-project.org/lppl.txt
+%
+% and version 1.2 or later is part of all distributions of
+% LaTeX version 1999/12/01 or later.
+%
+% Currently this work has the LPPL maintenance status "maintained".
+%
+% The Current Maintainer of this work is Vilar Camara Neto.
+%
+% This work consists of the files ufmgthesis.dtx and
+% ufmgthesis.ins and the derived file ufmgthesis.cls.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{ufmgthesis.dtx}
+%</driver>
+%<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<class>\ProvidesClass{ufmgthesis}
+%<*class>
+  [2008/02/26 v0.31 Classe para dissertações, teses e propostas de tese no
+  formato PPGCC/ICEx/UFMG]
+%</class>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+
+\begin{document}
+\DocInput{ufmgthesis.dtx}
+\end{document}
+%</driver>
+% \fi
+
+% \CheckSum{1284}
+
+
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \changes{v0.31}{2008/02/26}{Correção da contra-capa, em que aparecia o nome
+%   do autor duplicado.}
+% \changes{v0.30}{2007/12/13}{Mudança na especificação de dedicatórias e
+%   agradecimentos; cabeçalho da página de título agora apresenta nome do autor
+%   e do orientador.}
+% \changes{v0.20}{2007/11/09}{Mudança na especificação de resumos e
+%   \emph{abstracts}; término da tradução da documentação para o português.}
+% \changes{v0.14}{2006/11/05}{Documentação traduzida para o português.
+%   Eliminados brokentitle e similares. Corrigidos bugs de formatação.
+%   Corrigido cabeçalho quando apêndices são postos após as Referências
+%   Bibliográficas.}
+% \changes{v0.13}{2005/07/24}{The approval sheet now shows the broken title.}
+% \changes{v0.12}{2005/07/21}{Bugs: arabic numbering in front matter (with
+%   ``easy way'') and no header in main matter (with command
+%   \string\ufmgthesis).}
+% \changes{v0.11}{2005/06/21}{Typo: \string\ufmgthesis was previously named
+%   \string\ufmghesis; Front matter header/footer reformat; page numbering
+%   starts right after cover/title pages; \string\mainmatter is now automatic
+%   (see `nomainmatter' class option)}
+% \changes{v0.10}{2005/03/12}{Cover/title page reformat; added `centertitles'
+%   class option}
+% \changes{v0.09}{2005/03/10}{Extended the Portuguese/non-Portuguese
+%   integration}
+% \changes{v0.08}{2005/03/09}{Changed date format and document structure,
+%   especially to provide more integration between Portuguese and
+%   non-Portuguese parts}
+% \changes{v0.07}{2005/03/09}{Changed ``Thesis proposal'' to ``Thesis
+%   project''}
+% \changes{v0.06}{2005/03/07}{Corrected the bibliography header placement}
+% \changes{v0.05}{2005/02/22}{Added bibliography support}
+% \changes{v0.04}{2005/01/15}{Added `memhfixc' package auto-loading}
+% \changes{v0.03}{2005/01/15}{`twoside' option is working now}
+% \changes{v0.02}{2005/01/13}{Corrected small formatting bugs}
+% \changes{v0.01}{2004/12/09}{Initial version (first draft)}
+%
+% \GetFileInfo{ufmgthesis.dtx}
+%
+% \DoNotIndex{\#,\$,\%,\&,\@,\\,\{,\},\^,\_}
+% \DoNotIndex{\`~}
+% \DoNotIndex{\ }
+% \DoNotIndex{\z@,\m@ne,\@ne,\@ifpackageloaded,\@ifundefined,\@temp}
+% \DoNotIndex{\@undefined}
+% \DoNotIndex{\addtocount,\advance,\AtBeginDocument,\begin,\bgroup}
+% \DoNotIndex{\begingroup,\bibname,\c,\catcode,\closein,\centering}
+% \DoNotIndex{\chapter,\chaptermark,\checkandfixthelayout,\cleardoublepage}
+% \DoNotIndex{\contentsname,\copypagestyle,\csname,\date,\DeclareOption}
+% \DoNotIndex{\define@key,\doublespace,\egroup,\end,\endcsname,\ExecuteOptions}
+% \DoNotIndex{\expandafter,\fi,\frontmatter,\gdef,\height,\hspace}
+% \DoNotIndex{\if,\if@twoside,\ifnum,\ifx,\includegraphics,\input}
+% \DoNotIndex{\languagename,\Large,\large,\leftmark,\let,\listfigurename}
+% \DoNotIndex{\listoffigures,\listoftables,\listtablename,\LoadClass}
+% \DoNotIndex{\loop,\mainmatter,\makeevenhead,\makeheadrule,\makeoddfoot}
+% \DoNotIndex{\makeoddhead,\MakeUppercase,\markboth,\markright,\maxsecnumdepth}
+% \DoNotIndex{\message,\newcommand,\newcounter,\newif,\normalrulethickness}
+% \DoNotIndex{\normalsize,\onehalfspace,\pagestyle,\par,\PassOptionsToClass}
+% \DoNotIndex{\ProcessOptions,\protect,\quad,\raisebox,\relax,\renewcommand}
+% \DoNotIndex{\repeat,\RequirePackage,\rightmark,\sectionmark,\setcounter}
+% \DoNotIndex{\setkeys,\setlrmarginsandblock,\setulmarginsandblock}
+% \DoNotIndex{\singlespace,\stretch,\tableofcontents,\textbf,\textit,\textsc}
+% \DoNotIndex{\textwidth,\thechapter,\thepage,\thesection,\title}
+% \DoNotIndex{\closeout,\day,\def,\edef,\else,\empty,\endgroup,\vspace}
+%
+% \title{A classe \textsf{ufmgthesis}\thanks{Este documento corresponde à
+% versão \fileversion{} da classe \textsf{ufmgthesis}, lançada em~\filedate.}}
+% \author{Vilar Camara Neto\qquad\qquad Eduardo Nakamura \\
+% \texttt{\{neto,nakamura\}@dcc.ufmg.br}}
+% \date{13 de dezembro de 2007}
+%
+% \sloppy
+% \maketitle
+%
+% \StopEventually
+%
+% \tableofcontents
+%
+%
+% \section{Introdução}
+%
+% Este arquivo descreve a classe \LaTeX{} |ufmgthesis| --- uma classe
+% extra-oficial para formatar dissertações de mestrado, teses de doutorado e
+% propostas de tese para a Universidade Federal de Minas Gerais (UFMG). Esta
+% classe é baseada na classe original |ufmgthes| criada pelo estudante Eduardo
+% Freire Nakamura, bastante utilizada por outros estudantes.
+%
+% Conforme descrito acima, esta classe \emph{não é oficial}! Ela não foi
+% desenvolvida ou distribuída pela UFMG ou pelo PPGCC. Portanto, deve ficar
+% claro que esta classe é distribuída no estilo ``como está'' (``as is''), sem
+% garantias de qualquer tipo. Se você adotar a classe |ufmgthesis| em seu
+% documento, discuta a formatação com seu orientador, pois ele pode preferir
+% que sejam feitas certas adaptações. Se você acredita que essas alterações são
+% interessantes para futuros estudantes, então divulgue sua versão! Mas não se
+% esqueça de incrementar o número da versão e de descrever quais foram as suas
+% alterações.
+%
+%
+% \section{Como usar a classe}
+%
+% Esta seção descreve como usar a classe |ufmgthesis|. \emph{Por favor,
+% leia-a!} Eu avisei.
+%
+% Note que a classe |ufmgthesis| é baseada na |memoir|, que é uma classe
+% altamente configurável. Você deve tê-la instalada no seu sistema \LaTeX.
+% Alguns sistemas já vêm com essa classe (incluindo a distribuição mais comum
+% do Windows, o MiK\TeX). A Seção~\ref{sec:memoirtips} contém uma descrição
+% rápida sobre a instalação do |memoir|.
+%
+%
+% \subsection{Informações importantes para usuários de versões anteriores}
+%
+% Se você estava usando uma versão anterior da classe |ufmgthesis| e está
+% atualizando-a para a versão atual, algumas mudanças estruturais (por exemplo,
+% na sintaxe dos comandos) podem ter ocorrido. Dê uma olhada nas subseções a
+% seguir para ver se essas mudanças afetam o seu documento.
+%
+% Naturalmente, se você está usando o |ufmgthesis| pela primeira vez, esta
+% seção não é importante.
+%
+% \subsubsection{Mudanças introduzidas na versão 0.30}
+%
+% Por sugestão da Secretaria do nosso curso, decidimos (e achei melhor) colocar
+% a Dedicatória e os Agradecimentos antes dos resumos. Além disso, mudou o
+% cabeçalho da página de título: ao invés do nome da instituição, passa a
+% aparecer os nomes do autor e o orientador. 
+%
+% \subsubsection{Mudanças introduzidas na versão 0.20}
+%
+% A definição de resumos e \emph{abstracts} mudou: os diversos comandos
+% |\abstract|, |\englishabstract| e |\portugueseabstract| foram centralizados
+% em um único comando |\abstract|. A sintaxe deste comando é
+% |\abstract|\marg{título}\marg{arquivo} (note que especificar o título é
+% obrigatório, como ``Resumo'', ``Abstract'' ou ``Resumo Estendido''). É
+% possível definir qualquer número de resumos e \emph{abstracts}.
+%
+% A mesma observação se aplica às opções |abstract|, |englishabstract| e
+% |portugueseabstract| do comando |\ufmgthesis|, substituídas pela opção
+% |abstract|.
+%
+% \subsubsection{Mudanças introduzidas na versão 0.14}
+%
+% As opções |brokentitle| e |portuguesebrokentitle| e os comandos
+% |\brokentitle| e |\portuguesebrokentitle| foram eliminados. Sem dó nem
+% piedade. Caso você queira definir manualmente as quebras de linha para
+% balancear melhor o título na capa e na folha de título, introduza as quebras
+% de linha (|\\|) na própria opção |title| ou no comando |\title|.
+%
+% O comando |\backmatter| não é mais chamado automaticamente. Isso resolve
+% o problema da numeração inexistente dos apêndices, para quem prefere
+% colocá-los após as Referências Bibliográficas. (Entretanto, alguns recomendam
+% que as Referências Bibliográficas sejam colocadas \emph{após} os apêndices.)
+%
+% \subsubsection{Mudanças introduzidas na versão 0.11}
+%
+% \textbf{Importante!} Versões anteriores tinham um erro de grafia no comando
+% |\ufmgthesis|: seu nome era definido como |\ufmghesis| (ou seja, sem o
+% \textbf{t}). Esse erro foi corrigido a partir da versão 0.11. Se você estiver
+% atualizando de uma versão anterior, por favor altere o seu documento para
+% chamar o comando com a grafia correta.
+%
+% O comando |\mainmatter| agora é chamado automaticamente, a não ser que a
+% opção de classe |nomainmatter| seja especificada.
+%
+% A formatação dos cabeçalhos e rodapés mudou: o título da seção não aparece
+% mais, porque muitas vezes o cabeçalho ficava sobrecarregado com muito texto
+% (especialmente no caso de seções com títulos compridos).
+%
+% Além disso, a numeração das páginas começa logo após a folha de título. (Nas
+% versões anteriores, a numeração começava somente após o Sumário.)
+%
+% \subsubsection{Mudanças introduzidas na versão 0.10}
+%
+% A formatação da capa e da página de título mudou. Na nova versão, a posição
+% do nome do autor do documento é diferente.
+%
+% \subsubsection{Mudanças introduzidas na versão 0.09}
+%
+% Foram criadas as opções |portuguesetitle|, |portuguesebrokentitle|,
+% |portugueseuniversity| e |portuguesecourse|. Elas só são importantes se você
+% estiver escrevendo o documento em uma língua diferente do português. Além
+% disso, a opção |department| desapareceu, pois essa informação não era usada.
+%
+% \subsubsection{Mudanças introduzidas na versão 0.08}
+%
+% O formato da data fornecido pela opção |date=|\meta{data} (para o comando
+% |\ufmgthesis|) ou pelo comando |\date|\marg{data} mudou. Ao invés de fornecer
+% a data de forma textual (ou seja, ``10 de janeiro de 2005'' ou ``January 10,
+% 2005''), você deve agora fornecer a data no formato |aaaa-mm-dd| ou
+% |aaaa-mm|. Veja a Seção~\ref{sec:ufmgthesis} para mais detalhes.
+%
+%
+% \subsection{Opções da classe}
+%
+% \newcommand{\defmark}{$\triangleright$}
+% \newcommand{\sep}{$\mid$}
+%
+% Ao usar o comando |\documentclass|, você pode fornecer algumas opções para
+% configurar a aparência do documento. As opções disponíveis são listadas a
+% seguir. A opção padrão em cada caso é identificada pelo símbolo \defmark.
+%
+% \begin{itemize}
+%
+% \item |msc| \sep{} \defmark|phd|
+%
+%   Define se este documento é uma dissertação de mestrado ou uma tese de
+%   doutorado.
+%
+% \item |proposal| ou |project|
+%
+%   Se qualquer uma dessas opções for fornecida, o documento torna-se uma
+%   proposta de dissertação ou um projeto de tese. O efeito é o mesmo para
+%   qualquer uma das duas opções.
+%
+% \item |single| \sep{} \defmark|onehalf| \sep{} |double|
+%
+%   Define o espaçamento padrão entre as linhas: simples, 1\,\textonehalf{} ou
+%   duplo.
+%
+% \item |centertitles|
+%
+%   Por padrão, o texto-título das páginas introdutórias (resumos,
+%   Agradecimentos, Sumário, Lista de Figuras e Lista de Tabelas) é alinhado à
+%   esquerda. Com esta opção, os títulos passam a ser centralizados. Também é
+%   afetado o título das ``Referências Bibliográficas''. Esta opção não altera
+%   o alinhamento do título dos capítulos ao longo do documento.
+%
+% \item \defmark|showcover| \sep{} |hidecover|
+%
+%   Habilita ou desabilita a geração da capa.
+%
+% \item \defmark|showtitle| \sep{} |hidetitle|
+%
+%   Habilita ou desabilita a geração da folha de título.
+%
+% \item \defmark|showapproval| \sep{} |hideapproval|
+%
+%   Habilita ou desabilita a geração da folha de aprovação.
+%
+% \item \defmark|showabstract| \sep{} |hideabstract|
+%
+%   Habilita ou desabilita a geração das páginas de resumo (\emph{abstract}).
+%
+% \item \defmark|showdedication| \sep{} |hidededication|
+%
+%   Habilita ou desabilita a geração da página de dedicatória.
+%
+% \item \defmark|showack| \sep{} |hideack|
+%
+%   Habilita ou desabilita a geração da página de agradecimentos.
+%
+% \item \defmark|showtoc| \sep{} |hidetoc|
+%
+%   Habilita ou desabilita a geração do Sumário (\emph{Table of Contents}).
+%
+% \item \defmark|showlof| \sep{} |hidelof|
+%
+%   Habilita ou desabilita a geração da Lista de Figuras.
+%
+% \item \defmark|showlot| \sep{} |hidelot|
+%
+%   Habilita ou desabilita a geração da Lista de Tabelas.
+%
+% \item \defmark|showall| \sep{} |hideall|
+%
+%   Habilita ou desabilita a geração de todas as páginas opcionais. Você pode
+%   usar a opção |hideall| para acelerar a compilação do documento enquanto ele
+%   está sendo construído e alterar para |showall| somente na geração das
+%   versões finais.
+%
+% \item |nomainmatter|
+%
+%   A classe |\ufmgthesis| chama automaticamente o comando |\mainmatter| depois
+%   da construção de todas as páginas introdutórias. (O comando |\mainmatter|
+%   reinicia a numeração das páginas e configura-as para o formato arábico: 1,
+%   2, 3, etc.) Se você quiser inserir manualmente outras páginas antes do
+%   corpo principal do documento de modo a manter a numeração romana (i, ii,
+%   iii, etc.) --- por exemplo, uma Lista de Algoritmos ou algo similar ---,
+%   então use esta opção. Neste caso, porém, \emph{não se esqueça} de colocar o
+%   comando |\mainmatter| antes do primeiro capítulo. Se você esquecer desse
+%   comando, todas as páginas do seu documento serão numerados conforme a
+%   formatação romana.
+%
+% \end{itemize}
+%
+%
+% \subsection{O jeito muito fácil de usar a classe}
+% \label{sec:ufmgthesis}
+%
+% Todas as páginas introdutórias --- capa, folha de título, folha de aprovação,
+% resumo, resumo estendido, \emph{abstract}, dedicatória, agradecimentos,
+% Sumário, lista de figuras e lista de tabelas --- podem ser gerados por um
+% único comando. É sério. O comando mágico é |\ufmgthesis|, que recebe todas as
+% informações por meio de pares \meta{chave}|=|\meta{valor}. A chamada ao
+% comando se parece com algo como:
+%
+% \begin{quote}
+% \begin{raggedright}
+% |\ufmgthesis{|\\
+% |  title={O Título da Tese},|\\
+% |  author={Vilar Fiuza da Camara Neto},|\\
+% |  university={Universidade Federal de Minas Gerais},|\\
+% |  |\emph{demais informações\ldots}\\
+% |}|
+% \end{raggedright}
+% \end{quote}
+%
+% Bom, agora você precisa da lista de todas as chaves que podem ser fornecidas
+% como parâmetros para o comando |\ufmgthesis|. Eis a lista:
+%
+% \begin{itemize}
+%
+% \item |title|=\marg{título}
+%
+%   Define o título da dissertação ou da tese.
+%
+%   Ao compilar o texto, se você perceber que as quebras de linha que ocorreram
+%   na capa criaram um efeito desbalanceado, marque manualmente os pontos de
+%   quebra de linha com duas contra-barras (|\\|). Para maiores informações,
+%   veja a descrição do comando |\title| na página~\pageref{macro:title}.
+%
+% \item |author|=\marg{nome}
+%
+%   Define o nome do autor.
+%
+% \item |university|=\marg{nome}
+%
+%   Define o nome da universidade.
+%
+% \item |course|=\marg{nome}
+%
+%   Define o nome do curso.
+%
+% \item |portuguesetitle|=\marg{título}\\
+%   |portugueseuniversity|=\marg{nome}\\
+%   |portuguesecourse|=\marg{nome}
+%
+%   Se você está escrevendo o documento em língua estrangeira, você precisará
+%   fornecer também o título do documento e os nomes da universidade e do curso
+%   em português. Essas chaves servem para isso.
+%
+% \item |address|=\marg{endereço}
+%
+%   Não é o endereço completo: apenas a cidade e o estado, para constarem na
+%   capa e na folha de título.
+%
+% \item |date|=\marg{data}
+%
+%   Define a data do documento, \emph{sempre} no formato |aaaa-mm-dd| ou
+%   |aaaa-mm-dd| (ou seja, o dia não é obrigatório). Note a ordem
+%   (ano-mês-dia), o hífen como separador e o uso de 4 dígitos para o ano.
+%
+% \item |logo|=\marg{arquivo}
+%
+%   Especifica o arquivo gráfico que contém o logotipo da universidade. O
+%   logotipo aparece na folha de aprovação.
+%
+% \item |advisor|=\marg{nome}\marg{título}\marg{instituição}
+%
+%   Define as informações do orientador. \meta{título} é algo como
+%   ``\texttt{Ph.\~{}D.}'' ou ``\texttt{M.\~{}Sc.}'' (por favor, use o til após
+%   o primeiro ponto ao invés de espaço, senão o \LaTeX{} entende que se trata
+%   de um ponto-seguido). \meta{instituição} é a universidade do orientador. Se
+%   você usar um ponto para o argumento \meta{instituição} --- ou seja,
+%   \texttt{advisor=}\marg{nome}\marg{título}|{.}| ---, ele será copiado do
+%   valor atribuído à chave \texttt{university}. O nome do orientador constará
+%   nas folhas de título e de aprovação.
+%
+% \item |coadvisor|=\marg{nome}\marg{título}\marg{instituição}
+%
+%   Define as informações do co-orientador. Os argumentos são os mesmos da
+%   chave \texttt{advisor}.
+%
+% \item |member|=\oarg{relacionamento}\marg{nome}\marg{título}\marg{instituição}
+%
+%   Define mais um membro da banca. Você pode usar esta chave várias vezes, uma
+%   para cada membro da banca. Os argumentos são os mesmos da chave
+%   \texttt{advisor}, porém há um argumento opcional, \meta{relacionamento}:
+%   esse texto aparece após o nome do membro da banca, na folha de aprovação.
+%   Normalmente esse argumento opcional não é usado.
+%
+% \item |abstract|=\marg{título}\marg{arquivo}
+%
+%   Define um arquivo \texttt{.tex} que contém o texto do resumo (ou
+%   \emph{abstract}). O argumento \meta{título} refere-se ao título a constar
+%   na página: geralmente ``Resumo'', ``Abstract'' ou ``Resumo Estendido''.
+%   \emph{Não use o comando} |\chapter| \emph{nesse arquivo.}
+%
+%   Você pode usar esta opção diversas vezes, para especificar versões
+%   diferentes do resumo. O mais comum é que sejam especificadas pelo menos uma
+%   versão em português e uma em inglês. Observe os exemplos descritos a seguir.
+%
+% \item |dedication|=\marg{arquivo}
+%
+%   Define um arquivo \texttt{.tex} que contém a dedicatória. \emph{Não use o
+%   comando} |\chapter| \emph{nesse arquivo}, inclusive porque páginas de
+%   dedicatória não apresentam título.
+%
+%   Você pode usar esta opção diversas vezes, geralmente se quiser apresentar
+%   dedicatórias em mais de uma linguagem.
+%
+% \item |ack|=\oarg{título}\marg{arquivo}
+%
+%   Define um arquivo \texttt{.tex} que contém os agradecimentos. Se o
+%   argumento \meta{título} for omitido, será adotado ``Agradecimentos'' na
+%   linguagem do documento. \emph{Não use o comando} |\chapter| \emph{nesse
+%   arquivo.}
+%
+%   Você pode usar esta opção diversas vezes, geralmente se quiser apresentar
+%   agradecimentos em mais de uma linguagem.
+%
+% \end{itemize}
+%
+% Eis um exemplo completo, para um documento escrito em língua portuguesa:
+%
+% \begin{quote}
+% \begin{verbatim}
+% \ufmgthesis{
+%   title={Protocolo para Verificação de Erros\\em Redes Totalmente
+%     Confiáveis},
+%   author={Vilar Fiuza da Camara Neto},
+%   university={Universidade Federal de Minas Gerais},
+%   course={Ciência da Computação},
+%   address={Belo Horizonte},
+%   date={2005-01-30},
+%   logo={img/brasao},
+%   advisor={Adamastor Pompeu Setúbal}{Ph.~D.}{.},
+%   coadvisor={Romualdo Freijó Quaresma}{Ph.~D.}{.},
+%   member=[Co-revisor]{Aristolfo Hostetten}{M.~Sc.}{Universidade
+%     Federal do Paraná},
+%   member={Isaías Fortunato de Oliveira Neto Jr.}{M.~Sc.}
+%     {Universidade Estadual de São João do Pirapora},
+%   member={Deodato Alípio Doberval Etrusco}{M.~Sc.}
+%     {Universidade de Vesúvio, Pompéia},
+%   abstract={Resumo}{resumo.tex},
+%   abstract={Abstract}{abstract.tex},
+%   abstract={Resumo Estendido}{resumoest.tex},
+%   dedication={dedicatoria.tex},
+%   ack={agradecimentos.tex},
+% }
+%\end{verbatim}
+% \end{quote}
+%
+% Note que neste exemplo a chave |abstract| foi usada várias vezes para definir
+% versões diferentes do resumo.
+%
+% Eis um exemplo para ilustrar a estrutura do comando |\ufmgthesis| para um
+% documento escrito em língua estrangeira (note que é necessário definir também
+% as chaves |portuguesetitle|, |portugueseuniversity| e |portuguesecourse|):
+%
+% \begin{quote}
+% \begin{verbatim}
+% \ufmgthesis{
+%   title={Protocol for Error-Verification inside\\Totally Error-Free
+%     Networks},
+%   author={Vilar Fiuza da Camara Neto},
+%   university={Federal University of Minas Gerais},
+%   course={Computer Science},
+%   portuguesetitle={Protocolo para Verificação de Erros\\em Redes
+%     Totalmente Confiáveis},
+%   portugueseuniversity={Universidade Federal de Minas Gerais},
+%   portuguesecourse={Ciência da Computação},
+%   address={Belo Horizonte},
+%   date={2005-01-30},
+%   logo={img/brasao},
+%   advisor={Adamastor Pompeu Setúbal}{Ph.~D.}{.},
+%   coadvisor={Romualdo Freijó Quaresma}{Ph.~D.}{.},
+%   member=[Co-revisor]{Aristolfo Hostetten}{M.~Sc.}{Universidade
+%     Federal do Paraná},
+%   member={Isaías Fortunato de Oliveira Neto Jr.}{M.~Sc.}
+%     {Universidade Estadual de São João do Pirapora},
+%   member={Deodato Alípio Doberval Etrusco}{M.~Sc.}
+%     {Universidade de Vesúvio, Pompéia},
+%   abstract={Resumo}{resumo.tex},
+%   abstract={Abstract}{abstract.tex},
+%   dedication={dedicatoria.tex},
+%   ack={agradecimentos.tex},
+% }
+%\end{verbatim}
+% \end{quote}
+%
+%
+% \subsection{O jeito fácil de usar a classe}
+%
+% Há outra maneira de compor as páginas introdutórias: pode-se esquecer o
+% comando mágico |\ufmgthesis| e chamar vários comandos --- alguns para definir
+% as informações do documento, outros para construir cada página introdutória.
+% É um procedimento menos automatizado, mas você terá um controle mais preciso
+% da ordem das páginas que serão montadas.
+%
+% Os comandos para definir as informações do documento possuem os mesmos nomes
+% e argumentos das chaves descritas na seção anterior: você chama os comandos
+% |\title|\marg{título}, |\author|\marg{autor}, e assim por diante. A única
+% exceção é o comando |\addtocomitee|\oarg{relacionamento}\marg{nome}%
+% \marg{título}\marg{instituição}, que corresponde à chave |member| (um comando
+% chamado |\member| me pareceu muito genérico).
+%
+% Após definir todas as informações, você deve chamar comandos para construir
+% cada página. Esses comandos são descritos a seguir:
+%
+% \begin{itemize}
+%
+% \item |\makecoverpage|
+%
+%   Compõe a capa, que contém o nome do autor, o título do documento, o
+%   endereço e a data.
+%
+% \item |\maketitlepage|
+%
+%   Compõe a folha de título. É parecida com a capa, mas inclui o nome do
+%   orientador e uma breve descrição formal do documento.
+%
+% \item |\makeapproval|
+%
+%   Compõe a folha de aprovação. Essa página lista todos os membros da banca,
+%   deixando espaço para suas assinaturas. Na versão atual, essa página é
+%   sempre composta em português, independentemente da linguagem do documento.
+%
+% \item |\includeabstract|\marg{título}\marg{arquivo}
+%
+%   Inclui um arquivo |.tex| com o texto do resumo. \meta{título} é o título do
+%   resumo. Pode ser usado para incluir um resumo alternativo escrito em língua
+%   estrangeira. \emph{Não use o comando} |\chapter| \emph{nesse arquivo.}
+%
+% \item |\includededication|\marg{arquivo}
+%
+%   Inclui um arquivo |.tex| com o texto da dedicatória. \emph{Não use o
+%   comando} |\chapter| \emph{nesse arquivo.}
+%
+% \item |\includeack|\oarg{título}\marg{arquivo}
+%
+%   Inclui um arquivo |.tex| com o texto dos agradecimentos. Se \meta{título}
+%   for omitido, será adotado ``Agradecimentos'' na linguagem do documento.
+%   \emph{Não use o comando} |\chapter| \emph{nesse arquivo.}
+%
+% \item |\tableofcontents|
+%
+%   Compõe o Sumário.
+%
+% \item |\listoffigures|
+%
+%   Compõe a lista de figuras.
+%
+% \item |\listoftables|
+%
+%   Compõe a lista de tabelas.
+%
+% \end{itemize}
+%
+% Após usar esses comandos, você deve usar o comando |\mainmatter|, que
+% reinicia a numeração das páginas e configura-as para a formatação arábica (1,
+% 2, 3, etc.).
+%
+%
+% \subsection{O jeito difícil de usar a classe}
+%
+% Ainda não foi implementado\ldots{} :-)
+%
+%
+% \subsection{As referências bibliográficas}
+%
+% Você pode usar qualquer sistema e estilo para as referências bibliográficas:
+% a classe |ufmgthesis| não obriga a adoção de nada em particular.
+%
+% Entretanto, se você estiver usando o sistema Bib\TeX{} (que gerencia arquivos
+% |.bib|), você pode estar se perguntando sobre o estilo a ser adotado (ou
+% seja, qual deve ser o argumento para o comando |\bibliographystyle{}|?). Como
+% no momento não há nenhum estilo oficial adotado pelo PPGCC/UFMG, aqui nós
+% fornecemos um estilo fortemente baseado no tradicional |apalike|: o estilo
+% |ufmg| (arquivo |ufmg.bst|). Se quiser adotá-lo, você deve colocar o arquivo
+% |ufmg.bst| em um diretório visível ao sistema Bib\TeX{} (pode ser no mesmo
+% diretório que contém o seu arquivo |.bib|).
+%
+% Se você adotar o estilo |ufmg|, então a classe |ufmgthesis| provê um comando
+% para gerar automaticamente a seção de referências bibliográficas (veja
+% abaixo).
+%
+% Reiterando: Se você adotar esse estilo, discuta-o com seu orientador para ver
+% se ele é adequado ao seu caso.
+%
+% O jeito mais fácil de criar a seção de referências bibliográficas é usar o
+% comando |\ufmgbibliography|. É somente isso: não há necessidade de usar os
+% comandos |\bibliographystyle| ou |\bibliography|. A sintaxe é:
+%
+% \begin{quote}
+% |\ufmgbibliography|\oarg{opções}\marg{arquivo-de-bibliografia}
+% \end{quote}
+% onde \meta{arquivo-de-bibliografia} é o nome do seu arquivo |.bib| sem a
+% extensão. Assim, se o seu banco de dados bibliográfico está armazenado no
+% arquivo |referencias.bib|, você deve chamar |\ufmgbibliography{referencias}|.
+%
+% Há algumas \meta{opções} disponíveis, tratando em geral da formatação da
+% bibliografia. São elas:
+%
+% \begin{itemize}
+%
+% \item |noauthorrepeat|
+%
+%   Se você tiver uma série de itens bibliográficos de mesma autoria, essa
+%   opção faz com que os autores apareçam somente no primeiro item: nos demais
+%   itens, um travessão triplo (``---------'') aparece no lugar dos autores.
+%   (Isso pode ser alterado: veja a próxima opção.)
+%
+% \item |noauthorrepstring|
+%
+%   Ao usar a opção |noauthorrepeat|, você pode configurar o que aparece no
+%   lugar dos autores quando há repetição de autoria. O padrão é um travessão
+%   triplo (ou seja, uma seqüência de 9 hífens, pois o \LaTeX{} converte três
+%   hífens em um travessão). Exemplo: |noauthorrepstring={Idem}| apresenta o
+%   texto ``Idem'' no lugar dos autores repetidos.
+%
+% \item |nobreakitems|
+%
+%   Esta opção impede a ocorrência de quebra de página no meio de um item
+%   bibligráfico.
+%
+% \item |bibauthorand|
+%
+%   Define o texto que aparece antes do último autor em um item bibliográfico.
+%   O padrão é ``e'' (em português) ou ``and'' (em inglês). Exemplo: para
+%   especificar um ``e'' comercial, use |bibauthorand=\&|.
+%
+% \item |citeauthorand|
+%
+%   Define o texto que aparece antes do último autor em uma citação
+%   bibliográfica. O padrão é ``e'' (em português) ou ``and'' (em inglês).
+%   Exemplo: para especificar um ``e'' comercial, use |citeauthorand=\&|.
+%
+% \item |authorformat|
+%
+%   Define a formatação da lista de autores. O padrão é a formatação do texto
+%   padrão. Exemplo: para formatar a lista de autores em
+%   versalete\footnote{Versalete: ``O que é isso?'' ``É o famoso \emph{small
+%   caps}'', ou seja, as letras minúsculas são exibidas como maiúsculas de
+%   tamanho reduzido.}, use |authorformat=\scshape|.
+%
+% \item |titleformat|
+%
+%   Define a formatação do título. O padrão é a formatação do texto padrão.
+%   Exemplo: para colocar o título em itálico, use |titleformat=\itshape|.
+%
+% \item |btitleformat|
+%
+%   Define a formatação do \emph{booktitle} para itens do tipo |@incollection|
+%   e |@inproceedings|. O padrão é |\itshape| (itálico).
+%
+% \item |booktitleformat|
+%
+%   Define a formatação do \emph{booktitle} para itens do tipo |@book|,
+%   |@inbook|, |@manual|, |@phdthesis| e |@proceedings|. O padrão é |\itshape|
+%   (itálico).
+%
+% \item |journalformat|
+%
+%   Define a formatação do nome do periódico para itens do tipo |@article|. O
+%   padrão é |\itshape| (itálico).
+%
+% \end{itemize}
+%
+% Certas coisas são automaticamente traduzidas (atualmente para português e
+% inglês somente). Por exemplo, se você tem um artigo dos autores ``Michael J.
+% Brooks and Berthold K. P. Horn'', ele será citado como sendo de ``Brooks e
+% Horn'' se o seu documento estiver em português ou de ``Brooks and Horn'' se
+% estiver em inglês. Para ativar a tradução, você não precisa especificar
+% nenhuma opção: basta informar a linguagem correta para o pacote |babel|, ou
+% seja:
+% \begin{quote}
+% |\usepackage[brazil]{babel}     % para documentos em português|
+% \end{quote}
+% ou
+% \begin{quote}
+% |\usepackage[english]{babel}    % para documentos em inglês|
+% \end{quote}
+%
+% Finalmente, eu recomendo \emph{fortemente} a adoção do pacote |natbib|, para
+% que as referências tenham uma aparência mais profissional. Não é somente uma
+% questão de preferência pessoal: vejo vários orientadores recomendando a
+% adoção desse pacote.
+%
+%
+% \subsection{Dicas sobre a classe \texttt{memoir}}
+% \label{sec:memoirtips}
+%
+% Como foi dito anteriormente, a classe |ufmgthesis| baseia-se na classe
+% |memoir|, que deve estar instalada no seu sistema. Caso contrário, o
+% compilador \LaTeX{} deverá reclamar da ausência do arquivo |memoir.cls| e
+% você deverá instalar essa classe. Se você estiver usando a distribuição
+% MiK\TeX{} para Windows, é bastante simples: basta executar o aplicativo
+% \emph{MiKTeX Package Manager} ou o \emph{Browse Packages}, selecionar
+% ``memoir'' da lista de pacotes e comandar a instalação do mesmo. Talvez você
+% precise de privilégios de administração na máquina para fazer isso: consulte
+% o administrador do computador ou da rede.
+%
+% Sob Linux, a instalação talvez não seja automatizada, mas não é difícil.
+% Antes de mais nada, baixe todos os arquivos do repositório CTAN: atualmente,
+% o \emph{link} é
+% \begin{quote}
+% |http://www.ctan.org/tex-archive/macros/latex/contrib/memoir/|
+% \end{quote}
+%
+% Quando os arquivos estiverem no seu computador, abra um terminal, entre no
+% diretório que contém os arquivos baixados e execute o comando
+% \begin{quote}
+% |latex memoir.ins|
+% \end{quote}
+% que criará o arquivo |memoir.cls|. Opcionalmente, para gerar a documentação
+% da classe |memoir|, execute:
+% \begin{quote}
+% |latex memoir.dtx|
+% \end{quote}
+% Agora crie um diretório local |texmf| no seu diretório \emph{home}:
+% \begin{quote}
+% |mkdir ~/texmf/tex/latex/memoir|
+% \end{quote}
+% e copie para lá todos os arquivos |*.cls|, |*.sty| e |*.clo|. Finalmente,
+% execute o comando |texhash|. Pronto, está terminado!
+%
+% De qualquer forma, dê uma lida no arquivo |README| que vem com o pacote
+% |memoir|. Esta seção foi escrita com base nas informações contidas no arquivo
+% |README| e nas instruções presentes em |http://www.tex.ac.uk/|
+% |cgi-bin/texfaq2html?label=instpackages|.
+%
+%
+% \subsection{Algumas dicas para acelerar o seu trabalho}
+%
+% Provavelmente você vai querer os seguintes comandos no preâmbulo do seu
+% documento:
+%
+% \begin{quote}
+% \begin{verbatim}
+% \usepackage[brazil]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage[T1]{fontenc}
+%\end{verbatim}
+% \end{quote}
+%
+% Se também quiser gráficos (quem não quer?):
+%
+% \begin{quote}
+% \begin{verbatim}
+% \usepackage{graphicx}
+%\end{verbatim}
+% \end{quote}
+%
+% Se você quiser que o arquivo |.pdf| gerado possua \emph{links} clicáveis em
+% todas as referências a seções, figuras, tabelas, páginas, citações, etc.:
+%
+% \begin{quote}
+% \begin{verbatim}
+% \usepackage[a4paper,
+%   portuguese,
+%   bookmarks=true,
+%   bookmarksnumbered=true,
+%   linktocpage,
+%   ]{hyperref}
+%\end{verbatim}
+% \end{quote}
+%
+%
+% \subsection{Possíveis problemas e suas soluções}
+%
+% Um problema freqüente é causado por uma incompatibilidade entre a classe
+% |memoir| e o pacote |algorithm|. Esse problema é facilmente identificado pela
+% ocorrência do seguinte erro:
+% \begin{quote}
+% \begin{verbatim}
+% ! LaTeX Error: Command \newfloat already defined.
+%                Or name \end... illegal, see p.192 of the manual.
+% 
+% See the LaTeX manual or LaTeX Companion for explanation.
+% Type  H <return>  for immediate help.
+%\end{verbatim}
+% \end{quote}
+%
+% A solução é simples: basta colocar o comando |\let\newfloat=\undefined| antes
+% de |\includepackage{algorithm}|. Dessa forma, o seu preâmbulo deve ficar mais
+% ou menos como segue:
+% \begin{quote}
+% \begin{verbatim}
+% \usepackage...
+% \usepackage...
+% \let\newfloat=\undefined
+% \usepackage{algorithm}
+% \usepackage...
+% \usepackage...
+%\end{verbatim}
+% \end{quote}
+%
+% Espero que esse ``bug'' na classe |memoir| seja resolvido em breve. Por
+% enquanto, esse ``hack'' funciona bem e nunca ouvi falar de algum efeito
+% adverso. (Se você descobrir algum, por favor me avise!)
+%
+%
+% \section{Código-fonte}
+%
+% Esta seção documenta o código-fonte do arquivo |ufmgthesis.cls|. Você não
+% precisa ler esta seção: ela serve como referência para os desenvolvedores do
+% pacote.
+%
+%
+% \subsection*{Pré-requisitos e comandos gerais}
+%
+% A classe |ufmgthesis| requer alguns pacotes, portanto eles serão incluídos:
+%    \begin{macrocode}
+\RequirePackage{keyval}
+\RequirePackage{setspace}
+%    \end{macrocode}
+
+
+% As opções de classe são gerenciadas por diretivas do tipo |\newif|, que são
+% declaradas e inicializadas a seguir:
+%
+%    \begin{macrocode}
+%% Opções gerais:
+
+\newif\if@phd                 % Tese de doutorado?
+\newif\if@msc                 % Dissertação de mestrado?
+\newif\if@proposal            % Opção de proposta/projeto?
+\newif\if@showcover           % Compor a capa?
+\newif\if@showtitle           % Compor a folha de título?
+\newif\if@showapproval        % Compor a folha de aprovação?
+\newif\if@showabstract        % Compor as páginas de resumo/abstract?
+\newif\if@showdedication      % Compor a dedicatória?
+\newif\if@showack             % Compor os agradecimentos?
+\newif\if@showtoc             % Compor o Sumário?
+\newif\if@showlof             % Compor a Lista de Figuras?
+\newif\if@showlot             % Compor a Lista de Tabelas?
+\newif\if@extraporttitlepage  % Exibir também uma folha de título em português?
+\newif\if@putmainmatter       % \mainmatter depois das páginas introdutórias?
+
+\def\ufmg@showall{%
+  \@showcovertrue
+  \@showtitletrue
+  \@showapprovaltrue
+  \@showabstracttrue
+  \@showdedicationtrue
+  \@showacktrue
+  \@showtoctrue
+  \@showloftrue
+  \@showlottrue
+}
+
+\def\ufmg@hideall{%
+  \@showcoverfalse
+  \@showtitlefalse
+  \@showapprovalfalse
+  \@showabstractfalse
+  \@showdedicationfalse
+  \@showackfalse
+  \@showtocfalse
+  \@showloffalse
+  \@showlotfalse
+}
+
+\@proposalfalse
+\ufmg@showall
+\@putmainmattertrue
+
+%% Opções das referências bibliográficas:
+
+\newif\if@bibnorepauthor  % Substituir autorias repetidas por linha comprida?
+\newif\if@nobreakitems    % Impedir quebra de página no meio de um item?
+
+\@bibnorepauthorfalse
+\@nobreakitemsfalse
+%    \end{macrocode}
+
+% \DescribeMacro{\BreakableUppercase}%
+% |\BreakableUppercase| provê um ``hack'' para |\MakeUppercase| que permite a
+% ocorrência de quebras de linha (|\\|) em seu argumento. Assim como o comando
+% |\MakeUppercase|, este comando é chamado com um argumento obrigatório:
+% |\BreakableUppercase| \marg{título}.
+%
+%    \begin{macrocode}
+\def\BreakableUppercase#1{%
+  \bgroup
+  \let\ufmg@prevdbs=\\%
+  \def\\{\protect\ufmg@prevdbs}%
+  \MakeUppercase{#1}%
+  \egroup
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@defspacing}%
+% Esta macro armazena o espaçamento padrão entre linhas, que pode ser escolhida
+% pelo usuário por meio de uma das seguintes opções de classe: |single|,
+% |onehalf| ou |double|.
+%
+%    \begin{macrocode}
+\newcommand{\ufmg@defspacing}{\onehalfspace}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@redefchaptitlefont}%
+% Esta macro redefine a formatação do texto produzido pelo comando |\chapter|.
+% O único objetivo é redefinir |\chaptitlefont| (consulte o manual do |memoir|)
+% para incluir o comando |\centering| se a opção de classe |centertitles| for
+% especificada.
+%
+%    \begin{macrocode}
+\def\ufmg@redefchaptitlefont{}
+%    \end{macrocode}
+
+% \DescribeMacro{\university}%
+% \DescribeMacro{\course}%
+% \DescribeMacro{\address}%
+% Este conjunto de comandos define algumas informações sobre o documento. Cada
+% comando recebe um argumento obrigatório, que é a informação associada ao
+% comando.
+%
+%    \begin{macrocode}
+\newcommand*{\university}[1]{\gdef\@university{#1}}  % Nome da universidade
+\newcommand*{\course}[1]{\gdef\@course{#1}}          % Nome do curso
+\newcommand*{\address}[1]{\gdef\@address{#1}}        % Endereço (cidade/estado)
+%    \end{macrocode}
+
+% \DescribeMacro{\degree}%
+% Este comando define a titulação buscada pelo autor. Não é obrigatório chamar
+% este comando, pois um padrão é automaticamente configurado --- ``Mestre'',
+% ``Doutor'' ou uma tradução correspondente --- de acordo com a opção de classe
+% (|msc| ou |phd|) e a linguagem corrente (selecionada por meio do pacote
+% |babel|).
+%
+%    \begin{macrocode}
+\newcommand*{\degree}[1]{\gdef\@degree{#1}}          % Titulação
+%    \end{macrocode}
+%
+% \DescribeMacro{\logo}%
+% Este comando define o arquivo gráfico que contém o logotipo a ser usado na
+% composição da folha de aprovação. Pode-se especificar o diretório e/ou a
+% extensão do arquivo. Se o comando não for usado, a folha de aprovação é
+% composta sem logotipo. Lembre-se de que o formato do arquivo (dado por sua
+% extensão) deve ser compatível com o sistema \LaTeX{} em uso: por exemplo, o
+% formato de arquivo |.eps| não é compatível com a geração de arquivos |.pdf|
+% pelo |pdflatex|.
+%
+%    \begin{macrocode}
+\newcommand*{\logo}[1]{\gdef\@logo{#1}}              % Logotipo
+%    \end{macrocode}
+%
+% \DescribeMacro{\title}%
+% \label{macro:title}%
+% Este comando define o título do documento, que aparece na capa, na folha de
+% título e na folha de aprovação.
+%
+% Quando o título do documento é longo e não cabe em uma única linha (na capa e
+% na folha de título), a quebra automática de linha pode causar um
+% desbalanceamento do texto entre as linhas. Por exemplo, se o título for
+% ``Este é o título comprido da minha tese'', o texto pode ser quebrado da
+% seguinte maneira:
+% \begin{center}
+% Este é o título comprido da minha\\tese
+% \end{center}
+%
+% Nesses casos, você pode especificar manualmente as quebras de linha com duas
+% contra-barras. Por exemplo: |\title{Este é o título comprido\\da minha tese}|
+% gera uma quebra mais balanceada:
+%
+% \begin{center}
+% Este é o título comprido\\da minha tese
+% \end{center}
+%
+% O uso do comando de quebra de linha (|\\|) não é necessário se o autor
+% estiver satisfeito com o balanceamento gerado automaticamente.
+%
+%    \begin{macrocode}
+\renewcommand*{\title}[1]                            % Título
+  {\gdef\@title{#1}}
+%    \end{macrocode}
+
+% \DescribeMacro{\portuguesetitle}%
+% \DescribeMacro{\portugueseuniversity}%
+% \DescribeMacro{\portuguesecourse}%
+% Para documentos não escritos em português, esses comandos especificam as
+% informações correspondentes em língua portuguesa:
+%    \begin{macrocode}
+\newcommand*{\portuguesetitle}[1]                    % Título em português
+  {\gdef\@portuguesetitle{#1}}
+\newcommand*{\portugueseuniversity}[1]               % Nome da univers. em pt.
+  {\gdef\@portugueseuniversity{#1}}
+\newcommand*{\portuguesecourse}[1]                   % Nome do curso em port.
+  {\gdef\@portuguesecourse{#1}}
+%    \end{macrocode}
+
+% Vários comandos são criados para lidar com as opções de classe:
+%
+%    \begin{macrocode}
+\DeclareOption{msc}{\@phdfalse\@msctrue}
+\DeclareOption{phd}{\@phdtrue\@mscfalse}
+\DeclareOption{proposal}{\@proposaltrue}
+\DeclareOption{project}{\@proposaltrue}
+
+\DeclareOption{single}{\renewcommand{\ufmg@defspacing}{\singlespace}}
+\DeclareOption{onehalf}{\renewcommand{\ufmg@defspacing}{\onehalfspace}}
+\DeclareOption{double}{\renewcommand{\ufmg@defspacing}{\doublespace}}
+
+\DeclareOption{hideall}{\ufmg@hideall}
+\DeclareOption{hidecover}{\@showcoverfalse}
+\DeclareOption{hidetitle}{\@showtitlefalse}
+\DeclareOption{hideapproval}{\@showapprovalfalse}
+\DeclareOption{hideabstract}{\@showabstractfalse}
+\DeclareOption{hidededication}{\@showdedicationfalse}
+\DeclareOption{hideack}{\@showackfalse}
+\DeclareOption{hidetoc}{\@showtocfalse}
+\DeclareOption{hidelof}{\@showloffalse}
+\DeclareOption{hidelot}{\@showlotfalse}
+
+\DeclareOption{showall}{\ufmg@showall}
+\DeclareOption{showcover}{\@showcovertrue}
+\DeclareOption{showtitle}{\@showtitletrue}
+\DeclareOption{showapproval}{\@showapprovaltrue}
+\DeclareOption{showabstract}{\@showabstracttrue}
+\DeclareOption{showdedication}{\@showdedicationtrue}
+\DeclareOption{showack}{\@showacktrue}
+\DeclareOption{showtoc}{\@showtoctrue}
+\DeclareOption{showlof}{\@showloftrue}
+\DeclareOption{showlot}{\@showlottrue}
+
+\DeclareOption{nomainmatter}{\@putmainmatterfalse}
+
+\DeclareOption{centertitles}{%
+   \def\ufmg@redefchaptitlefont{%
+    \expandafter\renewcommand\expandafter{\expandafter\chaptitlefont
+    \expandafter}\expandafter{\chaptitlefont\centering}%
+  }%
+}
+
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
+%    \end{macrocode}
+
+% As opções padrão são configuradas a seguir:
+%
+%    \begin{macrocode}
+\ExecuteOptions{phd,onehalf,showall}
+\ProcessOptions
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@setdoctype}%
+% Esta macro checa algumas opções do documento e ajusta os registros internos
+% |\@degree| e |\@documenttype|. Esta macro é chamada pela macro
+% |\ufmg@selectlanguage|, que é chamada durante o comando |\begin{document}|.
+%
+%    \begin{macrocode}
+\def\ufmg@setdoctype{%
+  \if@phd
+    % Esta é uma tese de doutorado
+    \degree{\ufmg@phd}
+    \if@proposal
+      \gdef\@documenttype{\ufmg@phddocproj}%
+      \ufmg@set@phddocproj
+    \else
+      \gdef\@documenttype{\ufmg@phddoc}%
+      \ufmg@set@phddoc
+    \fi
+  \else
+    % Esta é uma dissertação de mestrado
+    \degree{\ufmg@msc}
+    \if@proposal
+      \gdef\@documenttype{\ufmg@mscdocprop}%
+      \ufmg@set@mscdocprop
+    \else
+      \gdef\@documenttype{\ufmg@mscdoc}%
+      \ufmg@set@mscdoc
+    \fi
+  \fi
+}
+%    \end{macrocode}
+
+% Agora a página é formatada. Aqui estão as opções sobre o tamanho da página,
+% tamanho padrão da fonte, paginação, margens da página, etc. Todo o trabalho é
+% feito pela classe |memoir|, o que simplifica bastante o gerenciamento do
+% \emph{layout}. Consulte a Seção~\ref{sec:memoirtips} sobre o uso da classe
+% |memoir|.
+%
+%    \begin{macrocode}
+\LoadClass{memoir}
+
+\setlrmarginsandblock{3cm}{2.5cm}{*}
+\setulmarginsandblock{3cm}{3cm}{*}
+
+\checkandfixthelayout
+%    \end{macrocode}
+
+% Configuração da profundidade do Sumário e da numeração de seções:
+%
+%    \begin{macrocode}
+\maxsecnumdepth{subsubsection}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{4}
+%    \end{macrocode}
+
+
+% \subsection*{Rotinas de tradução}
+%
+% \DescribeMacro{\ufmg@langgroup}%
+% Agora são definidas as rotinas de tradução. Tenta-se usar a linguagem
+% configurada para o pacote |babel|; se esse pacote não for usado, a linguagem
+% padrão é |brazil|.
+%
+%    \begin{macrocode}
+\def\ufmg@langgroup{\@ifundefined{languagename}{brazil}{\languagename}}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@deflanguage}%
+% \DescribeMacro{\ufmg@selectlanguage}%
+% O par de comandos |\ufmg@deflanguage|\marg{linguagem} e
+% |\ufmg@selectlanguage| trabalham em conjunto para configurar a tabela de
+% traduções a ser usada na composição do texto. O primeiro comando recebe o
+% nome da linguagem como argumento; o segundo efetivamente configura o sistema.
+% Atualmente, somente as linguagens |brazil| e |english| são reconhecidas. Caso
+% uma outra linguagem seja especificada, uma advertência é disparada e o padrão
+% |brazil| é adotado.
+%
+%    \begin{macrocode}
+\def\ufmg@deflanguage#1{%
+  \@ifundefined{ufmg@lang@#1}{%
+    \ClassWarning{ufmgthesis}{Linguagem nao definida: #1^^J
+    Adotando a linguagem padrao `brazil'.^^J}%
+    \def\ufmg@langgroup{brazil}}
+    {\def\ufmg@langgroup{#1}}%
+}
+\def\ufmg@selectlanguage{%
+  \csname ufmg@lang@\ufmg@langgroup\endcsname\ufmg@setdoctype
+}
+%    \end{macrocode}
+
+% Os seguintes comandos e |\newif|s auxiliares são definidos para ajudar nas
+% rotinas de tradução.
+%
+%    \begin{macrocode}
+\newif\if@ufmgdateerror
+
+\newcommand{\ufmg@formatdate}[2][]{%
+  \begingroup
+    \def\ufmg@templang{#1}%
+    \ifx\ufmg@templang\empty\let\ufmg@templang\ufmg@langgroup\fi
+    \expandafter\ufmg@parsedate#2---\relax
+  \endgroup
+}
+\def\ufmg@parsedate#1-#2-#3-#4\relax{%
+  \@ufmgdateerrortrue
+  \def\ufmg@year{\number#1}\def\ufmg@month{\number#2}%
+  \def\ufmg@day{#3}\ifx\ufmg@day\empty\else\def\ufmg@day{\number#3}\fi
+  \ifx\ufmg@month\empty\else\ifnum#1>99\relax
+    \@ufmgdateerrorfalse
+    \csname ufmg@expanddate@\ufmg@templang\endcsname
+  \fi\fi
+  \if@ufmgdateerror
+    \ClassError{ufmgthesis}{Formato invalido de data.^^J%
+    Ao usar a opcao `date=' para o comando \string\ufmgthesis\space ou o
+    comando \string\date\string{...\string},^^J%
+    sempre forneca a data no formato aaaa-mm-dd ou aaaa-mm^^J%
+    (note a ordem ano-mes-dia e o hifen como separador)}%
+    \endinput
+  \fi
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@lang@brazil}%
+% \DescribeMacro{\ufmg@lang@english}%
+% Agora são definidas as tabelas de tradução. Você pode melhorar a classe e
+% adicionar novas tabelas, desde que \emph{todos} os dados sejam traduzidos!
+%
+%    \begin{macrocode}
+\def\ufmg@expandmonth@brazil#1{%
+  \ifcase\ufmg@month\or
+  janeiro\or fevereiro\or mar\c{c}o\or abril\or maio\or junho\or
+  julho\or agosto\or setembro\or outubro\or novembro\or dezembro\fi
+}
+\def\ufmg@expanddate@brazil{%
+  \edef\text@month{\ufmg@expandmonth@brazil{\ufmg@month}}%
+  \ifx\ufmg@day\empty\expandafter\MakeUppercase\text@month
+    \else \two@digits\ufmg@day\ de\ \text@month\fi
+  \ de\ \ufmg@year
+}
+\def\ufmg@lang@brazil{%
+  \@extraporttitlepagefalse
+
+  \def\@deflang@title{%
+    \@ifundefined{@portuguesetitle}{\@title}{\@portuguesetitle}}
+  \def\@deflang@university{%
+    \@ifundefined{@portugueseuniversity}{\@university}%
+    {\@portugueseuniversity}}
+  \def\@deflang@course{%
+    \@ifundefined{@portuguesecourse}{\@course}{\@portuguesecourse}}
+
+  \def\ufmg@msc{Mestre}
+  \def\ufmg@phd{Doutor}
+  \def\ufmg@mscdoc{Disserta\c{c}\~{a}o}
+  \def\ufmg@mscdocprop{Proposta de disserta\c{c}\~{a}o}
+  \def\ufmg@phddoc{Tese}
+  \def\ufmg@phddocproj{Projeto de tese}
+  \def\ufmg@approvaltitle{Folha de Aprova\c{c}\~{a}o}
+  \def\ufmg@advisor{Orientador}
+  \def\ufmg@coadvisor{Co-orientador}
+  \def\ufmg@docdescription{%
+    \@documenttype{} apresentad\ufmg@doctype@gender{} ao Programa de
+    P\'{o}s-Gradua\c{c}\~{a}o em \@deflang@course{} da
+    \@deflang@university{} como requisito parcial para a obten\c{c}\~{a}o
+    do grau de \@degree{} em \@deflang@course.}
+  \def\ufmg@approvaltext{%
+    \@documenttype{} defendid\ufmg@doctype@gender{} e
+    aprovad\ufmg@doctype@gender{} pela banca examinadora constitu\'{i}da
+    por:}
+  \def\ufmg@acknowledgments{Agradecimentos}
+
+  \def\ufmg@set@phddocproj{\def\ufmg@doctype@gender{o}}
+  \def\ufmg@set@phddoc{\def\ufmg@doctype@gender{a}}
+  \def\ufmg@set@mscdocprop{\def\ufmg@doctype@gender{a}}
+  \def\ufmg@set@mscdoc{\def\ufmg@doctype@gender{a}}
+
+  \def\ufmgbibauthorsep{;}
+  \def\ufmgbibauthorlastsep{}
+  \def\ufmgbibauthorand{e}
+  \def\ufmgciteauthorand{e}
+  \def\ufmgbibpagestring{p.\@}
+  \def\ufmgbibpagesstring{pp.\@}
+  \def\ufmgbibeditorstring{editor}
+  \def\ufmgbibeditorsstring{editores}
+  \def\ufmgbibeditionstring{edição}
+
+  \def\appendixpagename{Apêndices}
+  \def\appendixtocname{Apêndices}
+}
+
+\def\ufmg@expandmonth@english#1{%
+  \ifcase\ufmg@month\or
+  january\or february\or march\or april\or may\or june\or
+  july\or august\or september\or october\or november\or december\fi
+}
+\def\ufmg@expanddate@english{%
+  \edef\text@month{\ufmg@expandmonth@english{\ufmg@month}}%
+  \expandafter\MakeUppercase\text@month
+  \ifx\ufmg@day\empty\else\ \ufmg@day,\fi
+  \ \ufmg@year
+}
+\def\ufmg@lang@english{%
+  \@extraporttitlepagetrue
+
+  \def\@deflang@title{\@title}
+  \def\@deflang@university{\@university}
+  \def\@deflang@course{\@course}
+
+  \def\ufmg@msc{Master}
+  \def\ufmg@phd{Doctor}
+  \def\ufmg@mscdoc{Dissertation}
+  \def\ufmg@mscdocprop{Dissertation proposal}
+  \def\ufmg@phddoc{Thesis}
+  \def\ufmg@phddocproj{Thesis project}
+  \def\ufmg@approvaltitle{Approval Sheet}
+  \def\ufmg@advisor{Advisor}
+  \def\ufmg@coadvisor{Co-advisor}
+  \def\ufmg@docdescription{%
+    \@documenttype{} presented to the Graduate Program in \@course{} of the
+    \@university{} in partial fulfillment of the requirements for the
+    degree of \@degree{} in \@course.}
+  \def\ufmg@approvaltext{%
+    \@documenttype{} presented to and approved by the committee composed by:}
+  \def\ufmg@acknowledgments{Acknowledgments}
+
+  \let\ufmg@set@phddocproj\relax
+  \let\ufmg@set@phddoc\relax
+  \let\ufmg@set@mscdocprop\relax
+  \let\ufmg@set@mscdoc\relax
+
+  \def\ufmgbibauthorsep{,}
+  \def\ufmgbibauthorlastsep{,}
+  \def\ufmgbibauthorand{and}
+  \def\ufmgciteauthorand{and}
+  \def\ufmgbibpagestring{page}
+  \def\ufmgbibpagesstring{pages}
+  \def\ufmgbibeditorstring{editor}
+  \def\ufmgbibeditorsstring{editors}
+  \def\ufmgbibeditionstring{edition}
+}
+%    \end{macrocode}
+% \subsection*{Capa e folha de título}
+%
+% \DescribeMacro{\makecoverpage}%
+% \DescribeMacro{\maketitlepage}%
+% Em geral, o documento possui duas folhas de apresentação: a \emph{capa}, que
+% contém somente o nome da instituição, o nome do autor, o título do documento,
+% a localidade (cidade e estado) e a data; e a \emph{folha de título}, bastante
+% parecida, mas que inclui uma breve descrição formal do documento.
+%
+% Se o documento não for escrito em português, o comando |\maketitlepage|
+% compõe duas folhas de título: uma em português e outra na linguagem do
+% documento.
+%
+%    \begin{macrocode}
+\newcommand{\makecoverpage}{%
+  \if@showcover\begingroup
+    \ufmg@deflanguage{brazil}\ufmg@selectlanguage
+    \ufmg@maketitlepage{\z@}
+  \endgroup\fi
+}
+\newcommand{\maketitlepage}{%
+  \if@showtitle
+    \if@extraporttitlepage\begingroup
+      \ufmg@deflanguage{brazil}\ufmg@selectlanguage
+      \ufmg@maketitlepage{\@ne}%
+    \endgroup\fi
+    \ufmg@maketitlepage{\@ne}%
+  \fi
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@docdescriptionwidth}%
+% Esta é a largura do bloco com a descrição formal do texto.
+%    \begin{macrocode}
+\def\ufmg@docdescriptionwidth{0.5\textwidth}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@makedocdescription}%
+% Este comando compõe o texto com a descrição formal do documento, que é parte
+% da folha de título.
+%
+%    \begin{macrocode}
+\def\ufmg@makedocdescription{%
+  \begin{minipage}{\ufmg@docdescriptionwidth}
+    \ufmg@docdescription
+  \end{minipage}
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@titpag@fmtauthor}%
+% \DescribeMacro{\ufmg@titpag@fmtadvisor}%
+% \DescribeMacro{\ufmg@titpag@fmttitle}%
+% \DescribeMacro{\ufmg@titpag@fmtaddress}%
+% \DescribeMacro{\ufmg@titpag@fmtdate}%
+% Essas macros armazenam a formatação de cada segmento da capa e da folha de
+% título. Se você quiser alterar a formatação, altere estas macros e \emph{não}
+% a estrutura do comando |\ufmg@maketitlepage|!
+%
+%    \begin{macrocode}
+\def\ufmg@titpag@fmtauthor#1{\large\BreakableUppercase{#1}}
+\def\ufmg@titpag@fmtadvisor{\large\scshape}
+\def\ufmg@titpag@fmttitle#1{\Large\bfseries\BreakableUppercase{#1}}
+\def\ufmg@titpag@fmtaddress{\large}
+\def\ufmg@titpag@fmtdate{\large}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@maketitlepage}%
+% Este comando compõe a capa e a folha de título. É chamado com um argumento
+% obrigatório, que é |0| (|\z@|) para compor a capa ou |1| (|\@ne|) para compor
+% a folha de título.
+%
+%    \begin{macrocode}
+\def\ufmg@maketitlepage#1{%
+  \begin{titlingpage}
+  \begin{singlespace}
+  {\centering
+    \vbox to48ex{%
+      {\ufmg@titpag@fmtauthor{\@author}\par}%
+      \ifx#1\z@
+      \else
+        \medskip
+        {\ufmg@titpag@fmtadvisor{\ufmg@advisor: \ufmg@advisorname}\par}%
+      \fi
+      \vfil
+    }%
+
+    \begin{doublespace}
+    {\ufmg@titpag@fmttitle{\@deflang@title}\par}
+
+    \vspace{10ex}
+    \end{doublespace}
+
+    \ifx#1\@ne
+      \hspace*{\stretch{1}}\ufmg@makedocdescription\par
+    \fi
+
+    \vspace{\stretch{1}}
+
+    {\ufmg@titpag@fmtaddress{\@address}\par}
+    \vspace{1ex}
+
+    {\ufmg@titpag@fmtdate{\ufmg@formatdate{\@date}\par}}
+  }
+  \end{singlespace}
+  \end{titlingpage}
+}
+%    \end{macrocode}
+
+
+% \subsection*{A banca e a Folha de Aprovação}
+%
+% Há alguns comandos para gerenciar a lista de membros da banca. Esses comandos
+% foram construídos para aceitar bancas de qualquer tamanho.
+%
+% Antes de mais nada, um contador para armazenar o número de integrantes:
+%
+%    \begin{macrocode}
+\newcounter{ufmg@c@banca}
+%    \end{macrocode}
+
+% \DescribeMacro{\addtocomitee}%
+% Agora o comando que adiciona um membro à banca: |\addtocomitee|
+% \oarg{relacionamento} \marg{nome} \marg{título} \marg{instituição}. O
+% argumento opcional \oarg{relacionamento} especifica o relacionamento entre o
+% membro da banca e o estudante, em geral ``Orientador'' ou ``Co-orientador''.
+% Note que já há dois outros comandos, |\advisor| and |\coadvisor|, que
+% adicionam um membro da banca com esses relacionamentos específicos (veja a
+% seguir).
+%
+%    \begin{macrocode}
+\newcommand{\addtocomitee}[4][\relax]{%
+  \stepcounter{ufmg@c@banca}
+  \expandafter\def\csname ufmg@banca@\theufmg@c@banca name\endcsname
+    {#2}
+  \expandafter\def\csname ufmg@banca@\theufmg@c@banca title\endcsname
+    {#3}
+  \def\ufmg@temp{#4}
+  \if\ufmg@temp.
+    \expandafter\def\csname ufmg@banca@\theufmg@c@banca instit\endcsname
+      {\@university}
+  \else
+    \expandafter\def\csname ufmg@banca@\theufmg@c@banca instit\endcsname
+      {#4}
+  \fi
+  \ifx#1\relax\else
+    \expandafter\def\csname ufmg@banca@\theufmg@c@banca rel\endcsname
+      {#1}
+  \fi
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\advisor}%
+% \DescribeMacro{\coadvisor}%
+% Como mencionado anteriormente, esses dois comandos apenas chamam
+% |\addtocomitee| com o termo correto de relacionamento. (Porém, é importante
+% usar explicitamente o comando |\advisor| para definir o nome do orientador
+% que irá para a folha de título.) Use: |\advisor| \marg{nome} \marg{título}
+% \marg{instituição} (ou |\coadvisor|).
+%
+%    \begin{macrocode}
+\newcommand{\advisor}[3]{%
+  \addtocomitee[\ufmg@advisor]{#1}{#2}{#3}%
+  \def\ufmg@advisorname{#1}%
+}
+\newcommand{\coadvisor}[3]{\addtocomitee[\ufmg@coadvisor]{#1}{#2}{#3}}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@fmtbancatitle}%
+% \DescribeMacro{\ufmg@fmtbancaname}%
+% \DescribeMacro{\ufmg@fmtbancainstit}%
+% \DescribeMacro{\ufmg@fmtbancarel}%
+% Essas macros armazenam a formatação de cada segmento das informações dos
+% membros da banca. Se você quiser alterar a formatação, altere estas macros e
+% \emph{não} a estrutura do comando |\ufmg@maketitlepage|!
+%
+%    \begin{macrocode}
+\def\ufmg@fmtbancatitle{}
+\def\ufmg@fmtbancaname{\scshape}
+\def\ufmg@fmtbancainstit{}
+\def\ufmg@fmtbancarel{}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@makecomiteelist}%
+% Este comando compõe a lista de membros da banca, que é parte da folha de
+% aprovação.
+%
+%    \begin{macrocode}
+\newcommand{\ufmg@makecomiteelist}{%
+  \setcounter{ufmg@c@banca}{1}
+  \loop\expandafter\ifx\csname ufmg@banca@\theufmg@c@banca name\endcsname\relax
+    \else
+    {\centering
+    \vspace{\stretch{1}}
+    {\ufmg@fmtbancatitle{%
+      \csname ufmg@banca@\theufmg@c@banca title\endcsname}}~%
+    {\ufmg@fmtbancaname{%
+      \csname ufmg@banca@\theufmg@c@banca name\endcsname}}%
+    \@ifundefined{ufmg@banca@\theufmg@c@banca rel}{}{%
+      \ -- {\ufmg@fmtbancarel{%
+        \csname ufmg@banca@\theufmg@c@banca rel\endcsname}}%
+    }%
+    \\%
+    {\ufmg@fmtbancainstit{%
+      \csname ufmg@banca@\theufmg@c@banca instit\endcsname}}\\%
+    }
+    \stepcounter{ufmg@c@banca}
+  \repeat
+  \vspace{\stretch{1.5}}
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@apprpag@fmtuniv}%
+% \DescribeMacro{\ufmg@apprpag@fmtcaption}%
+% \DescribeMacro{\ufmg@apprpag@fmttitle}%
+% \DescribeMacro{\ufmg@apprpag@fmtauthor}%
+% \DescribeMacro{\ufmg@apprpag@fmttext}%
+% \DescribeMacro{\ufmg@apprpag@fmtaddrdate}%
+% Essas macros armazenam a formatação de cada segmento da folha de aprovação.
+% Se você quiser alterar a formatação, altere estas macros e \emph{não} a
+% estrutura do comando |\ufmg@maketitlepage|!
+%
+%    \begin{macrocode}
+\def\ufmg@apprpag@fmtuniv#1{\normalsize\MakeUppercase{#1}}
+\def\ufmg@apprpag@fmtcaption#1{\large\MakeUppercase{#1}}
+\def\ufmg@apprpag@fmttitle{\Large}
+\def\ufmg@apprpag@fmtauthor#1{\large\BreakableUppercase{#1}}
+\def\ufmg@apprpag@fmttext{}
+\def\ufmg@apprpag@fmtaddrdate{}
+%    \end{macrocode}
+
+% \DescribeMacro{\makeapproval}%
+% Esta macro compõe a folha de aprovação.
+%
+%    \begin{macrocode}
+\newcommand{\makeapproval}{%
+  \if@showapproval
+    \begingroup
+    \ufmg@deflanguage{brazil}\ufmg@selectlanguage
+    \begin{titlingpage}
+    \begin{singlespace}
+    {\centering
+      \ifx\@logo\@undefined
+        {\ufmg@apprpag@fmtuniv{\@deflang@university}\par}
+        \vspace{12ex}
+      \else
+        \raisebox{-0.5\height}{\includegraphics{\@logo}}\quad
+        {\ufmg@apprpag@fmtuniv{\@deflang@university}\par}
+        \vspace{6ex}
+      \fi
+
+      {\ufmg@apprpag@fmtcaption{\ufmg@approvaltitle}\par}
+      \vspace{5ex}
+
+      {\ufmg@apprpag@fmttitle{\@deflang@title}\par}
+      \vspace{5ex}
+
+      {\ufmg@apprpag@fmtauthor{\@author}\par}
+      \vspace{5ex}
+    }
+
+    {\ufmg@apprpag@fmttext{\ufmg@approvaltext}\par}
+    \vspace{4ex}
+
+    \ufmg@makecomiteelist
+
+    {\centering
+      {\ufmg@apprpag@fmtaddrdate{\@address, \ufmg@formatdate{\@date}}\par}%
+    }
+    \end{singlespace}
+    \end{titlingpage}
+    \endgroup
+  \fi
+}
+%    \end{macrocode}
+
+
+% \subsection*{Resumos e \emph{Abstracts}}
+%
+% O trabalho pode incluir uma ou mais versões de resumos (\emph{abstracts}):
+% tradicionalmente há uma versão em português e outra em inglês, mas podem ser
+% exigidas duas versões em uma mesma língua (``Resumo'' e ``Resumo Estendido'',
+% por exemplo).
+%
+% Para comportar a variedade de possibilidades, a classe |ufmgthesis| permite a
+% definição de um número arbitrário de resumos. Para cada um, especifica-se o
+% título (``Resumo'', ``Abstract'', etc.) e um arquivo |.tex| com o texto do
+% resumo em questão.
+%
+% O arquivo |.tex| especificado pode vir com a especificação de um diretório,
+% mas cuidado: os compiladores \LaTeX{} não gostam muito de nomes de arquivos
+% (ou diretórios) com espaços ou letras acentuadas. Portanto, não use nomes de
+% arquivo como ``\texttt{Capítulo 1.tex}''. Além disso, ao especificar
+% diretórios use barras (|/|) ao invés de contra-barras (|\|), mesmo que você
+% esteja trabalhando no Microsoft Windows.
+%
+% Nenhum desses arquivos |.tex| especificados deve conter o comando |\chapter|.
+% Ele é chamado automaticamente. Além disso, se for necessário usar |\section|,
+% |\subsection|, etc., coloque um asterisco depois do comando (ou seja,
+% |\section*|, |\subsection*|, etc.), para que as seções não apareçam no
+% Conteúdo.
+%
+% \DescribeMacro{\includeabstract}%
+% Este comando inclui uma página de resumo. A forma de uso é:
+% |\includeabstract| \marg{título} \marg{arquivo}. \meta{título} é o título do
+% resumo, conforme explicado anteriormente.
+%
+%    \begin{macrocode}
+\newcommand{\includeabstract}[2]{%
+  \if@showabstract
+    \ufmg@redefchaptitlefont
+    \chapter*{#1}
+    \input{#2}
+    \cleardoublepage
+  \fi
+}
+%    \end{macrocode}
+
+% Para a inclusão de vários arquivos de resumo, é necessário um contador para
+% armazenar o número de resumos definidos:
+%
+%    \begin{macrocode}
+\newcounter{ufmg@c@abstract}
+%    \end{macrocode}
+
+% \DescribeMacro{\addabstract}%
+% Agora o comando que registra um arquivo de resumo: |\addabstract|
+% \marg{título} \marg{arquivo}.
+%
+%    \begin{macrocode}
+\newcommand{\addabstract}[2]{%
+  \stepcounter{ufmg@c@abstract}
+  \expandafter\def\csname ufmg@abstract@\theufmg@c@abstract title\endcsname
+    {#1}
+  \expandafter\def\csname ufmg@abstract@\theufmg@c@abstract filename\endcsname
+    {#2}
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@includeabstractlist}%
+% Este comando inclui todos os resumos previamente definidos pelo comando
+% |\addabstract|.
+%
+%    \begin{macrocode}
+\newcommand{\ufmg@includeabstractlist}{%
+  \if@showabstract
+    \setcounter{ufmg@c@abstract}{1}
+    \loop\expandafter\ifx
+      \csname ufmg@abstract@\theufmg@c@abstract title\endcsname
+      \relax
+      \else
+      \includeabstract
+        {\csname ufmg@abstract@\theufmg@c@abstract title\endcsname}
+        {\csname ufmg@abstract@\theufmg@c@abstract filename\endcsname}
+      \stepcounter{ufmg@c@abstract}
+    \repeat
+  \fi
+}
+%    \end{macrocode}
+
+
+% \subsection*{Demais páginas}
+%
+% As demais páginas introdutórias (dedicatória e agradecimentos) são baseadas
+% em arquivos |.tex| externos, já que não há maneira de compô-las
+% automaticamente :-) . Todos os comandos recebem como argumento obrigatório o
+% nome do arquivo |.tex| (que pode incluir o diretório), mas valem as mesmas
+% regras descritas para os resumos: nomes de arquivos não podem ter espaços ou
+% letras acentuadas; sempre especifique diretórios com barras (|/|) ao invés de
+% contra-barras (|\|); não use o comando |\chapter|; e coloque asterisco nos
+% comandos |\section*|, |\subsection*|, etc.
+%
+% Embora o mais comum seja a inclusão de somente uma página de cada
+% (dedicatória e agradecimentos), há autores que preferem fornecer mais de uma
+% versão de cada (em português e em língua estrangeira). Portanto, é possível
+% citar várias dedicatórias e/ou agradecimentos pelo uso repetido dos comandos
+% |\includededication| e |\includeack| (ou das opções |dedication| e |ack| do
+% comando |\ufmgthesis|).
+%
+% Para a inclusão de vários arquivos de cada, é necessário um contador para
+% armazenar o número de arquivos definidos:
+%
+%    \begin{macrocode}
+\newcounter{ufmg@c@dedication}
+\newcounter{ufmg@c@ack}
+%    \end{macrocode}
+
+% \DescribeMacro{\adddedication}%
+% \ldots e o comando que registra um arquivo de agradecimentos:
+% |\adddedication| \marg{arquivo} (note que a dedicatória não requer um
+% título).
+%
+%    \begin{macrocode}
+\newcommand{\adddedication}[1]{%
+  \stepcounter{ufmg@c@dedication}
+  \expandafter\def\csname ufmg@dedication@\theufmg@c@dedication
+    filename\endcsname{#1}
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\addack}%
+% Agora o comando que registra um arquivo de agradecimentos: |\addack|
+% \oarg{título} \marg{arquivo}. Se \meta{título} for omitido, será adotado
+% ``Agradecimentos'' (ou a tradução correspondente à linguagem configurada).
+%
+%    \begin{macrocode}
+\newcommand{\addack}[2][]{%
+  \stepcounter{ufmg@c@ack}
+  \def\ufmg@tempack{#1}
+  \ifx\ufmg@tempack\empty
+    \expandafter\addack@\expandafter{\ufmg@acknowledgments}
+  \else
+    \addack@{#1}
+  \fi
+  \expandafter\def\csname ufmg@ack@\theufmg@c@ack filename\endcsname{#2}
+}
+\def\addack@#1{
+  \expandafter\def\csname ufmg@ack@\theufmg@c@ack title\endcsname{#1}
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\includededication}%
+% Este comando inclui a dedicatória. A forma de uso é: |\includededication|
+% \marg{arquivo}.
+%
+%    \begin{macrocode}
+\newcommand{\includededication}[1]{%
+  \if@showdedication
+    \vspace*{\stretch{1}}
+    \textit{\input{#1}}
+    \vspace*{\stretch{1}}
+    \cleardoublepage
+  \fi
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\includeack}%
+% Este comando inclui os agradecimentos. A forma de uso é: |\includeack|
+% \oarg{título} \marg{arquivo}.
+%
+%    \begin{macrocode}
+\newcommand{\includeack}[2][]{%
+  \if@showack
+    \edef\ufmg@tempack{#1}%
+    \ifx\ufmg@tempack\empty\let\ufmg@tempack\ufmg@acknowledgments\fi
+    \ufmg@redefchaptitlefont
+    \chapter*{\ufmg@tempack}
+    \input{#2}
+    \cleardoublepage
+  \fi
+}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmg@includededicationlist}%
+% Este comando inclui todos os resumos previamente definidos pelo comando
+% |\adddedication|.
+%
+%    \begin{macrocode}
+\newcommand{\ufmg@includededicationlist}{%
+  \if@showdedication
+    \setcounter{ufmg@c@dedication}{1}
+    \loop
+    \expandafter\ifx
+      \csname ufmg@dedication@\theufmg@c@dedication filename\endcsname
+      \relax
+    \else
+      \includededication
+        {\csname ufmg@dedication@\theufmg@c@dedication filename\endcsname}
+      \stepcounter{ufmg@c@dedication}
+    \repeat
+  \fi
+}
+%    \end{macrocode}
+% \DescribeMacro{\ufmg@includeacklist}%
+% Este comando inclui todos os resumos previamente definidos pelo comando
+% |\addack|.
+%
+%    \begin{macrocode}
+\newcommand{\ufmg@includeacklist}{%
+  \if@showack
+    \setcounter{ufmg@c@ack}{1}
+    \loop
+    \expandafter\ifx\csname ufmg@ack@\theufmg@c@ack filename\endcsname\relax
+    \else
+      \includeack
+        [\csname ufmg@ack@\theufmg@c@ack title\endcsname]
+        {\csname ufmg@ack@\theufmg@c@ack filename\endcsname}
+      \stepcounter{ufmg@c@ack}
+    \repeat
+  \fi
+}
+%    \end{macrocode}
+
+
+% \subsection*{Cabeçalhos e rodapés}
+%
+% O código a seguir lida com todo o necessário para configurar os cabeçalhos e
+% rodapés das páginas.
+%
+%    \begin{macrocode}
+\if@twoside
+  \makeheadrule{headings}{\textwidth}{\normalrulethickness}
+  \makeoddhead{headings}{\textsc{\rightmark}}{}{\thepage}
+  \makeevenhead{headings}{\thepage}{}{\textsc{\leftmark}}
+
+  \copypagestyle{contents}{plain}
+
+  \copypagestyle{listoffigures}{plain}
+
+  \copypagestyle{listoftables}{plain}
+
+  \copypagestyle{bibliography}{headings}
+  \makeoddhead{bibliography}{\textsc{\bibname}}{}{\thepage}
+  \makeevenhead{bibliography}{\thepage}{}{\textsc{\bibname}}
+\else
+  \makeheadrule{headings}{\textwidth}{\normalrulethickness}
+  \makeoddhead{headings}{\textsc{\leftmark}}{}{\thepage}
+
+  \copypagestyle{contents}{plain}
+
+  \copypagestyle{listoffigures}{plain}
+
+  \copypagestyle{listoftables}{plain}
+
+  \copypagestyle{bibliography}{headings}
+  \makeoddhead{bibliography}{\textsc{\bibname}}{}{\thepage}
+\fi
+
+\def\ufmg@chaptermark#1{%
+  \markboth{%
+    \ifnum\c@secnumdepth>\m@ne
+      \if@mainmatter
+        \if@twoside\@chapapp\ \fi
+        \thechapter.
+      \fi
+    \fi
+    #1}{}}%
+
+\def\ufmg@sectionmark#1{%
+  \markright{%
+    \ifnum\c@secnumdepth>\z@\thesection. \ \fi
+    #1}}%
+
+\def\ufmgrestoremarks{%
+  \let\chaptermark=\ufmg@chaptermark
+  \let\sectionmark=\ufmg@sectionmark
+}
+
+\ufmgrestoremarks
+\g@addto@macro\mainmatter{\pagestyle{headings}\ufmgrestoremarks}
+%    \end{macrocode}
+
+
+% \subsection*{Sumário, Lista de Figuras e Lista de Tabelas}
+%
+% \DescribeMacro{\tableofcontents}%
+% \DescribeMacro{\listoffigures}%
+% \DescribeMacro{\listoftables}%
+% Estes comandos compõem o Sumário, a Lista de Figuras e a Lista de Tabelas. Os
+% comandos originais são modificados para lidar corretamente com a formatação
+% dos cabeçalhos e rodapés das páginas.
+%
+%    \begin{macrocode}
+\let\ufmg@orig@tableofcontents=\tableofcontents
+\renewcommand{\tableofcontents}{{%
+  \if@showtoc\begingroup
+    \ufmg@redefchaptitlefont
+    \let\ufmg@save@tableofcontents=\tableofcontents
+    \let\tableofcontents=\ufmg@orig@tableofcontents
+    \pagestyle{contents}
+    \tableofcontents*
+    \cleardoublepage
+  \endgroup\fi
+}}
+
+\let\ufmg@orig@listoffigures=\listoffigures
+\renewcommand{\listoffigures}{{%
+  \if@showlof\begingroup
+    \ufmg@redefchaptitlefont
+    \let\ufmg@save@listoffigures=\listoffigures
+    \let\listoffigures=\ufmg@orig@listoffigures
+    \pagestyle{listoffigures}
+    \listoffigures*
+    \cleardoublepage
+  \endgroup\fi
+}}
+
+\let\ufmg@orig@listoftables=\listoftables
+\renewcommand{\listoftables}{{%
+  \if@showlot\begingroup
+    \ufmg@redefchaptitlefont
+    \let\ufmg@save@listoftables=\listoftables
+    \let\listoftables=\ufmg@orig@listoftables
+    \pagestyle{listoftables}
+    \listoftables*
+    \cleardoublepage
+  \endgroup\fi
+}}
+%    \end{macrocode}
+
+
+% \subsection*{O comando ``deixe que eu faço tudo''}
+%
+% \DescribeMacro{\ufmgthesis}%
+% Este é o ``comando mágico'' que compõe todas as páginas introdutórias. Ele
+% recebe como argumento uma série de pares do tipo \meta{chave}|=|\meta{valor},
+% descritos na Seção~\ref{sec:ufmgthesis}. Leia essa seção!
+%
+%    \begin{macrocode}
+
+\def\ufmg@addabstract#1#2{\addabstract{#1}{#2}}
+\def\ufmg@adddedication#1{\adddedication{#1}}
+\def\ufmg@addack{\@ifnextchar[{\addack}{\ufmg@addack@}}
+\def\ufmg@addack@#1\relax{\addack[]{#1}}
+
+\define@key{ufmg}{title}{\title{#1}}
+\define@key{ufmg}{author}{\author{#1}}
+\define@key{ufmg}{university}{\university{#1}}
+\define@key{ufmg}{course}{\course{#1}}
+\define@key{ufmg}{portuguesetitle}{\portuguesetitle{#1}}
+\define@key{ufmg}{portugueseuniversity}{\portugueseuniversity{#1}}
+\define@key{ufmg}{portuguesecourse}{\portuguesecourse{#1}}
+\define@key{ufmg}{address}{\address{#1}}
+\define@key{ufmg}{date}{\date{#1}}
+\define@key{ufmg}{logo}{\logo{#1}}
+\define@key{ufmg}{advisor}{\advisor#1}
+\define@key{ufmg}{coadvisor}{\coadvisor#1}
+\define@key{ufmg}{member}{\addtocomitee#1}
+\define@key{ufmg}{abstract}{\ufmg@addabstract#1}
+\define@key{ufmg}{dedication}{\ufmg@adddedication{#1}}
+\define@key{ufmg}{ack}{\ufmg@addack#1\relax}
+
+\newcommand{\ufmgthesis}[1]{%
+  \setkeys{ufmg}{#1}
+
+  \frontmatter
+  \pagestyle{plain}
+
+  % Capa
+  \makecoverpage
+  % Folha(s) de título
+  \maketitlepage
+  % Folha de aprovação
+  \makeapproval
+  % Dedicatória
+  \ufmg@includededicationlist
+  % Agradecimentos
+  \ufmg@includeacklist
+  % Resumo, Abstract, etc.
+  \ufmg@includeabstractlist
+
+  \tableofcontents
+  \listoffigures
+  \listoftables
+
+  \if@putmainmatter\mainmatter\fi
+}
+%    \end{macrocode}
+
+%
+% \subsection*{Referências bibliográficas}
+%
+% Aqui estão todos os comandos, opções e processamentos relacionados à
+% composição das referências bibliográficas (caso se queira adotar o estilo
+% |ufmg| de bibliografia para o Bib\TeX).
+%
+% A seguir, as macros que definem as opções configuráveis:
+%
+%    \begin{macrocode}
+\def\ufmg@bibauthorformat{}
+\def\ufmg@bibtitleformat{}
+\def\ufmg@bibbtitleformat{\itshape}
+\def\ufmg@bibbooktitleformat{\itshape}
+\def\ufmg@bibjournalformat{\itshape}
+
+\def\ufmg@norepstring{---------}
+\def\ufmgbibinstring{In}
+%    \end{macrocode}
+
+% As macros a seguir devem ser usadas de maneira automática e somente dentro do
+% arquivo |.bbl| file (que é gerado pelo sistema Bib\TeX):
+%
+%    \begin{macrocode}
+\newcommand{\ufmgbibauthordoformat}[1]{%
+  \if@bibnorepauthor
+    \def\ufmg@currentauthor{#1}%
+    \ifx\ufmg@lastauthor\ufmg@currentauthor\ufmg@norepstring
+      \else{\ufmg@bibauthorformat#1}\fi
+    \def\ufmg@lastauthor{#1}%
+  \else
+    {\ufmg@bibauthorformat#1}%
+  \fi
+}
+\newcommand{\ufmgbibtitledoformat}[1]{{\ufmg@bibtitleformat#1}}
+\newcommand{\ufmgbibbtitledoformat}[1]{{\ufmg@bibbtitleformat#1}}
+\newcommand{\ufmgbibbooktitledoformat}[1]{{\ufmg@bibbooktitleformat#1}}
+\newcommand{\ufmgbibjournaldoformat}[1]{{\ufmg@bibjournalformat#1}}
+%    \end{macrocode}
+
+% Eis a declaração das opções para o comando |\ufmgbibliography|:
+%
+%    \begin{macrocode}
+\define@key{ufmgbib}{noauthorrepeat}[true]{\@bibnorepauthortrue}
+\define@key{ufmgbib}{noauthorrepstring}{\def\ufmg@norepstring{#1}}
+\define@key{ufmgbib}{nobreakitems}[true]{\@nobreakitemstrue}
+\define@key{ufmgbib}{bibauthorand}{\def\ufmgbibauthorand{#1}}
+\define@key{ufmgbib}{citeauthorand}{\def\ufmgciteauthorand{#1}}
+\define@key{ufmgbib}{authorformat}{\def\ufmg@bibauthorformat{#1}}
+\define@key{ufmgbib}{titleformat}{\def\ufmg@bibtitleformat{#1}}
+\define@key{ufmgbib}{btitleformat}{\def\ufmg@bibbtitleformat{#1}}
+\define@key{ufmgbib}{booktitleformat}{\def\ufmg@bibbooktitleformat{#1}}
+\define@key{ufmgbib}{journalformat}{\def\ufmg@bibjournalformat{#1}}
+%    \end{macrocode}
+
+% \DescribeMacro{\ufmgbibliography}%
+% Finalmente, eis o comando mágico. O argumento obrigatório é o nome do arquivo
+% de banco de dados bibliográfico (o arquivo |.bib|), sem a extensão.
+%
+%    \begin{macrocode}
+\newcommand{\ufmgbibliography}[2][]{%
+  \setkeys{ufmgbib}{#1}
+
+  \cleardoublepage
+  \pagestyle{bibliography}
+  \bibliographystyle{ufmg}
+  \begingroup
+    \ufmg@redefchaptitlefont
+    \if@nobreakitems\raggedbottom\interlinepenalty=10000\relax\fi
+    \bibliography{#2}
+  \endgroup
+
+  \cleardoublepage
+  \pagestyle{headings}
+  \ufmgrestoremarks
+}
+%    \end{macrocode}
+
+% \subsection*{Rotina de pós-processamento}
+%
+% \DescribeMacro{\AtBeginDocument}%
+% Finalmente, a rotina atrelada ao comando |\AtBeginDocument|: aqui são
+% chamados os comandos para configurar a linguagem e o espaçamento padrão entre
+% linhas. O pacote |graphicx| também é carregado automaticamente, embora seja
+% melhor que o usuário inclua manualmente esse pacote: dessa maneira, o usuário
+% poderá carregá-lo com as opções que desejar.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \ufmg@selectlanguage\ufmg@defspacing
+  \@ifpackageloaded{graphicx}{}{\RequirePackage{graphicx}}%
+  \@ifpackageloaded{hyperref}{\RequirePackage{memhfixc}}{}%
+}
+%    \end{macrocode}
+%
+% \Finale

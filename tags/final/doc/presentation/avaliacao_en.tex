@@ -1,0 +1,142 @@
+\section{Evaluation}
+\subsection{Experiments}
+
+\begin{frame}{The Applicative \textbf{olac}}
+	\begin{itemize}[<+-| alert@+>]
+		\item In the applicative \textbf{olac} we have the implementation of three different approaches of an association rules based classifier:
+		\begin{itemize}[<+-| alert@+>]
+			\item The LAC (\textit{Lazy Associative Classifier}) approach, that is the \textit{lazy} strategy in his original version(and non-orthogonal);
+			\item The OLAC (\textit{Orthogonal Lazy Associative Classifier}) approach, that is a variant of the \textit{lazy} strategy considering orthogonality;
+			\item The ORIGAMI, that is the adaptation presented for the ORIGAMI strategy.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+%\begin{frame}[fragile,shrink=30]{Opções de Execução}
+%
+%\begin{verbatim}
+%Usage: ./olac [options]
+%Options:
+%  -i, --training-file       Set the training file
+%  -t, --testing-file        Set the testing file
+%  -s, --support             Set the support
+%  -c, --confidence          Set the confidence
+%  -r, --run-mode            Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]
+%  -p, --pattern-set         Set the pattern set type [f,m,r] [FREQUENT, MAXIMAL,
+%                              RANDOM MAXIMAL]
+%  -n, --min-num-rules       Set the minimum number of rules generated
+%  -l, --max-num-rank-rules  Set the maximum number of rules considered (rank size)
+%  -m, --min-rule-len        Set the minimum length of the rules
+%  -x, --max-rule-len        Set the maximum length of the rules
+%  -o, --orth-mode           Set the orthogonality mode [h,p,o] [HEURISTICAL,
+%                              POLYNOMIAL, ORIGAMI]
+%\end{verbatim}
+%
+%\end{frame}
+
+%\begin{frame}[fragile,shrink=30]{Opções de Execução}
+%
+%\begin{verbatim}
+%  -e, --orth-metric         Set the orthogonality metric [s,c,l,a] [STRUCTURE,
+%                              TRANSACTION COVERAGE, CLASS COVERAGE, ALL]
+%  -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE,
+%                              ALL]
+%  -g, --orth-pat-ordering   Set the way patterns are ordered for heuristic
+%                              [s,r,i,z,n] [SORTED, REVERSE SORTED, SORTED BY SIZE,
+%                              REVERSE SORTED BY SIZE, NONE]
+%  -u, --rule-measure        Set the rule measure used [s,c,j,k,o,n,e,p,l,i,v]
+%                              [SUPPORT, CONFIDENCE, JACCARD, KULC, COSINE,
+%                              CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE,
+%                              LIFT, LEVERAGE]
+%  -a, --origami-alpha       Set the alpha parameter used by ORIGAMI
+%  -b, --origami-beta        Set the beta parameter used by ORIGAMI
+%  -d, --debug               Set the level of debug [-1,0,1,2,3,4] [SILENT, NO DEBUG,
+%                              LOW LEVEL, MEDIUM LEVL, HIGH LEVEL, MAX LEVEL]
+%  -v, --verbose             Use verbose mode
+%  -h, --help                Display this information
+%\end{verbatim}
+%
+%\end{frame}
+
+%\subsection{Experimentos}
+
+\begin{frame}{Methodology}
+	\begin{itemize}[<+-| alert@+>]
+		\item We used 26 datasets from \textbf{UCI} (\textit{UC Irvine Machine Learning Repository});
+		\item We used 10-fold cross-validation and the final results of each experiment represent the average of the ten runs.
+			\end{itemize}
+\end{frame}
+
+%\begin{frame}{Metodologia}
+%	\begin{itemize}[<+-| alert@+>]
+%		\item Como resultados foram considerados a média das dez execuções diferentes para cada base de dados;
+%		\item Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms_presentation};
+%		\item Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC.
+%	\end{itemize}
+%\end{frame}
+
+\begin{frame}[shrink]{Methodology}
+	\begin{centering}
+	\input{../thesis/tables/table_test_parms_presentation_en.tex}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results for Each Dataset}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_acc_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results for Each Dataset}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_pat_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results for Each Dataset}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_each_db_rul_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results in Average for All Datasets}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_avg_db_acc_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results in Average for All Datasets}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_avg_db_pat_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Better Results in Average for All Datasets}
+	\begin{centering}
+	\includegraphics[width=\textwidth]{../thesis/graphs/histogram_best_run_for_avg_db_rul_en}
+	\end{centering}
+\end{frame}
+
+\begin{frame}[shrink]{Execution Parameters}
+	\begin{centering}
+	\input{../thesis/tables/table_best_parms_for_avg_db_en.tex}
+	\end{centering}
+\end{frame}
+
+\begin{frame}
+	\begin{block}{Results obtained with LAC using the best parameters for OLAC}
+		Patterns: $249.03$ \\
+		Rules: $628.12$ \\
+		Accuracy: $0.54$
+	\end{block}
+\end{frame}
+
+\begin{frame}[shrink]{Comparing the Results}
+	\begin{centering}
+	\input{../thesis/tables/table_comparison_lac_olac_presentation_en.tex}
+	\end{centering}
+\end{frame}
+
+% O Aplicativo olac
+% Exemplo de Execução
+% Experimentos

@@ -1,0 +1,95 @@
+\documentclass[a4paper,12pt,oneside,openright,msc]{ufmgthesis}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{type1ec}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage{natbib}
+\usepackage{multirow}
+
+\ifpdf
+	\usepackage{epstopdf}
+\fi
+
+\let\newfloat=\undefined
+\usepackage[ruled]{algorithm}
+\usepackage{algorithmic}
+
+\usepackage[
+	a4paper,
+	portuguese,
+	bookmarks=true,
+	bookmarksnumbered=true,
+	linktocpage,
+	colorlinks,
+	citecolor=blue,
+	plainpages=false,
+	pdfpagelabels]{hyperref}
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Definições
+\newtheorem{definition}{Definição}
+\newtheorem{problem}{Problema}
+\newtheorem{proposition}{Proposição}
+
+% Mudando o label dos algoritmos para portugês
+\floatname{algorithm}{Algoritmo}
+
+% Variáveis matemáticas
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\CD}{\mathcal{C_D}}
+\newcommand{\Cl}{\mathcal{C}^{'}}
+\newcommand{\ClD}{\mathcal{C}^{'}_D}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Dl}{\mathcal{D}^{'}}
+\newcommand{\DlF}{\mathcal{D}^{'}_F}
+\newcommand{\Dlc}{\mathcal{D}^{'}_c}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Fl}{\mathcal{F}^{'}}
+\newcommand{\Flc}{\mathcal{F}^{'}_c}
+\newcommand{\Fli}{\mathcal{F}^{'}_i}
+\newcommand{\Flt}{\mathcal{F}^{'}_t}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\Il}{\mathcal{I}^{'}}
+\newcommand{\IlF}{\mathcal{I}^{'}_F}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Or}{\mathcal{O}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\Se}{\mathcal{S}}
+
+\begin{document}
+
+\ufmgthesis{
+	title		= {Mineração de Padrões Freqüentes Ortogonais e sua Aplicação em Classificação Associativa},
+	author		= {Leandro Souza Costa},
+	university	= {Universidade Federal de Minas Gerais},
+	course		= {Ciência da Computação},
+	address		= {Belo Horizonte},
+	date		= {2008-04-16},
+	logo		= {img/brasao},
+	advisor		= {Wagner Meira Jr.}{Ph.~D.}{.},
+	member		= {Marcos André Gonçalves}{Ph.~D.}{.},
+	member		= {Sandra Aparecida de Amo}{Ph.~D.}{Universidade Federal de Uberlândia},
+	abstract	= {Resumo}{resumo.tex},
+	abstract	= {Abstract}{abstract.tex},
+	dedication	= {dedicatoria.tex},
+	ack		= {agradecimentos.tex}
+}
+
+\include{introducao}
+\include{trabalhos}
+\include{classificacao}
+\include{ortogonalidade}
+\include{resultados}
+\include{conclusao}
+\appendix
+\include{appendix_a}
+\include{appendix_b}
+
+\ufmgbibliography{thesis}
+
+\end{document}

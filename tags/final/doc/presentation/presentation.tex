@@ -1,0 +1,80 @@
+\documentclass{beamer}
+%\documentclass[draft]{beamer}
+%\documentclass[handout]{beamer}
+%\documentclass[draft,handout]{beamer}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{type1ec}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{soul}
+\usepackage{ifpdf}
+
+\ifpdf
+	\usepackage{epstopdf}
+\fi
+
+%\let\newfloat=\undefined
+\usepackage[portugues,boxed]{algorithm2e}
+\usepackage{algorithmic}
+
+%\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Mudando o label dos algoritmos para portugês
+%\floatname{algorithm}{Algoritmo}
+
+% Variáveis matemáticas
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\Cl}{\mathcal{C}^{'}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Dl}{\mathcal{D}^{'}}
+\newcommand{\Dlc}{\mathcal{D}^{'}_c}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Fl}{\mathcal{F}^{'}}
+\newcommand{\Flc}{\mathcal{F}^{'}_c}
+\newcommand{\Fli}{\mathcal{F}^{'}_i}
+\newcommand{\Flt}{\mathcal{F}^{'}_t}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\Il}{\mathcal{I}^{'}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Or}{\mathcal{O}}
+\newcommand{\R}{\mathcal{R}}
+%\newcommand{\Se}{\mathcal{S}}
+
+\usetheme[compress]{Berlin}
+%\usetheme{Berlin}
+
+\title[Mineração de Padrões Freqüentes e Ortogonais]{Mineração de Padrões Freqüentes Ortogonais e sua Aplicação em Classificação Associativa}
+\author[Leandro S. Costa]{Leandro Souza Costa \\ Orientador: Wagner Meira Jr.}
+\institute[DCC-UFMG]{Departamento de Ciência da Computação \\ Universidade Federal de Minas Gerais}
+\logo{\includegraphics[height=.8cm]{../thesis/img/speed}}
+\date[Dissertação de Mestrado]{Defesa de Dissertação de Mestrado \\ \today}
+
+\begin{document}
+
+\setbeamercovered{transparent}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\section*{Sumário}
+%\begin{frame}[shrink=5]
+%\tableofcontents
+%\end{frame}
+
+\include{introducao}
+\include{classificacao}
+%\include{classificacao_v2}
+\include{ortogonalidade}
+%\include{ortogonalidade_v2}
+\include{avaliacao}
+\include{conclusao}
+
+%\appendix
+%\include{apendice}
+
+\end{document}

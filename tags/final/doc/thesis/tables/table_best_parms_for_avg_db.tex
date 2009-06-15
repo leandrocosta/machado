@@ -1,0 +1,36 @@
+\begin{table}[htbp]
+	\centering
+%		\resizebox{0.95\textwidth}{!} {
+		\begin{tabular}{|l|c|c|c|}
+		\hline
+					& \textbf{LAC}	& \textbf{OLAC}	& \textbf{ORIGAMI}	\\
+		\hline
+		support			& 0.001	& 0.0001	& 0.0001		\\
+		\hline
+		confidence		& 0.01		& 0.0001	& 0.0001		\\
+		\hline
+		min-num-rules		& 1		& 1		& 1			\\
+		\hline
+		max-num-rank-rules	& 1000		& 100		& 10			\\
+		\hline
+		min-rule-len		& 1		& 1		& -			\\
+		\hline
+		max-rule-len		& 1		& 2		& -			\\
+		\hline
+		rule-measure		& n		& n		& c			\\
+		\hline
+		orth-metric		& -		& s		& s			\\
+		\hline
+		orth-method		& -		& s		& -			\\
+		\hline
+		orth-pat-ordering	& -		& s		& -			\\
+		\hline
+		origami-alpha		& -		& -		& 0.1			\\
+		\hline
+		origami-beta		& -		& -		& 0.8			\\
+		\hline
+		\end{tabular}
+%		}
+	\caption{Melhores Parâmetros para cada Execução}
+	\label{tab:best_parms_for_avg_db}
+\end{table}

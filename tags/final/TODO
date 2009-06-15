@@ -1,0 +1,198 @@
+* Foram formatados os 25 arquivos. Até agora, o resultado dos padrões ortogonais foi melhor em 1 arquivo e igual em 6. O resultado dos padrões frequentes (clássico) fom melhor em 5 e igual em 1;
+* Depois de removida a parcela de normalização, o número de padrões ortogonais aumentou. (6, 8 padrões em média);
+* Existem arquivos com transações muito grandes (38 itens), o programa está ineficiente. Foram feitas algumas melhorias quanto ao desempenho, e ainda há mais a fazer;
+* Abordagem ortogonalidade por classes foi implementada, mas aparentemente não obteve melhorias;
+* Foram implementadas todas as métricas utilizadas pelo 'lazy' (SUPPORT, CONFIDENCE, GAIN, JACCARD, KULC, COSINE, COHERENCE, SENSITIVITY, SPECIFICITY, LAPLACE, CORRELATION);
+* Foi observado que o 'lazy' sempre gera um número mínimo de regras (diminuindo o valor da confiança, quando necessário);
+* Foi feito dois scripts de teste: um para descobrir a configuração do lazy que produz os melhores resultados, e outro para comparar as execuções lazy/orth/freq para cada configuração.
+
+Tarefas:
+
+1) Tentar melhorar abordagem ortogonalidade por classes
+
+	* Dois padrões são ortogonais se cobrem CLASSES diferentes, ex.: Sejam P1 e P2 dois padrões presentes numa base. Se P1 está presente em transações com classes A, B e C, e P2 está presente em transações com classes D, E e F, eles são totalmente ortogonais (mesmo que exista ambiguidade em cada um deles).
+
+---
+
+2) Implementar abordagem ortogonalidade por classes baseada no ORIGAMI
+
+O conjunto R deve ser alfa-ortogonal e beta-representativo
+
+	* O conjunto R deve possuir elementos cuja similaridade par-a-par entre o seus membros sejam menores que alfa para todos os pares possíves;
+	* Para cada elemento que não pertence a R deve existir, pelo menos, um elemento em R cuja similaridade entre os dois seja maior que beta.
+
+---
+
+3) Implementar ortogonalidade no ranking
+
+	* Depois de geradas as regras, separá-las por classe, e, para cada classe, obter apenas as regras cujos padrões sejam ortogonais entre si. Utilizar a abordagem do ORIGAMI.
+
+4) Estudar métricas do 'lazy', e suas relações com o resultado final
+
+5) Inserir gráficos nos scripts de teste
+
+6) Otimizar o código tanto memória quanto processamento
+
+---
+
+07/02/2008
+
+Implementados os parâmetros utilizados pelo lazy:
+  min-num-rules: número mínimo de regras (o valor da confiança é decrementado em 10% a cada iteração até que o número mínimo de regras seja gerado, ou a confiança chegue a 0.001);
+  max-num-rank-rules: número máximo de regras consideradas durante o classificação (a lista de regras é ordenada descrescentemente, e apenas as primeiras 'max-num-rank-ruels' são consideradas para a classificação);
+
+Resolvidos alguns detalhes de desempenho:
+  iteradores ++it ao invés de it++;
+  retirada de logs dos trechos mais críticos;
+  inicialização de iteradores 'end()' fora do loop 'for()';
+  melhorias no algoritmo de obtenção de padrões frequentes;
+  revisão da implementação da heurística de obtenção de padrões ortogonais.
+
+Resultado:
+
+  Execução anterior às modificações:
+    * orth 7 vezes em primeiro lugar, sendo 1 empatado com freq, 3 empatadas com lazy, e 3 empatadas com ambos;
+    * freq 10 vezes em primeiro lugar, sendo 5 isoladas, 1 com orth 1 com lazy e 3 com ambos;
+    * lazy 21 vezes em primeiro lugar, sendo 12 isoladas, 3 com orth, 1 com freq e 3 com ambos;
+    * das 5 vezes em que freq esteve isolado em primeiro lugar, orth empatou 2 vezes com lazy e perdeu 3.
+
+  Execução após as modificações (com os mesmos parâmetros da execução anterior):
+    * orth 12 vezes em primeiro lugar, sendo 2 isoladas, 8 empatadas com lazy e 2 empatadas com lazy e freq;
+    * freq 13 vezes em primeiro lugar, sendo 11 vezes isoladas e 2 empatadas com lazy e freq;
+    * lazy 12 vezes em primeiro lugar, sendo 2 isoladas, 8 empatadas com orth e 2 empatadas com lazy e freq;
+    * das 11 vezes em que freq esteve isolado em primeiro lugar, orth ganhou 4, empatou 3 com lazy e perdeu 4.
+
+  Parâmetros de execução:
+    suporte: 0.001 (para o lazy, 1 elemento)
+    confiança: 0.9
+    número mínimo de regras: 1
+    tamanho máximo de regra: 2 elementos no lado esquerdo
+    número máximo de regras no rank: 1000
+
+    (métrica de ortogonalidade: similaridade)
+
+---
+
+08/02/2008
+
+O mesmo código de ontem foi executado com os mesmos parâmetros, e ortogonalidade por classes ao invés de similaridade, porém, apenas 20 arquivos foram processados em tempo hábil.
+
+Resultado:
+    * orth 8 vezes em primeiro lugar, sendo 4 vezes isoladas, 3 empatadas com freq e 1 empatada com lazy e freq;
+    * freq 10 vezes em primeiro lugar, sendo 6 isoladas, 3 com orth 1 com lazy e orth;
+    * lazy 7 vezes em primeiro lugar, sendo 6 isoladas e 1 com freq e orth;
+    * das 6 vezes em que freq esteve isolado em primeiro lugar, orth ganhou 3, empatou 1 e perdeu 2 vezes para lazy.
+
+---
+19/02/2008
+
+	* Organizar métricas de ortogonalidade:
+
+		---------------------------------------------------------
+		|			| Set	| Pair Average	| All	|
+		---------------------------------------------------------
+		| Pattern Similarity	|	|		|	|
+		---------------------------------------------------------
+		| Transaction Coverage	|	|		|	|
+		---------------------------------------------------------
+		| Class Coverage	|	|		|	|
+		---------------------------------------------------------
+		| All			|	|		|	|
+		----------------------------------------------------------
+
+	* Parametrizar ordem dos padrões como entrada para a heurística:
+		- Sort;
+		- Reverse Sort;
+		- SizeSort;
+		- SizeReverseSort;
+		- None.
+
+	* Implementar heurística mais específica e inteligente:
+		- Class Coverage:
+			. Dar preferência por padrões cuja cobertura de classes seja menos ambígua.
+		- Transaction Coverage:
+			. Dar preferência por padrões com suportes menores;
+		- Similarity:
+			. Dar preferência por padrões com maiores quantidades de elementos.
+
+	* Implementar alfa e beta para ortogonalidades:
+		- Enquanto ortogonalidade do conjunto for maior que alfa, incluir novos elementos;
+			. Dando preferência aos citados acima.
+		- Gerar vários conjuntos-resultado de acordo com alfa;
+		- Calcular resíduo para cada conjunto-resultado de acordo com beta;
+		- Escolher o melhor conjunto-resultado de acordo com o resíduo.
+
+	* Utilizar a abordagem com alfa e beta com padrões maximais.
+
+---
+
+Geração de padrões maximais randômicos
+
+maximais_set = empty;
+maximais_set_size = 0;
+bKeepRunning = true;
+
+while (bKeepRunning)
+{
+	maximal = new MaximalPattern ();
+
+	maximal_items_array[item  IDs] = false;
+
+	item = getRandomItem ();
+
+	maximal.push (item);
+	maximal[item.getID ()] = true;
+
+	bTryMoreRandomItems = true;
+
+	while (bTryMoreRandomItems)
+	{
+		item = NULL;
+
+		for (i = 0; i < maximal.size () + 1; i++)
+		{
+			item = getRandomItem ();
+
+			if (maximal.find (item))
+				item = NULL;
+			else
+				break;
+		}
+
+		if (item)
+		{
+			new_maximal = maximal + item;
+
+			if (new_maximal é frequente)
+			{
+				delete maximal;
+				maximal = new_maximal;
+			}
+			else
+				bTryMoreRandomItems = false;
+		}
+		else
+			bTryMoreRandomItems = false;
+	}
+
+	// checar se é mesmo maximal ?
+
+	if (maximais_set.find (maximal)
+		duplicates++;
+	else
+		maximais_set.push (maximal);
+
+	if (duplicates > maximais_set)
+		bKeepRunning = false;
+}
+
+===
+
+Rodar:
+costa@antares /tmp/costa/personal/machado/test $ more output/classifier_o/breast.ac/best.out
+support [0.0001], confidence [0.0001], pattern_set [f], min_num_rules [1], max_num_rank_rules [100], min_rule_len [1], max_rule_len [3], omode [h], ometric [s], omethod [s], oordering [z], rule_measure [c}, avg_time [0.006560337], avg_patterns [6.921305], avg_rules [13.48043], accuracy [0.9756729]
+---
+Rodar:
+costa@tigre:/tmp/costa/personal/machado/test> more output/classifier_or/waveform.ac/best.out
+support [0.1], confidence [0.0001], min_num_rules [1], max_num_rank_rules [1000], ometric [s], alpha [0.7], beta [0.9], rule_measure [e], avg_time [0.07764388], avg_patterns [18.445], avg_rules [50.8622], accuracy [0.7672]
+---

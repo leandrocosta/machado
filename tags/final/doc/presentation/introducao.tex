@@ -1,0 +1,63 @@
+\section{Introdução}
+\subsection{Contextualização}
+
+\begin{frame}{Introdução}
+	\begin{itemize}[<+-| alert@+>]
+		\item Era da Informação;
+		\item Sistemas de Gerenciamento de Banco de Dados (SGBD);
+		\item \textit{Data Warehouse};
+		\item Mineração de Dados.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Mineração de Dados}
+	\begin{itemize}[<+-| alert@+>]
+		\item Descoberta de Conhecimento em Bases de Dados (KDD - \textit{Knowledge Discovery in Databases});
+		\item Padrões Freqüentes;
+		\item Regras de Associação;
+		\item Classificação Associativa.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Ortogonalidade}
+	\begin{block}{Definição Matemática}
+		Dois vetores $x$ e $y$ são ortogonais num espaço vetorial $V$ se o produto interno $\left\langle x,y \right\rangle$ é zero. Esta situação é descrita por $x \bot y$.
+	\end{block}
+	\pause
+	\begin{block}{Definição Adotada}
+		Estamos interessados no quanto os elementos de um conjunto contribuem com informações não redundantes para a solução de um problema. Considerando que seja possível medir esta contribuição, e chamá-la de \textbf{significância}, podemos definir \textbf{ortogonalidade} como a média das significâncias dos elementos do conjunto.
+	\end{block}
+\end{frame}
+
+\subsection{Objetivos}
+\begin{frame}{Objetivos}
+Explorar o problema de classificação associativa considerando ortogonalidade entre padrões freqüentes com a intenção de:
+	\begin{itemize}[<+-| alert@+>]
+		\item Minimizar o número de padrões utilizados na geração das regras;
+		\item Diminuir a redundância das regras geradas;
+		\item Diminuir a ambigüidade das regras geradas;
+		\item Aumentar a efetividade das classificações.
+	\end{itemize}
+\end{frame}
+
+\subsection{Trabalhos Relacionados}
+\begin{frame}{Trabalhos Relacionados}
+	\begin{itemize}[<+-| alert@+>]
+		\item Compactação do Conjunto de Padrões Freqüentes:
+		\begin{itemize}[<+-| alert@+>]
+			\item Padrões Fechados e Maximais;
+			\item Extração de sub-conjunto (top-$k$) de padrões;
+			\item Representação alternativa do conjuntos de padrões.
+		\end{itemize}
+		\item Diminuição de Redundância no Conjunto de Padrões Freqüentes:
+		\begin{itemize}[<+-| alert@+>]
+			\item Função objetivo relacionando significância e redundância;
+			\item Modelos baseados em agrupamentos e representantes;
+			\item ORIGAMI ($\alpha$-ortogonalidade).
+		\end{itemize}
+		\item Classificação Associativa:
+		\begin{itemize}[<+-| alert@+>]
+			\item Estratégia \textit{lazy}.
+		\end{itemize}
+	\end{itemize}
+\end{frame}

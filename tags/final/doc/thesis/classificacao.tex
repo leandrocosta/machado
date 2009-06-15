@@ -1,0 +1,118 @@
+\chapter{Classificação Associativa}
+\label{chapter:classificacao}
+
+Neste capítulo apresentaremos fundamentos teóricos relacionadas à Classificação Associativa, como definições de padrões freqüentes e regras de associação, além de uma breve discussão a respeito das estratégias \textit{eager} e \textit{lazy} encontradas na literatura. Também serão apresentadas e discutidas algumas métricas amplamente utilizadas na avaliação de regras de associação.
+
+\section{Introdução}
+
+Classificação já é um problema muito bem explorado na Ciência da Computação. Encontra-se facilmente, na literatura, vários modelos que têm sido propostos ao longo dos anos, incluindo modelos baseados em redes neurais \citep{lippmann88}, modelos estatísticos \citep{james85}, árvores de decisão \citep{cart84, quinlan93} e algoritmos genéticos \citep{goldberg89}. Dentre todos estes, árvores de decisão é um dos mais apropriados para a mineração de dados, pelo fato desta ser uma abordagem de fácil entendimento \citep{quinlan93}, além da sua construção ser relativamente fácil, quando comparada com outros modelos.
+\par
+Como uma alternativa para árvores de decisão, a classificação associativa foi proposta \citep{liu98integrating, dong99caep, li01cmar}. Esta abordagem, primeiramente, obtém um conjunto de regras de associação da base de treinamento, e então, constrói um classificador utilizando as regras obtidas. Este processo de classificação produz bons resultados, e ainda melhores acurácias que árvores de decisão \citep{liu98integrating}.
+\par
+De acordo com \cite{Veloso06Lazy}, algoritmos baseados em árvores de decisão executam uma estratégia gulosa \citep{cormen2001algorithms} de pesquisa por regras selecionando, por meio de uma heurística qualquer, os atributos mais indicados para se representar a classe de uma determinada instância. O algoritmo tem início com um conjunto vazio de regras de decisão e, gradualmente, adiciona restrições a este conjunto, até que não haja mais evidências para continuar a pesquisa, ou uma discriminação perfeita seja alcançada. O problema das árvores de decisão é que esta estratégia ``gulosa'' poderia reduzir o espaço de pesquisa, desconsiderando algumas regras de importância para o modelo.
+\par
+Classificação associativa, por outro lado, executa uma pesquisa global por regras que satisfazem determinadas questões de qualidade, o que faz com que nenhuma regra de importância seja desconsiderada pelo algoritmo.
+
+\section{Fundamentos Teóricos}
+
+Os dados de entrada para um classificador são uma coleção de registros. Cada registro é caracterizado por um par $(x,y)$, onde $x$ é um conjunto de atributos comuns, e $y$ é um atributo especial, designado como classe. De acordo com \cite{Kumar06}, classificação é o processo de se descobrir uma função $f$ que realiza o mapeamento de cada conjunto de atributos $x$ para uma das classes $y$ pré-definidas. 
+\par
+Este processo pode ser descrito da seguinte forma: Um primeiro conjunto de dados de entrada, chamado de base de treinamento, é utilizado para se construir um modelo que relaciona os atributos dos registros da base com uma das classes previamente conhecidas. Um segundo conjunto de dados, chamado de base de teste, que possui registros com apenas atributos comuns, é utilizado para se validar o modelo obtido com a base de treinamento.
+\par
+O processo de validação do modelo consiste em, através deste, designar uma classe para cada instância de teste, e comparar os resultados com o valor real. Espera-se que as classes designadas coincidam com as classes reais de cada instância de teste, o que validaria o modelo obtido com a base de treinamento.
+\par
+A função de mapeamento de um classificador associativo é representada por um conjunto de regras de associação. Tais regras são geradas a partir de um conjunto de padrões freqüentes extraídos da base de treinamento. Nas seções \ref{sec:classificacao_padroes} e \ref{sec:classificacao_regras} serão apresentados os fundamentos teóricos que estão por trás dos padrões freqüentes e das regras de associação de um classificador associativo.
+
+\subsection{Padrões Freqüentes}
+\label{sec:classificacao_padroes}
+
+O problema da mineração de padrões freqüentes pode ser descrito da seguinte forma:
+\par
+Seja $\mathcal{I}$ um conjunto de itens. Um conjunto $X = \left\{i_1, \cdots, i_k\right\} \subseteq \mathcal{I}$ é chamado de \textit{itemset} (ou padrão), ou \textit{k-itemset} se ele contém $k$ itens.
+\par
+Uma transação sobre $\mathcal{I}$ é um par $T = \left(tid, I\right)$ onde $tid$ é o identificador da transação e $I$ é um \textit{itemset}. Dizemos que uma transação $T = \left(tid, I\right)$ é coberta por um \textit{itemset} $X \subseteq \mathcal{I}$, se $X \subseteq I$.
+\par
+Uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$ é um conjunto de transações sobre $\mathcal{I}$. Omitiremos $\mathcal{I}$ sempre que a sua dedução for trivial, de acordo com o contexto.
+\par
+A cobertura de um \textit{itemset} $X$ em $\mathcal{D}$ consiste no conjunto de identificadores das transações em $\mathcal{D}$ cobertas por $X$: \[cobertura(X,\mathcal{D}) := \left\{ tid |(tid,I) \in \mathcal{D}, X \subseteq I \right\}.\]
+
+A freqüência de um \textit{itemset} $X$ em $\mathcal{D}$ é o número de transações cobertas por $X$ em $\mathcal{D}$: \[frequencia(X,\mathcal{D}) := |cobertura(X,\mathcal{D})|.\]
+
+Note que $|\mathcal{D}| = frequencia(\left\{\right\},\mathcal{D})$. O suporte de um \textit{itemset} $X$ em $\mathcal{D}$ é a probabilidade de $X$ ocorrer em uma transação $T \in \mathcal{D}$: \[suporte(X,\mathcal{D}) := P(X) = \frac{frequencia(X,\mathcal{D})}{|\mathcal{D}|}.\] Omitiremos $\mathcal{D}$ sempre que a sua dedução for trivial, de acordo com o contexto.
+\par
+Um \textit{itemset} é freqüente se o seu suporte é maior ou igual a um dado valor relativo mínimo $\sigma_{rel}$, com $0 \leq \sigma_{rel} \leq 1$. Quando se considera freqüências de \textit{itemsets} ao invés de suportes, é utilizado um valor absoluto $\sigma_{abs}$, com $0 \leq \sigma_{abs} \leq |\mathcal{D}|$. Obviamente, $\sigma_{abs} = \left\lceil \sigma_{rel} \cdot |\mathcal{D}| \right\rceil$. No restante deste texto, sempre que não especificarmos a natureza de $\sigma$, $\sigma_{rel}$ deve ser considerado.
+
+\begin{definition}
+Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, e $\sigma$ um valor mínimo de suporte. A coleção de \textit{itemsets} freqüentes em $\mathcal{D}$ em relação a $\sigma$ é dado por: \[\mathcal{F}(\mathcal{D},\sigma):=\left\{X \subseteq \mathcal{I} | suporte (X,\mathcal{D}) \geq \sigma \right\}.\]
+\end{definition}
+
+\begin{problem}[Mineração de Padrões Freqüentes]
+Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, e um suporte mínimo $\sigma$, encontre $\mathcal{F}(\mathcal{D},\sigma)$.
+\end{problem}
+
+\subsection{Regras de Associação}
+\label{sec:classificacao_regras}
+
+Uma regra de associação é uma implicação da forma $X \Rightarrow Y$, onde $X$ é um conjunto de itens em $\mathcal{I}$, e $Y$ é um único item em $\mathcal{I}$ que não está presente em $X$. A regra $X \Rightarrow Y$ é satisfeita no conjunto de transações $T$ com confiança $0 \leq c \leq 1$ se, e somente se, pelo menos $c$\% das transações em $T$ que satisfazem $X$ também satisfazem $Y$ \citep{agrawal93mining}.
+\par
+O suporte de uma regra $X \Rightarrow Y$ em $\mathcal{D}$ é o suporte de $X \cup Y$ em $\mathcal{D}$, e a freqüência da regra é a freqüência de $X \cup Y$. Dizemos que uma regra de associação é freqüente se o seu suporte excede um determinado valor mínimo $\sigma$.
+\par
+A confiança de uma regra de associação $X \Rightarrow Y$ em $\mathcal{D}$ é a probabilidade condicional de encontrar $Y$ numa transação, dado que esta contém $X$: \[confianca(X \Rightarrow Y,\mathcal{D}):=P(Y|X) = \frac{suporte(X \cup Y,\mathcal{D})}{suporte(X,\mathcal{D})}.\]
+
+Dizemos que a regra é de confiança se $P(Y|X)$ excede um determinado valor mínimo de confiança $\gamma$, com $0 \leq \gamma \leq 1$.
+
+\begin{definition}
+Seja $\mathcal{D}$ uma base de dados de transações sobre um conjunto de itens $\mathcal{I}$, $\sigma$ um valor mínimo para suporte e $\gamma$ um valor mínimo para confiança, o conjunto de regras de associação freqüentes e de confiança considerando $\sigma$ e $\gamma$ é dado por:
+\begin{multline*}
+\mathcal{R}(\mathcal{D},\sigma,\gamma) := \{X \Rightarrow Y|X,Y \subseteq \mathcal{I}, X \cap Y = \left\{ \right\}, X \cup Y \in \mathcal{F}(\mathcal{D},\sigma), \\
+confianca(X \Rightarrow Y,\mathcal{D}) \geq \gamma\}.
+\end{multline*}
+\end{definition}
+
+\begin{problem}[Mineração de Regras de Associação]
+Dado um conjunto de itens $\mathcal{I}$, uma base de dados de transações $\mathcal{D}$ sobre $\mathcal{I}$, um valor mínimo para suporte $\sigma$ e um valor mínimo para confiança $\gamma$, encontre $\mathcal{R}(\mathcal{D},\sigma,\gamma)$.
+\end{problem}
+
+\section{Estratégias \textit{eager} e \textit{lazy}}
+
+Classificadores que utilizam a estratégia \textit{eager} geram um conjunto de regras a partir de \textit{itemsets} freqüentes em relação à base de treinamento, e as organizam em ordem decrescente, de acordo com métricas apropriadas (alguma delas discutidas na seção \ref{sec:classificacao_metricas}). Então, para cada instância de teste, a primeira regra do conjunto que pode ser aplicada à instância é utilizada para classificá-la.
+\par
+Intuitivamente, classificadores associativos possuem comportamento melhor que árvores de decisão pelo fato de permitirem que várias regras sejam aplicadas a uma mesma partição da base de treinamento. Enquanto árvores de decisão produzem apenas uma regra possível de se aplicar a uma determinada instância de teste, classificadores associativos geram várias regras aplicáveis, que precisam ser ordenadas para que, posteriormente, a mais indicada seja escolhida para se classificar a instância.
+\par
+Entretanto, uma estratégia \textit{eager} pode gerar um número muito grande de regras, muitas delas desnecessárias durante a classificação, por não serem aplicáveis a nenhuma instância de teste.
+\par
+Diferente da estratégia \textit{eager}, um classificador associativo que utiliza a estratégia \textit{lazy} gera regras específicas para cada instância de teste. A estratégia \textit{lazy} obtém uma projeção da base de treinamento somente com instâncias que possuem pelo menos um atributo em comum com a instância de teste. A partir desta projeção e do conjunto de atributos da instância de teste, as regras são induzidas e ordenadas, e a melhor regra do conjunto é utilizada para a classificação. Pelo fato das regras serem induzidas a partir do conjunto de atributos da instância de teste, todas as regras geradas serão aplicáveis.
+\par
+Em \cite{Veloso06Lazy}, encontramos a demonstração de que estratégias \textit{lazy} de classificadores associativos produzem resultados iguais ou melhores aos classificadores que utilizam a estratégia \textit{eager}.
+
+%Em \cite{Veloso06Lazy} O Adriano discute bem as duas estratégias, procurar mais artigos relacionados. \\
+%Descrever as duas estratégias, e apresentar as vantagens do lazy.
+
+\section{Métricas de Regras de Associação}
+\label{sec:classificacao_metricas}
+
+Classificadores associativos, após produzirem um conjunto de regras de associação a partir de documentos que constituem a base de treinamento, organizam as regras em ordem decrescente, de acordo com uma métrica apropriada, para então utilizá-las na classificação de determinada instância de teste. Encontramos, na literatura, diversas métricas para este propósito, desde as mais conhecidas suporte e confiança até outras mais sofisticadas, como coerência, convicção, interesse, correlação, dentre outras.
+\par
+Abaixo, fornecemos a definição de algumas das métricas mais utilizadas. Utilizamos o termo $Z$ para designar uma regra associativa, que também pode ser descrita como $X \Rightarrow Y$. O termo $\mathcal{D}$ foi utilizado para designar a base de treinamento. Chamamos de $P(W)$ a probabilidade de que uma transação qualquer de $\mathcal{D}$ seja coberta por $W$: \[P(W) = \frac{frequencia(W)}{|\mathcal{D}|},\] onde $W$ pode ser tanto uma regra quanto um de seus elementos (padrão ou classe), e $frequencia(W)$ é o número de transações em $\mathcal{D}$ cobertas por $W$.
+
+\begin{itemize}
+	\item{Suporte:} Introduzido por \cite{agrawal93mining}, e definido como $P(Z)$, o suporte dá a proporção de transações na base de dados cobertas pela regra. Esta métrica é utilizada como uma medida da significância (ou importância) de um \textit{itemset}. A principal característica do suporte é a anti-monotonicidade, ou seja, se um \textit{itemset} é freqüente, todos os seus subconjuntos também serão. A desvantagem do suporte está relacionado com os itens raros. Itens que ocorrem com baixa freqüência na base de dados podem ser desprezados, embora talvez sejam importantes para a tarefa de classificação;
+	\item{Confiança:} Esta métrica, definida como $confianca(X \Rightarrow Y) = P(Y|X)$, e também introduzida por \cite{agrawal93mining}, representa a probabilidade de que uma transação coberta pelo antecedente de uma regra também seja coberta pelo termo conseqüente. Confiança está relacionada com a validação da hipótese representada pela regra. Em geral, o suporte é utilizado para se encontrar \textit{itemsets} significativos na base de dados, e a confiança é aplicada como um segundo passo para gerar regras precisas. A desvantagem da confiança é que ela está diretamente relacionada com a freqüência do termo conseqüente. Pela forma que a confiança é calculada, termos conseqüentes com altos suportes tendem a produzir altos valores para confiança, mesmo se não existir nenhuma associação entre os dois termos da regra;
+	\item{Convicção:} Definida como $conviccao(X \Rightarrow Y) = \frac{P(X) \times P(\neg Y)}{P(X \wedge \neg Y)}$, e introduzida por \cite{brin97dynamic}, convicção foi desenvolvida como uma alternativa para confiança, pelo fato desta não capturar adequadamente a direção das associações. Convicção compara a probabilidade de $X$ aparecer sem $Y$ com a freqüência real do aparecimento de $X$ sem $Y$;
+	\item{Leverage:} Definida como $leverage(X \Rightarrow Y) = P(X \wedge Y) - (P(X) \times P(Y))$, e introduzida por \cite{DBLP:books/mit/PF91/Piatetsky91}, mede a diferença de $X$ e $Y$ aparecendo juntos na base de dados e o que seria esperado se $X$ e $Y$ fossem estatisticamente dependentes;
+	\item{Lift:} Definida como $lift(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X) \times P(Y)}$, e introduzida por \cite{brin97dynamic}, mede quantas vezes $X$ e $Y$ ocorrem juntos a mais que o esperado se eles fossem estatisticamente independentes. Uma das desvantagens do \textit{lift} é ser suscetível a ruídos em pequenas bases de dados. Raros \textit{itemsets} com baixa probabilidade, que ocorrem juntos algumas vezes podem produzir altos valores para \textit{lift};
+	\item{Jaccard:} O coeficiente de Jaccard é uma medida estatística utilizada para comparar similaridade e diversidade entre conjuntos, definida pela razão entre a interseção e a união entre dois conjuntos. Esta métrica, obtida pela expressão $jaccard(X \Rightarrow Y) = \frac{P(X \wedge Y)}{P(X)+P(Y)-P(X \wedge Y)}$, é considerada como medida de interesse aplicada a regras de associação em diversos trabalhos encontrados na literatura \citep{tan02,geng06,Wu07Association};
+	\item{Laplace:} Definida como $laplace(X \Rightarrow Y) = \frac{frequencia(X \wedge Y) + 1}{frequencia(X) + c}$, onde $c$ é o número de classes do domínio, foi introduzida por \cite{clark91} como uma métrica alternativa para avaliação de regras de associação;
+	\item{Kulc:} Definida como $kulc(X \Rightarrow Y) = \frac{P(X \wedge Y)}{2}\left( \frac{1}{P(X)} + \frac{1}{P(Y)}\right)$, esta medida, originalmente conhecida como \textit{Kulczynski}, é muito utilizada na área química, e foi proposta como métrica para regras de associação em \cite{Wu07Association};
+	\item{Cosseno:} Esta métrica, bastante utilizada como medida de similaridade para textos, também é amplamente utilizada na avaliação de regras de associação \citep{tan02,geng06,Wu07Association}, e é definida como $cosseno(X \Rightarrow Y) = \frac{P(X \wedge Y)}{\sqrt{P(X) \times P(Y)}}$;
+	\item{Sensitividade:} Definida como $sensitividade(X \Rightarrow Y) = P(X|Y)$, sensitividade (ou \textit{recall}) é bastante utilizada em sistemas de recuperação de informação. Foi proposta como métrica de avaliação de regras de associação em \cite{geng06};
+	\item{Especificidade:} Definida como $especificidade(X \Rightarrow Y) = P(\neg Y | \neg X)$, e também citada por \cite{geng06}, esta métrica representa a proporção de verdadeiro-negativos sobre os casos negativos da regra.
+\end{itemize}
+ 
+Muitas outras métricas tem sido utilizadas em modelos de classificação associativa. Em \cite{tan02} encontramos um ótimo estudo comparativo entre várias, com descrição de propriedades chave que podem ser examinadas para se descobrir qual a métrica mais indicada para o domínio de cada aplicação. Em \cite{geng06} são apresentados nove critérios a serem considerados para se determinar que métricas devem ser utilizadas de acordo com o interesse e o tipo da aplicação. Em \cite{Wu07Association} os autores apresentam um estudo de outro conjunto de métricas sob a perspectiva da propriedade \textit{null-(transaction) invariance} de importância crítica para métricas de interesse.
+\par
+Neste trabalho, o famoso \textit{framework} suporte-confiança foi utilizado durante a geração das regras associativas. Como medida de qualidade das regras, foram implementadas todas as métricas apresentadas nesta seção, com a intenção de se avaliar, experimentalmente, a qualidade das regras obtidas a partir dos padrões ortogonais quando interpretadas sob a perspectiva de diferentes métricas.
+
+\section{Considerações}
+
+Neste capítulo foram apresentados os fundamentos teóricos relacionadas à Classificação Associativa, e as vantagens da estratégia \textit{lazy} sobre a estratégia \textit{eager}. Em seguida, foram apresentadas algumas métricas bastante utilizadas na avaliação de regras de associação. No capítulo seguinte, será discutido a utilização de ortogonalidade na classificação associativa, que inclui uma discussão sobre métricas e estratégias de ortogonalidade, uma explicação detalhada da utilização de ortogonalidade pelo classificador e das heurística de obtenção de conjuntos ortogonais, e ainda a adaptação da estratégia ORIGAMI para o problema de classificação associativa.

@@ -1,0 +1,170 @@
+Versão 0.31 (2008.02.26)
+===========
+
+* Correção da contra-capa, em que aparecia o nome do autor duplicado.
+
+
+Versão 0.30 (2007.12.13)
+===========
+
+* Dedicatórias e agradecimentos podem ser especificados mais de uma vez.
+* O cabeçalho da página de título agora apresenta o nome do autor e do 
+  orientador, ao invés do nome da instituição.
+* "Curso de pós-graduação" corrigido para "Programa de pós-graduação".
+* As páginas de dedicatória e agradecimentos agora antecedem as páginas de 
+  resumos e abstracts.
+
+
+Versão 0.20 (2007.11.09)
+===========
+
+* Os comandos de inclusão de resumos e abstracts foram alterados para permitir 
+  qualquer número de resumos e em qualquer ordem.
+* Terminada a tradução da documentação.
+* As advertências para não usar o comando '\section' em resumos, agradecimento,
+  etc. foram alteradas para que não se use o comando '\chapter' (o comando
+  '\section' pode ser livremente usado, assim como '\subsection', etc.).
+
+
+Versão 0.14 (2006.11.05)
+===========
+
+* Documentação e arquivo de exemplo traduzidos para o português.
+* Eliminadas as opções 'brokentitle' e 'portuguesebrokentitle' e os comandos 
+  '\brokentitle' e '\portuguesebrokentitle'.
+* O comando '\backmatter' não é mais chamado automaticamente por 
+  '\ufmgbibliography'.
+* Adicionadas configurações das traduções das macros '\appendixtocname' e 
+  '\appendixpagename'.
+* Resolvida a configuração de cabeçalho/rodapé quando os apêndices são 
+  colocados após as Referências Bibliográficas.
+
+
+Versão 0.13 (2005.07.24)
+===========
+
+* A Folha de Aprovação (``Approval Sheet'') agora apresenta o título fornecido
+  pela opção ``brokentitle'' (ou pelo comando \brokentitle) (sugestão de Tiago
+  M. Delboni).
+
+
+Versão 0.12 (2005.07.21)
+===========
+
+* Corrigidos os problemas com a numeração em arábico no "front matter" (com o
+  comando \ufmgthesis) e com a falta de cabeçalho no "main matter" (no "easy
+  way"). Bugs reportados por Thiago F. Chaves.
+
+
+Versão 0.11 (2005.06.21)
+===========
+
+* Alterado o formato do cabeçalho e rodapé das páginas do "front matter". A
+  numeração das páginas é sempre centralizada no rodapé e os cabeçalhos são
+  vazios.
+* A numeração (romana) do "front matter" é iniciada logo após a contra-capa.
+  (Originalmente era iniciada apenas no Sumário.)
+* Alterado o formato do cabeçalho e rodapé das páginas do "main matter" (texto
+  principal). Foi suprimido o título da seção e a numeração das páginas
+  aparece no cabeçalho, à direita. Isso foi feito por sugestão dos
+  orientadores, já que o cabeçalho no formato anterior (com título do capítulo
+  e da seção) apresentava texto demais, obrigando à adoção de abreviações e
+  confundindo o leitor.
+* O comando \mainmatter agora é chamado automaticamente pelo comando
+  \ufmgthesis. Para evitar essa chamada, use a opção de classe "nomainmatter".
+* A grafia do comando \ufmgthesis foi corrigida (antes era incorretamente
+  "\ufmghesis").
+
+
+Versão 0.10 (2005.05.17)
+===========
+
+* Alterada a grafia de datas por extenso em inglês, para ficar conforme boa
+  parte dos manuais de estilo: no uso de mês e ano, a vírgula foi suprimida.
+  Ex.: Ao invés de ``March, 2005'', o texto gerado passa a ser ``March 2005''.
+* Reformatada a capa e a contra-capa, para incluir o nome da universidade no
+  topo.
+* Adicionada a opção de classe `centertitles'.
+
+
+Versão 0.09 (2005.03.10)
+===========
+
+* No comando \ufmgthesis há novas opções para informar os dados em português,
+  caso o documento esteja escrito em outra língua: `portuguesetitle',
+  `portuguesebrokentitle', `portugueseuniversity' e `portuguesecourse'. As
+  informações são exatamente as mesmas dos equivalentes sem o prefixo
+  `portuguese', porém traduzidas para o português.
+* A capa será montada sempre em português, mesmo que o documento esteja
+  escrito em outra língua.
+* Em inglês, o texto ``...presented to the <departamento> of the
+  <universidade>...'' da contra-capa foi substituído por ``...presented to the
+  Graduate Program in <curso> of the <universidade>...''. Como conseqüência, a
+  opção `department' deixou de existir no comando \ufmgthesis.
+
+
+Versão 0.08 (2005.03.09)
+===========
+
+* Modificado o formato da data que deve ser informada pela opção `date=' do
+  comando \ufmgthesis ou pelo comando \date{...}: agora ela deve ser informada
+  no formato yyyy-mm-dd ou yyyy-mm (respeitando a ordem ano-mês-dia e a
+  separação por hífens). Nas versões anteriores, essa informação era fornecida
+  por extenso, como em ``10 de janeiro de 2005''. Agora ela DEVE ser fornecida
+  apenas como ``2005-01-10''.
+* No caso de teses de doutorado, o título da página de ``Resumo'' foi alterado
+  para ``Resumo Estendido''.
+* Mudada a terminologia de ``Doctor of Philosophy'' para ``Doctor''.
+* Se o documento não estiver escrito em português, é criada uma contra-capa em
+  português e outra na linguagem do documento.
+
+
+Versão 0.07 (2005.03.09)
+===========
+
+* Alterado o texto "Proposta de tese" para a forma correta, "Projeto de tese".
+  (O primeiro documento é requisito para se candidatar ao curso de doutorado;
+  o segundo é elaborado durante o curso.)
+
+
+Versão 0.06 (2005.03.07)
+===========
+
+* Corrigido o cabeçalho da bibliografia (o título do capítulo foi colocado à
+  direita).
+
+
+Versão 0.05 (2005.03.05)
+===========
+
+* Adicionado suporte para bibliografia e correspondente arquivo de estilo
+  bibliográfico (ufmg.bst).
+
+
+Versão 0.04 (2005.01.15)
+===========
+
+* Adicionada a carga automática do pacote `memhfixc'.
+
+
+Versão 0.03 (2005.01.15)
+===========
+
+* Retirado o argumento opcional de \LoadClass, pois estava interferindo na
+  opção `twoside'.
+
+
+Versão 0.02 (2005.01.13)
+===========
+
+* Reformatação do código-fonte e correção de pequenos erros tipográficos.
+* Correção de alguns bugs de formatação.
+* Alterada a ordem das opções 'hide*' e 'show*', para que seja possível usar
+  [hideall,showxxx,showxxx,...] como opções para \documentclass.
+* Correção do arquivo de log e reformatação do exemplo.
+
+
+Versão 0.01 (2004.12.09)
+===========
+
+* Versão inicial.

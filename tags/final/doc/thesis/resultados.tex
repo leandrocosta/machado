@@ -1,0 +1,364 @@
+\chapter{Avaliação Experimental}
+\label{chapter:resultados}
+
+Neste capítulo, apresentamos o aplicativo \textbf{olac}, descrevemos a sua interface de interação com o usuário, e incluímos um exemplo de execução que demonstra o comportamento da abordagem baseada em ortogonalidade. Em seguida, são apresentados os resultados obtidos com a execução das três abordagens de classificação implementadas no aplicativo em $26$ bases de dados do repositório \textbf{UCI}.
+
+\section{O Aplicativo \textbf{olac}}
+
+O aplicativo \textbf{olac} possui a implementação de três abordagens distintas de um classificador baseado em regras de associação.
+\par
+A primeira delas, chamada de \textbf{LAC} (\textit{Lazy Associative Classifier}), é a abordagem \textit{lazy} na sua versão original (e não-ortogonal), como foi proposta em \cite{Veloso06Lazy}, que simplesmente obtém, para cada instância de teste, um conjunto de padrões freqüentes, e o utiliza para gerar regras associativas. Depois disso, o algoritmo ordena as regras de acordo com uma métrica escolhida pelo usuário, e obtém a classe mais indicada pelas regras que compõem um \textit{ranking} de tamanho também fornecido pelo usuário.
+\par
+A segunda abordagem, chamada de \textbf{OLAC} (\textit{Orthogonal Lazy Associative Classifier}) é a modificação da abordagem \textit{lazy} que considera a ortogonalidade dos padrões durante a tarefa de obtenção de regras. O algoritmo extrai, do conjunto de padrões freqüentes, um sub-conjunto de padrões ortogonais, e utiliza este sub-conjunto para gerar as regras de associação. Depois disso, a classe mais indicada é escolhida considerando uma métrica e o tamanho do \textit{ranking}, da mesma forma que é feito no LAC.
+\par
+A terceira abordagem, chamada \textbf{ORIGAMI} é a implementação da estratégia ORIGAMI (como foi proposta em \cite{zaki07origami}) de acordo com a adaptação discutida na seção \ref{sec:ortogonalidade_origami_adaptacao}.
+\par
+A interface de interação do usuário com o aplicativo foi realizada por meio de argumentos fornecidos em linha de comando pelo usuário, de acordo com o formato de execução apresentado abaixo:
+
+\begin{footnotesize}
+\begin{verbatim}
+Usage: ./olac [options]
+Options:
+  -i, --training-file       Set the training file
+  -t, --testing-file        Set the testing file
+  -s, --support             Set the support
+  -c, --confidence          Set the confidence
+  -r, --run-mode            Set the run mode [c,o] [CLASSICAL, ORTHOGONAL]
+  -p, --pattern-set         Set the pattern set type [f,m,r] [FREQUENT, MAXIMAL,
+                              RANDOM MAXIMAL]
+  -n, --min-num-rules       Set the minimum number of rules generated
+  -l, --max-num-rank-rules  Set the maximum number of rules considered (rank size)
+  -m, --min-rule-len        Set the minimum length of the rules
+  -x, --max-rule-len        Set the maximum length of the rules
+  -o, --orth-mode           Set the orthogonality mode [h,p,o] [HEURISTICAL,
+                              POLYNOMIAL, ORIGAMI]
+  -e, --orth-metric         Set the orthogonality metric [s,c,l,a] [STRUCTURE,
+                              TRANSACTION COVERAGE, CLASS COVERAGE, ALL]
+  -w, --orth-method         Set the way metrics are used [s,p,a] [SET, PAIR AVERAGE,
+                              ALL]
+  -g, --orth-pat-ordering   Set the way patterns are ordered for heuristic
+                              [s,r,i,z,n] [SORTED, REVERSE SORTED, SORTED BY SIZE,
+                              REVERSE SORTED BY SIZE, NONE]
+  -u, --rule-measure        Set the rule measure used [s,c,j,k,o,n,e,p,l,i,v]
+                              [SUPPORT, CONFIDENCE, JACCARD, KULC, COSINE,
+                              CONVICTION, SENSITIVITY, SPECIFICITY, LAPLACE,
+                              LIFT, LEVERAGE]
+  -a, --origami-alpha       Set the alpha parameter used by ORIGAMI
+  -b, --origami-beta        Set the beta parameter used by ORIGAMI
+  -d, --debug               Set the level of debug [-1,0,1,2,3,4] [SILENT, NO DEBUG,
+                              LOW LEVEL, MEDIUM LEVL, HIGH LEVEL, MAX LEVEL]
+  -v, --verbose             Use verbose mode
+  -h, --help                Display this information
+\end{verbatim}
+\end{footnotesize}
+
+As opções \textbf{-i} e \textbf{-t} são utilizadas para fornecer os arquivos de treinamento e teste, respectivamente. O suporte para obtenção de padrões freqüentes, e a confiança para obtenção das regras de associação são fornecidos por \textbf{s} e \textbf{c}. A opção \textbf{-r} é usada para se escolher o modo de execução do algoritmo (\textbf{CLASSICAL} para \textbf{LAC} e \textbf{ORTHOGONAL} para \textbf{OLAC} e \textbf{ORIGAMI}). A opção \textbf{-p} é usada para se escolher o conjunto de padrões a ser obtido. Em geral, padrões freqüentes são utilizados pelas versões LAC e OLAC, e padrões maximais aleatórios são utilizados pela versão ORIGAMI, no entanto, é possível executar o aplicativo com diferentes combinações de abordagens e conjuntos de padrões, como por exemplo, utilizar o conjunto de todos os padrões maximais no LAC, ou executar o ORIGAMI com padrões freqüentes.
+\par
+A opção \textbf{-n} é utilizada para fornecer o número mínimo de regras a serem geradas. Caso não seja possível gerar um conjunto de regras de tamanho maior que este, de acordo com o parâmetro \textit{confiança}, o aplicativo tenta gerar regras com confianças abaixo do esperado até que este valor mínimo seja alcançado. O parâmetro \textbf{-l} é usado para se fornecer o tamanho máximo do \textit{ranking}. As opções \textbf{-m} e \textbf{-x} são utilizadas para limitar o número mínimo e máximo de itens no lado esquerdo das regras. Por meio da opção \textbf{-u} é informada a medida de interesse das regras. O modo de ortogonalidade é dado por \textbf{-o}, o usuário deve escolher entre a versão heurística de ortogonalidade (OLAC), a versão polinomial (uma abordagem bastante cara, que tenta todas as combinações para cada conjunto de padrões explorado), e o modo ORIGAMI. A opção \textbf{-e} é usada para se escolher a métrica de ortogonalidade utilizada pelo algoritmo em modo ortogonal. As opções \textbf{-w} e \textbf{-g} são usadas para dar a forma como as métricas serão utilizadas, e a forma como os padrões serão ordenados pelo algoritmo da abordagem heurística. As opções \textbf{-a} e \textbf{-b} são os parâmetros $\alpha$ e $\beta$ para a abordagem ORIGAMI.
+
+\section{Exemplo de Execução}
+
+Abaixo será apresentado um exemplo de execução do aplicativo, demonstrando o seu funcionamento e os resultados obtidos pela abordagem \textbf{OLAC}:
+
+A base de transações apresentada na tabela \ref{tab:example_training_db} foi criada sobre o conjunto de itens $\I = \left\{ A, B, C, D, E \right\}$, e utilizada como base de treinamento para o classificador. Uma única transação $ABE$ de classe $CLASS=1$ foi utilizada como instância de teste. O aplicativo \textbf{olac} foi executado, primeiramente, em modo \textbf{LAC} (ou não-ortogonal) utilizando os parâmetros encontrados na tabela \ref{tab:example_run_parms}.
+
+\input{tables/table_example_training_db.tex}
+
+\input{tables/table_example_run_parms.tex}
+
+\par
+Esta execução gerou o conjunto $\F = \left\{ A, B, E, AB, AE, BE, ABE \right\}$ de padrões freqüentes e classificou corretamente a instância de teste. Depois disso, o aplicativo foi executado em modo \textbf{OLAC} (ortogonal) utilizando os mesmos parâmetros da tabela \ref{tab:example_run_parms}, e \textit{estrutura} como métrica de ortogonalidade. Esta abordagem obteve o conjunto de padrões ortogonais $\Or = \left\{ AE, B \right\}$ do conjunto original de padrões freqüentes, e classificou corretamente a instância de teste com as regras geradas deste sub-conjunto de padrões. Como podemos observar, o conjunto de padrões ortogonais utilizado pelo OLAC é consideravelmente menor que o conjunto de padrões freqüentes original. E mais, o conjunto de padrões ortogonais não possui redundância entre seus elementos. É esperado que a redundância de um determinado conjunto de padrões ortogonais seja sempre menor que a redundância do conjunto original de padrões freqüentes.
+\par
+O aplicativo também foi executado com as outras duas métricas de ortogonalidade (cobertura de transações e cobertura de classes), extraindo, respectivamente, $\Or = \left\{ AB, E \right\}$ e $\Or = \left\{ B, E \right\}$ como conjuntos de padrões ortogonais, e estas execuções também classificaram a instância de teste corretamente.
+
+\section{Experimentos}
+
+Nesta seção serão apresentados os resultados das execuções do aplicativo em $26$ bases de dados do repositório \textbf{UCI} (\textit{UC Irvine Machine Learning Repository}), amplamente utilizado em pesquisas na área de classificação em mineração de dados.
+
+\subsection{Metodologia}
+
+A metodologia de testes adotada nos experimentos é baseada em trabalhos anteriores relacionados com classificação associativa que realizam experimentos em bases de dados do mesmo repositório \citep{Veloso06Lazy,DBLP:conf/sdm/YinH03,li01cmar,liu98integrating,friedman96lazy}.
+\par
+Todas as bases utilizadas durante os testes foram reordenadas aleatoriamente e particionadas em dez sub-conjuntos, de onde foram criadas dez configurações de teste para cada uma delas. Cada configuração de teste consiste de uma parte (um sub-conjunto da base) como arquivo de teste, e nove partes (os nove sub-conjuntos restantes da base) como arquivo de treinamento. Como resultados foram considerados a média das dez execuções diferentes para cada base de dados.
+\par
+Os parâmetros utilizados nos testes se encontram na tabela \ref{tab:table_test_parms}. Todas as combinações possíveis destes parâmetros foram realizadas, com exceção da combinação tamanho máximo de regra  $1$ e métrica de ortogonalidade $s$ para o OLAC \footnote{Quando a métrica de ortogonalidade baseada na estrutura dos padrões é utilizada em conjunto com o tamanho máximo de regra igual a $1$, OLAC terá o mesmo comportamento que LAC, já que a similaridade entre dois padrões freqüentes será sempre zero.}, e dos casos em que $\alpha$ é maior ou igual a $\beta$ para o ORIGAMI. É importante lembrar que alguns dos parâmetros desta tabela não são utilizados por todas as abordagens.
+\par
+A seguir serão apresentados os resultados obtidos pelos experimentos. Na seção \ref{resultados_experimentos_cada_base} serão apresentados os melhores resultados obtidos para as três abordagens, onde o conjunto de parâmetros de execução utilizado foi o mais adequado para cada aplicação e base de dados. Já na seção \ref{resultados_experimentos_todas_base} serão apresentados os melhores resultados obtidos onde o conjunto de parâmetros de execução utilizado em cada abordagem foi o que produziu a melhor média de acurácia para todas as bases.
+
+\input{tables/table_test_parms.tex}
+
+Abaixo, encontramos alguns gráficos comparando execuções das três abordagens implementadas: LAC, OLAC e ORIGAMI. %, but first we will do some observations about these test instances:
+%\par
+%\begin{itemize}
+%	\item LAC was run with support 1, just because this is the objective of LAC (the Adriano Veloso implementation) - to get better results with the minimum support value;
+%	\item ORIGAMI was run with $\alpha = 0.2$, and $\beta = 0.8$, we need to make more tests with another values for $\alpha$ and $\beta$ in order to get better results;
+%	\item We are still running these experiments with anoter parameters, and trying to get some better results for all approaches.
+%\end{itemize}
+
+\subsection{Melhores Resultados para Cada Base}
+\label{resultados_experimentos_cada_base}
+
+Na figura \ref{fig:histogram_best_run_for_each_db_acc} encontramos um histograma de acurácia obtida com as três abordagens para cada base de dados. A figura \ref{fig:histogram_best_run_for_each_db_pat} mostra um histograma com o número médio de padrões utilizados para se obter as regras de associação para cada instância de teste, a figura \ref{fig:histogram_best_run_for_each_db_rul} mostra o número médio de regras geradas para cada instância pelas três abordagens, e a figura \ref{fig:histogram_best_run_for_each_db_tim} mostra o tempo médio de cada classificação. Para estes quatro resultados foram utilizados os melhores conjuntos de parâmetros para cada aplicação e base de dados, por exemplo, para a abordagem OLAC para a base \textit{anneal.ac} foi utilizado suporte igual a $0.0001$, mas para a base \textit{horse.ac} foi utilizado suporte igual a $0.3$, já que os melhores resultados para cada base foram obtidos com estes valores.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_acc}
+	\caption{Histograma de Acurácia (melhores resultados para cada base)}
+	\label{fig:histogram_best_run_for_each_db_acc}
+\end{figure}
+
+Como podemos ver na figura \ref{fig:histogram_best_run_for_each_db_acc}, os valores de acurácia obtidos com as três versões do algoritmo estão muito próximas (de fato, este comportamento será comprovado na seção \ref{resultados_experimentos_ttest}). As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.843$, $0.840$ e $ 0.839$.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_pat}
+	\caption{Histograma de Padrões (melhores resultados para cada base)}
+	\label{fig:histogram_best_run_for_each_db_pat}
+\end{figure}
+
+O número de padrões gerados pelas abordagens OLAC e ORIGAMI é sempre menor ou igual ao número de padrões gerados pela abordagem LAC. Na figura \ref{fig:histogram_best_run_for_each_db_pat} vemos que, em alguns casos, as três abordagens utilizam uma quantidade de padrões freqüentes bem semelhante para gerar as regras, como na base \textit{crx.ac}. Porém, em casos como os das bases \textit{auto.ac}, \textit{vehicle.ac} ou \textit{waveform.ac}, a diferença chega a duas ou três ordens de grandeza. Em média, foi possível reduzir o número de padrões em uma ordem de grandeza utilizando a ortogonalidade.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_rul}
+	\caption{Histograma de Regras (melhores resultados para cada base)}
+	\label{fig:histogram_best_run_for_each_db_rul}
+\end{figure}
+
+O número de regras geradas pelas abordagens ortogonais também se mostrou sempre menor ou igual ao número de regras geradas pela abordagem não ortogonal, com exceção da base \textit{hepati.ac}, em que o OLAC gerou, em média, $19.78$ regras, e o LAC gerou apenas $18.43$, e das bases \textit{austra.ac} e \textit{crx.ac}, em que o ORIGAMI gerou mais regras que o LAC.
+\par
+É possível perceber o motivo pelo qual o OLAC gerou mais regras que o LAC para a base \textit{hepati.ac} analisando as tabelas \ref{tab:best_runs_for_each_db_lac} e \ref{tab:best_runs_for_each_db_olac}. Nessas tabelas, onde temos os parâmetros das melhores execuções para cada base de dados, vemos que a melhor execução do LAC para esta base foi obtida com confiança igual a $0.5$, o que reduz o número de regras válidas consideravelmente. Já para o OLAC, a melhor execução para esta base foi obtida com confiança igual a $0.0001$.
+\par
+A mesma observação é feita para o caso do ORIGAMI, analisando a tabela \ref{tab:best_runs_for_each_db_origami}. Para as bases \textit{austra.ac} e \textit{crx.ac}, a melhor execução do LAC foi obtida com confiança igual a $0.3$. Já para o ORIGAMI, a confiança foi de $0.0001$ nos dois casos.
+\par
+De qualquer forma, com as abordagens ortogonais foi possível classificar as instâncias de teste com um número de regras, em média, dez vezes menor que com a abordagem original. Como já era esperado, o LAC possui o menor tempo de execução, visto que o OLAC, além de obter o conjunto de padrões freqüentes, ainda executa uma heurística para extrair o conjunto de padrões ortogonais, e o ORIGAMI possui duas heurísticas que penalizam o seu tempo de execução: a geração de padrões maximais e a heurística de ortogonalidade.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_each_db_tim}
+	\caption{Histograma de Tempo (melhores resultados para cada base)}
+	\label{fig:histogram_best_run_for_each_db_tim}
+\end{figure}
+
+\clearpage
+
+Como já foi dito, na tabela \ref{tab:best_runs_for_each_db_lac} se encontram os parâmetros que obtiveram as melhores acurácias para o LAC, e os resultados de cada execução. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando um pequeno valor para suporte (em geral, entre $0.0001$ e $0.1$) e para confiança ($0.01$ em média). Isto sugere que, em grande parte das bases, existam transações cujas classes sejam bem representadas por padrões de freqüência muito baixa. A seguir, veremos que os melhores resultados para as abordagens ortogonais também foram obtidos com valores semelhantes a estes.
+
+\input{tables/table_best_runs_lac.tex}
+
+\clearpage
+
+A tabela \ref{tab:best_runs_for_each_db_olac} possui os parâmetros das melhores execuções do OLAC para cada base de dados. Analisando a tabela, vemos que a maior parte dos melhores resultado foi obtida utilizando regras de tamanho máximo igual a $2$, e métrica de ortogonalidade baseada na estrutura dos padrões.
+\par
+O motivo pelo qual as métricas baseadas em cobertura de classes e de transações não produziram resultados melhores pode estar relacionado com a heurística de obtenção de conjuntos ortogonais. Examinando os resultados de tais execuções, percebemos que, em muitas situações, o algoritmo obteve conjuntos pequenos de padrões ortogonais ($2$ a $4$ padrões) com uma medida muito alta de ortogonalidade. Acontece que, de acordo com a nossa heurística, se a adição de um elemento a mais ao conjunto-solução diminui a medida de ortogonalidade do mesmo, este elemento não é adicionado, e o conjunto anterior é tido como resultado.
+\par
+Um grande número de fatores contribui para que a nossa heurística encontre conjuntos de padrões com alto valor de ortogonalidade para as métricas baseadas em cobertura, a começar pela natureza dos dados. É fácil perceber que padrões pouco freqüentes na base possuem maior probabilidade de fazer parte de conjuntos ortogonais, visto que a sobreposição de cobertura entre estes padrões, tanto de classes quanto de transações, acontecerá em menor freqüência.
+\par
+Uma forma de evitar que padrões pouco freqüentes sejam inseridos no conjunto-solução é aumentar o valor do suporte utilizado pelo algoritmo, porém, fazendo isto, não será possível classificar corretamente transações cujas classes são pouco freqüentes, ou são bem representadas por padrões pouco freqüentes.
+
+\input{tables/table_best_runs_olac.tex}
+
+\clearpage
+
+A tabela \ref{tab:best_runs_for_each_db_origami} possui os parâmetros das melhores execuções do ORIGAMI para cada base de dados. É interessante notar que, em boa parte das bases de dados, o algoritmo conseguiu extrair apenas $1$ padrão ortogonal. Na maioria destes casos, utilizando valores de $\alpha$ muito pequenos. É fácil perceber que os parâmetros $\alpha$ e $\beta$ estão diretamente ligados à quantidade de padrões ortogonais extraídos pela abordagem, visto que, quanto menor o tamanho de $\alpha$, menor será o número de padrões considerados ortogonais no conjunto, e quanto maior o tamanho de $\beta$, maior será o número de padrões não representados por pelos candidatos ortogonais.
+\par
+Novamente, neste caso, percebemos a predominância da métrica baseada na estrutura dos padrões nos melhores resultados obtidos.
+
+\input{tables/table_best_runs_origami.tex}
+
+\subsection{Melhor Média dos Resultados para Todas as Bases}
+\label{resultados_experimentos_todas_base}
+
+Na figura \ref{fig:histogram_best_run_for_avg_db_acc} se encontra o histograma de acurácia obtido com as abordagens LAC, OLAC e ORIGAMI. A figura  \ref{fig:histogram_best_run_for_avg_db_pat} possui um histograma com a média do número de padrões utilizados por cada classificação, a figura \ref{fig:histogram_best_run_for_avg_db_rul} possui a média do número de regras obtidas em cada classificação, e a figura \ref{fig:histogram_best_run_for_avg_db_tim} possui a média do tempo necessário para a classificação de cada instância de teste. Para estes quatro resultados foi utilizado, para cada aplicação, o conjunto de parâmetros que produziu o melhor valor médio de acurácia para todo o conjunto de bases. Os conjuntos de parâmetros para cada abordagem se encontram na tabela \ref{tab:best_parms_for_avg_db}, sendo que alguns deles não são aplicáveis a todas as abordagens.
+
+\input{tables/table_best_parms_for_avg_db.tex}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_acc}
+	\caption{Histograma de Acurácia (melhores resultados para cada abordagem)}
+	\label{fig:histogram_best_run_for_avg_db_acc}
+\end{figure}
+
+\par
+Como podemos ver, na figura \ref{fig:histogram_best_run_for_avg_db_acc}, as melhores execuções de cada uma das três abordagens obtiveram resultados semelhantes novamente (fato que também será comprovado na seção \ref{resultados_experimentos_ttest}). As médias obtidas para as abordagens LAC, OLAC e ORIGAMI foram, respectivamente, $0.808$, $0.813$ e $0.782$. É interessante notar que a melhor execução do OLAC foi obtida com tamanho máximo de regra igual a $2$ (ou seja, no máximo dois itens do lado esquerdo da regra), enquanto que a melhor execução do LAC teve tamanho máximo de regra igual a $1$. Isto faz com que o OLAC encontre uma quantidade de padrões freqüentes muito maior que o LAC, no entanto, o tamanho do \textit{ranking} de regras do OLAC é menor que o do LAC, já que a ortogonalidade diminui o número de padrões considerados durante a geração das regras.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_pat}
+	\caption{Histograma de Padrões (melhores resultados para cada abordagem)}
+	\label{fig:histogram_best_run_for_avg_db_pat}
+\end{figure}
+
+\par
+Na tabela \ref{fig:histogram_best_run_for_avg_db_pat} vemos as quantidades de padrões gerados por cada abordagem. A diferença entre os resultados obtidos com o LAC e o OLAC neste histograma não é tão grande quanto no resultado anterior por influência dos parâmetros de execução. Além da diferença entre o tamanho máximo das regras, que favorece o LAC \footnote{Os padrões freqüentes utilizados pelo classificador são obtidos por meio de uma busca em largura no espaço de padrões, limitada pelo tamanho máximo da regra. Logo, o algoritmo só obtém os padrões de tamanho menor ou igual a este parâmetro}, o suporte utilizado pelo OLAC é $10$ vezes menor que o suporte do LAC.
+\par
+Analisando um exemplo de classificação podemos compreender como a utilização de padrões ortogonais pode auxiliar na classificação das transações. Para isso, usamos, como exemplo, uma configuração de teste da base \textbf{austra.ac}. A configuração selecionada possui $621$ transações de treinamento e $69$ instâncias de teste, das quais o OLAC classificou $61$ de maneira correta, e o LAC acertou $60$ vezes. A instância da tabela \ref{tab:table_lac_x_olac_austra.ac.test_instance_1} foi classificada corretamente pelo OLAC, mas não pelo LAC. Esta instância possui $14$ itens, sendo todos eles freqüentes (suporte maior que $0.0001$) na projeção obtida, que corresponde às $621$ transações da base de treinamento. Como o LAC foi executado com tamanho máximo das regras igual a $1$, foram encontrados $14$ padrões freqüentes (tabela \ref{tab:table_lac_x_olac_austra.ac.lac_patterns}), com os quais foram geradas $28$ regras de associação com confiança maior ou igual a $0.01$ (tabela \ref{tab:table_lac_x_olac_austra.ac.lac_rules}).
+
+\input{tables/table_lac_x_olac_austra.ac.test_instance_1.tex}
+\input{tables/table_lac_x_olac_austra.ac.lac_patterns.tex}
+\input{tables/table_lac_x_olac_austra.ac.lac_rules.tex}
+
+\par
+Já o OLAC, que foi executado com tamanho máximo de regra igual a $2$, obteve um conjunto de $105$ padrões freqüentes, dos quais foram extraídos $9$ padrões ortogonais (tabela \ref{tab:table_lac_x_olac_austra.ac.olac_patterns}), e, a partir destes, foram geradas $18$ regras com confiança maior ou igual a $0.001$ (tabela \ref{tab:table_lac_x_olac_austra.ac.olac_rules}).
+
+\input{tables/table_lac_x_olac_austra.ac.olac_patterns.tex}
+\input{tables/table_lac_x_olac_austra.ac.olac_rules.tex}
+
+\par
+Examinando as tabelas \ref{tab:table_lac_x_olac_austra.ac.lac_rules} e \ref{tab:table_lac_x_olac_austra.ac.olac_rules}, é possível perceber algumas características interessantes que aparecem nas regras obtidas pelo OLAC. Vemos, por exemplo, que a primeira regra do \textit{ranking}, que possui convicção próxima de $3.77$, é uma regra que contribui positivamente para o resultado correto do algoritmo, e foi obtida por meio da combinação de dois padrões que, na abordagem LAC, geraram regras com convicções próximas de $2.54$ e $1.55$ respectivamente. Nota-se que a combinação dos dois padrões, além de diminuir a redundância das regras, melhorou a sua medida de convicção, fazendo com que o algoritmo se aproximasse do resultado correto.
+\par
+E adicionalmente, podemos perceber também que a última regra do \textit{ranking} da abordagem OLAC, que possui convicção igual a $0.51$ e contribui negativamente para o resultado, e foi obtida por meio da combinação de duas regras da abordagem LAC com convicções iguais a $0.69$ e $0.56$, respectivamente, ou seja, nesse caso, a medida de convicção diminuiu. Logo, temos aqui um exemplo de como a ortogonalidade pode diminuir a redundância nas informações obtidas, e ainda melhorar a efetividade do algoritmo.
+\par
+Este fato é notado com freqüência nos casos em que o LAC é executado com o tamanho máximo de regra maior que $1$, pois neste caso, o número muito maior de regras será gerado, fazendo com haja redundância tanto das regras que contribuem positivamente para o sucesso da classificação quanto das que contribuem negativamente. Entretanto, não é raro encontrar transações nas bases de dados que são definidas por um número muito pequeno de padrões, e nestes casos, a redundância das regras falsas exerce maiores influências que a redundância das regras verdadeiras. É justamente nestes casos que a aplicação da ortogonalidade favorece o algoritmo.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_rul}
+	\caption{Histograma de Regras (melhores resultados para cada abordagem)}
+	\label{fig:histogram_best_run_for_avg_db_rul}
+\end{figure}
+
+\par
+Em relação ao ORIGAMI, esta abordagem obteve apenas um padrão freqüente e ortogonal para a maior parte das bases. Isto se deve à combinação dos parâmetros utilizados na sua melhor execução. Um suporte baixo favorece a geração de grandes padrões maximais, que tendem a se aproximar do padrão máximo obtido com todos os itens da instância de teste. Como a métrica de ortogonalidade baseada na estrutura dos padrões foi utilizada, isto torna difícil a obtenção de conjuntos ortogonais. Mesmo utilizando um valor baixo para o parâmetro $\alpha$, a probabilidade de dois padrões maximais possuírem itens em comum é muito grande. Em grande parte dos experimentos, o tamanho médio dos padrões maximais ficou bem próximo do tamanho da instância de teste.
+\par
+Novamente, como era de se esperar, o LAC obteve o melhor desempenho das três abordagens.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_tim}
+	\caption{Histograma de Tempo (melhores resultados para cada abordagem)}
+	\label{fig:histogram_best_run_for_avg_db_tim}
+\end{figure}
+
+\clearpage
+
+\subsubsection{Comparação das Métricas de Ortogonalidade (OLAC)}
+
+Na figura \ref{fig:histogram_best_run_for_avg_db_ometric_acc} encontramos os valores de acurácia obtidos após a execução da abordagem OLAC com cada uma das métricas de ortogonalidade implementadas, além dos resultados obtidos com a utilização da multiplicação das três métricas como medida de ortogonalidade. Na figura \ref{fig:histogram_best_run_for_avg_db_ometric_pat} encontramos o histograma de padrões, e em \ref{fig:histogram_best_run_for_avg_db_ometric_rul} encontramos o histograma de regras. Na figura \ref{fig:histogram_best_run_for_avg_db_ometric_tim} temos o tempo médio de classificação de uma instância de teste para cada métrica. Todos estes resultados foram obtidos com os parâmetros do OLAC encontrados na tabela \ref{tab:best_parms_for_avg_db} variando-se a métrica de ortogonalidade.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_ometric_acc}
+	\caption{Histograma de Acurácia por Métricas de Ortogonalidade}
+	\label{fig:histogram_best_run_for_avg_db_ometric_acc}
+\end{figure}
+
+A superioridade da métrica baseada na estrutura dos padrões sobre as outras pode ser notada analisando a figura \ref{fig:histogram_best_run_for_avg_db_ometric_acc}. Neste experimento, a métrica baseadas na estrutura dos padrões encontrou conjuntos ortogonais, em geral, maiores que os encontrados pelas métricas baseadas em cobertura. Isto se deve, em parte, ao tamanho máximo das regras, que reduz o tamanho dos padrões freqüentes considerados. Quando comparamos dois padrões diferentes de tamanho unitário, a ortogonalidade será sempre $1$ se a métrica baseada em estrutura for considerada. No caso das métricas baseadas em cobertura, este valor deve variar de acordo com a natureza dos dados. Como as aplicações foram executadas com o limite de tamanho das regras igual a $2$, espera-se que uma boa parte do conjunto-solução seja composta de padrões com apenas $1$ item.
+\par
+Analisando os resultados de algumas execuções, percebemos que o problema das métricas baseadas em cobertura não está na qualidade dos padrões extraídos, mas sim nas regras geradas com estes padrões. Em grande parte das instâncias de teste analisadas em que a métrica baseada em estrutura obteve sucesso, e as métricas baseadas em cobertura não obtiveram, o conjunto de padrões ortogonais destas possuía redundância até menor que naquele caso. Entretanto, os padrões selecionados eram indicativos de classes diferentes das verdadeiras. Seria necessário um estudo mais detalhado destes casos, para então chegar a uma conclusão a respeito da utilização de tais métricas.
+\par
+O tempo de execução do algoritmo para cada métrica varia de acordo com a natureza da base de dados. A métrica baseada em estrutura faz com que o desempenho do algoritmo seja influenciado pelo tamanho do conjunto de itens. Já a métrica baseada em cobertura de transações faz com o que o desempenho seja influenciado pela quantidade de transações da base. A cobertura de classes, por sua vez, faz com que o desempenho seja influenciado pelo tamanho do conjunto de classes encontradas na base de treinamento.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_ometric_pat}
+	\caption{Histograma de Padrões por Métricas de Ortogonalidade}
+	\label{fig:histogram_best_run_for_avg_db_ometric_pat}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_ometric_rul}
+	\caption{Histograma de Regras por Métricas de Ortogonalidade}
+	\label{fig:histogram_best_run_for_avg_db_ometric_rul}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{graphs/histogram_best_run_for_avg_db_ometric_tim}
+	\caption{Histograma de Tempo por Métricas de Ortogonalidade}
+	\label{fig:histogram_best_run_for_avg_db_ometric_tim}
+\end{figure}
+
+\clearpage
+
+\subsubsection{Comparação das Abordagens Quanto ao Número de Acertos}
+
+Na tabela \ref{tab:comparison_lac_olac} temos uma comparação entre as execuções do LAC e do OLAC, onde se encontram, para cada base de dados, a porcentagem de instâncias de teste que as duas abordagens acertaram (segunda coluna), a porcentagem de instâncias que o OLAC acertou e o LAC errou (terceira coluna), a porcentagem de instâncias que o LAC acertou e o OLAC errou (quarta coluna), e a porcentagem de instâncias que as duas abordagens erraram (quinta coluna). Os resultados foram obtidos com as melhores execuções para a média de todas as bases de dados (utilizando os parâmetros da tabela \ref{tab:best_parms_for_avg_db}).
+\par
+Com estes dados é possível notar que a maioria dos acertos das duas abordagens são coincidentes, ou seja, a abordagem OLAC está realizando, na maior parte das vezes, as mesmas classificações da abordagem LAC. A taxa de erro da estratégia OLAC em relação à quantidade de acertos total da estratégia LAC é de, aproximadamente, $2.3\%$, e a taxa de erro do LAC em relação ao OLAC é de $3.7\%$.
+
+\input{tables/table_comparison_lac_olac.tex}
+
+\clearpage
+
+Na tabela \ref{tab:comparison_lac_origami} temos a comparação entre as execuções do LAC e do ORIGAMI. A taxa de erro do ORIGAMI em relação ao LAC é de $12.7\%$, e a taxa de erro do LAC em relação ao ORIGAMI é de $10.5\%$. Analisando os dados, vemos que a solução baseada na abordagem ORIGAMI se distancia um pouco mais do LAC, se compararmos com o resultado da tabela anterior. De fato, os padrões utilizadas pelo ORIGAMI possuem características bem diferentes dos padrões utilizados pelo LAC e pelo OLAC. Enquanto estes utilizam de padrões de tamanho pequeno, o ORIGAMI utiliza apenas padrões maximais para gerar as regras de classificação. Isto faz com que o comportamento do ORIGAMI seja totalmente diferente dos comportamentos do LAC e do OLAC.
+
+\input{tables/table_comparison_lac_origami.tex}
+
+\clearpage
+
+Na tabela \ref{tab:comparison_olac_origami} temos a comparação entre as abordagens OLAC e ORIGAMI, que comprova o fato de que esta abordagem possui comportamento bem diferente daquela, fazendo com que os resultados das duas execuções se distanciem tanto.
+
+\input{tables/table_comparison_olac_origami.tex}
+
+\subsection{Avaliação teste-t de Student}
+\label{resultados_experimentos_ttest}
+
+Com o objetivo de verificar se os resultados de todas as abordagens são estatisticamente equivalentes, tanto para os experimentos executados com os parâmetros que obtiveram melhores acurácias para cada base quanto para os experimentos executados com os parâmetros que obtiveram as melhores médias de acurácia para todas as bases, a cada conjunto de resultados (comparando as abordagens par-a-par) foi aplicado o teste-t pareado com confiança igual a 99\%. Os resultados se encontram nas tabelas \ref{tab:ttest_best} e \ref{tab:ttest_best_avg} respectivamente. Cada uma delas possui três comparações distintas: LAC $\times$ OLAC, LAC $\times$ ORIGAMI e OLAC $\times$ ORIGAMI. O valor encontrado em cada coluna, para cada base de dados, é o nome da abordagem que possui os melhores resultados ou um hífem (caso os resultados sejam estatisticamente equivalentes). Analisando estas tabelas nota-se que todos os resultados são equivalentes entre LAC e OLAC, com exceção dos resultados obtidos com a base \textbf{waveform.ac} na tabela \ref{tab:ttest_best_avg}.
+
+\input{tables/table_ttest_best.tex}
+\input{tables/table_ttest_best_avg.tex}
+
+\subsection{Estudo de Casos de Teste}
+\label{resultados_experimentos_estudos}
+
+Nesta seção apresentaremos dois casos de teste extraídos do \textit{log} de execução em que as abordagens baseadas em ortogonalidade não obtêm sucesso na classificação das instâncias de teste. Foram utilizados os resultados das três abordagens considerando os parâmetros da tabela \ref{tab:best_parms_for_avg_db}.
+
+\subsubsection{Caso de Teste LAC x OLAC}
+
+Serão apresentados, nesta seção, os detalhes do processo de classificação de uma instância aleatória de teste em que o LAC obteve sucesso e o OLAC não. A configuração selecionada possui $668$ transações de treinamento e $69$ instâncias de teste da base \textit{breast.ac}, das quais o OLAC classificou quatro de maneira errada, e o LAC, apenas duas. Serão apresentados os detalhes da classificação da instância da tabela \ref{tab:table_lac_x_olac_breast.ac.test_instance_1}. Esta instância possui $10$ itens, sendo todos eles freqüentes (suporte maior que 0.0001) na projeção obtida, que corresponde a $630$ transações da base de treinamento. Visto que o LAC foi executado com tamanho máximo das regras igual a $1$, foram encontrados $10$ padrões freqüentes (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_patterns}), com os quais foram geradas $20$ regras de associação com confiança maior ou igual a $0.01$ (tabela \ref{tab:table_lac_x_olac_breast.ac.lac_rules}).
+
+\input{tables/table_lac_x_olac_breast.ac.test_instance_1.tex}
+\input{tables/table_lac_x_olac_breast.ac.lac_patterns.tex}
+\input{tables/table_lac_x_olac_breast.ac.lac_rules.tex}
+
+\par
+Já o OLAC, que foi executado com tamanho máximo de regra igual a $2$, obteve um conjunto de 55 padrões freqüentes, dos quais foram extraídos $7$ padrões ortogonais (tabela \ref{tab:table_lac_x_olac_breast.ac.olac_patterns}), e, a partir destes, gerou $14$ regras com confiança maior ou igual a $0.001$ (tabela \ref{tab:table_lac_x_olac_breast.ac.olac_rules}).
+
+\input{tables/table_lac_x_olac_breast.ac.olac_patterns.tex}
+\input{tables/table_lac_x_olac_breast.ac.olac_rules.tex}
+
+\par
+Analisando as tabelas \ref{tab:table_lac_x_olac_breast.ac.lac_patterns} e \ref{tab:table_lac_x_olac_breast.ac.olac_patterns}, percebe-se que todos os itens da instância de teste são encontrados nos conjuntos de padrões freqüentes das duas execuções. No caso do LAC, já era esperado que cada item correspondesse a um padrão, pelo fato de todos os itens serem freqüentes. Em relação ao OLAC, era esperado um sub-conjunto dos padrões freqüentes com baixa redundância em relação ao conjunto original. Como o OLAC foi executado com tamanho máximo de regra igual a 2, o conjunto de padrões freqüentes encontrados foi bem maior que o mesmo conjunto obtido pela estratégia LAC, porém, nota-se que o conjunto de padrões ortogonais é menor, mesmo cobrindo todos os itens da instância de teste. Além disso, nenhum item foi utilizado mais de uma vez, o que comprova a baixa redundância do conjunto.
+\par
+Entretanto, apesar da boa qualidade do conjunto de padrões ortogonais encontrado, a classificação não foi realizada com sucesso pelo OLAC. Uma análise simples das tabelas \ref{tab:table_lac_x_olac_breast.ac.lac_rules} e \ref{tab:table_lac_x_olac_breast.ac.olac_rules} é suficiente para entender o motivo deste erro. Na primeira tabela, vemos que as regras que mais contribuem para a classificação correta aparecem no topo do \textit{ranking} (posições 1, 2 e 4), com medidas de convicção grandes o suficiente para que a escolha da classe correta seja realizada. A média das convicções das regras que apontam para a classe \textbf{CLASS=1} é $7.14$, enquanto que, para a classe \textbf{CLASS=0}, este valor é igual a $3.35$. Já na segunda tabela, nota-se a presença de regras que contribuem para a classificação falsa numa proporção próxima à das regras verdadeiras. A primeira regra do \textit{ranking}, que possui o padrão \textbf{w=attr8=-2.5 w=attr10=-1.5} e aponta para a  classe \textbf{CLASS=0}, é responsável pela maior contribuição para o erro da classificação, com a medida de convicção igual a $46.27$. Na primeira tabela, vemos que os padrões \textbf{w=attr8=-2.5} e \textbf{w=attr10=-1.5} também contribuem para a classe falsa, mas com convicções iguais a $13.80$ e $11.10$, respectivamente. O que acontece, neste caso, é que existe uma relação entre o padrão \textbf{w=attr8=-2.5 w=attr10=-1.5} e a classe \textbf{CLASS=0} muito maior que a relação entre os sub-padrões \textbf{w=attr8=-2.5} e \textbf{w=attr10=-1.5} e a classe \textbf{CLASS=0}. Isto fez com que a média das regras que apontam para a classe \textbf{CLASS=0} ficasse em $9.01$, enquanto que a média da classe \textbf{CLASS=1} ficou em $8.68$.
+\par
+Um caso semelhante ocorre também com a segunda instância classificada de maneira errada pelo OLAC, onde o padrão \textbf{w=attr9=2.5-9.5 w=attr7=?}, por não fazer parte de nenhuma transação de classe \textbf{CLASS=0} na projeção, obteve uma medida infinita de convicção, fazendo com que esta classe fosse escolhida como resultado, onde o correto seria escolher a classe \textbf{CLASS=1}.
+\par
+Situações desse tipo contribuíram para que a abordagem OLAC não classificasse corretamente todas as instâncias em que a abordagem LAC obteve sucesso. No entanto, os erros encontrados estão mais relacionados com a natureza dos dados do que com o conceito de ortogonalidade.
+
+\subsubsection{Caso de Teste LAC x ORIGAMI}
+
+Nesta seção comparamos o comportamento do LAC e do ORIGAMI no processo de classificação de uma instância aleatória de teste em que o LAC obteve sucesso e o ORIGAMI não. A configuração selecionada possui $52$ transações de treinamento e $5$ instâncias de teste da base \textit{labor.ac}, das quais o ORIGAMI classificou $2$ de maneira correta, e o LAC não errou nenhuma classificação. A instância escolhida se encontra na tabela \ref{tab:table_lac_x_origami_labor.ac.test_instance_1}. Esta instância possui $16$ itens, sendo todos eles freqüentes na projeção obtida, que corresponde às $52$ transações da base de treinamento. Assim como no exemplo anterior, cada item da instância de teste deu origem a um padrão freqüente (tabela \ref{tab:table_lac_x_origami_labor.ac.lac_patterns}), com os quais foram obtidas $31$ regras de associação com confiança maior ou igual a $0.01$ (tabela \ref{tab:table_lac_x_origami_labor.ac.lac_rules}).
+
+\input{tables/table_lac_x_origami_labor.ac.test_instance_1.tex}
+\input{tables/table_lac_x_origami_labor.ac.lac_patterns.tex}
+\input{tables/table_lac_x_origami_labor.ac.lac_rules.tex}
+
+\par
+O ORIGAMI, por sua vez, obteve um conjunto de $13$ padrões maximais, que se encontram na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_patterns}, de onde foi extraído um único padrão ortogonal, e, posteriormente, a única regra de associação com confiança maior ou igual a $0.0001$, que pode ser vista na tabela \ref{tab:table_lac_x_origami_labor.ac.origami_rules}. É importante notar que todos os padrões maximais obtidos possuem suporte igual a $0.019231$, o que corresponde à fração $\frac{1}{52}$, ou seja, nenhum padrão maximal obtido aparece em mais de uma transação na base de dados. A combinação de parâmetros de execução utilizada foi responsável por fazer com que o algoritmo não selecionasse uma maior quantidade de padrões ortogonais. Como o valor do parâmetro $\alpha$ utilizado foi muito baixo ($0.1$), e o suporte utilizado favoreceu a obtenção de grandes padrões maximais, a métrica de ortogonalidade por estrutura de padrões não foi adequada. Isso aconteceu porque todos os padrões encontrados possuem similaridade maior que $10\%$, pelo fato de vários itens aparecerem em mais de um padrão. Os itens \textbf{w=attr1=ignore} e \textbf{w=attr8=?}, por exemplo, estão presentes em todos os padrões.
+\par
+Como resultado, a única regra obtida pela abordagem ORIGAMI aponta para a classe \textbf{CLASS=1}, fazendo com que o algoritmo classifique a instância de teste de maneira errada.
+
+\input{tables/table_lac_x_origami_labor.ac.origami_patterns.tex}
+\input{tables/table_lac_x_origami_labor.ac.origami_rules.tex}
+
+\section{Considerações}
+
+Neste capítulo, foi apresentado o aplicativo \textbf{olac}, sua interface de interação com o usuário, e um exemplo de execução onde foi demonstrado o comportamento da abordagem OLAC. Em seguida, foram apresentados os resultados obtidos com a execução das três abordagens de classificação em $26$ bases de dados disponíveis no repositório \textbf{UCI}.
+\par
+Na seção \ref{resultados_experimentos_cada_base} foram apresentados os melhores resultados obtidos com a execução das abordagens utilizando parâmetros diferentes para cada base de dados. As três abordagens obtiveram resultados muito próximos, em média, sendo que a abordagem LAC obteve uma leve vantagem sobre as outras. Entretanto, podemos perceber que este comportamento não se repetiu em todas as bases.
+\par
+Analisando os resultados, vemos que o LAC se saiu melhor em $11$ bases de dados, o OLAC, por sua vez, se saiu melhor em $6$ bases, assim como ORIGAMI. Além disso, as três abordagens obtiveram o mesmo resultado para $1$ base, e o LAC e o OLAC ainda empataram em outras $2$ bases. A superioridade das abordagens ortogonais em algumas bases indica que, mesmo quando os melhores parâmetros para cada execução são utilizados, ainda é possível obter vantagens com as abordagens baseadas em ortogonalidade.
+\par
+Na seção \ref{resultados_experimentos_todas_base} foram apresentados os melhores resultados obtidos com a execução das três abordagens utilizando o mesmo conjunto de parâmetros para todas as bases. Este resultado comprova a qualidade dos padrões ortogonais obtidos pelo OLAC, visto que a média das acurácias encontradas por esta abordagem ($0.813$) foi até um pouco maior que a média encontrada pelo LAC ($0.808$).
+\par
+Analisando os resultados, vemos que o LAC novamente se saiu melhor em $11$ bases, o OLAC, por sua vez, se saiu melhor em $8$ bases, e o ORIGAMI, em $6$. As três abordagens ainda empataram em $1$ base. Apesar do LAC continuar com os melhores resultados num número maior de bases, o OLAC obteve melhores resultados em média. Isto se deve à qualidade dos resultados obtidos, mesmo nos casos em que os do LAC são melhores.
+\par
+Na seção \ref{resultados_experimentos_ttest} foram apresentados resultados obtidos com o auxílio da metodologia teste-t de Student que comprovam a equivalência estatística entre as abordagens.
+\par
+Na seção \ref{resultados_experimentos_estudos} foram apresentados estudos de caso que comparam a classificação de uma instância pela abordagem ortogonal e não ortogonal para o OLAC e o ORIGAMI. Os estudos mostram um exemplo em que a abordagem ortogonal não consegue classificar corretamente uma instância em que a abordagem não ortogonal obtém sucesso. É possível perceber que a falha na classificação pelas abordagens ortogonais não foi causada pela má qualidade dos conjuntos ortogonais, mas sim pelas características dos padrões encontrados nestes conjuntos, que fizeram com que as métricas de avaliação das regras geradas indicassem a classificação falsa com maior convicção que a verdadeira.
+\par
+Em geral, os resultados demonstram que as abordagens ortogonais obtiveram resultados de boa qualidade, quando comparados com a abordagem clássica não ortogonal.
